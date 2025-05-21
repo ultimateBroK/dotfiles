@@ -40,7 +40,7 @@
           "powerline_symbol": "",
           "background": "p:color13",
           "type": "root",
-          "style": "powerline"
+          "style": "diamond"
         },
         {
           "properties": {
@@ -51,7 +51,7 @@
           "powerline_symbol": "",
           "background": "p:color13",
           "type": "os",
-          "style": "powerline"
+          "style": "diamond"
         },
         {
           "properties": {
@@ -63,33 +63,15 @@
           "foreground": "p:color13",
           "background": "p:color10",
           "type": "path",
-          "style": "powerline"
+          "style": "diamond"
         },
         {
           "type": "project",
           "style": "powerline",
           "powerline_symbol": "",
           "foreground": "p:color13",
-          "background": "p:color10",
+          "background": "p:color15",
           "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Version }} {{.Version}}{{ end }} {{ if .Name }}{{ .Name }}{{ end }}{{ end }} "
-        },
-        {
-          "type": "battery",
-          "style": "powerline",
-          "powerline_symbol": "",
-          "foreground": "p:color13",
-          "background": "p:color10",
-          "background_templates": [
-            "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
-            "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
-            "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
-          ],
-          "template": " {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }} ",
-          "properties": {
-            "discharging_icon": " ",
-            "charging_icon": " ",
-            "charged_icon": " "
-          }
         }
       ]
     },
