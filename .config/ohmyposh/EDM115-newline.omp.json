@@ -156,6 +156,177 @@
           "background": "#6272a4",
           "type": "php",
           "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#7FD5EA",
+          "type": "go",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#00ffff",
+          "type": "dotnet",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#99908a",
+          "type": "rust",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#4063D8",
+          "type": "ruby",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#f6553c",
+          "type": "swift",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#7F52FF",
+          "type": "kotlin",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#0000ff",
+          "type": "lua",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#4e2a8e",
+          "type": "elixir",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "λ {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#5e5086",
+          "type": "haskell",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#000000",
+          "type": "crystal",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#00a6c4",
+          "type": "dart",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#9558B2",
+          "type": "julia",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#0073a1",
+          "type": "perl",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#f7a41d",
+          "type": "zig",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "󱈚 {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#734f96",
+          "type": "fortran",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "󰫏 {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#000000",
+          "type": "mojo",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "󰆥 {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#ffe953",
+          "type": "nim",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "λ {{ .Full }}",
+          "foreground": "p:color15",
+          "background": "#ff6d00",
+          "type": "ocaml",
+          "style": "diamond"
+        },
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "󰍛 {{ .Full }}",
+          "foreground": "p:color13",
+          "background": "#4f87c4",
+          "type": "v",
+          "style": "diamond"
         }
       ]
     },
@@ -181,7 +352,7 @@
   "patch_pwsh_bleed": true,
   "final_space": true,
   "palette": {
-    "color0": "#0e1513",
+    "color0": "#0f1417",
     "color1": "",
     "color2": "",
     "color3": "",
@@ -191,11 +362,11 @@
     "color7": "",
     "color8": "",
     "color9": "",
-    "color10": "#82d5c8",
+    "color10": "#8dcff1",
     "color11": "",
     "color12": "",
-    "color13": "#00201c",
+    "color13": "#001e2b",
     "color14": "",
-    "color15": "#dde4e1"
+    "color15": "#dfe3e7"
   }
 }

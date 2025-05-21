@@ -25,7 +25,8 @@
 
     // Modules Left
     "modules-left": [
-        "custom/appmenu",
+        "custom/hypridle",
+        //"custom/appmenu",
         "group/links",
         //"wlr/taskbar",
         //"group/quicklinks",

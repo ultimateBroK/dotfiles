@@ -25,6 +25,7 @@
 
     // Modules Left
     "modules-left": [
+        "custom/hypridle",
         //"custom/appmenu",
         "hyprland/workspaces",
         "hyprland/window"
