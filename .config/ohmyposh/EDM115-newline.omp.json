@@ -74,30 +74,6 @@
           "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Version }} {{.Version}}{{ end }} {{ if .Name }}{{ .Name }}{{ end }}{{ end }} "
         },
         {
-          "type": "upgrade",
-          "style": "plain",
-          "foreground": "p:color13",
-          "background": "p:color10",
-          "properties": {
-            "cache_duration": "168h"
-          }
-        },
-        {
-          "type": "status",
-          "style": "powerline",
-          "powerline_symbol": "",
-          "foreground": "p:color13",
-          "background": "p:color10",
-          "background_templates": [
-            "{{ if .Error }}#e91e63{{ end }}"
-          ],
-          "trailing_diamond": "",
-          "template": "<#193549></>  ",
-          "properties": {
-            "always_enabled": true
-          }
-        },
-        {
           "type": "battery",
           "style": "powerline",
           "powerline_symbol": "",
