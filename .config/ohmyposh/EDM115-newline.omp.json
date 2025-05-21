@@ -129,11 +129,13 @@
         },
         {
           "properties": {
-            "display_mode": "files"
+            "fetch_virtual_env": true,
+            "display_mode": "environment",
+            "home_enabled": true
           },
           "leading_diamond": "",
           "trailing_diamond": "",
-          "template": " {{ .Full }}",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}",
           "foreground": "p:color13",
           "background": "#50fa7b",
           "type": "python",
