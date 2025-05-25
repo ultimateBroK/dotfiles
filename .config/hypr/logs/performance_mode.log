@@ -70,3 +70,288 @@
 [2025-05-22 09:44:23] Notification: [Balanced Mode Activated] Reduced effects for better performance.
 [2025-05-22 09:44:23] Saved current mode: balanced
 [2025-05-22 09:44:23] Performance Mode Script Completed
+[2025-05-22 10:07:17] --- Performance Mode Script Started ---
+[2025-05-22 10:07:17] Notification: [Already in balanced mode] No changes needed.
+[2025-05-22 10:07:18] --- Performance Mode Script Started ---
+[2025-05-22 10:07:18] Cleaning up previous mode settings
+[2025-05-22 10:07:18] Setting up normal mode
+[2025-05-22 10:07:18] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 10:07:18] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-22 10:07:18] Saved current mode: normal
+[2025-05-22 10:07:18] Performance Mode Script Completed
+[2025-05-22 10:07:19] --- Performance Mode Script Started ---
+[2025-05-22 10:07:19] Cleaning up previous mode settings
+[2025-05-22 10:07:19] Setting up balanced mode
+[2025-05-22 10:07:19] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 10:07:19] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-22 10:07:19] Saved current mode: balanced
+[2025-05-22 10:07:19] Performance Mode Script Completed
+[2025-05-22 17:15:41] --- Performance Mode Script Started ---
+[2025-05-22 17:15:41] Cleaning up previous mode settings
+[2025-05-22 17:15:41] Setting up battery mode
+[2025-05-22 17:15:42] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:42] Notification: [Battery Saving Mode Activated] Power saving optimizations enabled.
+[2025-05-22 17:15:42] Saved current mode: battery
+[2025-05-22 17:15:42] Performance Mode Script Completed
+[2025-05-22 17:15:44] --- Performance Mode Script Started ---
+[2025-05-22 17:15:44] Cleaning up previous mode settings
+[2025-05-22 17:15:44] Setting up gaming mode
+[2025-05-22 17:15:44] gamemode not installed, skipping
+[2025-05-22 17:15:44] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:44] Notification: [Gaming Mode Activated] Maximum performance configuration.
+[2025-05-22 17:15:44] Saved current mode: gaming
+[2025-05-22 17:15:44] Performance Mode Script Completed
+[2025-05-22 17:15:45] --- Performance Mode Script Started ---
+[2025-05-22 17:15:45] Cleaning up previous mode settings
+[2025-05-22 17:15:45] Setting up battery mode
+[2025-05-22 17:15:45] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:45] Notification: [Battery Saving Mode Activated] Power saving optimizations enabled.
+[2025-05-22 17:15:45] Saved current mode: battery
+[2025-05-22 17:15:45] Performance Mode Script Completed
+[2025-05-22 17:15:46] --- Performance Mode Script Started ---
+[2025-05-22 17:15:46] Cleaning up previous mode settings
+[2025-05-22 17:15:46] Setting up presentation mode
+[2025-05-22 17:15:46] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:46] Notification: [Presentation Mode Activated] Screen-lock disabled. Optimized for presentations.
+[2025-05-22 17:15:46] Saved current mode: presentation
+[2025-05-22 17:15:46] Performance Mode Script Completed
+[2025-05-22 17:15:47] --- Performance Mode Script Started ---
+[2025-05-22 17:15:47] Cleaning up previous mode settings
+[2025-05-22 17:15:47] Setting up battery mode
+[2025-05-22 17:15:47] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:47] Notification: [Battery Saving Mode Activated] Power saving optimizations enabled.
+[2025-05-22 17:15:47] Saved current mode: battery
+[2025-05-22 17:15:47] Performance Mode Script Completed
+[2025-05-22 17:15:48] --- Performance Mode Script Started ---
+[2025-05-22 17:15:48] Cleaning up previous mode settings
+[2025-05-22 17:15:48] Setting up presentation mode
+[2025-05-22 17:15:48] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:48] Notification: [Presentation Mode Activated] Screen-lock disabled. Optimized for presentations.
+[2025-05-22 17:15:48] Saved current mode: presentation
+[2025-05-22 17:15:48] Performance Mode Script Completed
+[2025-05-22 17:15:49] --- Performance Mode Script Started ---
+[2025-05-22 17:15:49] Cleaning up previous mode settings
+[2025-05-22 17:15:49] Setting up battery mode
+[2025-05-22 17:15:49] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:49] Notification: [Battery Saving Mode Activated] Power saving optimizations enabled.
+[2025-05-22 17:15:49] Saved current mode: battery
+[2025-05-22 17:15:49] Performance Mode Script Completed
+[2025-05-22 17:15:49] --- Performance Mode Script Started ---
+[2025-05-22 17:15:49] Cleaning up previous mode settings
+[2025-05-22 17:15:49] Setting up gaming mode
+[2025-05-22 17:15:49] gamemode not installed, skipping
+[2025-05-22 17:15:49] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:49] Notification: [Gaming Mode Activated] Maximum performance configuration.
+[2025-05-22 17:15:49] Saved current mode: gaming
+[2025-05-22 17:15:49] Performance Mode Script Completed
+[2025-05-22 17:15:50] --- Performance Mode Script Started ---
+[2025-05-22 17:15:50] Cleaning up previous mode settings
+[2025-05-22 17:15:50] Setting up performance mode
+[2025-05-22 17:15:50] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:50] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-22 17:15:50] Saved current mode: performance
+[2025-05-22 17:15:50] Performance Mode Script Completed
+[2025-05-22 17:15:50] --- Performance Mode Script Started ---
+[2025-05-22 17:15:50] Cleaning up previous mode settings
+[2025-05-22 17:15:50] Setting up balanced mode
+[2025-05-22 17:15:51] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:51] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-22 17:15:51] Saved current mode: balanced
+[2025-05-22 17:15:51] Performance Mode Script Completed
+[2025-05-22 17:15:51] --- Performance Mode Script Started ---
+[2025-05-22 17:15:51] Cleaning up previous mode settings
+[2025-05-22 17:15:51] Setting up performance mode
+[2025-05-22 17:15:51] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:51] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-22 17:15:51] Saved current mode: performance
+[2025-05-22 17:15:51] Performance Mode Script Completed
+[2025-05-22 17:15:52] --- Performance Mode Script Started ---
+[2025-05-22 17:15:52] Cleaning up previous mode settings
+[2025-05-22 17:15:52] Setting up gaming mode
+[2025-05-22 17:15:52] gamemode not installed, skipping
+[2025-05-22 17:15:52] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:52] Notification: [Gaming Mode Activated] Maximum performance configuration.
+[2025-05-22 17:15:52] Saved current mode: gaming
+[2025-05-22 17:15:52] Performance Mode Script Completed
+[2025-05-22 17:15:53] --- Performance Mode Script Started ---
+[2025-05-22 17:15:53] Cleaning up previous mode settings
+[2025-05-22 17:15:53] Setting up balanced mode
+[2025-05-22 17:15:54] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:54] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-22 17:15:54] Saved current mode: balanced
+[2025-05-22 17:15:54] Performance Mode Script Completed
+[2025-05-22 17:15:54] --- Performance Mode Script Started ---
+[2025-05-22 17:15:54] Cleaning up previous mode settings
+[2025-05-22 17:15:54] Setting up normal mode
+[2025-05-22 17:15:54] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:54] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-22 17:15:54] Saved current mode: normal
+[2025-05-22 17:15:54] Performance Mode Script Completed
+[2025-05-22 17:15:55] --- Performance Mode Script Started ---
+[2025-05-22 17:15:55] Cleaning up previous mode settings
+[2025-05-22 17:15:55] Setting up performance mode
+[2025-05-22 17:15:55] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:55] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-22 17:15:55] Saved current mode: performance
+[2025-05-22 17:15:55] Performance Mode Script Completed
+[2025-05-22 17:15:56] --- Performance Mode Script Started ---
+[2025-05-22 17:15:56] Cleaning up previous mode settings
+[2025-05-22 17:15:56] Setting up gaming mode
+[2025-05-22 17:15:56] gamemode not installed, skipping
+[2025-05-22 17:15:56] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:56] Notification: [Gaming Mode Activated] Maximum performance configuration.
+[2025-05-22 17:15:56] Saved current mode: gaming
+[2025-05-22 17:15:56] Performance Mode Script Completed
+[2025-05-22 17:15:57] --- Performance Mode Script Started ---
+[2025-05-22 17:15:57] Cleaning up previous mode settings
+[2025-05-22 17:15:57] Setting up battery mode
+[2025-05-22 17:15:57] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 17:15:57] Notification: [Battery Saving Mode Activated] Power saving optimizations enabled.
+[2025-05-22 17:15:57] Saved current mode: battery
+[2025-05-22 17:15:57] Performance Mode Script Completed
+[2025-05-22 23:09:12] --- Performance Mode Script Started ---
+[2025-05-22 23:09:12] Cleaning up previous mode settings
+[2025-05-22 23:09:12] Setting up gaming mode
+[2025-05-22 23:09:12] gamemode not installed, skipping
+[2025-05-22 23:09:12] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 23:09:12] Notification: [Gaming Mode Activated] Maximum performance configuration.
+[2025-05-22 23:09:12] Saved current mode: gaming
+[2025-05-22 23:09:12] Performance Mode Script Completed
+[2025-05-22 23:09:13] --- Performance Mode Script Started ---
+[2025-05-22 23:09:13] Cleaning up previous mode settings
+[2025-05-22 23:09:13] Setting up performance mode
+[2025-05-22 23:09:13] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 23:09:13] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-22 23:09:13] Saved current mode: performance
+[2025-05-22 23:09:13] Performance Mode Script Completed
+[2025-05-22 23:09:17] --- Performance Mode Script Started ---
+[2025-05-22 23:09:17] Cleaning up previous mode settings
+[2025-05-22 23:09:17] Setting up balanced mode
+[2025-05-22 23:09:17] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-22 23:09:17] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-22 23:09:17] Saved current mode: balanced
+[2025-05-22 23:09:17] Performance Mode Script Completed
+[2025-05-23 00:43:07] --- Performance Mode Script Started ---
+[2025-05-23 00:43:07] Notification: [Already in balanced mode] No changes needed.
+[2025-05-23 08:45:10] --- Performance Mode Script Started ---
+[2025-05-23 08:45:10] Notification: [Already in balanced mode] No changes needed.
+[2025-05-23 08:45:11] --- Performance Mode Script Started ---
+[2025-05-23 08:45:11] Cleaning up previous mode settings
+[2025-05-23 08:45:11] Setting up normal mode
+[2025-05-23 08:45:11] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 08:45:11] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-23 08:45:11] Saved current mode: normal
+[2025-05-23 08:45:11] Performance Mode Script Completed
+[2025-05-23 08:45:13] --- Performance Mode Script Started ---
+[2025-05-23 08:45:13] Cleaning up previous mode settings
+[2025-05-23 08:45:13] Setting up balanced mode
+[2025-05-23 08:45:13] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 08:45:13] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-23 08:45:13] Saved current mode: balanced
+[2025-05-23 08:45:13] Performance Mode Script Completed
+[2025-05-23 09:50:49] --- Performance Mode Script Started ---
+[2025-05-23 09:50:49] Notification: [Already in balanced mode] No changes needed.
+[2025-05-23 09:50:50] --- Performance Mode Script Started ---
+[2025-05-23 09:50:50] Cleaning up previous mode settings
+[2025-05-23 09:50:50] Setting up performance mode
+[2025-05-23 09:50:50] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 09:50:50] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-23 09:50:50] Saved current mode: performance
+[2025-05-23 09:50:50] Performance Mode Script Completed
+[2025-05-23 09:50:51] --- Performance Mode Script Started ---
+[2025-05-23 09:50:51] Cleaning up previous mode settings
+[2025-05-23 09:50:51] Setting up balanced mode
+[2025-05-23 09:50:51] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 09:50:51] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-23 09:50:51] Saved current mode: balanced
+[2025-05-23 09:50:51] Performance Mode Script Completed
+[2025-05-23 09:50:53] --- Performance Mode Script Started ---
+[2025-05-23 09:50:53] Cleaning up previous mode settings
+[2025-05-23 09:50:53] Setting up normal mode
+[2025-05-23 09:50:53] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 09:50:53] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-23 09:50:53] Saved current mode: normal
+[2025-05-23 09:50:53] Performance Mode Script Completed
+[2025-05-23 09:50:53] --- Performance Mode Script Started ---
+[2025-05-23 09:50:53] Cleaning up previous mode settings
+[2025-05-23 09:50:53] Setting up balanced mode
+[2025-05-23 09:50:53] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 09:50:53] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-23 09:50:53] Saved current mode: balanced
+[2025-05-23 09:50:53] Performance Mode Script Completed
+[2025-05-23 14:45:46] --- Performance Mode Script Started ---
+[2025-05-23 14:45:46] Cleaning up previous mode settings
+[2025-05-23 14:45:46] Setting up performance mode
+[2025-05-23 14:45:46] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 14:45:46] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-23 14:45:46] Saved current mode: performance
+[2025-05-23 14:45:46] Performance Mode Script Completed
+[2025-05-23 14:45:47] --- Performance Mode Script Started ---
+[2025-05-23 14:45:47] Cleaning up previous mode settings
+[2025-05-23 14:45:47] Setting up balanced mode
+[2025-05-23 14:45:47] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 14:45:47] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-23 14:45:47] Saved current mode: balanced
+[2025-05-23 14:45:47] Performance Mode Script Completed
+[2025-05-23 19:39:06] --- Performance Mode Script Started ---
+[2025-05-23 19:39:06] Notification: [Already in balanced mode] No changes needed.
+[2025-05-23 19:39:09] --- Performance Mode Script Started ---
+[2025-05-23 19:39:09] Cleaning up previous mode settings
+[2025-05-23 19:39:09] Setting up normal mode
+[2025-05-23 19:39:09] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 19:39:09] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-23 19:39:09] Saved current mode: normal
+[2025-05-23 19:39:09] Performance Mode Script Completed
+[2025-05-23 19:39:10] --- Performance Mode Script Started ---
+[2025-05-23 19:39:10] Cleaning up previous mode settings
+[2025-05-23 19:39:10] Setting up balanced mode
+[2025-05-23 19:39:11] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-23 19:39:11] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-23 19:39:11] Saved current mode: balanced
+[2025-05-23 19:39:11] Performance Mode Script Completed
+[2025-05-24 09:52:21] --- Performance Mode Script Started ---
+[2025-05-24 09:52:21] Cleaning up previous mode settings
+[2025-05-24 09:52:21] Setting up performance mode
+[2025-05-24 09:52:21] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-24 09:52:21] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-24 09:52:21] Saved current mode: performance
+[2025-05-24 09:52:21] Performance Mode Script Completed
+[2025-05-24 09:52:22] --- Performance Mode Script Started ---
+[2025-05-24 09:52:22] Cleaning up previous mode settings
+[2025-05-24 09:52:22] Setting up balanced mode
+[2025-05-24 09:52:22] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-24 09:52:22] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-24 09:52:22] Saved current mode: balanced
+[2025-05-24 09:52:22] Performance Mode Script Completed
+[2025-05-24 19:09:23] --- Performance Mode Script Started ---
+[2025-05-24 19:09:23] Cleaning up previous mode settings
+[2025-05-24 19:09:23] Setting up normal mode
+[2025-05-24 19:09:24] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-24 19:09:24] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-24 19:09:24] Saved current mode: normal
+[2025-05-24 19:09:24] Performance Mode Script Completed
+[2025-05-24 19:09:24] --- Performance Mode Script Started ---
+[2025-05-24 19:09:24] Cleaning up previous mode settings
+[2025-05-24 19:09:24] Setting up balanced mode
+[2025-05-24 19:09:25] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-24 19:09:25] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-24 19:09:25] Saved current mode: balanced
+[2025-05-24 19:09:25] Performance Mode Script Completed
+[2025-05-24 19:13:45] --- Performance Mode Script Started ---
+[2025-05-24 19:13:45] Notification: [Already in balanced mode] No changes needed.
+[2025-05-25 22:59:07] --- Performance Mode Script Started ---
+[2025-05-25 22:59:07] Notification: [Already in balanced mode] No changes needed.
+[2025-05-25 22:59:08] --- Performance Mode Script Started ---
+[2025-05-25 22:59:08] Cleaning up previous mode settings
+[2025-05-25 22:59:08] Setting up performance mode
+[2025-05-25 22:59:08] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-25 22:59:08] Notification: [Performance Mode Activated] Minimal effects for maximum performance.
+[2025-05-25 22:59:08] Saved current mode: performance
+[2025-05-25 22:59:08] Performance Mode Script Completed
+[2025-05-25 22:59:08] --- Performance Mode Script Started ---
+[2025-05-25 22:59:08] Cleaning up previous mode settings
+[2025-05-25 22:59:08] Setting up balanced mode
+[2025-05-25 22:59:08] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-25 22:59:08] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-25 22:59:08] Saved current mode: balanced
+[2025-05-25 22:59:08] Performance Mode Script Completed
