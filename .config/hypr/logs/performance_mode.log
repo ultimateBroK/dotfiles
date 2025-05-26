@@ -355,3 +355,17 @@
 [2025-05-25 22:59:08] Notification: [Balanced Mode Activated] Reduced effects for better performance.
 [2025-05-25 22:59:08] Saved current mode: balanced
 [2025-05-25 22:59:08] Performance Mode Script Completed
+[2025-05-26 20:03:17] --- Performance Mode Script Started ---
+[2025-05-26 20:03:17] Cleaning up previous mode settings
+[2025-05-26 20:03:17] Setting up normal mode
+[2025-05-26 20:03:17] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-26 20:03:17] Notification: [Normal Mode Activated] Full animations and effects enabled.
+[2025-05-26 20:03:17] Saved current mode: normal
+[2025-05-26 20:03:17] Performance Mode Script Completed
+[2025-05-26 20:03:18] --- Performance Mode Script Started ---
+[2025-05-26 20:03:18] Cleaning up previous mode settings
+[2025-05-26 20:03:18] Setting up balanced mode
+[2025-05-26 20:03:18] Skipping CPU governor change (no sudo privileges without password)
+[2025-05-26 20:03:18] Notification: [Balanced Mode Activated] Reduced effects for better performance.
+[2025-05-26 20:03:18] Saved current mode: balanced
+[2025-05-26 20:03:18] Performance Mode Script Completed
