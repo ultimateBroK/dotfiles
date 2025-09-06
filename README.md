@@ -260,13 +260,3 @@ vim ~/.config/hypr/colors.conf
 - The Linux ricing community for inspiration and ideas
 - Everyone who shared their configurations and helped build the ecosystem
 
-## 📄 License
-
-This project is available under the [MIT License](LICENSE).
-
----
-
-<div align="center">
-<p>⭐ If you found these dotfiles useful, please consider giving the repository a star!</p>
-<p>Created with ❤️ by username</p>
-</div>
