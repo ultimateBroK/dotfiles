@@ -1,0 +1,36 @@
+{
+    "label" : "lock",
+    "action" : "loginctl lock-session",
+    "text" : "lock",
+    "keybind" : "l"
+}
+{
+    "label" : "hibernate",
+    "action" : "systemctl hibernate || loginctl hibernate",
+    "text" : "downloading",
+    "keybind" : "h"
+}
+{
+    "label" : "logout",
+    "action" : "~/.config/hypr/custom/scripts/logout_with_sound.sh",
+    "text" : "logout",
+    "keybind" : "e"
+}
+{
+    "label" : "shutdown",
+    "action" : "~/.config/hypr/custom/scripts/shutdown_with_sound.sh",
+    "text" : "power_settings_new",
+    "keybind" : "s"
+}
+{
+    "label" : "suspend",
+    "action" : "systemctl suspend || loginctl suspend",
+    "text" : "bedtime",
+    "keybind" : "u"
+}
+{
+    "label" : "reboot",
+    "action" : "~/.config/hypr/custom/scripts/reboot_with_sound.sh",
+    "text" : "restart_alt",
+    "keybind" : "r"
+}
