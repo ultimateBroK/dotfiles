@@ -265,7 +265,7 @@ PanelWindow {
             case RegionSelection.SnipAction.Copy:
                 if (saveScreenshotDir === "") {
                     // not saving the screenshot, just copy to clipboard
-                    snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && ${cleanup}`]
+                    snipProc.command = ["bash", "-c", `${cropToStdout} | wl-copy && notify-send "Screenshot" "Region screenshot copied to clipboard" -a "Screenshot" -i "camera" -t 2000 && ${cleanup}`]
                     break;
                 }
 
@@ -277,6 +277,7 @@ PanelWindow {
                     saveFileName="screenshot-$(date '+%Y-%m-%d_%H.%M.%S').png" && \
                     savePath="${savePathBase}/$saveFileName" && \
                     ${cropToStdout} | tee >(wl-copy) > "$savePath" && \
+                    notify-send "Screenshot saved" "Region screenshot saved to clipboard and file\n$savePath" -a "Screenshot" -i "camera" -t 3000 && \
                     ${cleanup}`
                 ]
 

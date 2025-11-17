@@ -39,7 +39,7 @@ StyledOverlayWidget {
                     name: "Screenshot"
                     onClicked: {
                         GlobalStates.overlayOpen = false;
-                        Quickshell.execDetached(["bash", "-c", "grim - | wl-copy"]);
+                        Quickshell.execDetached(["bash", "-c", "~/.config/hypr/hyprland/scripts/screenshot.sh --fullscreen --clipboard"]);
                     }
                 }
 
