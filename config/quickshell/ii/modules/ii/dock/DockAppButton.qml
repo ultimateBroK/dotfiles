@@ -19,8 +19,41 @@ DockButton {
 
     readonly property bool isSeparator: appToplevel.appId === "SEPARATOR"
     readonly property var desktopEntry: DesktopEntries.heuristicLookup(appToplevel.appId)
+    readonly property string normalizedAppId: (appToplevel?.appId ?? "").trim()
+    readonly property string executableFallback: {
+        if (normalizedAppId.length === 0)
+            return "";
+        const withoutDesktop = normalizedAppId.replace(/\.desktop$/i, "");
+        if (!withoutDesktop.includes("."))
+            return withoutDesktop;
+        const parts = withoutDesktop.split(".");
+        const lastSegment = parts[parts.length - 1];
+        return lastSegment.length > 0 ? lastSegment : withoutDesktop;
+    }
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
+
+    function launchPinnedApp() {
+        if (root.desktopEntry) {
+            root.desktopEntry.execute();
+            return true;
+        }
+
+        const candidateIds = [];
+        if (root.normalizedAppId.length > 0)
+            candidateIds.push(root.normalizedAppId);
+        if (root.executableFallback.length > 0 && root.executableFallback !== root.normalizedAppId)
+            candidateIds.push(root.executableFallback);
+
+        for (const candidate of candidateIds) {
+            console.warn(`[DockAppButton] Launching fallback command for ${root.normalizedAppId}: ${candidate}`);
+            Quickshell.execDetached([candidate]);
+            return true;
+        }
+
+        console.warn("[DockAppButton] Unable to resolve launch command for pinned app:", root.normalizedAppId);
+        return false;
+    }
 
     Loader {
         active: isSeparator
@@ -55,7 +88,7 @@ DockButton {
 
     onClicked: {
         if (appToplevel.toplevels.length === 0) {
-            root.desktopEntry?.execute();
+            launchPinnedApp();
             return;
         }
         lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
@@ -63,7 +96,7 @@ DockButton {
     }
 
     middleClickAction: () => {
-        root.desktopEntry?.execute();
+        launchPinnedApp();
     }
 
     altAction: () => {

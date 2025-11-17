@@ -21,6 +21,26 @@ MouseArea { // Notification group area
     property bool popup: false
     property real padding: 10
     implicitHeight: background.implicitHeight
+    readonly property var latestNotification: (notificationCount > 0) ? notifications[notificationCount - 1] : null
+    readonly property string latestImage: {
+        const imageSource = latestNotification?.image;
+        return typeof imageSource === "string" ? imageSource : "";
+    }
+    readonly property string safeSummary: {
+        const summary = normalizeText(latestNotification?.summary);
+        if (summary.length > 0)
+            return summary;
+        const body = normalizeText(latestNotification?.body);
+        if (body.length > 0)
+            return firstLine(body);
+        return Translation.tr("Notification");
+    }
+    readonly property string safeAppName: {
+        const app = normalizeText(notificationGroup?.appName);
+        if (app.length > 0)
+            return app;
+        return safeSummary;
+    }
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: 20 // Account for gaps and bouncy animations
@@ -32,6 +52,23 @@ MouseArea { // Notification group area
         Math.abs(parentDragDistance) > dragConfirmThreshold ? 0 :
         dragIndexDiff == 1 ? (parentDragDistance * 0.3) :
         dragIndexDiff == 2 ? (parentDragDistance * 0.1) : 0
+
+    function normalizeText(value) {
+        if (value === null || value === undefined)
+            return "";
+        try {
+            const stringValue = value.toString();
+            return stringValue.trim();
+        } catch (error) {
+            console.warn("[NotificationGroup] Failed to normalize text:", error);
+            return "";
+        }
+    }
+
+    function firstLine(value) {
+        const newline = value.indexOf("\n");
+        return newline === -1 ? value : value.slice(0, newline);
+    }
 
     function destroyWithAnimation(left = false) {
         root.qmlParent.resetDrag()
@@ -156,9 +193,10 @@ MouseArea { // Notification group area
             NotificationAppIcon { // Icons
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
-                image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
+                image: root?.multipleNotifications ? "" : root.latestImage
                 appIcon: notificationGroup?.appIcon
-                summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
+                summary: root.safeSummary
+                appName: root.safeAppName
                 urgency: root.notifications.some(n => n.urgency === NotificationUrgency.Critical.toString()) ? 
                     NotificationUrgency.Critical : NotificationUrgency.Normal
             }
@@ -166,7 +204,7 @@ MouseArea { // Notification group area
             ColumnLayout { // Content
                 Layout.fillWidth: true
                 spacing: expanded ? (root.multipleNotifications ? 
-                    (notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 : 
+                    (root.latestImage != "") ? 35 : 
                     5 : 0) : 0
                 // spacing: 00
                 Behavior on spacing {
@@ -191,9 +229,7 @@ MouseArea { // Notification group area
                             id: appName
                             elide: Text.ElideRight
                             Layout.fillWidth: true
-                            text: (topRow.showAppName ?
-                                notificationGroup?.appName :
-                                notificationGroup?.notifications[0]?.summary) || ""
+                            text: topRow.showAppName ? root.safeAppName : root.safeSummary
                             font.pixelSize: topRow.showAppName ?
                                 topRow.fontSize :
                                 Appearance.font.pixelSize.small

@@ -16,23 +16,67 @@ import Quickshell.Services.Notifications
  */
 Singleton {
 	id: root
+    function stringOrEmpty(value) {
+        if (value === null || value === undefined)
+            return "";
+        if (typeof value === "string")
+            return value;
+        try {
+            return value.toString();
+        } catch (error) {
+            console.warn("[Notifications] Failed to stringify value:", error);
+            return "";
+        }
+    }
+
+    function normalizeImageSource(image) {
+        if (!image)
+            return "";
+        if (typeof image === "string") {
+            // Xử lý các edge cases cho image string
+            const trimmed = image.trim();
+            if (trimmed === "" || trimmed === "null" || trimmed === "undefined") {
+                return "";
+            }
+            return trimmed;
+        }
+        if (typeof image === "object") {
+            // Xử lý object với nhiều trường hợp
+            try {
+                if (typeof image.url === "string" && image.url.trim() !== "") {
+                    return image.url.trim();
+                }
+                if (typeof image.dataUrl === "string" && image.dataUrl.trim() !== "") {
+                    return image.dataUrl.trim();
+                }
+                if (typeof image.path === "string" && image.path.trim() !== "") {
+                    return image.path.trim();
+                }
+            } catch (error) {
+                console.warn("[Notifications] Error normalizing image object:", error);
+            }
+        }
+        console.warn("[Notifications] Unsupported image payload received, ignoring.");
+        return "";
+    }
+
     component Notif: QtObject {
         id: wrapper
         required property int notificationId // Could just be `id` but it conflicts with the default prop in QtObject
         property Notification notification
-        property list<var> actions: notification?.actions.map((action) => ({
+        property list<var> actions: notification?.actions?.map((action) => ({
             "identifier": action.identifier,
             "text": action.text,
         })) ?? []
         property bool popup: false
-        property bool isTransient: notification?.hints.transient ?? false
-        property string appIcon: notification?.appIcon ?? ""
-        property string appName: notification?.appName ?? ""
-        property string body: notification?.body ?? ""
-        property string image: notification?.image ?? ""
-        property string summary: notification?.summary ?? ""
+        property bool isTransient: notification?.hints?.transient ?? false
+        property string appIcon: stringOrEmpty(notification?.appIcon)
+        property string appName: stringOrEmpty(notification?.appName)
+        property string body: stringOrEmpty(notification?.body)
+        property string image: normalizeImageSource(notification?.image)
+        property string summary: stringOrEmpty(notification?.summary)
         property double time
-        property string urgency: notification?.urgency.toString() ?? "normal"
+        property string urgency: notification?.urgency?.toString?.() ?? "normal"
         property Timer timer
 
         onNotificationChanged: {
@@ -46,11 +90,11 @@ Singleton {
         return {
             "notificationId": notif.notificationId,
             "actions": notif.actions,
-            "appIcon": notif.appIcon,
-            "appName": notif.appName,
-            "body": notif.body,
-            "image": notif.image,
-            "summary": notif.summary,
+            "appIcon": stringOrEmpty(notif.appIcon),
+            "appName": stringOrEmpty(notif.appName),
+            "body": stringOrEmpty(notif.body),
+            "image": stringOrEmpty(notif.image),
+            "summary": stringOrEmpty(notif.summary),
             "time": notif.time,
             "urgency": notif.urgency,
         }
@@ -160,28 +204,48 @@ Singleton {
         persistenceSupported: true
 
         onNotification: (notification) => {
-            notification.tracked = true
-            const newNotifObject = notifComponent.createObject(root, {
-                "notificationId": notification.id + root.idOffset,
-                "notification": notification,
-                "time": Date.now(),
-            });
-			root.list = [...root.list, newNotifObject];
-
-            // Popup
-            if (!root.popupInhibited) {
-                newNotifObject.popup = true;
-                if (notification.expireTimeout != 0) {
-                    newNotifObject.timer = notifTimerComponent.createObject(root, {
-                        "notificationId": newNotifObject.notificationId,
-                        "interval": notification.expireTimeout < 0 ? (Config?.options.notifications.timeout ?? 7000) : notification.expireTimeout,
-                    });
+            try {
+                notification.tracked = true
+                const newNotifObject = notifComponent.createObject(root, {
+                    "notificationId": notification.id + root.idOffset,
+                    "notification": notification,
+                    "time": Date.now(),
+                });
+                
+                // Validate notification object trước khi thêm vào list
+                if (!newNotifObject) {
+                    console.warn("[Notifications] Failed to create notification object");
+                    return;
                 }
-                root.unread++;
+                
+                root.list = [...root.list, newNotifObject];
+
+                // Popup
+                if (!root.popupInhibited) {
+                    newNotifObject.popup = true;
+                    if (notification.expireTimeout != 0) {
+                        try {
+                            newNotifObject.timer = notifTimerComponent.createObject(root, {
+                                "notificationId": newNotifObject.notificationId,
+                                "interval": notification.expireTimeout < 0 ? (Config?.options.notifications.timeout ?? 7000) : notification.expireTimeout,
+                            });
+                        } catch (error) {
+                            console.warn("[Notifications] Failed to create notification timer:", error);
+                        }
+                    }
+                    root.unread++;
+                }
+                root.notify(newNotifObject);
+                // console.log(notifToString(newNotifObject));
+                
+                try {
+                    notifFileView.setText(stringifyList(root.list));
+                } catch (error) {
+                    console.warn("[Notifications] Failed to save notification to file:", error);
+                }
+            } catch (error) {
+                console.error("[Notifications] Error processing notification:", error);
             }
-            root.notify(newNotifObject);
-            // console.log(notifToString(newNotifObject));
-            notifFileView.setText(stringifyList(root.list));
         }
     }
 
@@ -269,15 +333,22 @@ Singleton {
         path: Qt.resolvedUrl(filePath)
         onLoaded: {
             const fileContents = notifFileView.text()
-            root.list = JSON.parse(fileContents).map((notif) => {
+            let parsedList = [];
+            try {
+                parsedList = JSON.parse(fileContents);
+            } catch (error) {
+                console.warn("[Notifications] Failed to parse cached notification file:", error);
+                parsedList = [];
+            }
+            root.list = parsedList.map((notif) => {
                 return notifComponent.createObject(root, {
                     "notificationId": notif.notificationId,
                     "actions": [], // Notification actions are meaningless if they're not tracked by the server or the sender is dead
-                    "appIcon": notif.appIcon,
-                    "appName": notif.appName,
-                    "body": notif.body,
-                    "image": notif.image,
-                    "summary": notif.summary,
+                    "appIcon": stringOrEmpty(notif.appIcon),
+                    "appName": stringOrEmpty(notif.appName),
+                    "body": stringOrEmpty(notif.body),
+                    "image": stringOrEmpty(notif.image),
+                    "summary": stringOrEmpty(notif.summary),
                     "time": notif.time,
                     "urgency": notif.urgency,
                 });

@@ -90,7 +90,20 @@ Item {
                 anchors.top: row.top
 
                 Repeater {
-                    model: modelData.children
+                    model: {
+                        // Filter sections: bỏ section "Workspace 11-20" nếu có
+                        var filtered = [];
+                        for (var i = 0; i < modelData.children.length; i++) {
+                            const section = modelData.children[i];
+                            const sectionName = section.name || "";
+                            // Bỏ section "Workspace 11-20"
+                            if (/workspace\s+11-20/i.test(sectionName)) {
+                                continue;
+                            }
+                            filtered.push(section);
+                        }
+                        return filtered;
+                    }
 
                     delegate: Item { // Section with real keybinds
                         id: keybindSection
@@ -125,6 +138,13 @@ Item {
                                         var result = [];
                                         for (var i = 0; i < keybindSection.modelData.keybinds.length; i++) {
                                             const keybind = keybindSection.modelData.keybinds[i];
+                                            
+                                            // Bỏ workspace 11-20 khỏi cheatsheet
+                                            const comment = keybind.comment || "";
+                                            const workspace11to20Regex = /workspace\s+(1[1-9]|20)/i;
+                                            if (workspace11to20Regex.test(comment)) {
+                                                continue; // Skip keybind này
+                                            }
 
                                             if (!Config.options.cheatsheet.splitButtons) {
                                                 for (var j = 0; j < keybind.mods.length; j++) {

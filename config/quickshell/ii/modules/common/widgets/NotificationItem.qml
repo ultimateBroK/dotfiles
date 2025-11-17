@@ -29,7 +29,29 @@ Item { // Notification item area
         dragIndexDiff == 1 ? (parentDragDistance * 0.3) :
         dragIndexDiff == 2 ? (parentDragDistance * 0.1) : 0
 
+    readonly property string normalizedSummary: normalizeText(notificationObject?.summary)
+    readonly property string normalizedAppName: normalizeText(notificationObject?.appName)
+    readonly property string processedBodyText: processNotificationBody(notificationObject?.body ?? "", notificationObject?.appName || notificationObject?.summary)
+    readonly property string normalizedBody: normalizeText(processedBodyText)
+    readonly property string safeBody: normalizedBody.length > 0 ? normalizedBody : Translation.tr("No additional details")
+    readonly property string safeBodyRich: safeBody.replace(/\n/g, "<br/>")
+    readonly property string safeSummary: normalizedSummary.length > 0 ? normalizedSummary :
+        (normalizedAppName.length > 0 ? normalizedAppName :
+            (normalizedBody.length > 0 ? normalizedBody.split("\n")[0] : Translation.tr("Notification")))
+
     implicitHeight: background.implicitHeight
+
+    function normalizeText(value) {
+        if (value === null || value === undefined)
+            return "";
+        try {
+            const stringValue = value.toString();
+            return stringValue.trim();
+        } catch (error) {
+            console.warn("[NotificationItem] Failed to normalize text:", error);
+            return "";
+        }
+    }
 
     function processNotificationBody(body, appName) {
         let processedBody = body
@@ -63,7 +85,7 @@ Item { // Notification item area
     TextMetrics {
         id: summaryTextMetrics
         font.pixelSize: root.fontSize
-        text: root.notificationObject.summary || ""
+        text: root.safeSummary
     }
 
     SequentialAnimation { // Drag finish animation
@@ -126,6 +148,10 @@ Item { // Notification item area
         }
 
         image: notificationObject.image
+        appIcon: notificationObject.appIcon
+        appName: notificationObject.appName
+        summary: notificationObject.summary
+        urgency: (notificationObject.urgency?.toLowerCase?.() === "critical") ? NotificationUrgency.Critical : NotificationUrgency.Normal
         anchors.right: background.left
         anchors.top: background.top
         anchors.rightMargin: 10
@@ -180,7 +206,7 @@ Item { // Notification item area
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colOnLayer3
                     elide: Text.ElideRight
-                    text: root.notificationObject.summary || ""
+                    text: root.safeSummary
                 }
                 StyledText {
                     opacity: !root.expanded ? 1 : 0
@@ -195,9 +221,7 @@ Item { // Notification item area
                     wrapMode: Text.Wrap // Needed for proper eliding????
                     maximumLineCount: 1
                     textFormat: Text.StyledText
-                    text: {
-                        return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")
-                    }
+                    text: root.safeBodyRich
                 }
             }
 
@@ -217,10 +241,7 @@ Item { // Notification item area
                     wrapMode: Text.Wrap
                     elide: Text.ElideRight
                     textFormat: Text.RichText
-                    text: {
-                        return `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>` + 
-                            `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
-                    }
+                    text: `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>${root.safeBodyRich}`
 
                     onLinkActivated: (link) => {
                         Qt.openUrlExternally(link)
