@@ -206,12 +206,19 @@ Item {
                     id: workspaceButtonBackground
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
+                    property bool isActiveWorkspace: monitor?.activeWorkspace?.id == button.workspaceValue
+                    property string activeWindowAddress: `0x${root.activeWindow?.HyprlandToplevel?.address}`
+                    property var activeWindowForWorkspace: isActiveWorkspace && root.activeWindow?.activated ? 
+                        HyprlandData.windowByAddress[activeWindowAddress] : null
+                    property var focusedWindow: (activeWindowForWorkspace && activeWindowForWorkspace.workspace?.id === button.workspaceValue) ? 
+                        activeWindowForWorkspace : null
                     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(button.workspaceValue)
-                    property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
+                    property var displayWindow: focusedWindow || biggestWindow
+                    property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(displayWindow?.class), "image-missing")
 
                     StyledText { // Workspace number text
                         opacity: root.showNumbers
-                            || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || root.showNumbers))
+                            || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.displayWindow || root.showNumbers))
                             || (root.showNumbers && !Config.options?.bar.workspaces.showAppIcons)
                             )  ? 1 : 0
                         z: 3
@@ -238,7 +245,7 @@ Item {
                         id: wsDot
                         opacity: (Config.options?.bar.workspaces.alwaysShowNumbers
                             || root.showNumbers
-                            || (Config.options?.bar.workspaces.showAppIcons && workspaceButtonBackground.biggestWindow)
+                            || (Config.options?.bar.workspaces.showAppIcons && workspaceButtonBackground.displayWindow)
                             ) ? 0 : 1
                         visible: opacity > 0
                         anchors.centerIn: parent
@@ -259,8 +266,8 @@ Item {
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
                         opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 :
-                            (workspaceButtonBackground.biggestWindow && !root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
-                            1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
+                            (workspaceButtonBackground.displayWindow && !root.showNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
+                            1 : workspaceButtonBackground.displayWindow ? workspaceIconOpacityShrinked : 0
                             visible: opacity > 0
                         IconImage {
                             id: mainAppIcon

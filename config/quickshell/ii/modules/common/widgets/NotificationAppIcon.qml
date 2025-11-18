@@ -19,13 +19,27 @@ MaterialShape { // App icon
     property bool appIconLoadFailed: false
     readonly property bool showNotificationImage: image != "" && !imageLoadFailed
     
-    // Normalize app name/icon để xử lý các edge cases
+    // Normalize app name/icon để xử lý các edge cases theo cách tổng quát
     function normalizeAppIdentifier(identifier) {
-        if (!identifier || typeof identifier !== "string") return "";
+        if (!identifier || typeof identifier !== "string")
+            return "";
+
         // Loại bỏ whitespace và normalize
         let normalized = identifier.trim();
-        if (normalized === "") return "";
-        
+        if (normalized === "")
+            return "";
+
+        // Xử lý file paths (lấy tên file không có extension)
+        if (normalized.includes("/")) {
+            const parts = normalized.split("/");
+            normalized = parts[parts.length - 1];
+            // Loại bỏ extension nếu có
+            if (normalized.includes(".")) {
+                const nameParts = normalized.split(".");
+                normalized = nameParts.slice(0, -1).join(".");
+            }
+        }
+
         // Xử lý domain names (com.example.app -> app)
         if (normalized.includes(".")) {
             const parts = normalized.split(".");
@@ -34,68 +48,87 @@ MaterialShape { // App icon
                 normalized = parts[parts.length - 1];
             }
         }
-        
+
         // Loại bỏ các ký tự đặc biệt không hợp lệ cho icon name
-        normalized = normalized.replace(/[^a-zA-Z0-9._-]/g, "-");
-        
+        normalized = normalized
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]/g, "-"); // an toàn cho icon name
+
         return normalized;
     }
-    
-    // Tự động resolve icon tốt nhất với nhiều fallback strategies
+
+    // Thử resolve icon từ một identifier duy nhất (appIcon, appName, ...)
+    function resolveIconFromIdentifier(identifier) {
+        if (!identifier || typeof identifier !== "string" || !AppSearch)
+            return "";
+
+        const lowercased = identifier.toLowerCase();
+        
+        // Xử lý đặc biệt cho Microsoft Edge - ưu tiên cao nhất và tránh fuzzy search sai
+        if (lowercased.includes("edge") || lowercased.includes("microsoft")) {
+            // Thử các tên icon Edge phổ biến trước
+            const edgeCandidates = ["microsoft-edge", "edge", "msedge", "com.microsoft.edge"];
+            for (let i = 0; i < edgeCandidates.length; i++) {
+                const candidate = edgeCandidates[i];
+                // Kiểm tra trực tiếp xem icon có tồn tại không
+                if (AppSearch.iconExists(candidate)) {
+                    return candidate;
+                }
+                // Thử dùng guessIcon (sẽ check substitutions)
+                const guessed = AppSearch.guessIcon(candidate);
+                if (guessed && AppSearch.iconExists(guessed) && 
+                    (guessed.includes("edge") || guessed.includes("microsoft"))) {
+                    return guessed;
+                }
+            }
+            // Nếu không tìm thấy Edge icon, trả về rỗng thay vì để fuzzy search tìm "hp"
+            return "";
+        }
+
+        const normalized = normalizeAppIdentifier(identifier);
+        const candidates = [];
+
+        // Ưu tiên id đã normalize, sau đó đến id gốc
+        if (normalized && normalized !== identifier)
+            candidates.push(normalized);
+        candidates.push(identifier);
+
+        for (let i = 0; i < candidates.length; i++) {
+            const candidate = candidates[i];
+            if (!candidate)
+                continue;
+
+            // 1. Nếu icon tồn tại trực tiếp -> dùng luôn
+            if (AppSearch.iconExists(candidate))
+                return candidate;
+
+            // 2. Để AppSearch đoán icon tốt nhất (sẽ check substitutions và fuzzy search)
+            const guessed = AppSearch.guessIcon(candidate);
+            if (guessed && AppSearch.iconExists(guessed) && guessed !== "application-x-executable") {
+                return guessed;
+            }
+        }
+
+        return "";
+    }
+
+    // Tự động resolve icon tốt nhất với nhiều nguồn vào, nhưng code vẫn gọn
     readonly property string resolvedAppIcon: {
         try {
-            // Strategy 1: Nếu có appIcon và icon tồn tại, dùng nó trực tiếp
-            if (appIcon && appIcon !== "" && typeof appIcon === "string") {
-                const normalizedIcon = normalizeAppIdentifier(appIcon);
-                if (normalizedIcon !== "" && AppSearch && AppSearch.iconExists(normalizedIcon)) {
-                    return normalizedIcon;
-                }
-                // Thử với icon gốc (có thể là full path)
-                if (AppSearch && AppSearch.iconExists(appIcon)) {
-                    return appIcon;
-                }
-            }
-            
-            // Strategy 2: Nếu có appIcon nhưng không hợp lệ, thử guess từ appIcon
-            if (appIcon && appIcon !== "" && typeof appIcon === "string") {
-                const normalizedIcon = normalizeAppIdentifier(appIcon);
-                if (normalizedIcon !== "" && AppSearch) {
-                    const guessed = AppSearch.guessIcon(normalizedIcon);
-                    if (AppSearch.iconExists(guessed)) {
-                        return guessed;
-                    }
-                    // Thử guess từ icon gốc
-                    const guessedOriginal = AppSearch.guessIcon(appIcon);
-                    if (AppSearch.iconExists(guessedOriginal)) {
-                        return guessedOriginal;
-                    }
-                }
-            }
-            
-            // Strategy 3: Nếu có appName, thử guess từ appName
-            if (appName && appName !== "" && typeof appName === "string") {
-                const normalizedName = normalizeAppIdentifier(appName);
-                if (normalizedName !== "" && AppSearch) {
-                    const guessed = AppSearch.guessIcon(normalizedName);
-                    if (AppSearch.iconExists(guessed)) {
-                        return guessed;
-                    }
-                    // Thử guess từ appName gốc
-                    const guessedOriginal = AppSearch.guessIcon(appName);
-                    if (AppSearch.iconExists(guessedOriginal)) {
-                        return guessedOriginal;
-                    }
-                }
-            }
-            
-            // Strategy 4: Thử từ summary nếu có keyword đặc biệt
-            if (summary && summary !== "" && typeof summary === "string" && AppSearch) {
-                const lowerSummary = summary.toLowerCase();
-                // Một số keywords đặc biệt có thể giúp tìm icon
-                if (lowerSummary.includes("update") || lowerSummary.includes("upgrade")) {
-                    const guessed = AppSearch.guessIcon("system-update");
-                    if (AppSearch.iconExists(guessed)) return guessed;
-                }
+            // Thứ tự ưu tiên: appIcon -> appName -> một số gợi ý từ summary
+            const sources = [
+                appIcon,
+                appName,
+                // Một số từ khóa đặc biệt có lợi cho việc map icon (system-update, v.v.)
+                (summary && typeof summary === "string" && summary.toLowerCase().includes("update"))
+                    ? "system-update"
+                    : ""
+            ];
+
+            for (let i = 0; i < sources.length; i++) {
+                const icon = resolveIconFromIdentifier(sources[i]);
+                if (icon && icon !== "")
+                    return icon;
             }
         } catch (error) {
             console.warn("[NotificationAppIcon] Error resolving icon:", error);

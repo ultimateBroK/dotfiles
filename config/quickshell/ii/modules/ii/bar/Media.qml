@@ -50,6 +50,7 @@ Item {
 
         ClippedFilledCircularProgress {
             id: mediaCircProg
+            visible: !!activePlayer
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
             value: activePlayer?.position / activePlayer?.length
@@ -72,16 +73,25 @@ Item {
             }
         }
 
-        StyledText {
-            visible: Config.options.bar.verbose
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
+        PingPongScrollingText {
+            visible: Config.options.bar.verbose && !!activePlayer
             Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true // Ensures the text takes up available space
+            Layout.fillWidth: true
             Layout.rightMargin: rowLayout.spacing
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight // Truncates the text on the right
+            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             color: Appearance.colors.colOnLayer1
+            fontPixelSize: Appearance.font.pixelSize.normal
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
+        }
+
+        StyledText {
+            visible: Config.options.bar.verbose && !activePlayer
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            color: Appearance.colors.colOnLayer1
+            font.pixelSize: Appearance.font.pixelSize.normal
+            text: cleanedTitle
         }
 
     }

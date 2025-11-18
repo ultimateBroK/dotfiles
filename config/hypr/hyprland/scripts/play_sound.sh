@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to play system sounds
+# Script to play system sounds (moved from custom/scripts)
 # Usage: play_sound.sh <sound-name>
 
 SOUND_NAME="$1"
@@ -24,4 +24,5 @@ else
         ffplay -nodisp -autoexit "$SYSTEM_SOUND_OGG" &>/dev/null &
     fi
 fi
+
 

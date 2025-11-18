@@ -133,6 +133,7 @@ Variants {
                 opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
                 cache: false
                 smooth: false
+                asynchronous: false
                 // Range = groups that workspaces span on
                 property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
                 property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
@@ -174,8 +175,14 @@ Variants {
                     }
                 }
                 sourceSize {
-                    width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale * 3
-                    height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale * 3
+                    // Load at native wallpaper resolution to maintain original sharpness
+                    // Use wallpaper dimensions when available, otherwise use display size with scale
+                    width: bgRoot.wallpaperWidth > bgRoot.screen.width ? 
+                           bgRoot.wallpaperWidth : 
+                           bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
+                    height: bgRoot.wallpaperHeight > bgRoot.screen.height ? 
+                            bgRoot.wallpaperHeight : 
+                            bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
                 }
                 width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
                 height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale

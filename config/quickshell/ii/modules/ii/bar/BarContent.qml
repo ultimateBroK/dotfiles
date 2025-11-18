@@ -315,6 +315,24 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
+                        id: volumeStatusIcon
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                        property real volumeValue: (Audio?.value ?? Audio.sink?.audio?.volume ?? 0)
+                        property bool muted: Audio.sink?.audio?.muted ?? false
+
+                        text: {
+                            if (muted || volumeValue <= 0.001)
+                                return "volume_off";
+                            if (volumeValue <= 0.40)
+                                return "volume_mute";
+                            if (volumeValue <= 0.70)
+                                return "volume_down";
+                            return "volume_up";
+                        }
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                    }
+                    MaterialSymbol {
                         visible: BluetoothStatus.available
                         text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
                         iconSize: Appearance.font.pixelSize.larger

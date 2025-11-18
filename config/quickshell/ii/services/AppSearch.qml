@@ -13,6 +13,7 @@ Singleton {
     property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
+        // Common aliases / odd desktop IDs
         "code-url-handler": "visual-studio-code",
         "Code": "visual-studio-code",
         "gnome-tweaks": "org.gnome.tweaks",
@@ -20,6 +21,13 @@ Singleton {
         "wps": "wps-office2019-kprometheus",
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
+
+        // Chromium-based browsers & Microsoft Edge aliases
+        "edge": "microsoft-edge",
+        "msedge": "microsoft-edge",
+        "microsoft edge": "microsoft-edge",
+        "microsoft-edge-dev": "microsoft-edge",
+        "com.microsoft.edge": "microsoft-edge",
     })
     property var regexSubstitutions: [
         {

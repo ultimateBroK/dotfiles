@@ -188,16 +188,12 @@ Item { // Player instance
                 Layout.fillHeight: true
                 spacing: 2
 
-                StyledText {
+                PingPongScrollingText {
                     id: trackTitle
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.large
+                    fontPixelSize: Appearance.font.pixelSize.large
                     color: blendedColors.colOnLayer0
-                    elide: Text.ElideRight
                     text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
-                    animateChange: true
-                    animationDistanceX: 6
-                    animationDistanceY: 0
                 }
                 StyledText {
                     id: trackArtist
