@@ -16,6 +16,7 @@ Item {
     property int animationDuration: 4000 // Thời gian cho mỗi chiều (ms)
     property int pauseDuration: 500 // Thời gian dừng ở đầu/cuối (ms)
     property bool autoStart: true // Tự động bắt đầu animation khi text thay đổi
+    property bool centerStaticText: false // Căn giữa khi không cần scroll
     
     clip: true
     implicitHeight: scrollingText.implicitHeight
@@ -39,7 +40,7 @@ Item {
         color: root.color
         font.pixelSize: root.fontPixelSize
         text: root.text
-        horizontalAlignment: Text.AlignLeft
+        horizontalAlignment: (root.needsScrolling || !root.centerStaticText) ? Text.AlignLeft : Text.AlignHCenter
         
         property real textX: 0 // Vị trí X của text để scroll
     }

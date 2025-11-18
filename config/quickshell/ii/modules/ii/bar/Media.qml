@@ -81,6 +81,7 @@ Item {
             width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             color: Appearance.colors.colOnLayer1
             fontPixelSize: Appearance.font.pixelSize.normal
+            centerStaticText: cleanedTitle === Translation.tr("No media")
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
         }
 
