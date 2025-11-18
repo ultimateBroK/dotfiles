@@ -28,7 +28,6 @@ function findSuitableMaterialSymbol(summary = "") {
         'install': 'deployed_code_update',
         'input': 'keyboard_alt',
         'preedit': 'keyboard_alt',
-        // KDE Connect notifications – show a phone/device icon instead of generic chat
         'kde connect': 'phone_android',
         'kdeconnect': 'phone_android',
         'startswith:file': 'folder_copy', // Declarative startsWith check

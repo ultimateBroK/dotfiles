@@ -18,77 +18,77 @@ MaterialShape { // App icon
     property bool imageLoadFailed: false
     property bool appIconLoadFailed: false
     readonly property bool showNotificationImage: image != "" && !imageLoadFailed
-    
-    // Normalize app name/icon để xử lý các edge cases theo cách tổng quát
+
+    // Normalize app name/icon to handle edge cases in a generic way
     function normalizeAppIdentifier(identifier) {
         if (!identifier || typeof identifier !== "string")
             return "";
 
-        // Loại bỏ whitespace và normalize
+        // Remove whitespace and normalize
         let normalized = identifier.trim();
         if (normalized === "")
             return "";
 
-        // Xử lý file paths (lấy tên file không có extension)
+        // Handle file paths (get file name without extension)
         if (normalized.includes("/")) {
             const parts = normalized.split("/");
             normalized = parts[parts.length - 1];
-            // Loại bỏ extension nếu có
+            // Remove extension if present
             if (normalized.includes(".")) {
                 const nameParts = normalized.split(".");
                 normalized = nameParts.slice(0, -1).join(".");
             }
         }
 
-        // Xử lý domain names (com.example.app -> app)
+        // Handle domain names (com.example.app -> app)
         if (normalized.includes(".")) {
             const parts = normalized.split(".");
-            // Nếu có nhiều phần, lấy phần cuối cùng (thường là app name)
+            // If multiple segments, get the last one (usually app name)
             if (parts.length > 1) {
                 normalized = parts[parts.length - 1];
             }
         }
 
-        // Loại bỏ các ký tự đặc biệt không hợp lệ cho icon name
+        // Remove invalid/special characters for icon name
         normalized = normalized
             .toLowerCase()
-            .replace(/[^a-z0-9._-]/g, "-"); // an toàn cho icon name
+            .replace(/[^a-z0-9._-]/g, "-"); // safe for icon name
 
         return normalized;
     }
 
-    // Thử resolve icon từ một identifier duy nhất (appIcon, appName, ...)
+    // Try resolving icon from a single identifier (appIcon, appName, etc.)
     function resolveIconFromIdentifier(identifier) {
         if (!identifier || typeof identifier !== "string" || !AppSearch)
             return "";
 
         const lowercased = identifier.toLowerCase();
-        
-        // Xử lý đặc biệt cho Microsoft Edge - ưu tiên cao nhất và tránh fuzzy search sai
+
+        // Special handling for Microsoft Edge - highest priority & avoid incorrect fuzzy search
         if (lowercased.includes("edge") || lowercased.includes("microsoft")) {
-            // Thử các tên icon Edge phổ biến trước
+            // Try common Edge icon names first
             const edgeCandidates = ["microsoft-edge", "edge", "msedge", "com.microsoft.edge"];
             for (let i = 0; i < edgeCandidates.length; i++) {
                 const candidate = edgeCandidates[i];
-                // Kiểm tra trực tiếp xem icon có tồn tại không
+                // Check directly if icon exists
                 if (AppSearch.iconExists(candidate)) {
                     return candidate;
                 }
-                // Thử dùng guessIcon (sẽ check substitutions)
+                // Try using guessIcon (will check substitutions)
                 const guessed = AppSearch.guessIcon(candidate);
-                if (guessed && AppSearch.iconExists(guessed) && 
+                if (guessed && AppSearch.iconExists(guessed) &&
                     (guessed.includes("edge") || guessed.includes("microsoft"))) {
                     return guessed;
                 }
             }
-            // Nếu không tìm thấy Edge icon, trả về rỗng thay vì để fuzzy search tìm "hp"
+            // If Edge icon not found, return empty instead of allowing fuzzy search to find "hp"
             return "";
         }
 
         const normalized = normalizeAppIdentifier(identifier);
         const candidates = [];
 
-        // Ưu tiên id đã normalize, sau đó đến id gốc
+        // Prefer normalized id if different, then the raw id
         if (normalized && normalized !== identifier)
             candidates.push(normalized);
         candidates.push(identifier);
@@ -98,11 +98,11 @@ MaterialShape { // App icon
             if (!candidate)
                 continue;
 
-            // 1. Nếu icon tồn tại trực tiếp -> dùng luôn
+            // 1. Use directly if icon exists
             if (AppSearch.iconExists(candidate))
                 return candidate;
 
-            // 2. Để AppSearch đoán icon tốt nhất (sẽ check substitutions và fuzzy search)
+            // 2. Let AppSearch guess best icon (checks substitutions & fuzzy search)
             const guessed = AppSearch.guessIcon(candidate);
             if (guessed && AppSearch.iconExists(guessed) && guessed !== "application-x-executable") {
                 return guessed;
@@ -112,14 +112,14 @@ MaterialShape { // App icon
         return "";
     }
 
-    // Tự động resolve icon tốt nhất với nhiều nguồn vào, nhưng code vẫn gọn
+    // Automatically resolve the best icon from several sources, concise code
     readonly property string resolvedAppIcon: {
         try {
-            // Thứ tự ưu tiên: appIcon -> appName -> một số gợi ý từ summary
+            // Priority order: appIcon -> appName -> special keyword based on summary
             const sources = [
                 appIcon,
                 appName,
-                // Một số từ khóa đặc biệt có lợi cho việc map icon (system-update, v.v.)
+                // Certain keywords help map correct icon (e.g. system-update)
                 (summary && typeof summary === "string" && summary.toLowerCase().includes("update"))
                     ? "system-update"
                     : ""
@@ -133,8 +133,8 @@ MaterialShape { // App icon
         } catch (error) {
             console.warn("[NotificationAppIcon] Error resolving icon:", error);
         }
-        
-        // Không tìm được icon hợp lệ
+
+        // No valid icon found
         return "";
     }
     property real materialIconScale: 0.57
@@ -156,7 +156,7 @@ MaterialShape { // App icon
     onAppIconChanged: appIconLoadFailed = false
     onAppNameChanged: appIconLoadFailed = false
     onResolvedAppIconChanged: {
-        // Reset load failed khi resolved icon thay đổi
+        // Reset load failed when resolved icon changes
         if (resolvedAppIcon !== "") {
             appIconLoadFailed = false;
         }
@@ -164,7 +164,7 @@ MaterialShape { // App icon
 
     Loader {
         id: materialSymbolLoader
-        // Chỉ dùng Material icon khi không có icon hợp lệ (hoặc load fail) và cũng không có image hợp lệ
+        // Only use Material icon if no valid icon or app icon load failed and no valid image
         active: (root.resolvedAppIcon === "" || root.appIconLoadFailed) && !root.showNotificationImage
         anchors.fill: parent
         sourceComponent: MaterialSymbol {
@@ -184,7 +184,7 @@ MaterialShape { // App icon
     }
     Loader {
         id: appIconLoader
-        // Dùng app icon khi có icon hợp lệ và không có image riêng hoặc image lỗi
+        // Use app icon if valid and no separate image, or image failed
         active: (!root.showNotificationImage) && root.resolvedAppIcon !== "" && !root.appIconLoadFailed
         anchors.centerIn: parent
         sourceComponent: IconImage {
@@ -192,7 +192,7 @@ MaterialShape { // App icon
             implicitSize: root.appIconSize
             asynchronous: true
             source: Quickshell.iconPath(root.resolvedAppIcon, "image-missing")
-            
+
             onStatusChanged: {
                 if (status === IconImage.Error || status === IconImage.Null) {
                     console.warn("[NotificationAppIcon] Failed to load app icon:", root.resolvedAppIcon);
@@ -203,7 +203,7 @@ MaterialShape { // App icon
     }
     Loader {
         id: notifImageLoader
-        // Khi có image hợp lệ, ưu tiên hiển thị image làm nền, có thể overlay appIcon nhỏ
+        // When a valid image is present, give priority and optionally overlay small appIcon
         active: root.showNotificationImage
         anchors.fill: parent
         sourceComponent: Item {
@@ -249,10 +249,10 @@ MaterialShape { // App icon
                     implicitSize: root.smallAppIconSize
                     asynchronous: true
                     source: Quickshell.iconPath(root.resolvedAppIcon, "image-missing")
-                    
+
                     onStatusChanged: {
                         if (status === IconImage.Error || status === IconImage.Null) {
-                            // Không cần warn ở đây vì đây là overlay icon nhỏ
+                            // No warning here, as this is just a small overlay icon
                             root.appIconLoadFailed = true;
                         }
                     }
