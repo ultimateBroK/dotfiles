@@ -78,10 +78,11 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.rightMargin: rowLayout.spacing
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             color: Appearance.colors.colOnLayer1
             fontPixelSize: Appearance.font.pixelSize.normal
-            centerStaticText: cleanedTitle === Translation.tr("No media")
+            // Center text when it fits; PingPongScrollingText will automatically
+            // switch to scrolling when the text overflows its width.
+            centerStaticText: true
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
         }
 

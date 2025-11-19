@@ -27,7 +27,8 @@ Item {
         spacing: -4
 
         StyledText {
-            Layout.fillWidth: true
+            Layout.preferredWidth: 300
+            Layout.alignment: Qt.AlignLeft
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
@@ -37,11 +38,11 @@ Item {
 
         }
 
-        StyledText {
-            Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.small
+        PingPongScrollingText {
+            Layout.preferredWidth: 300
+            Layout.alignment: Qt.AlignLeft
+            fontPixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
-            elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.title :
                 (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`

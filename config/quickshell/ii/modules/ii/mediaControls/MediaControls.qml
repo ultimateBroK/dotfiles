@@ -28,13 +28,13 @@ Scope {
         function stateRank(player) {
             if (player.playbackState === MprisPlaybackState.Playing)
                 return 0;   // highest priority
-            if (player.playbackState === MprisPlaybackState.Paused)
-                return 1;   // just below Playing
-            return 2;       // Stopped / Unknown / others
+            return 1;       // Stopped / Paused / others
         }
 
         function hasUsefulMetadata(player) {
             if (!player) return false;
+            if (player.playbackState === MprisPlaybackState.Playing) return true;
+
             const hasTitle = player.trackTitle && player.trackTitle.length > 0;
             const hasArtist = player.trackArtist && player.trackArtist.length > 0;
             const hasLength = player.length && player.length > 0;
