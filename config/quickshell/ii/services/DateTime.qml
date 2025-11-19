@@ -10,6 +10,8 @@ import Quickshell.Io
  * A nice wrapper for date and time strings.
  */
 Singleton {
+    readonly property var enLocale: Qt.locale("en_US")
+
     property var clock: SystemClock {
         id: clock
         precision: {
@@ -18,11 +20,11 @@ Singleton {
             return SystemClock.Minutes;
         }
     }
-    property string time: Qt.locale().toString(clock.date, Config.options?.time.format ?? "hh:mm")
-    property string shortDate: Qt.locale().toString(clock.date, Config.options?.time.shortDateFormat ?? "dd/MM")
-    property string date: Qt.locale().toString(clock.date, Config.options?.time.dateWithYearFormat ?? "dd/MM/yyyy")
-    property string longDate: Qt.locale().toString(clock.date, Config.options?.time.dateFormat ?? "dddd, dd/MM")
-    property string collapsedCalendarFormat: Qt.locale().toString(clock.date, "dd MMMM yyyy")
+    property string time: enLocale.toString(clock.date, Config.options?.time.format ?? "hh:mm AP")
+    property string shortDate: enLocale.toString(clock.date, Config.options?.time.shortDateFormat ?? "dd/MM/yy")
+    property string date: enLocale.toString(clock.date, Config.options?.time.dateWithYearFormat ?? "dd/MM/yyyy")
+    property string longDate: enLocale.toString(clock.date, Config.options?.time.dateFormat ?? "ddd, dd/MM/yy")
+    property string collapsedCalendarFormat: enLocale.toString(clock.date, "dd MMMM yyyy")
     property string uptime: "0h, 0m"
 
     Timer {

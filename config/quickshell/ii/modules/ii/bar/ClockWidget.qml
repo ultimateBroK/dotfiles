@@ -14,7 +14,7 @@ Item {
     RowLayout {
         id: rowLayout
         anchors.centerIn: parent
-        spacing: 4
+        spacing: 2
 
         StyledText {
             font.pixelSize: Appearance.font.pixelSize.large
@@ -26,7 +26,7 @@ Item {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
-            text: "•"
+            text: "-"
         }
 
         StyledText {

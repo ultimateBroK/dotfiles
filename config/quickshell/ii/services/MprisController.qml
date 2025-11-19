@@ -31,28 +31,52 @@ Singleton {
 			target: modelData;
 
 			Component.onCompleted: {
+				// Ưu tiên chọn player đang Playing làm trackedPlayer đầu tiên,
+				// nếu chưa có trackedPlayer hoặc chưa có player nào Playing.
 				if (root.trackedPlayer == null || modelData.isPlaying) {
 					root.trackedPlayer = modelData;
 				}
 			}
 
 			Component.onDestruction: {
-				if (root.trackedPlayer == null || !root.trackedPlayer.isPlaying) {
+				// Nếu player bị destroy chính là player đang được track,
+				// hãy chọn player Playing khác (nếu có), nếu không thì fallback về player đầu tiên.
+				if (root.trackedPlayer === modelData) {
+					let nextPlayer = null;
+
 					for (const player of Mpris.players.values) {
-						if (player.playbackState.isPlaying) {
-							root.trackedPlayer = player;
+						if (player.isPlaying) {
+							nextPlayer = player;
 							break;
 						}
 					}
 
-					if (trackedPlayer == null && Mpris.players.values.length != 0) {
-						trackedPlayer = Mpris.players.values[0];
+					if (!nextPlayer && Mpris.players.values.length > 0) {
+						nextPlayer = Mpris.players.values[0];
 					}
+
+					root.trackedPlayer = nextPlayer;
 				}
 			}
 
 			function onPlaybackStateChanged() {
-				if (root.trackedPlayer !== modelData) root.trackedPlayer = modelData;
+				// Nếu player này bắt đầu Playing -> trở thành trackedPlayer.
+				if (modelData.isPlaying) {
+					root.trackedPlayer = modelData;
+					return;
+				}
+
+				// Nếu player này dừng lại và hiện đang là trackedPlayer,
+				// chuyển trackedPlayer sang player khác đang Playing (nếu có),
+				// hoặc giữ nguyên nếu không tìm được player Playing.
+				if (root.trackedPlayer === modelData && !modelData.isPlaying) {
+					for (const player of Mpris.players.values) {
+						if (player.isPlaying) {
+							root.trackedPlayer = player;
+							return;
+						}
+					}
+				}
 			}
 		}
 	}

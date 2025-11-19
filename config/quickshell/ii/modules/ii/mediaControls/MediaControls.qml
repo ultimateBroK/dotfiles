@@ -16,8 +16,67 @@ Scope {
     id: root
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
+
+    // All "real" players after basic dedup/filtering (no plasma / playerctld noise)
     readonly property var realPlayers: Mpris.players.values.filter(player => isRealPlayer(player))
-    readonly property var meaningfulPlayers: filterDuplicatePlayers(realPlayers)
+
+    // Final players list shown in the popup:
+    // - Drop "empty" sessions (no title / artist / length / position) to avoid noise cards
+    // - Order by playback state: Playing > Paused > everything else
+    // - Then run duplicate-filtering (plasma, playerctld, etc.)
+    readonly property var meaningfulPlayers: {
+        function stateRank(player) {
+            if (player.playbackState === MprisPlaybackState.Playing)
+                return 0;   // highest priority
+            if (player.playbackState === MprisPlaybackState.Paused)
+                return 1;   // just below Playing
+            return 2;       // Stopped / Unknown / others
+        }
+
+        function hasUsefulMetadata(player) {
+            if (!player) return false;
+            const hasTitle = player.trackTitle && player.trackTitle.length > 0;
+            const hasArtist = player.trackArtist && player.trackArtist.length > 0;
+            const hasLength = player.length && player.length > 0;
+            const hasPosition = player.position && player.position > 0;
+
+            const dbus = (player.dbusName || "").toLowerCase();
+            const isBrowser =
+                    dbus.startsWith("org.mpris.mediaplayer2.firefox") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.chromium") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.google-chrome") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.brave") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.vivaldi") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.edge") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.opera") ||
+                    dbus.startsWith("org.mpris.mediaplayer2.plasma-browser-integration");
+
+            // Browser MPRIS sessions often linger after closing the tab – if stopped at 0s,
+            // treat them as empty so they don't stay controllable forever.
+            if (isBrowser &&
+                player.playbackState === MprisPlaybackState.Stopped &&
+                (!player.position || player.position <= 0)) {
+                return false;
+            }
+
+            return hasTitle || hasArtist || hasLength || hasPosition;
+        }
+
+        // Drop empty players when we have at least one with real metadata.
+        const candidates = realPlayers.filter(hasUsefulMetadata);
+        const baseList = candidates.length > 0 ? candidates : realPlayers;
+
+        // Copy + sort to keep original array untouched
+        const sorted = baseList.slice().sort((a, b) => {
+            const ra = stateRank(a);
+            const rb = stateRank(b);
+            if (ra !== rb)
+                return ra - rb;
+            return 0;
+        });
+
+        return filterDuplicatePlayers(sorted);
+    }
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
@@ -25,7 +84,7 @@ Scope {
     property list<real> visualizerPoints: []
 
     property bool hasPlasmaIntegration: false
-    Process {
+    Process { // one-shot check for plasma-browser-integration
         id: plasmaIntegrationAvailabilityCheckProc
         running: true
         command: ["bash", "-c", "command -v plasma-browser-integration-host"]
@@ -34,16 +93,16 @@ Scope {
         }
     }
     function isRealPlayer(player) {
-        if (!Config.options.media.filterDuplicatePlayers) {
-            return true;
-        }
+        if (!Config.options.media.filterDuplicatePlayers) return true;
         return (
-            // Remove unecessary native buses from browsers if there's plasma integration
-            !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.firefox')) && !(hasPlasmaIntegration && player.dbusName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
-            // playerctld just copies other buses and we don't need duplicates
-            !player.dbusName?.startsWith('org.mpris.MediaPlayer2.playerctld') &&
+            // Drop native browser buses when plasma integration is available
+            !(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.firefox")) &&
+            !(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.chromium")) &&
+            // playerctld just mirrors other buses
+            !player.dbusName?.startsWith("org.mpris.MediaPlayer2.playerctld") &&
             // Non-instance mpd bus
-            !(player.dbusName?.endsWith('.mpd') && !player.dbusName.endsWith('MediaPlayer2.mpd')));
+            !(player.dbusName?.endsWith(".mpd") && !player.dbusName.endsWith("MediaPlayer2.mpd"))
+        );
     }
     function filterDuplicatePlayers(players) {
         let filtered = [];
@@ -74,18 +133,15 @@ Scope {
         return filtered;
     }
 
-    Process {
+    Process { // CAVA visualizer bridge
         id: cavaProc
         running: mediaControlsLoader.active
         onRunningChanged: {
-            if (!cavaProc.running) {
-                root.visualizerPoints = [];
-            }
+            if (!cavaProc.running) root.visualizerPoints = [];
         }
         command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
         stdout: SplitParser {
             onRead: data => {
-                // Parse `;`-separated values into the visualizerPoints array
                 let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
                 root.visualizerPoints = points;
             }
@@ -118,10 +174,15 @@ Scope {
                 left: !(Config.options.bar.vertical && Config.options.bar.bottom)
                 right: Config.options.bar.vertical && Config.options.bar.bottom
             }
+            // Position popup just under the top bar and horizontally centered (for horizontal bars)
             margins {
-                top: Config.options.bar.vertical ? ((mediaControlsRoot.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
+                top: Config.options.bar.vertical
+                     ? ((mediaControlsRoot.screen.height / 2) - widgetHeight * 1.5)
+                     : Appearance.sizes.barHeight
                 bottom: Appearance.sizes.barHeight
-                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((mediaControlsRoot.screen.width / 2) - (osdWidth / 2) - widgetWidth)
+                left: Config.options.bar.vertical
+                      ? Appearance.sizes.barHeight
+                      : (mediaControlsRoot.screen.width - root.widgetWidth) / 2
                 right: Appearance.sizes.barHeight
             }
 
@@ -158,7 +219,7 @@ Scope {
                     }
                 }
 
-                Item { // No player placeholder
+                Item { // Placeholder when there are no players
                     Layout.alignment: {
                         if (mediaControlsRoot.anchors.left) return Qt.AlignLeft;
                         if (mediaControlsRoot.anchors.right) return Qt.AlignRight;
