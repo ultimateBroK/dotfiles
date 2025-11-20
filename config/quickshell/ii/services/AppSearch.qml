@@ -62,21 +62,32 @@ Singleton {
     }))
 
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
+        let results;
         if (root.sloppySearch) {
-            const results = list.map(obj => ({
+            const scoredResults = list.map(obj => ({
                 entry: obj,
                 score: Levendist.computeScore(obj.name.toLowerCase(), search.toLowerCase())
             })).filter(item => item.score > root.scoreThreshold)
                 .sort((a, b) => b.score - a.score)
-            return results
+            results = scoredResults
                 .map(item => item.entry)
+        } else {
+            results = Fuzzy.go(search, preppedNames, {
+                all: true,
+                key: "name"
+            }).map(r => {
+                return r.obj.entry
+            });
         }
 
-        return Fuzzy.go(search, preppedNames, {
-            all: true,
-            key: "name"
-        }).map(r => {
-            return r.obj.entry
+        // Deduplicate entries by ID
+        const seenIds = new Set();
+        return results.filter(entry => {
+            if (seenIds.has(entry.id)) {
+                return false;
+            }
+            seenIds.add(entry.id);
+            return true;
         });
     }
 

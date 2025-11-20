@@ -212,13 +212,14 @@ Item { // Notification item area
                     opacity: !root.expanded ? 1 : 0
                     visible: opacity > 0
                     Layout.fillWidth: true
+                    clip: true
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
-                    wrapMode: Text.Wrap // Needed for proper eliding????
+                    wrapMode: Text.NoWrap
                     maximumLineCount: 1
                     textFormat: Text.StyledText
                     text: root.safeBodyRich
@@ -361,3 +362,5 @@ Item { // Notification item area
         }
     }
 }
+
+
