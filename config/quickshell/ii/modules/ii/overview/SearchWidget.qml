@@ -383,7 +383,7 @@ Item { // Wrapper
                                 if (cleanedCommand.startsWith(Config.options.search.prefix.shellCommand)) {
                                     cleanedCommand = cleanedCommand.slice(Config.options.search.prefix.shellCommand.length);
                                 }
-                                Quickshell.execDetached(["bash", "-c", searchingText.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand]);
+                                Quickshell.execDetached(["zsh", "-c", `source ~/.zshrc && ${searchingText.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${cleanedCommand}'` : cleanedCommand}`]);
                             }
                         };
                         const webSearchResultObject = {
