@@ -25,18 +25,131 @@ Singleton {
         rescaleSize: 10
     }
     property real wallpaperVibrancy: (wallColorQuant.colors[0]?.hslSaturation + wallColorQuant.colors[0]?.hslLightness) / 2
-    property real autoBackgroundTransparency: { // y = 0.5768x^2 - 0.759x + 0.2896
+    
+    // Color scheme type adaptation factors
+    readonly property string colorSchemeType: Config?.options?.appearance?.palette?.type ?? "auto"
+    readonly property bool isDarkMode: m3colors.darkmode
+    
+    // Transparency adjustment factor based on color scheme type
+    readonly property real schemeTransparencyFactor: {
+        switch(colorSchemeType) {
+            case "scheme-vibrant": return 1.15;  // More transparency for vibrant schemes
+            case "scheme-rainbow": return 1.2;
+            case "scheme-fruit-salad": return 1.25;
+            case "scheme-expressive": return 1.1;
+            case "scheme-fidelity": return 1.0;
+            case "scheme-content": return 0.95;
+            case "scheme-neutral": return 0.85;  // Less transparency for neutral
+            case "scheme-monochrome": return 0.8;  // Less transparency for monochrome
+            case "scheme-tonal-spot": return 1.05;
+            default: return 1.0;
+        }
+    }
+    
+    // Mode-aware transparency calculation with scheme type adjustment
+    property real autoBackgroundTransparency: {
         let x = wallpaperVibrancy
-        let y = 0.5768 * (x * x) - 0.759 * (x) + 0.2896
-        return Math.max(0, Math.min(0.22, y))
+        // Base formula: y = 0.5768x^2 - 0.759x + 0.2896
+        let baseY = 0.5768 * (x * x) - 0.759 * (x) + 0.2896
+        
+        // Adjust for dark/light mode
+        let modeAdjust = isDarkMode ? 1.0 : 0.85  // Light mode needs less transparency
+        
+        // Apply scheme type factor
+        let adjusted = baseY * modeAdjust * schemeTransparencyFactor
+        
+        // Clamp with different limits for dark/light mode
+        let maxTrans = isDarkMode ? 0.25 : 0.20
+        return Math.max(0, Math.min(maxTrans, adjusted))
     }
-    property real autoContentTransparency: { // y = -10.1734x^2 + 3.4457x + 0.1872
+    
+    property real autoContentTransparency: {
         let x = autoBackgroundTransparency
-        let y = -10.1734 * (x * x) + 3.4457 * (x) + 0.1872
-        return Math.max(0, Math.min(0.6, y))
+        // Base formula: y = -10.1734x^2 + 3.4457x + 0.1872
+        let baseY = -10.1734 * (x * x) + 3.4457 * (x) + 0.1872
+        
+        // Adjust for dark/light mode
+        let modeAdjust = isDarkMode ? 1.0 : 0.9  // Light mode needs less content transparency
+        
+        // Apply scheme type factor (less aggressive for content)
+        let schemeFactor = 0.7 + (schemeTransparencyFactor - 1.0) * 0.3
+        let adjusted = baseY * modeAdjust * schemeFactor
+        
+        // Clamp with different limits for dark/light mode
+        let maxTrans = isDarkMode ? 0.65 : 0.55
+        return Math.max(0, Math.min(maxTrans, adjusted))
     }
+    
     property real backgroundTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoBackgroundTransparency : Config?.options.appearance.transparency.backgroundTransparency : 0
     property real contentTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.automatic ? autoContentTransparency : Config?.options.appearance.transparency.contentTransparency : 0
+    readonly property real schemeSaturationBoost: {
+        let base = {
+            "scheme-vibrant": 1.15,
+            "scheme-rainbow": 1.2,
+            "scheme-fruit-salad": 1.25,
+            "scheme-expressive": 1.1,
+            "scheme-fidelity": 1.0,
+            "scheme-content": 0.95,
+            "scheme-neutral": 0.7,
+            "scheme-monochrome": 0.0,
+            "scheme-tonal-spot": 1.05
+        }[colorSchemeType] ?? 1.0
+        
+        // Light mode: slightly reduce saturation boost to avoid being too intense
+        if (!isDarkMode && base > 1.0) {
+            return base * 0.92
+        }
+        // Dark mode can handle full saturation
+        return base
+    }
+    readonly property real schemePrimaryMix: {
+        switch(colorSchemeType) {
+            case "scheme-vibrant": return 0.12;
+            case "scheme-rainbow": return 0.15;
+            case "scheme-fruit-salad": return 0.18;
+            case "scheme-expressive": return 0.10;
+            case "scheme-fidelity": return 0.08;
+            case "scheme-content": return 0.06;
+            case "scheme-neutral": return 0.03;
+            case "scheme-monochrome": return 0.0;
+            case "scheme-tonal-spot": return 0.09;
+            default: return 0.08;
+        }
+    }
+    readonly property real schemeContrastBoost: {
+        let base = {
+            "scheme-vibrant": 1.1,
+            "scheme-rainbow": 1.15,
+            "scheme-fruit-salad": 1.2,
+            "scheme-expressive": 1.05,
+            "scheme-fidelity": 1.0,
+            "scheme-content": 0.95,
+            "scheme-neutral": 0.9,
+            "scheme-monochrome": 0.85,
+            "scheme-tonal-spot": 1.0
+        }[colorSchemeType] ?? 1.0
+        
+        // Light mode: increase contrast for better readability
+        if (!isDarkMode) {
+            return Math.min(1.25, base * 1.08)
+        }
+        return base
+    }
+    
+    // Lightness adjustment for light mode backgrounds
+    readonly property real schemeLightnessAdjust: {
+        if (!isDarkMode) {
+            // Light mode: slightly brighten backgrounds for better contrast with vibrant schemes
+            switch(colorSchemeType) {
+                case "scheme-vibrant":
+                case "scheme-rainbow":
+                case "scheme-fruit-salad": return 1.05;
+                case "scheme-expressive": return 1.03;
+                default: return 1.0;
+            }
+        }
+        return 1.0
+    }
 
     m3colors: QtObject {
         property bool darkmode: true
@@ -114,22 +227,100 @@ Singleton {
 
     colors: QtObject {
         property color colSubtext: m3colors.m3outline
-        property color colLayer0: ColorUtils.mix(ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency), m3colors.m3primary, Config.options.appearance.extraBackgroundTint ? 0.99 : 1)
-        property color colOnLayer0: m3colors.m3onBackground
-        property color colLayer0Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.9, root.contentTransparency))
-        property color colLayer0Active: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.8, root.contentTransparency))
-        property color colLayer0Border: ColorUtils.mix(root.m3colors.m3outlineVariant, colLayer0, 0.4)
-        property color colLayer1: ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency);
+        
+        // Base layer0 with scheme-aware primary mixing and mode-aware adjustments
+        property color colLayer0Base: {
+            var bg = ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency);
+            var mixRatio = Config.options.appearance.extraBackgroundTint ? (0.99 - root.schemePrimaryMix) : (1.0 - root.schemePrimaryMix);
+            var mixed = ColorUtils.mix(bg, m3colors.m3primary, mixRatio);
+            
+            // Apply lightness adjustment for light mode
+            if (root.schemeLightnessAdjust !== 1.0) {
+                var base = Qt.color(mixed);
+                var adjusted = Qt.hsla(base.hslHue, base.hslSaturation, Math.min(1.0, base.hslLightness * root.schemeLightnessAdjust), base.a);
+                return adjusted;
+            }
+            return mixed;
+        }
+        property color colLayer0: {
+            if (root.schemeSaturationBoost === 0.0) {
+                // Monochrome: desaturate completely
+                var base = Qt.color(colLayer0Base);
+                var gray = (base.r + base.g + base.b) / 3;
+                return Qt.rgba(gray, gray, gray, base.a);
+            } else if (root.schemeSaturationBoost !== 1.0) {
+                // Adjust saturation based on scheme type
+                var base = Qt.color(colLayer0Base);
+                var hsl = Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * root.schemeSaturationBoost), base.hslLightness, base.a);
+                return hsl;
+            }
+            return colLayer0Base;
+        }
+        property color colOnLayer0: {
+            if (root.schemeContrastBoost !== 1.0) {
+                var base = Qt.color(m3colors.m3onBackground);
+                var adjusted = Qt.hsla(base.hslHue, base.hslSaturation, Math.min(1.0, base.hslLightness * root.schemeContrastBoost), base.a);
+                return adjusted;
+            }
+            return m3colors.m3onBackground;
+        }
+        property color colLayer0Hover: {
+            var mixRatio = 0.9 * root.schemeContrastBoost;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.95, mixRatio), root.contentTransparency));
+        }
+        property color colLayer0Active: {
+            var mixRatio = 0.8 * root.schemeContrastBoost;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.9, mixRatio), root.contentTransparency));
+        }
+        property color colLayer0Border: {
+            var borderColor = root.m3colors.m3outlineVariant;
+            if (root.schemeSaturationBoost > 1.0) {
+                // Enhance border visibility for vibrant schemes
+                var base = Qt.color(borderColor);
+                var enhanced = Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * 1.1), base.hslLightness, base.a);
+                return ColorUtils.mix(enhanced, colLayer0, 0.4);
+            }
+            return ColorUtils.mix(borderColor, colLayer0, 0.4);
+        }
+        property color colLayer1: {
+            var base = ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency);
+            // Light mode: slightly brighten layer1 for better separation
+            if (!root.isDarkMode && root.schemeLightnessAdjust > 1.0) {
+                var c = Qt.color(base);
+                return Qt.hsla(c.hslHue, c.hslSaturation, Math.min(1.0, c.hslLightness * 1.02), c.a);
+            }
+            return base;
+        }
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
-        property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, 0.45);
-        property color colLayer2: ColorUtils.transparentize(m3colors.m3surfaceContainer, root.contentTransparency)
+        property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, root.isDarkMode ? 0.45 : 0.50);
+        property color colLayer2: {
+            var base = ColorUtils.transparentize(m3colors.m3surfaceContainer, root.contentTransparency);
+            // Light mode: slightly brighten layer2
+            if (!root.isDarkMode && root.schemeLightnessAdjust > 1.0) {
+                var c = Qt.color(base);
+                return Qt.hsla(c.hslHue, c.hslSaturation, Math.min(1.0, c.hslLightness * 1.03), c.a);
+            }
+            return base;
+        }
         property color colOnLayer2: m3colors.m3onSurface;
-        property color colOnLayer2Disabled: ColorUtils.mix(colOnLayer2, m3colors.m3background, 0.4);
-        property color colLayer1Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, 0.92), root.contentTransparency)
-        property color colLayer1Active: ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, 0.85), root.contentTransparency);
-        property color colLayer2Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.90), root.contentTransparency)
-        property color colLayer2Active: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.80), root.contentTransparency);
-        property color colLayer2Disabled: ColorUtils.transparentize(ColorUtils.mix(colLayer2, m3colors.m3background, 0.8), root.contentTransparency);
+        property color colOnLayer2Disabled: ColorUtils.mix(colOnLayer2, m3colors.m3background, root.isDarkMode ? 0.4 : 0.5);
+        property color colLayer1Hover: {
+            var mixRatio = root.isDarkMode ? 0.92 : 0.94;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, mixRatio), root.contentTransparency);
+        }
+        property color colLayer1Active: {
+            var mixRatio = root.isDarkMode ? 0.85 : 0.88;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, mixRatio), root.contentTransparency);
+        }
+        property color colLayer2Hover: {
+            var mixRatio = root.isDarkMode ? 0.90 : 0.92;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, mixRatio), root.contentTransparency);
+        }
+        property color colLayer2Active: {
+            var mixRatio = root.isDarkMode ? 0.80 : 0.83;
+            return ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, mixRatio), root.contentTransparency);
+        }
+        property color colLayer2Disabled: ColorUtils.transparentize(ColorUtils.mix(colLayer2, m3colors.m3background, root.isDarkMode ? 0.8 : 0.75), root.contentTransparency);
         property color colLayer3: ColorUtils.transparentize(m3colors.m3surfaceContainerHigh, root.contentTransparency)
         property color colOnLayer3: m3colors.m3onSurface;
         property color colLayer3Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer3, colOnLayer3, 0.90), root.contentTransparency)
@@ -138,21 +329,68 @@ Singleton {
         property color colOnLayer4: m3colors.m3onSurface;
         property color colLayer4Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer4, colOnLayer4, 0.90), root.contentTransparency)
         property color colLayer4Active: ColorUtils.transparentize(ColorUtils.mix(colLayer4, colOnLayer4, 0.80), root.contentTransparency);
-        property color colPrimary: m3colors.m3primary
+        property color colPrimary: {
+            if (root.schemeSaturationBoost === 0.0) {
+                // Monochrome: desaturate primary
+                var base = Qt.color(m3colors.m3primary);
+                var gray = (base.r + base.g + base.b) / 3;
+                return Qt.rgba(gray, gray, gray, base.a);
+            } else if (root.schemeSaturationBoost !== 1.0) {
+                var base = Qt.color(m3colors.m3primary);
+                return Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * root.schemeSaturationBoost), base.hslLightness, base.a);
+            }
+            return m3colors.m3primary;
+        }
         property color colOnPrimary: m3colors.m3onPrimary
-        property color colPrimaryHover: ColorUtils.mix(colors.colPrimary, colLayer1Hover, 0.87)
-        property color colPrimaryActive: ColorUtils.mix(colors.colPrimary, colLayer1Active, 0.7)
+        property color colPrimaryHover: {
+            var baseRatio = root.schemeSaturationBoost > 1.0 ? 0.85 : 0.87;
+            // Light mode needs slightly different mixing for better visibility
+            var mixRatio = root.isDarkMode ? baseRatio : (baseRatio + 0.02);
+            return ColorUtils.mix(colors.colPrimary, colLayer1Hover, mixRatio);
+        }
+        property color colPrimaryActive: {
+            var baseRatio = root.schemeSaturationBoost > 1.0 ? 0.65 : 0.7;
+            // Light mode: slightly more mixing for better contrast
+            var mixRatio = root.isDarkMode ? baseRatio : (baseRatio + 0.03);
+            return ColorUtils.mix(colors.colPrimary, colLayer1Active, mixRatio);
+        }
         property color colPrimaryContainer: m3colors.m3primaryContainer
         property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colors.colOnPrimaryContainer, 0.9)
         property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colors.colOnPrimaryContainer, 0.8)
         property color colOnPrimaryContainer: m3colors.m3onPrimaryContainer
-        property color colSecondary: m3colors.m3secondary
+        property color colSecondary: {
+            if (root.schemeSaturationBoost === 0.0) {
+                var base = Qt.color(m3colors.m3secondary);
+                var gray = (base.r + base.g + base.b) / 3;
+                return Qt.rgba(gray, gray, gray, base.a);
+            } else if (root.schemeSaturationBoost !== 1.0) {
+                var base = Qt.color(m3colors.m3secondary);
+                return Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * root.schemeSaturationBoost), base.hslLightness, base.a);
+            }
+            return m3colors.m3secondary;
+        }
         property color colOnSecondary: m3colors.m3onSecondary
-        property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
-        property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
-        property color colSecondaryContainer: m3colors.m3secondaryContainer
-        property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, m3colors.m3onSecondaryContainer, 0.90)
-        property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, m3colors.m3onSecondaryContainer, 0.54)
+        property color colSecondaryHover: {
+            var baseRatio = root.schemeSaturationBoost > 1.0 ? 0.82 : 0.85;
+            // Light mode: slightly more mixing
+            var mixRatio = root.isDarkMode ? baseRatio : (baseRatio + 0.02);
+            return ColorUtils.mix(colSecondary, colLayer1Hover, mixRatio);
+        }
+        property color colSecondaryActive: {
+            var baseRatio = root.schemeSaturationBoost > 1.0 ? 0.35 : 0.4;
+            // Light mode: more mixing for better contrast
+            var mixRatio = root.isDarkMode ? baseRatio : (baseRatio + 0.05);
+            return ColorUtils.mix(colSecondary, colLayer1Active, mixRatio);
+        }
+        property color colSecondaryContainer: {
+            if (root.schemeSaturationBoost > 1.0) {
+                var base = Qt.color(m3colors.m3secondaryContainer);
+                return Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * 1.05), base.hslLightness, base.a);
+            }
+            return m3colors.m3secondaryContainer;
+        }
+        property color colSecondaryContainerHover: ColorUtils.mix(colSecondaryContainer, m3colors.m3onSecondaryContainer, 0.90)
+        property color colSecondaryContainerActive: ColorUtils.mix(colSecondaryContainer, m3colors.m3onSecondaryContainer, 0.54)
         property color colTertiary: m3colors.m3tertiary
         property color colTertiaryHover: ColorUtils.mix(m3colors.m3tertiary, colLayer1Hover, 0.85)
         property color colTertiaryActive: ColorUtils.mix(m3colors.m3tertiary, colLayer1Active, 0.4)

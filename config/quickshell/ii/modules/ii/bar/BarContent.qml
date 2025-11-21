@@ -46,6 +46,27 @@ Item { // Bar content region
         border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
         border.color: Appearance.colors.colLayer0Border
     }
+    
+    // Subtle accent gradient overlay for vibrant schemes
+    Rectangle {
+        id: barAccentGradient
+        anchors.fill: barBackground
+        radius: barBackground.radius
+        visible: {
+            var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
+            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && Config.options.bar.showBackground;
+        }
+        opacity: 0.4
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: "transparent" }
+            GradientStop { 
+                position: 1.0; 
+                color: ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.12)
+            }
+        }
+        z: -1
+    }
 
     FocusedScrollMouseArea { // Left side | scroll to change brightness
         id: barLeftSideMouseArea

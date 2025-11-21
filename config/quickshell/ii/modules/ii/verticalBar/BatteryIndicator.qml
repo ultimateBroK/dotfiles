@@ -21,10 +21,31 @@ MouseArea {
         id: batteryProgress
         anchors.centerIn: parent
         vertical: true
-        valueBarWidth: 21
+        valueBarWidth: 36
         valueBarHeight: 40
         value: percentage
-        highlightColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
+        
+        property color baseColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
+        property color chargingGlowColor: Appearance.colors.colOnSecondaryContainer
+        
+        highlightColor: isCharging ? chargingGlowColor : baseColor
+        
+        SequentialAnimation on chargingGlowColor {
+            running: isCharging
+            loops: Animation.Infinite
+            ColorAnimation {
+                from: Appearance.colors.colOnSecondaryContainer
+                to: Qt.lighter(Appearance.colors.colOnSecondaryContainer, 1.3)
+                duration: 1100
+                easing.type: Easing.InOutQuad
+            }
+            ColorAnimation {
+                from: Qt.lighter(Appearance.colors.colOnSecondaryContainer, 1.3)
+                to: Appearance.colors.colOnSecondaryContainer
+                duration: 1100
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         font {
             pixelSize: text.length > 2 ? 11 : 13
@@ -47,6 +68,38 @@ MouseArea {
                     text: isCharging ? "bolt" : "battery_android_full"
                     iconSize: Appearance.font.pixelSize.normal
                     animateChange: true
+                    opacity: 1.0
+                    scale: 1.0
+                    
+                    SequentialAnimation on opacity {
+                        running: isCharging
+                        loops: Animation.Infinite
+                        NumberAnimation {
+                            to: 0.5
+                            duration: 900
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            to: 1.0
+                            duration: 900
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                    
+                    SequentialAnimation on scale {
+                        running: isCharging
+                        loops: Animation.Infinite
+                        NumberAnimation {
+                            to: 1.15
+                            duration: 900
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            to: 1.0
+                            duration: 900
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter

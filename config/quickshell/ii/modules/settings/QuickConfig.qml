@@ -32,7 +32,7 @@ ContentPage {
         toggled: Appearance.m3colors.darkmode === dark
         colBackground: Appearance.colors.colLayer2
         onClicked: {
-            Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --mode ${dark ? "dark" : "light"} --noswitch`]);
+            Quickshell.execDetached(["zsh", "-c", `${Directories.wallpaperSwitchScriptPath} --mode ${dark ? "dark" : "light"} --noswitch`]);
         }
         contentItem: Item {
             anchors.centerIn: parent
@@ -172,61 +172,190 @@ ContentPage {
             }
         }
 
-        ConfigSelectionArray {
-            currentValue: Config.options.appearance.palette.type
-            onSelected: newValue => {
-                Config.options.appearance.palette.type = newValue;
-                Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --noswitch`]);
-            }
-            options: [
-                {
-                    "value": "auto",
-                    "displayName": Translation.tr("Auto")
-                },
-                {
-                    "value": "scheme-content",
-                    "displayName": Translation.tr("Content")
-                },
-                {
-                    "value": "scheme-expressive",
-                    "displayName": Translation.tr("Expressive")
-                },
-                {
-                    "value": "scheme-fidelity",
-                    "displayName": Translation.tr("Fidelity")
-                },
-                {
-                    "value": "scheme-fruit-salad",
-                    "displayName": Translation.tr("Fruit Salad")
-                },
-                {
-                    "value": "scheme-monochrome",
-                    "displayName": Translation.tr("Monochrome")
-                },
-                {
-                    "value": "scheme-neutral",
-                    "displayName": Translation.tr("Neutral")
-                },
-                {
-                    "value": "scheme-rainbow",
-                    "displayName": Translation.tr("Rainbow")
-                },
-                {
-                    "value": "scheme-tonal-spot",
-                    "displayName": Translation.tr("Tonal Spot")
+        ContentSubsection {
+            title: Translation.tr("Color Scheme Type")
+            tooltip: Translation.tr("Select how colors are generated from your wallpaper.\nAuto will intelligently detect the best scheme for your image.")
+            
+            ConfigSelectionArray {
+                id: colorTypeSelector
+                currentValue: Config.options.appearance.palette.type
+                onSelected: newValue => {
+                    Config.options.appearance.palette.type = newValue;
+                    colorTypeSelector.enabled = false;
+                    Quickshell.execDetached(["zsh", "-c", `${Directories.wallpaperSwitchScriptPath} --noswitch --type ${newValue}`]);
+                    // Re-enable after a delay to allow script to start
+                    reenableTimer.restart();
                 }
-            ]
+                options: [
+                    {
+                        "value": "auto",
+                        "displayName": Translation.tr("Auto"),
+                        "icon": "auto_awesome"
+                    },
+                    {
+                        "value": "scheme-content",
+                        "displayName": Translation.tr("Content"),
+                        "icon": "palette"
+                    },
+                    {
+                        "value": "scheme-expressive",
+                        "displayName": Translation.tr("Expressive"),
+                        "icon": "brush"
+                    },
+                    {
+                        "value": "scheme-fidelity",
+                        "displayName": Translation.tr("Fidelity"),
+                        "icon": "photo"
+                    },
+                    {
+                        "value": "scheme-fruit-salad",
+                        "displayName": Translation.tr("Fruit Salad"),
+                        "icon": "colorize"
+                    },
+                    {
+                        "value": "scheme-monochrome",
+                        "displayName": Translation.tr("Monochrome"),
+                        "icon": "invert_colors_off"
+                    },
+                    {
+                        "value": "scheme-neutral",
+                        "displayName": Translation.tr("Neutral"),
+                        "icon": "tune"
+                    },
+                    {
+                        "value": "scheme-rainbow",
+                        "displayName": Translation.tr("Rainbow"),
+                        "icon": "gradient"
+                    },
+                    {
+                        "value": "scheme-tonal-spot",
+                        "displayName": Translation.tr("Tonal Spot"),
+                        "icon": "circle"
+                    },
+                    {
+                        "value": "scheme-vibrant",
+                        "displayName": Translation.tr("Vibrant"),
+                        "icon": "flare"
+                    }
+                ]
+                
+                Timer {
+                    id: reenableTimer
+                    interval: 500
+                    onTriggered: {
+                        colorTypeSelector.enabled = true;
+                    }
+                }
+            }
         }
 
-        ConfigSwitch {
-            buttonIcon: "ev_shadow"
-            text: Translation.tr("Transparency")
-            checked: Config.options.appearance.transparency.enable
-            onCheckedChanged: {
-                Config.options.appearance.transparency.enable = checked;
+        ContentSubsection {
+            title: Translation.tr("Transparency")
+            tooltip: Translation.tr("Control transparency of backgrounds and content.\nAutomatic mode adjusts based on wallpaper and color scheme.")
+            
+            ConfigSwitch {
+                buttonIcon: "ev_shadow"
+                text: Translation.tr("Enable Transparency")
+                checked: Config.options.appearance.transparency.enable
+                onCheckedChanged: {
+                    Config.options.appearance.transparency.enable = checked;
+                }
             }
-            StyledToolTip {
-                text: Translation.tr("Might look ass. Unsupported.")
+            
+            ConfigSwitch {
+                id: autoTransparencySwitch
+                enabled: Config.options.appearance.transparency.enable
+                buttonIcon: "auto_awesome"
+                text: Translation.tr("Automatic")
+                checked: Config.options.appearance.transparency.automatic
+                onCheckedChanged: {
+                    Config.options.appearance.transparency.automatic = checked;
+                    // Sync manual values with current auto values when switching to auto
+                    if (checked) {
+                        Config.options.appearance.transparency.backgroundTransparency = Appearance.autoBackgroundTransparency;
+                        Config.options.appearance.transparency.contentTransparency = Appearance.autoContentTransparency;
+                    }
+                }
+                
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                    propagateComposedEvents: true
+                    StyledToolTip {
+                        extraVisibleCondition: false
+                        alternativeVisibleCondition: parent.containsMouse
+                        text: {
+                            if (autoTransparencySwitch.checked && Config.options.appearance.transparency.enable) {
+                                let bg = (Appearance.autoBackgroundTransparency * 100).toFixed(1);
+                                let content = (Appearance.autoContentTransparency * 100).toFixed(1);
+                                let schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
+                                return Translation.tr("Auto: Background %1%, Content %2%\nBased on wallpaper and %3 scheme").arg(bg).arg(content).arg(schemeType === "auto" ? Translation.tr("auto-detected") : schemeType.replace("scheme-", ""));
+                            }
+                            return Translation.tr("Automatically adjust transparency based on wallpaper and color scheme");
+                        }
+                    }
+                }
+            }
+            
+            ConfigSpinBox {
+                id: backgroundTransparencySpinBox
+                enabled: Config.options.appearance.transparency.enable && !Config.options.appearance.transparency.automatic
+                icon: "layers"
+                text: Translation.tr("Background Transparency (%)")
+                value: Config.options.appearance.transparency.automatic 
+                    ? (Appearance.autoBackgroundTransparency * 100)
+                    : (Config.options.appearance.transparency.backgroundTransparency * 100)
+                from: 0
+                to: 100
+                stepSize: 1
+                onValueChanged: {
+                    if (!Config.options.appearance.transparency.automatic) {
+                        Config.options.appearance.transparency.backgroundTransparency = value / 100;
+                    }
+                }
+                
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                    propagateComposedEvents: true
+                    StyledToolTip {
+                        extraVisibleCondition: false
+                        alternativeVisibleCondition: parent.containsMouse
+                        text: Translation.tr("Transparency of background layers (0% = opaque, 100% = fully transparent)")
+                    }
+                }
+            }
+            
+            ConfigSpinBox {
+                id: contentTransparencySpinBox
+                enabled: Config.options.appearance.transparency.enable && !Config.options.appearance.transparency.automatic
+                icon: "layers"
+                text: Translation.tr("Content Transparency (%)")
+                value: Config.options.appearance.transparency.automatic 
+                    ? (Appearance.autoContentTransparency * 100)
+                    : (Config.options.appearance.transparency.contentTransparency * 100)
+                from: 0
+                to: 100
+                stepSize: 1
+                onValueChanged: {
+                    if (!Config.options.appearance.transparency.automatic) {
+                        Config.options.appearance.transparency.contentTransparency = value / 100;
+                    }
+                }
+                
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                    propagateComposedEvents: true
+                    StyledToolTip {
+                        extraVisibleCondition: false
+                        alternativeVisibleCondition: parent.containsMouse
+                        text: Translation.tr("Transparency of content layers like panels and cards (0% = opaque, 100% = fully transparent)")
+                    }
+                }
             }
         }
     }

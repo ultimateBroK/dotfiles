@@ -24,7 +24,7 @@ handle_kde_material_you_colors() {
     # Map $type_flag to allowed scheme variants for kde-material-you-colors-wrapper.sh
     local kde_scheme_variant=""
     case "$type_flag" in
-        scheme-content|scheme-expressive|scheme-fidelity|scheme-fruit-salad|scheme-monochrome|scheme-neutral|scheme-rainbow|scheme-tonal-spot)
+        scheme-content|scheme-expressive|scheme-fidelity|scheme-fruit-salad|scheme-monochrome|scheme-neutral|scheme-rainbow|scheme-tonal-spot|scheme-vibrant)
             kde_scheme_variant="$type_flag"
             ;;
         *)
@@ -371,7 +371,7 @@ main() {
     fi
 
     # Validate type_flag (allow 'auto' as well)
-    allowed_types=(scheme-content scheme-expressive scheme-fidelity scheme-fruit-salad scheme-monochrome scheme-neutral scheme-rainbow scheme-tonal-spot auto)
+    allowed_types=(scheme-content scheme-expressive scheme-fidelity scheme-fruit-salad scheme-monochrome scheme-neutral scheme-rainbow scheme-tonal-spot scheme-vibrant auto)
     valid_type=0
     for t in "${allowed_types[@]}"; do
         if [[ "$type_flag" == "$t" ]]; then
@@ -393,19 +393,52 @@ main() {
     # If type_flag is 'auto', detect scheme type from image (after imgpath is set)
     if [[ "$type_flag" == "auto" ]]; then
         if [[ -n "$imgpath" && -f "$imgpath" ]]; then
-            detected_type="$(detect_scheme_type_from_image "$imgpath")"
+            detected_type="$(detect_scheme_type_from_image "$imgpath" 2>/dev/null)"
             # Only use detected_type if it's valid
             valid_detected=0
-            for t in "${allowed_types[@]}"; do
-                if [[ "$detected_type" == "$t" && "$detected_type" != "auto" ]]; then
-                    valid_detected=1
-                    break
-                fi
-            done
+            if [[ -n "$detected_type" ]]; then
+                for t in "${allowed_types[@]}"; do
+                    if [[ "$detected_type" == "$t" && "$detected_type" != "auto" ]]; then
+                        valid_detected=1
+                        break
+                    fi
+                done
+            fi
             if [[ $valid_detected -eq 1 ]]; then
                 type_flag="$detected_type"
+                echo "[switchwall] Auto-detected scheme: $type_flag" >&2
             else
                 echo "[switchwall] Warning: Could not auto-detect a valid scheme, defaulting to 'scheme-tonal-spot'" >&2
+                type_flag="scheme-tonal-spot"
+            fi
+        elif [[ -n "$noswitch_flag" ]]; then
+            # When using --noswitch, try to get wallpaper from config
+            if [ -f "$SHELL_CONFIG_FILE" ]; then
+                config_wallpaper=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null)
+                if [[ -n "$config_wallpaper" && -f "$config_wallpaper" ]]; then
+                    detected_type="$(detect_scheme_type_from_image "$config_wallpaper" 2>/dev/null)"
+                    valid_detected=0
+                    if [[ -n "$detected_type" ]]; then
+                        for t in "${allowed_types[@]}"; do
+                            if [[ "$detected_type" == "$t" && "$detected_type" != "auto" ]]; then
+                                valid_detected=1
+                                break
+                            fi
+                        done
+                    fi
+                    if [[ $valid_detected -eq 1 ]]; then
+                        type_flag="$detected_type"
+                        echo "[switchwall] Auto-detected scheme from current wallpaper: $type_flag" >&2
+                    else
+                        echo "[switchwall] Warning: Could not auto-detect scheme from current wallpaper, defaulting to 'scheme-tonal-spot'" >&2
+                        type_flag="scheme-tonal-spot"
+                    fi
+                else
+                    echo "[switchwall] Warning: No wallpaper found in config for auto-detection, defaulting to 'scheme-tonal-spot'" >&2
+                    type_flag="scheme-tonal-spot"
+                fi
+            else
+                echo "[switchwall] Warning: Config file not found, defaulting to 'scheme-tonal-spot'" >&2
                 type_flag="scheme-tonal-spot"
             fi
         else
