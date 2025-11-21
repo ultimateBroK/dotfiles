@@ -50,6 +50,12 @@ Item {
 
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
+    function normalizeAddress(address) {
+        if (address === null || address === undefined)
+            return ""
+        const strAddress = typeof address === "string" ? address : `${address}`
+        return strAddress.startsWith("0x") ? strAddress : `0x${strAddress}`
+    }
 
     StyledRectangularShadow {
         target: overviewBackground
@@ -160,7 +166,7 @@ Item {
                     values: {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return [...ToplevelManager.toplevels.values.filter((toplevel) => {
-                            const address = `0x${toplevel.HyprlandToplevel?.address}`
+                            const address = root.normalizeAddress(toplevel.HyprlandToplevel?.address)
                             var win = windowByAddress[address]
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
                             return inWorkspaceGroup;
@@ -172,7 +178,7 @@ Item {
                     required property var modelData
                     property int monitorId: windowData?.monitor
                     property var monitor: HyprlandData.monitors.find(m => m.id == monitorId)
-                    property var address: `0x${modelData.HyprlandToplevel.address}`
+                    property var address: root.normalizeAddress(modelData.HyprlandToplevel.address)
                     toplevel: modelData
                     monitorData: this.monitor
                     scale: root.scale
