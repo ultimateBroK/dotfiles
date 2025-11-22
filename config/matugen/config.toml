@@ -32,3 +32,7 @@ output_path = '~/.local/state/quickshell/user/generated/color.txt'
 [templates.wallpaper]
 input_path = '~/.config/matugen/templates/wallpaper.txt'
 output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
+
+[templates.ghostty]
+input_path = '~/.config/matugen/templates/ghostty/colors'
+output_path = '~/.config/ghostty/colors'

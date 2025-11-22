@@ -4,10 +4,13 @@
 
 set -e
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Use absolute paths to the package files
-ALL_PACKAGES="./all-packages.txt"
-AUR_PACKAGES="./aur-packages.txt"
-FLATPAK_PACKAGES="./flatpak-packages.txt"
+ALL_PACKAGES="$SCRIPT_DIR/all-packages.txt"
+AUR_PACKAGES="$SCRIPT_DIR/aur-packages.txt"
+FLATPAK_PACKAGES="$SCRIPT_DIR/flatpak-packages.txt"
 
 echo "========================================="
 echo "Package Installation Script"

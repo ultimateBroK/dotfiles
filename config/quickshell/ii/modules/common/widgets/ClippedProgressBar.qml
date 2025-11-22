@@ -16,6 +16,8 @@ ProgressBar {
     property color highlightColor: Appearance?.colors.colOnSecondaryContainer ?? "#685496"
     property color trackColor: ColorUtils.transparentize(highlightColor, 0.5) ?? "#F1D3F9"
     property alias radius: contentItem.radius
+    property bool pulsing: false
+    property int pulseDuration: 1000
     property string text
     default property Item textMask: Item {
         width: valueBarWidth
@@ -77,6 +79,32 @@ ProgressBar {
 
             radius: Appearance.rounding.unsharpen
             color: root.highlightColor
+
+            Item {
+                anchors.fill: parent
+                visible: root.pulsing
+                
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    x: -width
+                    
+                    gradient: Gradient {
+                        orientation: Gradient.Horizontal
+                        GradientStop { position: 0.0; color: "transparent" }
+                        GradientStop { position: 0.5; color: Qt.rgba(1,1,1,0.5) }
+                        GradientStop { position: 1.0; color: "transparent" }
+                    }
+
+                    NumberAnimation on x {
+                        from: -width
+                        to: parent.width
+                        duration: root.pulseDuration
+                        loops: Animation.Infinite
+                        running: root.pulsing
+                    }
+                }
+            }
         }
     }
 

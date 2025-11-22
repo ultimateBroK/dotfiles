@@ -291,9 +291,6 @@ ContentPage {
             onValueChanged: {
                 Config.options.notifications.timeout = value;
             }
-            StyledToolTip {
-                text: Translation.tr("Timeout duration when not defined by the notification itself")
-            }
         }
     }
 

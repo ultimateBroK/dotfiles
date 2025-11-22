@@ -12,6 +12,14 @@ MouseArea {
     readonly property bool isPluggedIn: Battery.isPluggedIn
     readonly property real percentage: Battery.percentage
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
+    
+    readonly property real energyRate: Battery.energyRate
+    readonly property int pulseDuration: {
+        if (energyRate >= 60) return 300; // Very Fast charging (>60W)
+        if (energyRate >= 30) return 500; // Fast charging (30-60W)
+        if (energyRate >= 10) return 700; // Standard charging (10-30W)
+        return 1000;                      // Slow charging (<10W)
+    }
 
     implicitWidth: batteryProgress.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
@@ -25,26 +33,12 @@ MouseArea {
         value: percentage
         
         property color baseColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
-        property color chargingGlowColor: Appearance.colors.colOnSecondaryContainer
+        property color chargingColor: Appearance.colors.colPrimary
         
-        highlightColor: isCharging ? chargingGlowColor : baseColor
+        highlightColor: isCharging ? chargingColor : baseColor
         
-        SequentialAnimation on chargingGlowColor {
-            running: isCharging
-            loops: Animation.Infinite
-            ColorAnimation {
-                from: Appearance.colors.colOnSecondaryContainer
-                to: Qt.lighter(Appearance.colors.colOnSecondaryContainer, 1.3)
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
-            ColorAnimation {
-                from: Qt.lighter(Appearance.colors.colOnSecondaryContainer, 1.3)
-                to: Appearance.colors.colOnSecondaryContainer
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
-        }
+        pulsing: isCharging
+        pulseDuration: root.pulseDuration
 
         Item {
             anchors.centerIn: parent
@@ -53,7 +47,7 @@ MouseArea {
 
             RowLayout {
                 anchors.centerIn: parent
-                spacing: 0
+                spacing: 2
 
                 MaterialSymbol {
                     id: boltIcon
@@ -70,13 +64,13 @@ MouseArea {
                         running: isCharging && percentage < 1
                         loops: Animation.Infinite
                         NumberAnimation {
-                            to: 0.4
-                            duration: 800
+                            to: 0.1
+                            duration: root.pulseDuration
                             easing.type: Easing.InOutQuad
                         }
                         NumberAnimation {
                             to: 1.0
-                            duration: 800
+                            duration: root.pulseDuration
                             easing.type: Easing.InOutQuad
                         }
                     }

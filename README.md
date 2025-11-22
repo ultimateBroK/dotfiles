@@ -19,26 +19,33 @@ dotfiles/
    git clone <your-repo-url> ~/Downloads/dotfiles
    ```
 
-2. Copy your config files to the dotfiles directory:
+2. Run the setup script:
    ```bash
-   cp -r ~/.config/hypr ~/Downloads/dotfiles/config/
-   cp -r ~/.config/quickshell ~/Downloads/dotfiles/config/
-   # ... add other configs as needed
+   cd ~/Downloads/dotfiles
+   chmod +x setup.sh
+   ./setup.sh
    ```
    
-   Or use the helper script (if available locally):
+   The script will offer options to:
+   - Install packages (Official, AUR, Flatpak)
+   - Symlink dotfiles to `~/.config`
+   - Do both
+
+   **Note:** The script assumes you are running on an Arch-based system (uses `pacman` and `paru`).
+
+## Manual Setup (Alternative)
+
+1. Copy your config files to the dotfiles directory:
    ```bash
-   chmod +x ~/Downloads/dotfiles/copy-configs.sh
-   ~/Downloads/dotfiles/copy-configs.sh <config-name>
+   cp -r ~/.config/hypr ~/Downloads/dotfiles/config/
+   # ... add other configs as needed
    ```
 
-3. Run the symlink script:
+2. Run the symlink script manually:
    ```bash
    chmod +x ~/Downloads/dotfiles/link-dotfiles.sh
    ~/Downloads/dotfiles/link-dotfiles.sh
    ```
-   
-   **Note:** These helper scripts are not tracked in git. You'll need to create them locally or manage symlinks manually.
 
 ## Adding New Configs
 
