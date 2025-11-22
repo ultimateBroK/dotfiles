@@ -85,6 +85,22 @@ MaterialShape { // App icon
             return "";
         }
 
+        // Special handling for Brave Browser
+        if (lowercased.includes("brave")) {
+            const braveCandidates = ["brave-browser", "brave", "com.brave.Browser"];
+            for (let i = 0; i < braveCandidates.length; i++) {
+                const candidate = braveCandidates[i];
+                if (AppSearch.iconExists(candidate)) {
+                    return candidate;
+                }
+                const guessed = AppSearch.guessIcon(candidate);
+                if (guessed && AppSearch.iconExists(guessed) && guessed.includes("brave")) {
+                    return guessed;
+                }
+            }
+            return "";
+        }
+
         const normalized = normalizeAppIdentifier(identifier);
         const candidates = [];
 
