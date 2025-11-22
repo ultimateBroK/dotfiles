@@ -62,59 +62,35 @@ ContentPage {
         icon: "battery_android_full"
         title: Translation.tr("Battery")
 
-        ConfigRow {
-            uniform: true
-            ConfigSpinBox {
-                icon: "warning"
-                text: Translation.tr("Low warning")
-                value: Config.options.battery.low
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.low = value;
+        ContentSubsection {
+            title: Translation.tr("Warnings")
+
+            ConfigRow {
+                uniform: true
+                ConfigSpinBox {
+                    icon: "warning"
+                    text: Translation.tr("Low warning")
+                    value: Config.options.battery.low
+                    from: 0
+                    to: 100
+                    stepSize: 5
+                    onValueChanged: {
+                        Config.options.battery.low = value;
+                    }
+                }
+                ConfigSpinBox {
+                    icon: "dangerous"
+                    text: Translation.tr("Critical warning")
+                    value: Config.options.battery.critical
+                    from: 0
+                    to: 100
+                    stepSize: 5
+                    onValueChanged: {
+                        Config.options.battery.critical = value;
+                    }
                 }
             }
-            ConfigSpinBox {
-                icon: "dangerous"
-                text: Translation.tr("Critical warning")
-                value: Config.options.battery.critical
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.critical = value;
-                }
-            }
-        }
-        ConfigRow {
-            uniform: false
-            Layout.fillWidth: false
-            ConfigSwitch {
-                buttonIcon: "pause"
-                text: Translation.tr("Automatic suspend")
-                checked: Config.options.battery.automaticSuspend
-                onCheckedChanged: {
-                    Config.options.battery.automaticSuspend = checked;
-                }
-                StyledToolTip {
-                    text: Translation.tr("Automatically suspends the system when battery is low")
-                }
-            }
-            ConfigSpinBox {
-                enabled: Config.options.battery.automaticSuspend
-                text: Translation.tr("at")
-                value: Config.options.battery.suspend
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.battery.suspend = value;
-                }
-            }
-        }
-        ConfigRow {
-            uniform: true
+
             ConfigSpinBox {
                 icon: "charger"
                 text: Translation.tr("Full warning")
@@ -124,6 +100,37 @@ ContentPage {
                 stepSize: 5
                 onValueChanged: {
                     Config.options.battery.full = value;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Power management")
+
+            ConfigRow {
+                uniform: false
+                Layout.fillWidth: false
+                ConfigSwitch {
+                    buttonIcon: "pause"
+                    text: Translation.tr("Automatic suspend")
+                    checked: Config.options.battery.automaticSuspend
+                    onCheckedChanged: {
+                        Config.options.battery.automaticSuspend = checked;
+                    }
+                    StyledToolTip {
+                        text: Translation.tr("Automatically suspends the system when battery is low")
+                    }
+                }
+                ConfigSpinBox {
+                    enabled: Config.options.battery.automaticSuspend
+                    text: Translation.tr("at")
+                    value: Config.options.battery.suspend
+                    from: 0
+                    to: 100
+                    stepSize: 5
+                    onValueChanged: {
+                        Config.options.battery.suspend = value;
+                    }
                 }
             }
         }

@@ -255,54 +255,58 @@ ContentPage {
         icon: "workspaces"
         title: Translation.tr("Workspaces")
 
-        ConfigSwitch {
-            buttonIcon: "counter_1"
-            text: Translation.tr('Always show numbers')
-            checked: Config.options.bar.workspaces.alwaysShowNumbers
-            onCheckedChanged: {
-                Config.options.bar.workspaces.alwaysShowNumbers = checked;
-            }
-        }
+        ContentSubsection {
+            title: Translation.tr("Display")
 
-        ConfigSwitch {
-            buttonIcon: "award_star"
-            text: Translation.tr('Show app icons')
-            checked: Config.options.bar.workspaces.showAppIcons
-            onCheckedChanged: {
-                Config.options.bar.workspaces.showAppIcons = checked;
+            ConfigSwitch {
+                buttonIcon: "counter_1"
+                text: Translation.tr('Always show numbers')
+                checked: Config.options.bar.workspaces.alwaysShowNumbers
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.alwaysShowNumbers = checked;
+                }
             }
-        }
 
-        ConfigSwitch {
-            buttonIcon: "colors"
-            text: Translation.tr('Tint app icons')
-            checked: Config.options.bar.workspaces.monochromeIcons
-            onCheckedChanged: {
-                Config.options.bar.workspaces.monochromeIcons = checked;
+            ConfigSwitch {
+                buttonIcon: "award_star"
+                text: Translation.tr('Show app icons')
+                checked: Config.options.bar.workspaces.showAppIcons
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.showAppIcons = checked;
+                }
             }
-        }
 
-        ConfigSpinBox {
-            icon: "view_column"
-            text: Translation.tr("Workspaces shown")
-            value: Config.options.bar.workspaces.shown
-            from: 1
-            to: 30
-            stepSize: 1
-            onValueChanged: {
-                Config.options.bar.workspaces.shown = value;
+            ConfigSwitch {
+                buttonIcon: "colors"
+                text: Translation.tr('Tint app icons')
+                checked: Config.options.bar.workspaces.monochromeIcons
+                onCheckedChanged: {
+                    Config.options.bar.workspaces.monochromeIcons = checked;
+                }
             }
-        }
 
-        ConfigSpinBox {
-            icon: "touch_long"
-            text: Translation.tr("Number show delay when pressing Super (ms)")
-            value: Config.options.bar.workspaces.showNumberDelay
-            from: 0
-            to: 1000
-            stepSize: 50
-            onValueChanged: {
-                Config.options.bar.workspaces.showNumberDelay = value;
+            ConfigSpinBox {
+                icon: "view_column"
+                text: Translation.tr("Workspaces shown")
+                value: Config.options.bar.workspaces.shown
+                from: 1
+                to: 30
+                stepSize: 1
+                onValueChanged: {
+                    Config.options.bar.workspaces.shown = value;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "touch_long"
+                text: Translation.tr("Number show delay when pressing Super (ms)")
+                value: Config.options.bar.workspaces.showNumberDelay
+                from: 0
+                to: 1000
+                stepSize: 50
+                onValueChanged: {
+                    Config.options.bar.workspaces.showNumberDelay = value;
+                }
             }
         }
 

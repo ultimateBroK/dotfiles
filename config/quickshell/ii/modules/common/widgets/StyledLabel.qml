@@ -3,13 +3,13 @@ import QtQuick
 import QtQuick.Controls
 
 Label {
-    renderType: Text.NativeRendering
+    renderType: Text.QtRendering
     verticalAlignment: Text.AlignVCenter
     property bool shouldUseRubik: /^\d+$/.test(root.text)
     property var defaultFont: shouldUseRubik ? "Rubik" : Appearance.font.family.main
     
     font {
-        hintingPreference: Font.PreferDefaultHinting
+        hintingPreference: Font.PreferFullHinting
         family: defaultFont
         pixelSize: Appearance?.font.pixelSize.small ?? 15
         variableAxes: shouldUseRubik ? ({}) : Appearance.font.variableAxes.main
