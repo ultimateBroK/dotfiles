@@ -191,17 +191,78 @@ Singleton {
     function cleanMusicTitle(title) {
         if (!title)
             return "";
-        // Brackets
+        
+        // Remove common prefixes (case-insensitive)
+        const prefixes = [
+            /^official\s+/i,
+            /^official\s+music\s+video\s+/i,
+            /^official\s+mv\s+/i,
+            /^mv\s+/i,
+            /^music\s+video\s+/i,
+            /^audio\s+/i,
+            /^lyric\s+video\s+/i,
+            /^lyrics\s+/i,
+            /^hq\s+/i,
+            /^hd\s+/i,
+            /^4k\s+/i,
+            /^8k\s+/i,
+            /^\[official\]\s*/i,
+            /^\(official\)\s*/i,
+            /^official\s*[-–—]\s*/i,
+        ];
+        for (let i = 0; i < prefixes.length; ++i) {
+            title = title.replace(prefixes[i], "");
+        }
+
+        // Remove brackets at the beginning
         title = title.replace(/^ *\([^)]*\) */g, " "); // Round brackets
         title = title.replace(/^ *\[[^\]]*\] */g, " "); // Square brackets
         title = title.replace(/^ *\{[^\}]*\} */g, " "); // Curly brackets
-        // Japenis brackets
+        // Japanese brackets
         title = title.replace(/^ *【[^】]*】/, ""); // Touhou
         title = title.replace(/^ *《[^》]*》/, ""); // ??
         title = title.replace(/^ *「[^」]*」/, ""); // OP/ED thingie
         title = title.replace(/^ *『[^』]*』/, ""); // OP/ED thingie
 
-        return title.trim();
+        // Remove brackets at the end
+        title = title.replace(/ *\([^)]*\)\s*$/g, " "); // Round brackets
+        title = title.replace(/ *\[[^\]]*\]\s*$/g, " "); // Square brackets
+        title = title.replace(/ *\{[^\}]*\}\s*$/g, " "); // Curly brackets
+        // Japanese brackets at end
+        title = title.replace(/【[^】]*】\s*$/, "");
+        title = title.replace(/《[^》]*》\s*$/, "");
+        title = title.replace(/「[^」]*」\s*$/, "");
+        title = title.replace(/『[^』]*』\s*$/, "");
+
+        // Remove common suffixes (case-insensitive)
+        const suffixes = [
+            /\s+official\s+music\s+video$/i,
+            /\s+official\s+mv$/i,
+            /\s+mv$/i,
+            /\s+music\s+video$/i,
+            /\s+audio$/i,
+            /\s+lyric\s+video$/i,
+            /\s+lyrics$/i,
+            /\s+\[official\]$/i,
+            /\s+\(official\)$/i,
+            /\s+\[hq\]$/i,
+            /\s+\[hd\]$/i,
+            /\s+\(hq\)$/i,
+            /\s+\(hd\)$/i,
+        ];
+        for (let i = 0; i < suffixes.length; ++i) {
+            title = title.replace(suffixes[i], "");
+        }
+
+        // Remove YouTube-style prefixes (e.g., "Artist - Title" when artist is already known)
+        // But be careful - only remove if it looks like a duplicate artist name
+        // This is a conservative approach - we'll only clean obvious duplicates
+        title = title.replace(/^(.+?)\s*[-–—]\s*\1\s*[-–—]\s*(.+)$/, "$1 - $2"); // "Artist - Artist - Title" -> "Artist - Title"
+
+        // Clean up multiple spaces and trim
+        title = title.replace(/\s+/g, " ").trim();
+
+        return title;
     }
 
     /**

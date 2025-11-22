@@ -9,6 +9,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import qs.modules.common
 
 /**
  * A service that provides easy access to the active Mpris player.
@@ -16,12 +17,149 @@ import Quickshell.Services.Mpris
 Singleton {
 	id: root;
 	property MprisPlayer trackedPlayer: null;
-	property MprisPlayer activePlayer: trackedPlayer ?? Mpris.players.values[0] ?? null;
+	readonly property MprisPlayer activePlayer: {
+		// Force re-evaluation when trackedPlayer or Mpris.players changes
+		const _ = trackedPlayer;
+		const __ = Mpris.players.count;
+		return getBestActivePlayer();
+	}
 	signal trackChanged(reverse: bool);
 
 	property bool __reverse: false;
 
 	property var activeTrack;
+
+	property bool hasPlasmaIntegration: false
+	Process { // one-shot check for plasma-browser-integration
+		id: plasmaIntegrationAvailabilityCheckProc
+		running: true
+		command: ["bash", "-c", "command -v plasma-browser-integration-host"]
+		onExited: (exitCode, exitStatus) => {
+			root.hasPlasmaIntegration = (exitCode === 0);
+		}
+	}
+
+	function isRealPlayer(player) {
+		if (!player) return false;
+		if (!Config.options.media.filterDuplicatePlayers) return true;
+		return (
+			// Drop native browser buses when plasma integration is available
+			!(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.firefox")) &&
+			!(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.chromium")) &&
+			// playerctld just mirrors other buses
+			!player.dbusName?.startsWith("org.mpris.MediaPlayer2.playerctld") &&
+			// Non-instance mpd bus
+			!(player.dbusName?.endsWith(".mpd") && !player.dbusName.endsWith("MediaPlayer2.mpd"))
+		);
+	}
+
+	function hasUsefulMetadata(player) {
+		if (!player) return false;
+		if (player.playbackState === MprisPlaybackState.Playing) return true;
+
+		const hasTitle = player.trackTitle && player.trackTitle.length > 0;
+		const hasArtist = player.trackArtist && player.trackArtist.length > 0;
+		const hasLength = player.length && player.length > 0;
+		const hasPosition = player.position && player.position > 0;
+
+		const dbus = (player.dbusName || "").toLowerCase();
+		const isBrowser =
+				dbus.startsWith("org.mpris.mediaplayer2.firefox") ||
+				dbus.startsWith("org.mpris.mediaplayer2.chromium") ||
+				dbus.startsWith("org.mpris.mediaplayer2.google-chrome") ||
+				dbus.startsWith("org.mpris.mediaplayer2.brave") ||
+				dbus.startsWith("org.mpris.mediaplayer2.vivaldi") ||
+				dbus.startsWith("org.mpris.mediaplayer2.edge") ||
+				dbus.startsWith("org.mpris.mediaplayer2.opera") ||
+				dbus.startsWith("org.mpris.mediaplayer2.plasma-browser-integration");
+
+		// Browser MPRIS sessions often linger after closing the tab – if stopped at 0s,
+		// treat them as empty so they don't stay controllable forever.
+		if (isBrowser &&
+			player.playbackState === MprisPlaybackState.Stopped &&
+			(!player.position || player.position <= 0)) {
+			return false;
+		}
+
+		return hasTitle || hasArtist || hasLength || hasPosition;
+	}
+
+	function filterDuplicatePlayers(players) {
+		let filtered = [];
+		let used = new Set();
+
+		for (let i = 0; i < players.length; ++i) {
+			if (used.has(i))
+				continue;
+			let p1 = players[i];
+			let group = [i];
+
+			// Find duplicates by trackTitle prefix
+			for (let j = i + 1; j < players.length; ++j) {
+				let p2 = players[j];
+				if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+					group.push(j);
+				}
+			}
+
+			// Pick the one with non-empty trackArtUrl, or fallback to the first
+			let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
+			if (chosenIdx === undefined)
+				chosenIdx = group[0];
+
+			filtered.push(players[chosenIdx]);
+			group.forEach(idx => used.add(idx));
+		}
+		return filtered;
+	}
+
+	function stateRank(player) {
+		if (player.playbackState === MprisPlaybackState.Playing)
+			return 0;   // highest priority
+		return 1;       // Stopped / Paused / others
+	}
+
+	function getBestActivePlayer() {
+		// If we have a manually tracked player that's still valid, prefer it
+		if (trackedPlayer && isRealPlayer(trackedPlayer) && hasUsefulMetadata(trackedPlayer)) {
+			return trackedPlayer;
+		}
+
+		// Filter to real players
+		const realPlayers = Mpris.players.values.filter(player => isRealPlayer(player));
+		if (realPlayers.length === 0) return null;
+
+		// Filter to players with useful metadata
+		const candidates = realPlayers.filter(hasUsefulMetadata);
+		const baseList = candidates.length > 0 ? candidates : realPlayers;
+
+		// Sort by playback state: Playing > Paused > everything else
+		const sorted = baseList.slice().sort((a, b) => {
+			const ra = stateRank(a);
+			const rb = stateRank(b);
+			if (ra !== rb)
+				return ra - rb;
+			// If same state, prefer players with better metadata (artwork, title, artist)
+			const aScore = (a.trackArtUrl ? 4 : 0) + (a.trackTitle ? 2 : 0) + (a.trackArtist ? 1 : 0);
+			const bScore = (b.trackArtUrl ? 4 : 0) + (b.trackTitle ? 2 : 0) + (b.trackArtist ? 1 : 0);
+			return bScore - aScore;
+		});
+
+		// Filter duplicates and return the best one
+		const filtered = filterDuplicatePlayers(sorted);
+		return filtered.length > 0 ? filtered[0] : null;
+	}
+
+	Connections {
+		target: Mpris
+		function onPlayersChanged() {
+			// Update tracked player when player list changes
+			const bestPlayer = root.getBestActivePlayer();
+			if (bestPlayer !== root.trackedPlayer) {
+				root.trackedPlayer = bestPlayer;
+			}
+		}
+	}
 
 	Instantiator {
 		model: Mpris.players;
@@ -31,50 +169,27 @@ Singleton {
 			target: modelData;
 
 			Component.onCompleted: {
-				// Ưu tiên chọn player đang Playing làm trackedPlayer đầu tiên,
-				// nếu chưa có trackedPlayer hoặc chưa có player nào Playing.
-				if (root.trackedPlayer == null || modelData.isPlaying) {
-					root.trackedPlayer = modelData;
+				// Update tracked player when a better one becomes available
+				const bestPlayer = root.getBestActivePlayer();
+				if (bestPlayer && (!root.trackedPlayer || bestPlayer.isPlaying)) {
+					root.trackedPlayer = bestPlayer;
 				}
 			}
 
 			Component.onDestruction: {
-				// Nếu player bị destroy chính là player đang được track,
-				// hãy chọn player Playing khác (nếu có), nếu không thì fallback về player đầu tiên.
+				// If the destroyed player was the tracked one, find the best replacement
 				if (root.trackedPlayer === modelData) {
-					let nextPlayer = null;
-
-					for (const player of Mpris.players.values) {
-						if (player.isPlaying) {
-							nextPlayer = player;
-							break;
-						}
-					}
-
-					if (!nextPlayer && Mpris.players.values.length > 0) {
-						nextPlayer = Mpris.players.values[0];
-					}
-
-					root.trackedPlayer = nextPlayer;
+					root.trackedPlayer = root.getBestActivePlayer();
 				}
 			}
 
 			function onPlaybackStateChanged() {
-				// Nếu player này bắt đầu Playing -> trở thành trackedPlayer.
-				if (modelData.isPlaying) {
-					root.trackedPlayer = modelData;
-					return;
-				}
-
-				// Nếu player này dừng lại và hiện đang là trackedPlayer,
-				// chuyển trackedPlayer sang player khác đang Playing (nếu có),
-				// hoặc giữ nguyên nếu không tìm được player Playing.
-				if (root.trackedPlayer === modelData && !modelData.isPlaying) {
-					for (const player of Mpris.players.values) {
-						if (player.isPlaying) {
-							root.trackedPlayer = player;
-							return;
-						}
+				// When playback state changes, update to the best available player
+				const bestPlayer = root.getBestActivePlayer();
+				if (bestPlayer) {
+					// Only switch if current player stopped or new player is playing
+					if (!root.trackedPlayer || !root.trackedPlayer.isPlaying || bestPlayer.isPlaying) {
+						root.trackedPlayer = bestPlayer;
 					}
 				}
 			}
