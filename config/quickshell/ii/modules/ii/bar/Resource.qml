@@ -57,14 +57,14 @@ Item {
             TextMetrics {
                 id: fullPercentageTextMetrics
                 text: "100"
-                font.pixelSize: Appearance.font.pixelSize.small
+                font.pixelSize: Appearance.font.pixelSize.normal
             }
 
             StyledText {
                 id: percentageText
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer1
-                font.pixelSize: Appearance.font.pixelSize.small
+                font.pixelSize: Appearance.font.pixelSize.normal
                 text: `${Math.round(percentage * 100).toString()}`
             }
         }

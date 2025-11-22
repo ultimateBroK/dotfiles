@@ -29,7 +29,7 @@ Item {
         StyledText {
             Layout.preferredWidth: 300
             Layout.alignment: Qt.AlignLeft
-            font.pixelSize: Appearance.font.pixelSize.smaller
+            font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
@@ -41,7 +41,7 @@ Item {
         PingPongScrollingText {
             Layout.preferredWidth: 300
             Layout.alignment: Qt.AlignLeft
-            fontPixelSize: Appearance.font.pixelSize.small
+            fontPixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer0
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.title :
