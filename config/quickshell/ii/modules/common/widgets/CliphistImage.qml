@@ -39,6 +39,8 @@ Rectangle {
         return match ? parseInt(match[2]) : 0;
     }
     property real scale: {
+        if (imageWidth <= 0 || imageHeight <= 0 || root.maxWidth <= 0 || root.maxHeight <= 0)
+            return 1;
         return Math.min(root.maxWidth / imageWidth, root.maxHeight / imageHeight, 1);
     }
 
@@ -53,10 +55,15 @@ Rectangle {
 
     Process {
         id: decodeImageProcess
-        command: ["bash", "-c", `[ -f ${imageDecodeFilePath} ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}'`]
+        command: ["bash", "-c", `mkdir -p '${imageDecodePath}' && ([ -f '${imageDecodeFilePath}' ] || echo '${StringUtils.shellSingleQuoteEscape(root.entry)}' | ${Cliphist.cliphistBinary} decode > '${imageDecodeFilePath}')`]
         onExited: (exitCode, exitStatus) => {
             if (exitCode === 0) {
-                root.source = imageDecodeFilePath;
+                // Convert to file:// URL for proper loading
+                if (imageDecodeFilePath.startsWith('/')) {
+                    root.source = "file://" + imageDecodeFilePath;
+                } else {
+                    root.source = imageDecodeFilePath;
+                }
             } else {
                 console.error("[CliphistImage] Failed to decode image for entry:", root.entry);
                 root.source = "";
@@ -81,15 +88,20 @@ Rectangle {
         id: image
         anchors.fill: parent
 
-        source: Qt.resolvedUrl(root.source)
+        source: {
+            if (!root.source) return "";
+            if (root.source.startsWith("file://")) return root.source;
+            if (root.source.startsWith("/")) return "file://" + root.source;
+            return root.source;
+        }
         fillMode: Image.PreserveAspectFit
         antialiasing: true
         asynchronous: true
 
-        width: root.imageWidth * root.scale
-        height: root.imageHeight * root.scale
-        sourceSize.width: width
-        sourceSize.height: height
+        width: root.imageWidth > 0 ? root.imageWidth * root.scale : parent.width
+        height: root.imageHeight > 0 ? root.imageHeight * root.scale : parent.height
+        sourceSize.width: width > 0 ? width : undefined
+        sourceSize.height: height > 0 ? height : undefined
     }
 
     Loader {

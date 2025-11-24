@@ -21,8 +21,8 @@ palette = 3={{colors.tertiary.default.hex}}
 palette = 11={{colors.tertiary_container.default.hex}}
 
 # Blue
-palette = 4={{colors.secondary.default.hex}}
-palette = 12={{colors.secondary_container.default.hex}}
+palette = 4={{colors.secondary_container.default.hex}}
+palette = 12={{colors.secondary.default.hex}}
 
 # Magenta
 palette = 5={{colors.primary_container.default.hex}}
@@ -33,5 +33,5 @@ palette = 6={{colors.secondary_container.default.hex}}
 palette = 14={{colors.on_secondary_container.default.hex}}
 
 # White
-palette = 7={{colors.on_surface.default.hex}}
-palette = 15={{colors.inverse_surface.default.hex}}
+palette = 7={{colors.on_surface_variant.default.hex}}
+palette = 15={{colors.on_surface.default.hex}}
