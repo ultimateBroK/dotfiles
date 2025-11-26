@@ -63,7 +63,7 @@ cryptsetup
 cups
 cups-filters
 cups-pdf
-cursor-bin
+cursor-beta-bin
 decibels
 deno
 device-mapper

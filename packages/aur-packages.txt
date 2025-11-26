@@ -4,7 +4,7 @@ appimagelauncher
 asus-vivobook-rgb-keyboard
 cloudflare-warp-nox-bin
 crush-bin
-cursor-bin
+cursor-beta-bin
 electron30-bin
 electron39-bin
 equibop-bin
