@@ -216,6 +216,7 @@ link_individual_items() {
         "ghostty"
         "kitty"
         "fish"
+        "fastfetch"
         "starship.toml"
         "cava"
         "mpv"
