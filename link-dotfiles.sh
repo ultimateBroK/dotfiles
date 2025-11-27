@@ -103,23 +103,92 @@ create_symlink() {
     local target="$2"
     local name=$(basename "$source")
     
+    # Check if target is already a symlink
     if [ -L "$target" ]; then
-        echo -e "${YELLOW}Symlink already exists: $target${NC}"
-        return 0
+        local current_link=$(readlink -f "$target")
+        local expected_link=$(readlink -f "$source")
+        if [ "$current_link" = "$expected_link" ]; then
+            echo -e "${GREEN}Symlink already exists and points to correct location: $target${NC}"
+            return 0
+        else
+            echo -e "${YELLOW}Symlink exists but points to wrong location${NC}"
+            echo -e "${YELLOW}  Current: $current_link${NC}"
+            echo -e "${YELLOW}  Expected: $expected_link${NC}"
+            echo -e "${YELLOW}Removing old symlink...${NC}"
+            rm "$target"
+        fi
     fi
     
+    # Handle existing target (directory or file) that is not a symlink
     if [ -e "$target" ] && [ ! -L "$target" ]; then
-        echo -e "${YELLOW}Backing up existing $target to ${target}.backup${NC}"
-        mv "$target" "${target}.backup"
+        if [ -d "$target" ]; then
+            echo -e "${YELLOW}Backing up existing directory $target to ${target}.backup${NC}"
+            # Use rsync or cp to backup, then remove
+            if command -v rsync &> /dev/null; then
+                rsync -a "$target/" "${target}.backup/" || {
+                    echo -e "${RED}Failed to backup directory with rsync, trying cp...${NC}"
+                    cp -r "$target" "${target}.backup" || {
+                        echo -e "${RED}Failed to backup directory! Aborting.${NC}"
+                        return 1
+                    }
+                }
+            else
+                cp -r "$target" "${target}.backup" || {
+                    echo -e "${RED}Failed to backup directory! Aborting.${NC}"
+                    return 1
+                }
+            fi
+            # Verify backup exists before removing original
+            if [ -d "${target}.backup" ]; then
+                rm -rf "$target"
+            else
+                echo -e "${RED}Backup verification failed! Not removing original directory.${NC}"
+                return 1
+            fi
+        else
+            echo -e "${YELLOW}Backing up existing file $target to ${target}.backup${NC}"
+            mv "$target" "${target}.backup" || {
+                echo -e "${RED}Failed to backup file! Aborting.${NC}"
+                return 1
+            }
+        fi
     fi
     
+    # Ensure parent directory exists
+    local parent_dir=$(dirname "$target")
+    if [ ! -d "$parent_dir" ]; then
+        mkdir -p "$parent_dir"
+    fi
+    
+    # Verify source exists
     if [ ! -e "$source" ]; then
         echo -e "${RED}Source does not exist: $source${NC}"
         return 1
     fi
     
+    # Create the symlink
     ln -sf "$source" "$target"
-    echo -e "${GREEN}Created symlink: $target -> $source${NC}"
+    
+    # Verify the symlink was created correctly
+    if [ -L "$target" ]; then
+        local actual_target=$(readlink -f "$target")
+        local expected_target=$(readlink -f "$source")
+        if [ "$actual_target" = "$expected_target" ]; then
+            if [ -d "$source" ]; then
+                echo -e "${GREEN}Created directory symlink: $target -> $source${NC}"
+            else
+                echo -e "${GREEN}Created file symlink: $target -> $source${NC}"
+            fi
+        else
+            echo -e "${RED}Error: Symlink verification failed!${NC}"
+            echo -e "${RED}  Expected: $expected_target${NC}"
+            echo -e "${RED}  Actual: $actual_target${NC}"
+            return 1
+        fi
+    else
+        echo -e "${RED}Error: Failed to create symlink: $target${NC}"
+        return 1
+    fi
 }
 
 # Function to create directory structure in dotfiles
