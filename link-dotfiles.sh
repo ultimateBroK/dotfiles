@@ -229,6 +229,7 @@ link_individual_items() {
         "qt6ct"
         "Kvantum"
         "sddm"
+        "spicetify"
         "zshrc.d"
     )
     
