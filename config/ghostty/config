@@ -32,7 +32,7 @@
 # theme = Darkmatrix
 # theme = Matrix
 config-file = colors
-
+custom-shader = shaders/cursor_tail.glsl
 # # Spacing around the equals sign does not matter.
 # # All of these are identical:
 # key=value

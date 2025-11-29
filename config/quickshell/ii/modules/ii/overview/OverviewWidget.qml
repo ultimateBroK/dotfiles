@@ -167,9 +167,13 @@ Item {
                     values: {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return [...ToplevelManager.toplevels.values.filter((toplevel) => {
-                            const address = root.normalizeAddress(toplevel.HyprlandToplevel?.address)
+                            if (!toplevel?.HyprlandToplevel?.address) return false;
+                            const address = root.normalizeAddress(toplevel.HyprlandToplevel.address)
                             var win = windowByAddress[address]
-                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            if (!win || !win.workspace) return false;
+                            const workspaceId = win.workspace.id;
+                            if (!workspaceId) return false;
+                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < workspaceId && workspaceId <= (root.workspaceGroup + 1) * root.workspacesShown)
                             return inWorkspaceGroup;
                         })].reverse()
                     }
