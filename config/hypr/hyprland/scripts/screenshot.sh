@@ -70,7 +70,7 @@ mkdir -p "$SCREENSHOT_DIR"
 case "$MODE" in
     fullscreen)
         if [[ "$OUTPUT" == "clipboard" ]]; then
-            if grim - | wl-copy; then
+            if grim - | wl-copy -t image/png; then
                 notify_screenshot "Full screen screenshot copied to clipboard"
             else
                 notify-send "Screenshot failed" "Could not capture screenshot" -a "Screenshot" -u critical
@@ -84,7 +84,7 @@ case "$MODE" in
                 exit 1
             fi
         else  # both
-            if grim "$FILEPATH" && cat "$FILEPATH" | wl-copy; then
+            if grim "$FILEPATH" && wl-copy -t image/png < "$FILEPATH"; then
                 notify_screenshot "Full screen screenshot saved" "$FILEPATH"
             else
                 notify-send "Screenshot failed" "Could not capture screenshot" -a "Screenshot" -u critical
@@ -155,7 +155,7 @@ case "$MODE" in
         
         # Take screenshot of the entire monitor
         if [[ "$OUTPUT" == "clipboard" ]]; then
-            if grim -o "$MONITOR_NAME" | wl-copy; then
+            if grim -o "$MONITOR_NAME" - | wl-copy -t image/png; then
                 notify_screenshot "Screenshot of monitor at cursor copied to clipboard"
             else
                 notify-send "Screenshot failed" "Could not capture screenshot of monitor" -a "Screenshot" -u critical
@@ -169,7 +169,7 @@ case "$MODE" in
                 exit 1
             fi
         else  # both
-            if grim -o "$MONITOR_NAME" "$FILEPATH" && cat "$FILEPATH" | wl-copy; then
+            if grim -o "$MONITOR_NAME" "$FILEPATH" && wl-copy -t image/png < "$FILEPATH"; then
                 notify_screenshot "Screenshot of monitor at cursor saved" "$FILEPATH"
             else
                 notify-send "Screenshot failed" "Could not capture screenshot of monitor" -a "Screenshot" -u critical
@@ -188,7 +188,7 @@ case "$MODE" in
         fi
         
         if [[ "$OUTPUT" == "clipboard" ]]; then
-            if grim -g "$REGION" | wl-copy; then
+            if grim -g "$REGION" - | wl-copy -t image/png; then
                 notify_screenshot "Region screenshot copied to clipboard"
             else
                 notify-send "Screenshot failed" "Could not capture region screenshot" -a "Screenshot" -u critical
@@ -202,7 +202,7 @@ case "$MODE" in
                 exit 1
             fi
         else  # both
-            if grim -g "$REGION" "$FILEPATH" && cat "$FILEPATH" | wl-copy; then
+            if grim -g "$REGION" "$FILEPATH" && wl-copy -t image/png < "$FILEPATH"; then
                 notify_screenshot "Region screenshot saved" "$FILEPATH"
             else
                 notify-send "Screenshot failed" "Could not capture region screenshot" -a "Screenshot" -u critical
