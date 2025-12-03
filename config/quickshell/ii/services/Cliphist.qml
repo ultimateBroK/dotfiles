@@ -46,26 +46,34 @@ Singleton {
         return !!(/^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(entry))
     }
 
+    function entryMime(entry) {
+        // Extract mime inside [[mime;...]] if present
+        const match = entry.match(/\[\[([^;\]]+);/)
+        return match ? match[1] : ""
+    }
+
     function refresh() {
         readProc.buffer = []
         readProc.running = true
     }
 
     function copy(entry) {
-        if (root.cliphistBinary.includes("cliphist")) // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy`]);
-        else { // Stash
+        const mime = entryMime(entry)
+        if (root.cliphistBinary.includes("cliphist")) { // Classic cliphist
+            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""}`]);
+        } else { // Stash
             const entryNumber = entry.split("\t")[0];
-            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy`]);
+            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""}`]);
         }
     }
 
     function paste(entry) {
-        if (root.cliphistBinary.includes("cliphist")) // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy && wl-paste`]);
-        else { // Stash
+        const mime = entryMime(entry)
+        if (root.cliphistBinary.includes("cliphist")) { // Classic cliphist
+            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`]);
+        } else { // Stash
             const entryNumber = entry.split("\t")[0];
-            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy; ${root.pressPasteCommand}`]);
+            Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`]);
         }
     }
 
@@ -75,7 +83,15 @@ Singleton {
             if (!isImage) return true;
             return entryIsImage(entry);
         }).slice(0, count)
-        const pasteCommands = [...targetEntries].reverse().map(entry => `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`)
+        const pasteCommands = [...targetEntries].reverse().map(entry => {
+            const mime = entryMime(entry)
+            if (root.cliphistBinary.includes("cliphist")) {
+                return `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`
+            } else {
+                const entryNumber = entry.split("\t")[0]
+                return `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`
+            }
+        })
         // Act
         Quickshell.execDetached(["bash", "-c", pasteCommands.join(` && sleep ${root.pasteDelay} && `)]);
     }

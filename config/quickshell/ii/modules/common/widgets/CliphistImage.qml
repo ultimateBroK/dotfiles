@@ -49,9 +49,14 @@ Rectangle {
     implicitHeight: imageHeight * scale
     implicitWidth: imageWidth * scale
 
-    Component.onCompleted: {
+    function startDecode() {
+        root.source = "";
         decodeImageProcess.running = true;
     }
+
+    Component.onCompleted: startDecode()
+
+    onEntryChanged: startDecode()
 
     Process {
         id: decodeImageProcess
