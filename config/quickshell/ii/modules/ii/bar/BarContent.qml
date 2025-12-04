@@ -174,34 +174,43 @@ Item { // Bar content region
         }
 
         MouseArea {
-            id: rightCenterGroup
+            id: clockGroup
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: root.centerSideModuleWidth
-            implicitHeight: rightCenterGroupContent.implicitHeight
+            implicitWidth: clockContent.implicitWidth
+            implicitHeight: clockContent.implicitHeight
 
             onPressed: {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
             }
 
             BarGroup {
-                id: rightCenterGroupContent
+                id: clockContent
                 anchors.fill: parent
+                padding: 8
 
                 ClockWidget {
                     showDate: (Config.options.bar.verbose && root.useShortenedForm < 2)
                     Layout.alignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
                 }
+            }
+        }
 
-                UtilButtons {
-                    visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
-                    Layout.alignment: Qt.AlignVCenter
-                }
+        BarGroup {
+            id: utilsGroup
+            anchors.verticalCenter: parent.verticalCenter
+            visible: (utilButtons.visible || batteryIndicator.visible)
+            padding: 8
 
-                BatteryIndicator {
-                    visible: (root.useShortenedForm < 2 && Battery.available)
-                    Layout.alignment: Qt.AlignVCenter
-                }
+            UtilButtons {
+                id: utilButtons
+                visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            BatteryIndicator {
+                id: batteryIndicator
+                visible: (root.useShortenedForm < 2 && Battery.available)
+                Layout.alignment: Qt.AlignVCenter
             }
         }
     }
