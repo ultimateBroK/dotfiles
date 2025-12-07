@@ -42,18 +42,6 @@ ApplicationWindow {
     color: Appearance.m3colors.m3background
 
     Process {
-        id: konachanWallProc
-        property string status: ""
-        command: ["bash", "-c", Quickshell.shellPath("scripts/colors/random/random_konachan_wall.sh")]
-        stdout: SplitParser {
-            onRead: data => {
-                console.log(`Konachan wall proc output: ${data}`);
-                konachanWallProc.status = data.trim();
-            }
-        }
-    }
-
-    Process {
         id: translationProc
         property string locale: ""
         command: [Directories.aiTranslationScriptPath, translationProc.locale]

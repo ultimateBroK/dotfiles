@@ -46,7 +46,7 @@ payload='{
         "responseMimeType": "text/x.enum",
         "responseSchema": {
             "type": "string",
-            "enum": [ "abstract", "anime", "city", "minimalist", "landscape", "plants", "person", "space" ]
+            "enum": [ "abstract", "city", "minimalist", "landscape", "plants", "person", "space" ]
         },
         "temperature": 0
     }

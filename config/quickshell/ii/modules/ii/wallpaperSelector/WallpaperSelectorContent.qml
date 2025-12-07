@@ -170,8 +170,7 @@ MouseArea {
                             { icon: "image", name: "Pictures", path: Directories.pictures }, 
                             { icon: "movie", name: "Videos", path: Directories.videos }, 
                             { icon: "", name: "---", path: "INTENTIONALLY_INVALID_DIR" }, 
-                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }, 
-                            ...(Config.options.policies.weeb === 1 ? [{ icon: "favorite", name: "Homework", path: `${Directories.pictures}/homework` }] : []),
+                            { icon: "wallpaper", name: "Wallpapers", path: `${Directories.pictures}/Wallpapers` }
                         ]
                         delegate: RippleButton {
                             id: quickDirButton
