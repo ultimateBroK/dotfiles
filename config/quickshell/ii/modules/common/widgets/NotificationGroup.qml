@@ -19,7 +19,7 @@ MouseArea { // Notification group area
     property bool multipleNotifications: notificationCount > 1
     property bool expanded: false
     property bool popup: false
-    property real padding: 10
+    property real padding: 12
     implicitHeight: background.implicitHeight
     readonly property var latestNotification: (notificationCount > 0) ? notifications[notificationCount - 1] : null
     readonly property string latestImage: {
@@ -175,7 +175,7 @@ MouseArea { // Notification group area
         clip: true
         implicitHeight: expanded ? 
             row.implicitHeight + padding * 2 :
-            Math.min(80, row.implicitHeight + padding * 2)
+            Math.min(110, row.implicitHeight + padding * 2) // allow more height so text wraps instead of clipping
 
         Behavior on implicitHeight {
             id: implicitHeightAnim
