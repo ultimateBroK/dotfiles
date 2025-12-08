@@ -249,4 +249,13 @@ Scope { // Scope
         }
     }
 
+    GlobalShortcut {
+        name: "sidebarLeftTogglePin"
+        description: "Pin/Unpin left sidebar (makes it take exclusive zone)"
+
+        onPressed: {
+            root.togglePin();
+        }
+    }
+
 }
