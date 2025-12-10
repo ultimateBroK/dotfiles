@@ -56,7 +56,6 @@ post_process() {
     local wallpaper_path="$3"
 
     handle_kde_material_you_colors &
-    "$SCRIPT_DIR/code/material-code-set-color.sh" &
 }
 
 check_and_prompt_upscale() {
