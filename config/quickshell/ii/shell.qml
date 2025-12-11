@@ -111,5 +111,32 @@ ShellRoot {
 
         onPressed: root.cyclePanelFamily()
     }
+
+    GlobalShortcut {
+        name: "dockToggle"
+        description: "Toggles the dock on/off"
+
+        onPressed: {
+            Config.options.dock.enable = !Config.options.dock.enable;
+        }
+    }
+
+    GlobalShortcut {
+        name: "dockTogglePin"
+        description: "Pins/unpins the dock (persistent)"
+
+        onPressed: {
+            Config.options.dock.pinnedOnStartup = !Config.options.dock.pinnedOnStartup;
+        }
+    }
+
+    GlobalShortcut {
+        name: "barAutoHideToggle"
+        description: "Toggles auto-hide for the bar"
+
+        onPressed: {
+            Config.options.bar.autoHide.enable = !Config.options.bar.autoHide.enable;
+        }
+    }
 }
 
