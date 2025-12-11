@@ -241,15 +241,6 @@ Scope { // Scope
     }
 
     GlobalShortcut {
-        name: "sidebarLeftToggleDetach"
-        description: "Detach left sidebar into a window/Attach it back"
-
-        onPressed: {
-            root.detach = !root.detach;
-        }
-    }
-
-    GlobalShortcut {
         name: "sidebarLeftTogglePin"
         description: "Pin/Unpin left sidebar (makes it take exclusive zone)"
 
