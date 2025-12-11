@@ -3,7 +3,7 @@
 # Master setup script for Dotfiles
 # This script orchestrates the installation of packages and symlinking of dotfiles.
 
-set -e
+set -euo pipefail
 
 # Get the directory of this script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -22,8 +22,13 @@ echo -e "${BLUE}=========================================${NC}"
 echo ""
 
 # Ensure helper scripts are executable
-chmod +x "$SCRIPT_DIR/packages/install-packages.sh"
-chmod +x "$SCRIPT_DIR/link-dotfiles.sh"
+for helper in "$SCRIPT_DIR/packages/install-packages.sh" "$SCRIPT_DIR/link-dotfiles.sh"; do
+    if [ ! -f "$helper" ]; then
+        echo -e "${RED}Missing helper: $helper${NC}"
+        exit 1
+    fi
+    chmod +x "$helper"
+done
 
 # Function to install packages
 install_packages() {
@@ -39,36 +44,38 @@ link_dotfiles() {
 
 # Main Menu
 show_menu() {
-    echo "Please select an option:"
-    echo "1) Install Packages (Official, AUR, Flatpak)"
-    echo "2) Link Dotfiles (Symlink configs to ~/.config)"
-    echo "3) Full Setup (Install Packages + Link Dotfiles)"
-    echo "4) Exit"
-    echo ""
-    read -p "Enter choice [1-4]: " choice
-    echo ""
-    
-    case $choice in
-        1)
-            install_packages
-            ;;
-        2)
-            link_dotfiles
-            ;;
-        3)
-            install_packages
-            echo ""
-            link_dotfiles
-            ;;
-        4)
-            echo "Exiting..."
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid choice. Please try again.${NC}"
-            show_menu
-            ;;
-    esac
+    while true; do
+        echo "Please select an option:"
+        echo "1) Install Packages (Official, AUR, Flatpak)"
+        echo "2) Link Dotfiles (Symlink configs to ~/.config)"
+        echo "3) Full Setup (Install Packages + Link Dotfiles)"
+        echo "4) Exit"
+        echo ""
+        read -p "Enter choice [1-4]: " choice
+        echo ""
+        case $choice in
+            1)
+                install_packages
+                ;;
+            2)
+                link_dotfiles
+                ;;
+            3)
+                install_packages
+                echo ""
+                link_dotfiles
+                ;;
+            4)
+                echo "Exiting..."
+                exit 0
+                ;;
+            *)
+                echo -e "${RED}Invalid choice. Please try again.${NC}"
+                continue
+                ;;
+        esac
+        break
+    done
 }
 
 # Check for arguments

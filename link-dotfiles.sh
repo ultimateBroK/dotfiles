@@ -3,7 +3,7 @@
 # Dotfiles symlink management script
 # This script creates symlinks from ~/.config to ~/Downloads/dotfiles/config
 
-set -e
+set -euo pipefail
 
 DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CONFIG_DIR="$HOME/.config"

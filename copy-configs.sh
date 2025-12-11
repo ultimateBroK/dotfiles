@@ -3,9 +3,10 @@
 # Helper script to copy configs from ~/.config to dotfiles
 # Usage: ./copy-configs.sh <config-name>
 
-set -e
+set -euo pipefail
 
-DOTFILES_DIR="$HOME/Downloads/dotfiles"
+# Resolve repo location relative to this script for portability
+DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 
@@ -15,13 +16,22 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-if [ -z "$1" ]; then
+if [ -z "${1-}" ]; then
     echo "Usage: $0 <config-name>"
     echo "Example: $0 hypr"
     exit 1
 fi
 
 CONFIG_NAME="$1"
+
+# Disallow path traversal or slashes in the config name
+case "$CONFIG_NAME" in
+    *"/"*|*".."*)
+        echo -e "${RED}Error: config name must be a simple basename${NC}"
+        exit 1
+        ;;
+esac
+
 SOURCE="$CONFIG_DIR/$CONFIG_NAME"
 TARGET="$DOTFILES_CONFIG_DIR/$CONFIG_NAME"
 
@@ -42,7 +52,8 @@ if [ -e "$TARGET" ]; then
 fi
 
 echo -e "${GREEN}Copying $CONFIG_NAME...${NC}"
-cp -r "$SOURCE" "$TARGET"
+mkdir -p "$DOTFILES_CONFIG_DIR"
+cp -a "$SOURCE" "$TARGET"
 echo -e "${GREEN}Done! Copied to $TARGET${NC}"
 echo ""
 echo "Next steps:"
