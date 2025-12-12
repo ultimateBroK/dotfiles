@@ -7,6 +7,6 @@ if pgrep -x wayvibes > /dev/null; then
     notify-send -u low -t 2000 "Wayvibes" "Keyboard sounds disabled"
 else
     # Start wayvibes
-    wayvibes /home/ultimatebrok/Downloads/eg-oreo -v 5 --background
+    wayvibes /home/ultimatebrok/Downloads/eg-oreo -v 3 --background
     notify-send -u low -t 2000 "Wayvibes" "Keyboard sounds enabled"
 fi
