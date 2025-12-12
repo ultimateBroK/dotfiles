@@ -195,21 +195,46 @@ Item { // Bar content region
             }
         }
 
+        // Status group: Battery + Weather
         BarGroup {
-            id: utilsGroup
+            id: statusGroup
             anchors.verticalCenter: parent.verticalCenter
-            visible: (utilButtons.visible || batteryIndicator.visible)
+            // Show if either battery is available (and layout allows) or weather is enabled
+            visible: ((root.useShortenedForm < 2 && Battery.available) || Config.options.bar.weather.enable)
             padding: 8
 
-            UtilButtons {
-                id: utilButtons
-                visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
+            BatteryIndicator {
+                visible: (root.useShortenedForm < 2 && Battery.available)
                 Layout.alignment: Qt.AlignVCenter
             }
 
-            BatteryIndicator {
-                id: batteryIndicator
-                visible: (root.useShortenedForm < 2 && Battery.available)
+            Loader {
+                active: Config.options.bar.weather.enable
+                sourceComponent: WeatherBar {}
+            }
+        }
+
+        // Utilities group: placed to the right of statusGroup
+        BarGroup {
+            id: utilsGroup
+            anchors.verticalCenter: parent.verticalCenter
+            // Show only if any utility button is enabled and allowed by layout state
+            visible: (
+                Config.options.bar.verbose && root.useShortenedForm === 0 && (
+                    Config.options.bar.utilButtons.showScreenSnip ||
+                    Config.options.bar.utilButtons.showScreenRecord ||
+                    Config.options.bar.utilButtons.showColorPicker ||
+                    Config.options.bar.utilButtons.showKeyboardToggle ||
+                    Config.options.bar.utilButtons.showMicToggle ||
+                    Config.options.bar.utilButtons.showDarkModeToggle ||
+                    Config.options.bar.utilButtons.showPerformanceProfileToggle
+                )
+            )
+            padding: 8
+
+            UtilButtons {
+                // Inner component visibility remains tied to layout state
+                visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
                 Layout.alignment: Qt.AlignVCenter
             }
         }
@@ -370,15 +395,7 @@ Item { // Bar content region
                 Layout.fillHeight: true
             }
 
-            // Weather
-            Loader {
-                Layout.leftMargin: 4
-                active: Config.options.bar.weather.enable
-
-                sourceComponent: BarGroup {
-                    WeatherBar {}
-                }
-            }
+            // Weather moved into middle statusGroup with BatteryIndicator
         }
     }
 }
