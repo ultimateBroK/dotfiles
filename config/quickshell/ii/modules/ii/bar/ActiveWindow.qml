@@ -16,6 +16,24 @@ Item {
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
 
+    // Improve readability on bright wallpapers when the bar has no global background.
+    // Keep title/subtitle as two distinct tones in both modes.
+    readonly property bool brightWallpaper: Appearance.wallpaperLightness >= 0.60
+
+    // On bright wallpapers: use dark text (high contrast) with a light outline.
+    // On non-bright wallpapers: keep existing theme colors with a dark outline.
+    readonly property color titleColor: brightWallpaper ? Appearance.m3colors.m3shadow : Appearance.colors.colOnLayer0
+    readonly property color subtitleColor: brightWallpaper
+        ? ColorUtils.transparentize(Appearance.m3colors.m3shadow, 0.35)
+        : Appearance.colors.colSubtext
+
+    readonly property color outlineColor: brightWallpaper
+        ? ColorUtils.transparentize(
+              (Appearance.isDarkMode ? Appearance.m3colors.m3onBackground : Appearance.m3colors.m3inverseOnSurface),
+              0.25
+          )
+        : ColorUtils.transparentize(Appearance.m3colors.m3shadow, 0.15)
+
     implicitWidth: colLayout.implicitWidth
 
     ColumnLayout {
@@ -30,7 +48,9 @@ Item {
             Layout.preferredWidth: 300
             Layout.alignment: Qt.AlignLeft
             font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colSubtext
+            color: root.subtitleColor
+            outlineEnabled: true
+            outlineColor: root.outlineColor
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.appId :
@@ -42,7 +62,9 @@ Item {
             Layout.preferredWidth: 300
             Layout.alignment: Qt.AlignLeft
             fontPixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer0
+            color: root.titleColor
+            outlineEnabled: true
+            outlineColor: root.outlineColor
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.title :
                 (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`

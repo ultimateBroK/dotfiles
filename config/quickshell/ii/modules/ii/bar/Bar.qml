@@ -10,7 +10,8 @@ import qs.modules.common.widgets
 
 Scope {
     id: bar
-    property bool showBarBackground: Config.options.bar.showBackground
+    // Topbar should be background-less; groups/widgets provide their own surfaces.
+    property bool showBarBackground: false
 
     Variants {
         // For each monitor
@@ -167,7 +168,7 @@ Scope {
                                 }
 
                                 implicitSize: Appearance.rounding.screenRounding
-                                color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                                color: showBarBackground ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75) : "transparent"
 
                                 corner: RoundCorner.CornerEnum.TopLeft
                                 states: State {
@@ -186,7 +187,7 @@ Scope {
                                     bottom: Config.options.bar.bottom ? parent.bottom : undefined
                                 }
                                 implicitSize: Appearance.rounding.screenRounding
-                                color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                                color: showBarBackground ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75) : "transparent"
 
                                 corner: RoundCorner.CornerEnum.TopRight
                                 states: State {

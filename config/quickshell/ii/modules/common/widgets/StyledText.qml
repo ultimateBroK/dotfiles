@@ -7,7 +7,15 @@ Text {
     property real animationDistanceX: 0
     property real animationDistanceY: 6
 
-    renderType: Text.QtRendering
+    // Optional outline for readability on complex/bright backgrounds.
+    property bool outlineEnabled: false
+    property color outlineColor: ColorUtils.transparentize(Appearance.m3colors.m3shadow, 0.35)
+
+    // Prefer native glyph rasterization when animating/outlined for crisp edges.
+    // Default stays QtRendering to preserve existing look/perf elsewhere.
+    property bool nativeRendering: false
+
+    renderType: nativeRendering ? Text.NativeRendering : Text.QtRendering
     verticalAlignment: Text.AlignVCenter
     property bool shouldUseNumberFont: /^\d+$/.test(root.text)
     property var defaultFont: shouldUseNumberFont ? Appearance.font.family.numbers : Appearance.font.family.main
@@ -20,6 +28,9 @@ Text {
     }
     color: Appearance?.m3colors.m3onBackground ?? "black"
     linkColor: Appearance?.m3colors.m3primary
+
+    style: outlineEnabled ? Text.Outline : Text.Normal
+    styleColor: outlineColor
 
     component Anim: NumberAnimation {
         target: root

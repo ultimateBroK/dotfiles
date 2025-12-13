@@ -12,6 +12,9 @@ import qs.modules.common.functions
 Item { // Bar content region
     id: root
 
+    // Global topbar background is disabled; individual groups provide surfaces.
+    readonly property bool topbarHasBackground: false
+
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
@@ -27,24 +30,24 @@ Item { // Bar content region
 
     // Background shadow
     Loader {
-        active: Config.options.bar.showBackground && Config.options.bar.cornerStyle === 1 && Config.options.bar.floatStyleShadow
+        active: topbarHasBackground && Config.options.bar.cornerStyle === 1 && Config.options.bar.floatStyleShadow
         anchors.fill: barBackground
         sourceComponent: StyledRectangularShadow {
             anchors.fill: undefined // The loader's anchors act on this, and this should not have any anchor
             target: barBackground
         }
     }
-    // Background
+    // Background (translucent for wallpaper readability)
     Rectangle {
         id: barBackground
         anchors {
             fill: parent
-            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
+            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
         }
-        color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
+         color: "transparent"
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
-        border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
-        border.color: Appearance.colors.colLayer0Border
+         border.width: 0
+         border.color: "transparent"
     }
     
     // Subtle accent gradient overlay for vibrant schemes
@@ -54,15 +57,15 @@ Item { // Bar content region
         radius: barBackground.radius
         visible: {
             var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
-            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && Config.options.bar.showBackground;
+            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && topbarHasBackground;
         }
-        opacity: 0.4
+        opacity: 0.35
         gradient: Gradient {
             orientation: Gradient.Horizontal
             GradientStop { position: 0.0; color: "transparent" }
             GradientStop { 
                 position: 1.0; 
-                color: ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.12)
+                color: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.12), 0.5)
             }
         }
         z: -1
@@ -285,25 +288,38 @@ Item { // Bar content region
             spacing: 5
             layoutDirection: Qt.RightToLeft
 
-            RippleButton { // Right sidebar button
-                id: rightSidebarButton
-
+            BarGroup { // Right side should have a dark surface like the center groups
+                id: rightControlsGroup
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.rightMargin: Appearance.rounding.screenRounding
-                Layout.fillWidth: false
+                padding: 8
 
-                implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
-                implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+                SysTray {
+                    visible: root.useShortenedForm === 0
+                    Layout.fillWidth: false
+                    Layout.fillHeight: true
+                    invertSide: Config?.options.bar.bottom
+                }
 
-                buttonRadius: Appearance.rounding.full
-                colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                colBackgroundHover: Appearance.colors.colLayer1Hover
-                colRipple: Appearance.colors.colLayer1Active
-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                colRippleToggled: Appearance.colors.colSecondaryContainerActive
-                toggled: GlobalStates.sidebarRightOpen
-                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colPrimary
+                RippleButton { // Right sidebar button
+                    id: rightSidebarButton
+
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.fillWidth: false
+
+                    implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
+                    implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+
+                    buttonRadius: Appearance.rounding.full
+                    // Let BarGroup provide the base surface; only show hover/toggled emphasis.
+                    colBackground: "transparent"
+                    colBackgroundHover: "transparent"
+                    colRipple: Appearance.colors.colLayer1Active
+                    colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                    colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                    colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                    toggled: GlobalStates.sidebarRightOpen
+                    property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colPrimary
 
                 Behavior on colText {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -313,11 +329,11 @@ Item { // Bar content region
                     GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
                 }
 
-                RowLayout {
-                    id: indicatorsRowLayout
-                    anchors.centerIn: parent
-                    property real realSpacing: 15
-                    spacing: 0
+                    RowLayout {
+                        id: indicatorsRowLayout
+                        anchors.centerIn: parent
+                        property real realSpacing: 15
+                        spacing: 0
 
                     Revealer {
                         reveal: Audio.source?.audio?.muted ?? false
@@ -380,14 +396,8 @@ Item { // Bar content region
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
+                    }
                 }
-            }
-
-            SysTray {
-                visible: root.useShortenedForm === 0
-                Layout.fillWidth: false
-                Layout.fillHeight: true
-                invertSide: Config?.options.bar.bottom
             }
 
             Item {

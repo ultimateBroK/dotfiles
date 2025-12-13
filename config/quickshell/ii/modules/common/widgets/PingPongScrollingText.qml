@@ -13,6 +13,8 @@ Item {
     property string text: ""
     property color color: Appearance.colors.colOnLayer1
     property int fontPixelSize: Appearance.font.pixelSize.normal
+    property bool outlineEnabled: false
+    property color outlineColor: ColorUtils.transparentize(Appearance.m3colors.m3shadow, 0.35)
     property int animationDuration: 4000 // Duration for each direction (ms)
     property int pauseDuration: 500 // Pause duration at each edge (ms)
     property bool autoStart: true // Automatically start animation when text changes
@@ -38,11 +40,15 @@ Item {
     StyledText {
         id: scrollingText
         anchors.verticalCenter: parent.verticalCenter
-        x: root.needsScrolling ? textX : 0
+        // Snap to integer pixels to avoid subpixel blur on high-contrast wallpapers.
+        x: root.needsScrolling ? Math.round(textX) : 0
         width: root.needsScrolling ? root.contentWidth : (root.width > 0 ? root.width : implicitWidth)
         color: root.color
         font.pixelSize: root.fontPixelSize
         text: root.text
+        outlineEnabled: root.outlineEnabled
+        outlineColor: root.outlineColor
+        nativeRendering: root.outlineEnabled && root.needsScrolling
         horizontalAlignment: (root.needsScrolling || !root.centerStaticText) ? Text.AlignLeft : Text.AlignHCenter
         
         property real textX: 0 // X position used for scrolling
@@ -64,7 +70,7 @@ Item {
             target: scrollingText
             property: "textX"
             from: 0
-            to: -(root.contentWidth - root.width)
+            to: -Math.round(root.contentWidth - root.width)
             duration: root.animationDuration
             easing.type: Easing.Bezier
             easing.bezierCurve: [0.25, 0.1, 0.25, 1.0] // Smooth ease-in-out
@@ -79,7 +85,7 @@ Item {
         PropertyAnimation {
             target: scrollingText
             property: "textX"
-            from: -(root.contentWidth - root.width)
+            from: -Math.round(root.contentWidth - root.width)
             to: 0
             duration: root.animationDuration
             easing.type: Easing.Bezier

@@ -25,6 +25,7 @@ Singleton {
         rescaleSize: 10
     }
     property real wallpaperVibrancy: (wallColorQuant.colors[0]?.hslSaturation + wallColorQuant.colors[0]?.hslLightness) / 2
+    readonly property real wallpaperLightness: wallColorQuant.colors[0]?.hslLightness ?? 0.5
     
     // Color scheme type adaptation factors
     readonly property string colorSchemeType: Config?.options?.appearance?.palette?.type ?? "auto"
