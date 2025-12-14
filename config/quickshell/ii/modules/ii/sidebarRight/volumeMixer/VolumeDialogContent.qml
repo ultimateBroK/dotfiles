@@ -21,10 +21,50 @@ ColumnLayout {
     })
     readonly property bool hasApps: appPwNodes.length > 0
     spacing: 16
+    
+    // Applications header
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.topMargin: -8
+        visible: root.hasApps
+        spacing: 8
+        
+        MaterialSymbol {
+            text: "graphic_eq"
+            iconSize: 18
+            color: Appearance.colors.colPrimary
+        }
+        
+        StyledText {
+            text: Translation.tr("Applications")
+            font.pixelSize: Appearance.font.pixelSize.small
+            color: Appearance.colors.colOnSurface
+        }
+        
+        Rectangle {
+            Layout.preferredWidth: 24
+            Layout.preferredHeight: 20
+            radius: 10
+            color: Appearance.colors.colPrimaryContainer
+            visible: root.hasApps
+            
+            StyledText {
+                anchors.centerIn: parent
+                text: root.appPwNodes.length
+                font {
+                    pixelSize: Appearance.font.pixelSize.smaller
+                    weight: Font.Bold
+                }
+                color: Appearance.colors.colOnPrimaryContainer
+            }
+        }
+        
+        Item { Layout.fillWidth: true }
+    }
 
     DialogSectionListView {
         Layout.fillHeight: true
-        topMargin: 14
+        topMargin: 8
 
         model: ScriptModel {
             values: root.appPwNodes
@@ -39,11 +79,32 @@ ColumnLayout {
         }
     }
 
+    // Device selector header
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: 8
+        
+        MaterialSymbol {
+            text: root.isSink ? "speaker" : "mic"
+            iconSize: 18
+            color: Appearance.colors.colPrimary
+        }
+        
+        StyledText {
+            text: Translation.tr("Device")
+            font.pixelSize: Appearance.font.pixelSize.small
+            color: Appearance.colors.colOnSurface
+        }
+        
+        Item { Layout.fillWidth: true }
+    }
+    
     StyledComboBox {
         id: deviceSelector
         Layout.fillHeight: false
         Layout.fillWidth: true
         Layout.bottomMargin: 6
+        Layout.topMargin: -8
         model: root.devices.map(node => (node.nickname || node.description || Translation.tr("Unknown")))
         currentIndex: root.devices.findIndex(item => {
             if (root.isSink) {

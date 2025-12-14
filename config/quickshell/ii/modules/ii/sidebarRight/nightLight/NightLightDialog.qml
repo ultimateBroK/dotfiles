@@ -15,10 +15,11 @@ WindowDialog {
     id: root
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
+    property bool brightnessAvailable: root.brightnessMonitor !== null
     backgroundHeight: 600
 
     WindowDialogTitle {
-        text: Translation.tr("Eye protection")
+        text: Translation.tr("Display")
     }
     
     WindowDialogSectionHeader {

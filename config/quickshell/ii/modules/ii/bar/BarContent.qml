@@ -106,17 +106,40 @@ Item { // Bar content region
             anchors.fill: parent
             spacing: 10
 
-            LeftSidebarButton { // Left sidebar button
+            BarGroup {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: Appearance.rounding.screenRounding
-                colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                Layout.fillWidth: false
+                Layout.fillHeight: false
+                padding: 5
+                
+                LeftSidebarButton { // Left sidebar button
+                    Layout.alignment: Qt.AlignVCenter
+                    colBackground: "transparent"
+                    colBackgroundHover: "transparent"
+                }
             }
 
-            ActiveWindow {
+            BarGroup {
                 visible: root.useShortenedForm === 0
-                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.fillWidth: false
+                Layout.fillHeight: false
+                anchors.verticalCenter: parent.verticalCenter
+                padding: 8
+                
+                ActiveWindow {
+                    Layout.alignment: Qt.AlignVCenter
+                }
+            }
+            
+            Item {
+                visible: root.useShortenedForm === 0
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+            }
+            
+            Item {
+                visible: root.useShortenedForm === 0
+                Layout.preferredWidth: Appearance.rounding.screenRounding
             }
         }
     }

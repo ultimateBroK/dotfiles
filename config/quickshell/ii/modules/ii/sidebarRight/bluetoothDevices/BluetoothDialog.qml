@@ -16,10 +16,136 @@ import Quickshell.Hyprland
 WindowDialog {
     id: root
     backgroundHeight: 600
+    
+    // Logic: Get connected devices with proper null checks
+    property var connectedDevices: {
+        if (!Bluetooth.devices || !Bluetooth.devices.values) return [];
+        return [...Bluetooth.devices.values].filter(d => d && d.connected);
+    }
+    property bool hasConnectedDevices: root.connectedDevices.length > 0
+    property bool bluetoothEnabled: Bluetooth.defaultAdapter?.enabled ?? false
 
     WindowDialogTitle {
-        text: Translation.tr("Bluetooth devices")
+        text: Translation.tr("Bluetooth")
     }
+    
+    // Bluetooth disabled warning
+    Rectangle {
+        visible: !root.bluetoothEnabled
+        Layout.fillWidth: true
+        Layout.preferredHeight: disabledLayout.implicitHeight + 16
+        Layout.topMargin: -10
+        Layout.leftMargin: 0
+        Layout.rightMargin: 0
+        radius: Appearance.rounding.small
+        color: Appearance.colors.colErrorContainer
+        
+        RowLayout {
+            id: disabledLayout
+            anchors {
+                fill: parent
+                margins: 8
+            }
+            spacing: 10
+            
+            MaterialSymbol {
+                text: "bluetooth_disabled"
+                iconSize: 28
+                color: Appearance.colors.colOnErrorContainer
+            }
+            
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 2
+                
+                StyledText {
+                    text: Translation.tr("Bluetooth is Off")
+                    font {
+                        pixelSize: Appearance.font.pixelSize.small
+                        weight: Font.Medium
+                    }
+                    color: Appearance.colors.colOnErrorContainer
+                }
+                
+                StyledText {
+                    text: Translation.tr("Tap to enable")
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnErrorContainer
+                }
+            }
+        }
+        
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Bluetooth.defaultAdapter.enabled = true
+        }
+    }
+    
+    // Connected devices summary - only show when bluetooth enabled AND has connected devices
+    Rectangle {
+        visible: root.bluetoothEnabled && root.hasConnectedDevices
+        Layout.fillWidth: true
+        Layout.preferredHeight: connectedLayout.implicitHeight + 16
+        Layout.topMargin: -10
+        Layout.leftMargin: 0
+        Layout.rightMargin: 0
+        radius: Appearance.rounding.small
+        color: Appearance.colors.colSurfaceContainer
+        
+        RowLayout {
+            id: connectedLayout
+            anchors {
+                fill: parent
+                margins: 8
+            }
+            spacing: 10
+            
+            MaterialSymbol {
+                text: "bluetooth_connected"
+                iconSize: 28
+                color: Appearance.colors.colPrimary
+            }
+            
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 2
+                
+                StyledText {
+                    text: {
+                        if (root.connectedDevices.length === 0) return "";
+                        if (root.connectedDevices.length === 1) {
+                            return root.connectedDevices[0]?.name ?? Translation.tr("Unknown Device");
+                        }
+                        return Translation.tr("%1 devices").arg(root.connectedDevices.length);
+                    }
+                    font {
+                        pixelSize: Appearance.font.pixelSize.small
+                        weight: Font.Medium
+                    }
+                    color: Appearance.colors.colOnSurface
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                }
+                
+                StyledText {
+                    text: root.connectedDevices.length === 1 
+                        ? Translation.tr("Connected")
+                        : Translation.tr("All connected")
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colPrimary
+                }
+            }
+            
+            Rectangle {
+                Layout.preferredWidth: 8
+                Layout.preferredHeight: 8
+                radius: 4
+                color: Appearance.colors.colPrimary
+            }
+        }
+    }
+    
     WindowDialogSeparator {
         visible: !(Bluetooth.defaultAdapter?.discovering ?? false)
     }

@@ -19,8 +19,8 @@ Rectangle {
     implicitHeight: contentItem.implicitHeight + root.verticalPadding * 2
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    property real verticalPadding: 4
-    property real horizontalPadding: 12
+    property real verticalPadding: 6
+    property real horizontalPadding: 10
 
     Column {
         id: contentItem
@@ -31,6 +31,7 @@ Rectangle {
             topMargin: root.verticalPadding
             bottomMargin: root.verticalPadding
         }
+        spacing: 3
 
         Loader {
             anchors {
@@ -39,8 +40,9 @@ Rectangle {
             }
             visible: active
             active: Config.options.sidebar.quickSliders.showBrightness
-            sourceComponent: QuickSlider {
+            sourceComponent: QuickSliderItem {
                 materialSymbol: "brightness_6"
+                sliderLabel: Translation.tr("Brightness")
                 value: root.brightnessMonitor.brightness
                 onMoved: {
                     root.brightnessMonitor.setBrightness(value)
@@ -55,8 +57,9 @@ Rectangle {
             }
             visible: active
             active: Config.options.sidebar.quickSliders.showVolume
-            sourceComponent: QuickSlider {
+            sourceComponent: QuickSliderItem {
                 materialSymbol: "volume_up"
+                sliderLabel: Translation.tr("Volume")
                 value: Audio.sink.audio.volume
                 onMoved: {
                     Audio.sink.audio.volume = value
@@ -71,8 +74,9 @@ Rectangle {
             }
             visible: active
             active: Config.options.sidebar.quickSliders.showMic
-            sourceComponent: QuickSlider {
+            sourceComponent: QuickSliderItem {
                 materialSymbol: "mic"
+                sliderLabel: Translation.tr("Microphone")
                 value: Audio.source.audio.volume
                 onMoved: {
                     Audio.source.audio.volume = value
@@ -81,31 +85,37 @@ Rectangle {
         }
     }
 
-    component QuickSlider: StyledSlider { 
-        id: quickSlider
+    component QuickSliderItem: RowLayout {
+        id: sliderItem
         required property string materialSymbol
-        configuration: StyledSlider.Configuration.M
-        stopIndicatorValues: []
+        required property string sliderLabel
+        property alias value: quickSlider.value
+        signal moved()
+        spacing: 8
         
         MaterialSymbol {
-            id: icon
-            property bool nearFull: quickSlider.value >= 0.9
-            anchors {
-                verticalCenter: parent.verticalCenter
-                right: nearFull ? quickSlider.handle.right : parent.right
-                rightMargin: quickSlider.nearFull ? 14 : 8
-            }
-            iconSize: 20
-            color: nearFull ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-            text: quickSlider.materialSymbol
-
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
-            Behavior on anchors.rightMargin {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-            }
-
+            Layout.alignment: Qt.AlignVCenter
+            text: sliderItem.materialSymbol
+            iconSize: Appearance.font.pixelSize.normal
+            color: Appearance.colors.colPrimary
+        }
+        
+        StyledSlider {
+            id: quickSlider
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            configuration: StyledSlider.Configuration.S
+            stopIndicatorValues: []
+            onMoved: sliderItem.moved()
+        }
+        
+        StyledText {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 35
+            text: `${Math.round(quickSlider.value * 100)}%`
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            color: Appearance.colors.colOnSurface
+            horizontalAlignment: Text.AlignRight
         }
     }
 }

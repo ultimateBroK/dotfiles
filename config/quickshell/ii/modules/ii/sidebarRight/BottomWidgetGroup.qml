@@ -10,8 +10,8 @@ Rectangle {
     id: root
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    clip: true
-    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
+    clip: false
+    implicitHeight: collapsed ? (collapsedBottomWidgetGroupRow.implicitHeight + 16) : bottomWidgetGroupRow.implicitHeight
     property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
@@ -65,6 +65,8 @@ Rectangle {
         id: collapsedBottomWidgetGroupRow
         opacity: collapsed ? 1 : 0
         visible: opacity > 0
+        anchors.fill: parent
+        anchors.margins: 8
         Behavior on opacity {
             NumberAnimation {
                 id: collapsedBottomWidgetGroupRowFade
@@ -74,31 +76,80 @@ Rectangle {
             }
         }
 
-        spacing: 15
+        spacing: 8
         
-        CalendarHeaderButton {
-            Layout.margins: 10
-            Layout.rightMargin: 0
-            forceCircle: true
-            downAction: () => {
-                root.setCollapsed(false)
-            }
-            contentItem: MaterialSymbol {
+        // Expand button
+        Rectangle {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            radius: 16
+            color: Appearance.colors.colSurfaceContainerHigh
+            
+            MaterialSymbol {
+                anchors.centerIn: parent
                 text: "keyboard_arrow_up"
-                iconSize: Appearance.font.pixelSize.larger
-                horizontalAlignment: Text.AlignHCenter
-                color: Appearance.colors.colOnLayer1
+                iconSize: Appearance.font.pixelSize.normal
+                color: Appearance.colors.colOnSurfaceVariant
             }
+            
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.setCollapsed(false)
+            }
+        }
+        
+        // Calendar icon
+        MaterialSymbol {
+            Layout.alignment: Qt.AlignVCenter
+            text: "calendar_today"
+            iconSize: Appearance.font.pixelSize.normal
+            color: Appearance.colors.colPrimary
         }
 
         StyledText {
             property int remainingTasks: Todo.list.filter(task => !task.done).length;
-            Layout.margins: 10
-            Layout.leftMargin: 0
-            // text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
-            text: Translation.tr("%1   •   %2 tasks").arg(DateTime.collapsedCalendarFormat).arg(remainingTasks)
-            font.pixelSize: Appearance.font.pixelSize.large
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            text: DateTime.collapsedCalendarFormat
+            font {
+                pixelSize: Appearance.font.pixelSize.normal
+                weight: Font.Medium
+            }
             color: Appearance.colors.colOnLayer1
+            elide: Text.ElideRight
+        }
+        
+        // Tasks badge
+        Rectangle {
+            Layout.alignment: Qt.AlignVCenter
+            visible: Todo.list.filter(task => !task.done).length > 0
+            Layout.preferredWidth: taskBadgeLayout.implicitWidth + 12
+            Layout.preferredHeight: 24
+            radius: 12
+            color: Appearance.colors.colPrimaryContainer
+            
+            RowLayout {
+                id: taskBadgeLayout
+                anchors.centerIn: parent
+                spacing: 4
+                
+                MaterialSymbol {
+                    text: "checklist"
+                    iconSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnPrimaryContainer
+                }
+                
+                StyledText {
+                    text: Todo.list.filter(task => !task.done).length.toString()
+                    font {
+                        pixelSize: Appearance.font.pixelSize.smaller
+                        weight: Font.Bold
+                    }
+                    color: Appearance.colors.colOnPrimaryContainer
+                }
+            }
         }
     }
 
@@ -119,14 +170,14 @@ Rectangle {
 
         anchors.fill: parent 
         height: tabStack.height
-        spacing: 10
+        spacing: 8
         
         // Navigation rail
         Item {
             Layout.fillHeight: true
             Layout.fillWidth: false
-            Layout.leftMargin: 10
-            Layout.topMargin: 10
+            Layout.leftMargin: 8
+            Layout.topMargin: 8
             width: tabBar.width
             // Navigation rail buttons
             NavigationRailTabArray {

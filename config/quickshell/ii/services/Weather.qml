@@ -42,36 +42,54 @@ Singleton {
         visib: 0,
         press: 0,
         temp: 0,
-        tempFeelsLike: 0
+        tempFeelsLike: 0,
+        weatherDesc: "",
+        cloudCover: 0,
+        moonPhase: "",
+        moonrise: "",
+        moonset: "",
+        dewPoint: 0,
+        heatIndex: 0
     })
 
     function refineData(data) {
         let temp = {};
-        temp.uv = data?.current?.uvIndex || 0;
-        temp.humidity = (data?.current?.humidity || 0) + "%";
-        temp.sunrise = data?.astronomy?.sunrise || "0.0";
-        temp.sunset = data?.astronomy?.sunset || "0.0";
+        temp.uv = parseFloat(data?.current?.uvIndex || 0).toFixed(1);
+        temp.humidity = parseInt(data?.current?.humidity || 0) + "%";
+        temp.sunrise = data?.astronomy?.sunrise || "--:--";
+        temp.sunset = data?.astronomy?.sunset || "--:--";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
         temp.city = data?.location?.areaName[0]?.value || "City";
+        temp.weatherDesc = data?.current?.weatherDesc?.[0]?.value || "Unknown";
+        temp.cloudCover = parseInt(data?.current?.cloudcover || 0) + "%";
+        temp.moonPhase = data?.astronomy?.moon_phase || "Unknown";
+        temp.moonrise = data?.astronomy?.moonrise || "--:--";
+        temp.moonset = data?.astronomy?.moonset || "--:--";
         temp.temp = "";
         temp.tempFeelsLike = "";
+        temp.dewPoint = "";
+        temp.heatIndex = "";
         if (root.useUSCS) {
-            temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
-            temp.precip = (data?.current?.precipInches || 0) + " in";
-            temp.visib = (data?.current?.visibilityMiles || 0) + " m";
-            temp.press = (data?.current?.pressureInches || 0) + " psi";
-            temp.temp += (data?.current?.temp_F || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeF || 0);
+            temp.wind = parseFloat(data?.current?.windspeedMiles || 0).toFixed(1) + " mph";
+            temp.precip = parseFloat(data?.current?.precipInches || 0).toFixed(2) + " in";
+            temp.visib = parseFloat(data?.current?.visibilityMiles || 0).toFixed(1) + " mi";
+            temp.press = parseFloat(data?.current?.pressureInches || 0).toFixed(2) + " inHg";
+            temp.temp += parseFloat(data?.current?.temp_F || 0).toFixed(1);
+            temp.tempFeelsLike += parseFloat(data?.current?.FeelsLikeF || 0).toFixed(1);
+            temp.dewPoint = parseFloat(data?.current?.DewPointF || 0).toFixed(1) + "°F";
+            temp.heatIndex = parseFloat(data?.current?.HeatIndexF || 0).toFixed(1) + "°F";
             temp.temp += "°F";
             temp.tempFeelsLike += "°F";
         } else {
-            temp.wind = (data?.current?.windspeedKmph || 0) + " km/h";
-            temp.precip = (data?.current?.precipMM || 0) + " mm";
-            temp.visib = (data?.current?.visibility || 0) + " km";
-            temp.press = (data?.current?.pressure || 0) + " hPa";
-            temp.temp += (data?.current?.temp_C || 0);
-            temp.tempFeelsLike += (data?.current?.FeelsLikeC || 0);
+            temp.wind = parseFloat(data?.current?.windspeedKmph || 0).toFixed(1) + " km/h";
+            temp.precip = parseFloat(data?.current?.precipMM || 0).toFixed(1) + " mm";
+            temp.visib = parseFloat(data?.current?.visibility || 0).toFixed(1) + " km";
+            temp.press = parseInt(data?.current?.pressure || 0) + " hPa";
+            temp.temp += parseFloat(data?.current?.temp_C || 0).toFixed(1);
+            temp.tempFeelsLike += parseFloat(data?.current?.FeelsLikeC || 0).toFixed(1);
+            temp.dewPoint = parseFloat(data?.current?.DewPointC || 0).toFixed(1) + "°C";
+            temp.heatIndex = parseFloat(data?.current?.HeatIndexC || 0).toFixed(1) + "°C";
             temp.temp += "°C";
             temp.tempFeelsLike += "°C";
         }

@@ -61,7 +61,7 @@ Item {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: sidebarPadding
-            spacing: sidebarPadding
+            spacing: 8
 
             SystemButtonRow {
                 Layout.fillHeight: false
@@ -100,6 +100,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                Layout.minimumHeight: 150
             }
 
             BottomWidgetGroup {
@@ -107,6 +108,7 @@ Item {
                 Layout.fillHeight: false
                 Layout.fillWidth: true
                 Layout.preferredHeight: implicitHeight
+                Layout.maximumHeight: 400
             }
         }
     }

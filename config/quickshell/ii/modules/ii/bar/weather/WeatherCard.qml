@@ -19,26 +19,34 @@ Rectangle {
     ColumnLayout {
         id: columnLayout
         anchors.fill: parent
-        spacing: -10
+        spacing: 2
+        
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
+            spacing: 4
+            
             MaterialSymbol {
                 id: symbol
                 fill: 0
                 iconSize: Appearance.font.pixelSize.normal
-                color: Appearance.colors.colOnSurfaceVariant
+                color: Appearance.colors.colPrimary
             }
+            
             StyledText {
                 id: title
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colOnSurfaceVariant
             }
         }
+        
         StyledText {
             id: value
             Layout.alignment: Qt.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.small
-            color: Appearance.colors.colOnSurfaceVariant
+            font {
+                pixelSize: Appearance.font.pixelSize.small
+                weight: Font.Medium
+            }
+            color: Appearance.colors.colOnSurface
         }
     }
 }

@@ -39,14 +39,12 @@ RippleButton {
         }
     }
 
-    CustomIcon {
+    MaterialSymbol {
         id: distroIcon
         anchors.centerIn: parent
-        width: 19.5
-        height: 19.5
-        source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : `${Config.options.bar.topLeftIcon}-symbolic`
-        colorize: true
-        color: Appearance.colors.colPrimary
+        text: "smart_toy"
+        iconSize: 20
+        color: Appearance.colors.colOnLayer1
 
         Rectangle {
             opacity: root.showPing ? 1 : 0
