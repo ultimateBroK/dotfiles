@@ -27,9 +27,7 @@ import qs.modules.ii.sidebarRight
 import qs.modules.ii.overlay
 import qs.modules.ii.verticalBar
 import qs.modules.ii.wallpaperSelector
-
-import qs.modules.modern.background
-import qs.modules.modern.bar
+import qs.modules.adhd.bar
 
 import QtQuick
 import QtQuick.Window
@@ -75,8 +73,7 @@ ShellRoot {
     PanelLoader { identifier: "iiSidebarRight"; component: SidebarRight {} }
     PanelLoader { identifier: "iiVerticalBar"; extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
     PanelLoader { identifier: "iiWallpaperSelector"; component: WallpaperSelector {} }
-    PanelLoader { identifier: "modernBar"; extraCondition: !Config.options.bar.vertical; component: ModernBar {} }
-    PanelLoader { identifier: "modernBackground"; component: ModernBackground {} }
+    PanelLoader { identifier: "adhdBar"; extraCondition: !Config.options.bar.vertical && Config.options.adhd.enable; component: AdhdBar {} }
 
     component PanelLoader: LazyLoader {
         required property string identifier
@@ -85,16 +82,24 @@ ShellRoot {
     }
 
     // Panel families
-    property list<string> families: ["ii", "modern"]
+    property list<string> families: ["ii", "adhd"]
     property var panelFamilies: ({
         "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "modern": ["modernBar", "modernBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiWallpaperSelector"],
+        "adhd": ["adhdBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiWallpaperSelector"],
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
         const nextIndex = (currentIndex + 1) % families.length
-        Config.options.panelFamily = families[nextIndex]
-        Config.options.enabledPanels = panelFamilies[Config.options.panelFamily]
+        const nextFamily = families[nextIndex]
+        Config.options.panelFamily = nextFamily
+        Config.options.enabledPanels = panelFamilies[nextFamily]
+        
+        // Auto-enable/disable adhd when switching families
+        if (nextFamily === "adhd") {
+            Config.options.adhd.enable = true
+        } else if (nextFamily === "ii") {
+            Config.options.adhd.enable = false
+        }
     }
 
     IpcHandler {

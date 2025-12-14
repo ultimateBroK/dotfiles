@@ -552,6 +552,19 @@ Singleton {
                     property list<string> linkKeywords: ["porn"]
                 }
             }
+
+            property JsonObject adhd: JsonObject {
+                property bool enable: false
+                property JsonObject animations: JsonObject {
+                    property bool enable: true
+                }
+                property JsonObject pomodoro: JsonObject {
+                    property int workDuration: 25 // minutes
+                    property int shortBreakDuration: 5 // minutes
+                    property int longBreakDuration: 15 // minutes
+                    property int sessionsUntilLongBreak: 4
+                }
+            }
         }
     }
 }

@@ -143,6 +143,14 @@ Singleton {
                     property list<var> laps: []
                 }
             }
+
+            property JsonObject pomodoro: JsonObject {
+                property bool running: false
+                property int currentPhase: 0 // 0: Work, 1: ShortBreak, 2: LongBreak
+                property int startTime: 0
+                property int totalDuration: 1500 // 25 minutes in seconds
+                property int completedSessions: 0
+            }
         }
     }
 }
