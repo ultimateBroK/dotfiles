@@ -28,8 +28,8 @@ import qs.modules.ii.overlay
 import qs.modules.ii.verticalBar
 import qs.modules.ii.wallpaperSelector
 
-import qs.modules.waffle.background
-import qs.modules.waffle.bar
+import qs.modules.modern.background
+import qs.modules.modern.bar
 
 import QtQuick
 import QtQuick.Window
@@ -75,8 +75,8 @@ ShellRoot {
     PanelLoader { identifier: "iiSidebarRight"; component: SidebarRight {} }
     PanelLoader { identifier: "iiVerticalBar"; extraCondition: Config.options.bar.vertical; component: VerticalBar {} }
     PanelLoader { identifier: "iiWallpaperSelector"; component: WallpaperSelector {} }
-    PanelLoader { identifier: "wBar"; component: WaffleBar {} }
-    PanelLoader { identifier: "wBackground"; component: WaffleBackground {} }
+    PanelLoader { identifier: "modernBar"; extraCondition: !Config.options.bar.vertical; component: ModernBar {} }
+    PanelLoader { identifier: "modernBackground"; component: ModernBackground {} }
 
     component PanelLoader: LazyLoader {
         required property string identifier
@@ -85,10 +85,10 @@ ShellRoot {
     }
 
     // Panel families
-    property list<string> families: ["ii", "waffle"]
+    property list<string> families: ["ii", "modern"]
     property var panelFamilies: ({
         "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "waffle": ["wBar", "wBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiWallpaperSelector"],
+        "modern": ["modernBar", "modernBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiWallpaperSelector"],
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
