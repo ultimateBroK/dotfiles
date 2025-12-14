@@ -397,6 +397,7 @@ Item { // Bar content region
                     }
                     MaterialSymbol {
                         id: volumeStatusIcon
+                        Layout.alignment: Qt.AlignVCenter
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         property real volumeValue: (Audio?.value ?? Audio.sink?.audio?.volume ?? 0)
                         property bool muted: Audio.sink?.audio?.muted ?? false

@@ -25,6 +25,12 @@ MouseArea {
     implicitWidth: batteryProgress.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
 
+    // Smooth display value to avoid jagged jumps when percentage updates
+    property real displayPercentage: percentage
+    onPercentageChanged: displayPercentage = percentage
+
+    Behavior on displayPercentage { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }
+
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
     // Halo/Glow effect
@@ -83,6 +89,8 @@ MouseArea {
         anchors.centerIn: parent
         valueBarWidth: 36
         value: percentage
+
+        Behavior on value { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }
         
         property color baseColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
         property color chargingColor: Appearance.colors.colPrimary
@@ -130,7 +138,8 @@ MouseArea {
                 StyledText {
                     Layout.alignment: Qt.AlignVCenter
                     font: batteryProgress.font
-                    text: batteryProgress.text
+                    // Use animated displayPercentage (0..1) and convert to percent
+                    text: Math.round(root.displayPercentage * 100)
                 }
             }
         }

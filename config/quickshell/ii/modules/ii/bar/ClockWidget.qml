@@ -26,14 +26,15 @@ Item {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer1
-            text: "-"
+            text: " • "
         }
 
         StyledText {
             visible: root.showDate
             font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer1
-            text: DateTime.longDate
+            // Use a more compact weekday + day/month format (no year)
+            text: Qt.locale().toString(DateTime.clock.date, Config.options?.time?.shortDateFormat ? "ddd, " + Config.options?.time?.shortDateFormat : "ddd, dd/MM")
         }
     }
 

@@ -42,13 +42,13 @@ Singleton {
             return "battery-charge";
         if (Battery.isCriticalAndNotCharging)
             return "battery-warning";
-        if (Battery.percentage >= 0.9)
-            return "battery-full";
-        return `battery-0`;
+        // Use a level-based battery icon so the visual fill matches actual percentage
+        return batteryLevelIcon;
     }
 
     property string batteryLevelIcon: {
-        const discreteLevel = Math.ceil(Battery.percentage * 10);
+        // Use floor so small percentages don't round up to a higher bucket
+        const discreteLevel = Math.floor(Battery.percentage * 10);
         return `battery-${discreteLevel > 9 ? "full" : discreteLevel}`;
     }
 
