@@ -563,6 +563,10 @@ Singleton {
                     property int shortBreakDuration: 5 // minutes
                     property int longBreakDuration: 15 // minutes
                     property int sessionsUntilLongBreak: 4
+                    property JsonObject sound: JsonObject {
+                        property bool enable: true
+                        property string name: "complete"
+                    }
                 }
             }
         }

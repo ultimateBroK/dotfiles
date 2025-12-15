@@ -22,10 +22,11 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-        
-        onPressed: (mouse) => {
+        cursorShape: Qt.PointingHandCursor
+
+        onClicked: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
-                // Chuột trái -> mở menu popup (giống media controls)
+                // Chuột trái -> mở/đóng cửa sổ Pomodoro (giống media widget)
                 GlobalStates.pomodoroMenuOpen = !GlobalStates.pomodoroMenuOpen
             } else if (mouse.button === Qt.RightButton) {
                 // Chuột phải -> bắt đầu/tạm dừng timer

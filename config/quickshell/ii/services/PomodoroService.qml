@@ -25,6 +25,8 @@ Singleton {
     property int shortBreakDuration: Config.options?.adhd?.pomodoro?.shortBreakDuration ?? 5 // minutes
     property int longBreakDuration: Config.options?.adhd?.pomodoro?.longBreakDuration ?? 15 // minutes
     property int sessionsUntilLongBreak: Config.options?.adhd?.pomodoro?.sessionsUntilLongBreak ?? 4
+    property bool soundEnabled: Config.options?.adhd?.pomodoro?.sound?.enable ?? true
+    property string alertSound: Config.options?.adhd?.pomodoro?.sound?.name ?? "complete"
 
     // Use explicit bindings to Persistent state for reactivity
     property bool running: false
@@ -33,6 +35,34 @@ Singleton {
     property int startTime: 0
     property int totalDuration: workDuration * 60
     property int completedSessions: 0
+
+    function currentPhaseDurationSeconds() {
+        if (currentPhase === PomodoroService.Phase.Work) {
+            return workDuration * 60;
+        }
+        if (currentPhase === PomodoroService.Phase.ShortBreak) {
+            return shortBreakDuration * 60;
+        }
+        return longBreakDuration * 60;
+    }
+
+    function resyncDurationIfIdle() {
+        if (running) return;
+        const duration = currentPhaseDurationSeconds();
+        totalDuration = duration;
+        remainingSeconds = duration;
+        if (Persistent.states?.pomodoro) {
+            Persistent.states.pomodoro.totalDuration = duration;
+            Persistent.states.pomodoro.startTime = 0;
+            Persistent.states.pomodoro.running = false;
+        }
+    }
+
+    function playAlert(soundOverride = "") {
+        const soundName = (soundOverride && soundOverride.length > 0) ? soundOverride : alertSound;
+        if (!soundEnabled || !soundName) return;
+        Audio.playSystemSound(soundName);
+    }
 
     // Sync state from Persistent when it changes
     Connections {
@@ -53,6 +83,10 @@ Singleton {
             root.completedSessions = Persistent.states.pomodoro.completedSessions
         }
     }
+
+    onWorkDurationChanged: resyncDurationIfIdle()
+    onShortBreakDurationChanged: resyncDurationIfIdle()
+    onLongBreakDurationChanged: resyncDurationIfIdle()
 
     function getCurrentTimeInSeconds() {
         return Math.floor(Date.now() / 1000);
@@ -94,16 +128,7 @@ Singleton {
     }
 
     function startTimer() {
-        const phase = currentPhase;
-        let duration = 0;
-        
-        if (phase === PomodoroService.Phase.Work) {
-            duration = workDuration * 60;
-        } else if (phase === PomodoroService.Phase.ShortBreak) {
-            duration = shortBreakDuration * 60;
-        } else if (phase === PomodoroService.Phase.LongBreak) {
-            duration = longBreakDuration * 60;
-        }
+        const duration = currentPhaseDurationSeconds();
         
         // Update local state
         running = true;
@@ -242,6 +267,7 @@ Singleton {
                 urgency: "normal"
             });
         }
+        playAlert();
     }
 
     function skipToNextPhase() {

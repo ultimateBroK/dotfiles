@@ -5,6 +5,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
@@ -15,10 +16,55 @@ Scope {
     readonly property var pomodoro: PomodoroService
     readonly property real widgetWidth: 350
     readonly property real widgetHeight: 280
+    property int workDurationInput: Config.options?.adhd?.pomodoro?.workDuration ?? 25
+    property int shortBreakInput: Config.options?.adhd?.pomodoro?.shortBreakDuration ?? 5
+    property int longBreakInput: Config.options?.adhd?.pomodoro?.longBreakDuration ?? 15
+    property int sessionsUntilLongBreakInput: Config.options?.adhd?.pomodoro?.sessionsUntilLongBreak ?? 4
+    property bool soundEnabledInput: Config.options?.adhd?.pomodoro?.sound?.enable ?? true
+    property string alertSoundInput: Config.options?.adhd?.pomodoro?.sound?.name ?? "complete"
+    readonly property list<string> soundOptions: [
+        "complete",
+        "dialog-information",
+        "dialog-warning",
+        "alarm-clock-elapsed",
+        "system-ready",
+        "desktop-login",
+        "desktop-logout",
+        "message-new-email"
+    ]
+
+    function syncInputsFromConfig() {
+        workDurationInput = Config.options?.adhd?.pomodoro?.workDuration ?? 25;
+        shortBreakInput = Config.options?.adhd?.pomodoro?.shortBreakDuration ?? 5;
+        longBreakInput = Config.options?.adhd?.pomodoro?.longBreakDuration ?? 15;
+        sessionsUntilLongBreakInput = Config.options?.adhd?.pomodoro?.sessionsUntilLongBreak ?? 4;
+        soundEnabledInput = Config.options?.adhd?.pomodoro?.sound?.enable ?? true;
+        alertSoundInput = Config.options?.adhd?.pomodoro?.sound?.name ?? "complete";
+    }
+
+    function applyPomodoroSettings() {
+        Config.options.adhd.pomodoro.workDuration = workDurationInput;
+        Config.options.adhd.pomodoro.shortBreakDuration = shortBreakInput;
+        Config.options.adhd.pomodoro.longBreakDuration = longBreakInput;
+        Config.options.adhd.pomodoro.sessionsUntilLongBreak = sessionsUntilLongBreakInput;
+        Config.options.adhd.pomodoro.sound.enable = soundEnabledInput;
+        Config.options.adhd.pomodoro.sound.name = alertSoundInput || "complete";
+        pomodoro.resetTimer();
+    }
+
+    function previewAlertSound() {
+        if (!soundEnabledInput) return;
+        pomodoro.playAlert(alertSoundInput || pomodoro.alertSound);
+    }
 
     Loader {
         id: pomodoroControlsLoader
         active: GlobalStates.pomodoroMenuOpen
+        onActiveChanged: {
+            if (active) {
+                root.syncInputsFromConfig();
+            }
+        }
 
         sourceComponent: PanelWindow {
             id: pomodoroControlsRoot
@@ -213,6 +259,184 @@ Scope {
                                     }
                                 }
                                 onClicked: root.pomodoro.resetTimer()
+                            }
+                        }
+
+                        // Settings
+                        Rectangle {
+                            Layout.fillWidth: true
+                            color: Appearance.colors.colSurfaceContainer
+                            radius: Appearance.rounding.small
+                            border.width: 1
+                            border.color: Appearance.colors.colLayer0Border
+
+                            ColumnLayout {
+                                anchors.fill: parent
+                                anchors.margins: 10
+                                spacing: 10
+
+                                StyledText {
+                                    text: Translation.tr("Settings")
+                                    font.pixelSize: Appearance.font.pixelSize.normal
+                                    font.weight: Font.Bold
+                                    color: Appearance.colors.colOnSurface
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        text: Translation.tr("Work")
+                                        color: Appearance.colors.colOnSurfaceVariant
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                    }
+                                    SpinBox {
+                                        id: workDurationSpin
+                                        Layout.fillWidth: true
+                                        from: 5
+                                        to: 180
+                                        stepSize: 1
+                                        editable: true
+                                        value: root.workDurationInput
+                                        suffix: "m"
+                                        onValueModified: root.workDurationInput = value
+                                    }
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        text: Translation.tr("Short Break")
+                                        color: Appearance.colors.colOnSurfaceVariant
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                    }
+                                    SpinBox {
+                                        id: shortBreakSpin
+                                        Layout.fillWidth: true
+                                        from: 1
+                                        to: 60
+                                        stepSize: 1
+                                        editable: true
+                                        value: root.shortBreakInput
+                                        suffix: "m"
+                                        onValueModified: root.shortBreakInput = value
+                                    }
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        text: Translation.tr("Long Break")
+                                        color: Appearance.colors.colOnSurfaceVariant
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                    }
+                                    SpinBox {
+                                        id: longBreakSpin
+                                        Layout.fillWidth: true
+                                        from: 5
+                                        to: 120
+                                        stepSize: 1
+                                        editable: true
+                                        value: root.longBreakInput
+                                        suffix: "m"
+                                        onValueModified: root.longBreakInput = value
+                                    }
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        text: Translation.tr("Sessions")
+                                        color: Appearance.colors.colOnSurfaceVariant
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                    }
+                                    SpinBox {
+                                        id: sessionsSpin
+                                        Layout.fillWidth: true
+                                        from: 1
+                                        to: 10
+                                        stepSize: 1
+                                        editable: true
+                                        value: root.sessionsUntilLongBreakInput
+                                        onValueModified: root.sessionsUntilLongBreakInput = value
+                                    }
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+                                    StyledText {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        text: Translation.tr("Sound")
+                                        color: Appearance.colors.colOnSurfaceVariant
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                    }
+                                    ComboBox {
+                                        id: soundCombo
+                                        Layout.fillWidth: true
+                                        editable: true
+                                        model: root.soundOptions
+                                        currentIndex: root.soundOptions.indexOf(root.alertSoundInput)
+                                        onActivated: (index) => root.alertSoundInput = root.soundOptions[index] ?? root.alertSoundInput
+                                        onEditTextChanged: root.alertSoundInput = editText
+                                        Component.onCompleted: editText = root.alertSoundInput
+                                    }
+                                    Switch {
+                                        id: soundSwitch
+                                        checked: root.soundEnabledInput
+                                        onCheckedChanged: root.soundEnabledInput = checked
+                                    }
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+
+                                    RippleButton {
+                                        Layout.fillWidth: true
+                                        implicitHeight: 32
+                                        buttonRadius: Appearance.rounding.small
+                                        colBackground: Appearance.colors.colSurfaceContainer
+                                        colBackgroundHover: Appearance.colors.colSurfaceContainerHover
+                                        
+                                        contentItem: RowLayout {
+                                            anchors.centerIn: parent
+                                            spacing: 6
+                                            MaterialSymbol {
+                                                text: "volume_up"
+                                                iconSize: 18
+                                                color: Appearance.colors.colOnSurface
+                                            }
+                                            StyledText {
+                                                text: Translation.tr("Preview")
+                                                color: Appearance.colors.colOnSurface
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                            }
+                                        }
+                                        onClicked: root.previewAlertSound()
+                                    }
+
+                                    RippleButton {
+                                        Layout.fillWidth: true
+                                        implicitHeight: 32
+                                        buttonRadius: Appearance.rounding.small
+                                        colBackground: Appearance.colors.colPrimary
+                                        colBackgroundHover: Appearance.colors.colPrimaryHover
+                                        
+                                        contentItem: RowLayout {
+                                            anchors.centerIn: parent
+                                            spacing: 6
+                                            MaterialSymbol {
+                                                text: "save"
+                                                iconSize: 18
+                                                color: Appearance.colors.colOnPrimary
+                                            }
+                                            StyledText {
+                                                text: Translation.tr("Apply & Reset")
+                                                color: Appearance.colors.colOnPrimary
+                                                font.pixelSize: Appearance.font.pixelSize.small
+                                            }
+                                        }
+                                        onClicked: root.applyPomodoroSettings()
+                                    }
+                                }
                             }
                         }
 
