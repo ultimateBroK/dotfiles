@@ -70,7 +70,8 @@ Scope {
 
             Timer {
                 id: delayedGrabTimer
-                interval: Config.options.hacks.arbitraryRaceConditionDelay
+                // Reduced delay for faster response
+                interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 10, 5)
                 repeat: false
                 onTriggered: {
                     if (!grab.canBeActive)
@@ -99,10 +100,18 @@ Scope {
                 spacing: -8
 
                 Behavior on opacity {
-                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(columnLayout)
+                    // Faster animation for snappier feel
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.OutCubic
+                    }
                 }
                 Behavior on scale {
-                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(columnLayout)
+                    // Faster animation for snappier feel
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.OutCubic
+                    }
                 }
 
                 Keys.onPressed: event => {
@@ -128,10 +137,11 @@ Scope {
                 Loader {
                     id: overviewLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
+                    // Preload widget to avoid lag on first open
+                    active: (Config?.options.overview.enable ?? true)
                     sourceComponent: OverviewWidget {
                         panelWindow: root
-                        visible: (root.searchingText == "")
+                        visible: GlobalStates.overviewOpen && (root.searchingText == "")
                     }
                 }
             }
