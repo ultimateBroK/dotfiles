@@ -50,11 +50,32 @@ Item {
 
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
+    
+    // Cache filtered windows to reduce computation
+    property var cachedFilteredWindows: []
+    property int lastWorkspaceGroup: -1
+    
     function normalizeAddress(address) {
         if (address === null || address === undefined)
             return ""
         const strAddress = typeof address === "string" ? address : `${address}`
         return strAddress.startsWith("0x") ? strAddress : `0x${strAddress}`
+    }
+    
+    function updateFilteredWindows() {
+        const filtered = [...ToplevelManager.toplevels.values.filter((toplevel) => {
+            if (!toplevel?.HyprlandToplevel?.address) return false;
+            const address = normalizeAddress(toplevel.HyprlandToplevel.address)
+            var win = windowByAddress[address]
+            if (!win || !win.workspace) return false;
+            const workspaceId = win.workspace.id;
+            if (!workspaceId) return false;
+            const inWorkspaceGroup = (workspaceGroup * workspacesShown < workspaceId && workspaceId <= (workspaceGroup + 1) * workspacesShown)
+            return inWorkspaceGroup;
+        })].reverse()
+        cachedFilteredWindows = filtered
+        lastWorkspaceGroup = workspaceGroup
+        return filtered
     }
 
     StyledRectangularShadow {
@@ -165,17 +186,11 @@ Item {
             Repeater { // Window repeater
                 model: ScriptModel {
                     values: {
-                        // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
-                        return [...ToplevelManager.toplevels.values.filter((toplevel) => {
-                            if (!toplevel?.HyprlandToplevel?.address) return false;
-                            const address = root.normalizeAddress(toplevel.HyprlandToplevel.address)
-                            var win = windowByAddress[address]
-                            if (!win || !win.workspace) return false;
-                            const workspaceId = win.workspace.id;
-                            if (!workspaceId) return false;
-                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < workspaceId && workspaceId <= (root.workspaceGroup + 1) * root.workspacesShown)
-                            return inWorkspaceGroup;
-                        })].reverse()
+                        // Use cached result if workspace group hasn't changed, otherwise recalculate
+                        if (root.lastWorkspaceGroup === root.workspaceGroup && root.cachedFilteredWindows.length > 0) {
+                            return root.cachedFilteredWindows
+                        }
+                        return root.updateFilteredWindows()
                     }
                 }
                 delegate: OverviewWindow {

@@ -70,8 +70,8 @@ Scope {
 
             Timer {
                 id: delayedGrabTimer
-                // Reduced delay for faster response
-                interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 10, 5)
+                // Reduced delay for faster response - minimize delay to improve perceived performance
+                interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 20, 0)
                 repeat: false
                 onTriggered: {
                     if (!grab.canBeActive)
@@ -100,17 +100,17 @@ Scope {
                 spacing: -8
 
                 Behavior on opacity {
-                    // Faster animation for snappier feel
+                    // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.OutCubic
+                        duration: 100
+                        easing.type: Easing.OutQuad
                     }
                 }
                 Behavior on scale {
-                    // Faster animation for snappier feel
+                    // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.OutCubic
+                        duration: 100
+                        easing.type: Easing.OutQuad
                     }
                 }
 
@@ -137,8 +137,9 @@ Scope {
                 Loader {
                     id: overviewLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    // Preload widget to avoid lag on first open
+                    // Preload widget immediately to avoid lag on first open
                     active: (Config?.options.overview.enable ?? true)
+                    asynchronous: false // Load synchronously to ensure ready when needed
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: GlobalStates.overviewOpen && (root.searchingText == "")
