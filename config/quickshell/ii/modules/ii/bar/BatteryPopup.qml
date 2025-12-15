@@ -30,11 +30,21 @@ StyledPopup {
                     
                     Item {
                         id: batteryIcon
+                        // Hide the battery icon visuals while keeping its logic for
+                        // percentage / state calculations used elsewhere in the popup.
+                        visible: false
                         width: 72
                         height: 48
 
-                        // clamp percent to [0,1] and guard against invalid values
-                        property real percent: (Battery.percentage === undefined || isNaN(Battery.percentage)) ? 0 : Math.max(0, Math.min(1, Battery.percentage))
+                        // Normalized percentage in range [0, 1]
+                        // Handles both 0–1 and 0–100 style values from Battery.percentage
+                        property real percent: {
+                            let raw = Battery.percentage;
+                            if (raw === undefined || isNaN(raw)) return 0;
+                            // If the backend reports 0–100, convert to 0–1
+                            if (raw > 1) raw = raw / 100;
+                            return Math.max(0, Math.min(1, raw));
+                        }
                         property bool charging: Battery.isCharging
                         // consider battery full either by charge state or near-100% reading
                         property bool full: (Battery.chargeState == 4) || (percent >= 0.995)
@@ -45,6 +55,7 @@ StyledPopup {
                             width: 56
                             height: 32
                             radius: 6
+                            // Keep a solid background so the fill is always visible
                             color: Appearance.colors.colSurface
                             border.color: Appearance.colors.colOnSurfaceVariant
                             border.width: 1
@@ -131,16 +142,21 @@ StyledPopup {
                     
                     ColumnLayout {
                         spacing: 2
+                        Layout.alignment: Qt.AlignHCenter
                         
+                        // Big percentage text
                         StyledText {
                             text: `${Math.round(batteryIcon.percent * 100)}%`
                             font {
                                 pixelSize: Appearance.font.pixelSize.huge
                                 weight: Font.Bold
                             }
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
                             color: Appearance.colors.colOnSurface
                         }
                         
+                        // Charging state label
                         StyledText {
                             text: {
                                 if (batteryIcon.full) return Translation.tr("Fully Charged");
@@ -148,7 +164,38 @@ StyledPopup {
                                 return Translation.tr("Discharging");
                             }
                             font.pixelSize: Appearance.font.pixelSize.smaller
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
                             color: Appearance.colors.colOnSurfaceVariant
+                        }
+
+                        // Slim animated progress bar under the text to keep
+                        // the header visually interesting without an icon.
+                        Rectangle {
+                            Layout.topMargin: 8
+                            Layout.preferredWidth: 130
+                            Layout.preferredHeight: 4
+                            Layout.alignment: Qt.AlignHCenter
+                            radius: 999
+                            color: Appearance.colors.colSurface
+                            opacity: 0.9
+
+                            Rectangle {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                height: parent.height
+                                width: Math.max(6, parent.width * batteryIcon.percent)
+                                radius: parent.radius
+                                color: {
+                                    if (batteryIcon.full) return Appearance.colors.colPrimary;
+                                    if (Battery.isCharging) return Appearance.colors.colPrimary;
+                                    if (batteryIcon.percent <= 0.1) return Appearance.colors.colError;
+                                    if (batteryIcon.percent <= 0.3) return Appearance.colors.colWarning;
+                                    return Appearance.colors.colPrimary;
+                                }
+                                Behavior on width { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
+                                Behavior on color { ColorAnimation { duration: 250 } }
+                            }
                         }
                     }
                 }
