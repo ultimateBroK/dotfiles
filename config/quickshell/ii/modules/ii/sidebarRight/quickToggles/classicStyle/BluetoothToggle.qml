@@ -22,9 +22,19 @@ QuickToggleButton {
         GlobalStates.sidebarRightOpen = false
     }
     StyledToolTip {
-        text: Translation.tr("%1 | Right-click to configure").arg(
-            (BluetoothStatus.firstActiveDevice?.name ?? Translation.tr("Bluetooth"))
-            + (BluetoothStatus.activeDeviceCount > 1 ? ` +${BluetoothStatus.activeDeviceCount - 1}` : "")
-            )
+        text: {
+            const device = BluetoothStatus.firstActiveDevice;
+            let deviceText = device?.name ?? Translation.tr("Bluetooth");
+            if (BluetoothStatus.activeDeviceCount > 1) {
+                deviceText += ` +${BluetoothStatus.activeDeviceCount - 1}`;
+            }
+            // Add battery percentage if available
+            const battery = device?.battery;
+            const batteryAvailable = device?.batteryAvailable;
+            if (batteryAvailable && battery !== undefined && battery !== null && !isNaN(battery) && battery >= 0) {
+                deviceText += ` • ${Math.round(battery * 100)}%`;
+            }
+            return Translation.tr("%1 | Right-click to configure").arg(deviceText);
+        }
     }
 }

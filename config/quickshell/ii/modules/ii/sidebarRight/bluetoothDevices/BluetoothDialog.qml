@@ -129,9 +129,20 @@ WindowDialog {
                 }
                 
                 StyledText {
-                    text: root.connectedDevices.length === 1 
-                        ? Translation.tr("Connected")
-                        : Translation.tr("All connected")
+                    text: {
+                        if (root.connectedDevices.length === 1) {
+                            const device = root.connectedDevices[0];
+                            let statusText = Translation.tr("Connected");
+                            // Show battery if available for single connected device
+                            const battery = device?.battery;
+                            const batteryAvailable = device?.batteryAvailable;
+                            if (batteryAvailable && battery !== undefined && battery !== null && !isNaN(battery) && battery >= 0) {
+                                statusText += ` • ${Math.round(battery * 100)}%`;
+                            }
+                            return statusText;
+                        }
+                        return Translation.tr("All connected");
+                    }
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colPrimary
                 }

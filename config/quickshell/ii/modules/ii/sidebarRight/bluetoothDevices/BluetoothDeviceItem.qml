@@ -57,8 +57,12 @@ DialogListItem {
                     text: {
                         if (!root.device?.paired) return "";
                         let statusText = root.device?.connected ? Translation.tr("Connected") : Translation.tr("Paired");
-                        if (!root.device?.batteryAvailable) return statusText;
-                        statusText += ` • ${Math.round(root.device?.battery * 100)}%`;
+                        // Show battery if available (check both batteryAvailable and battery value)
+                        const battery = root.device?.battery;
+                        const batteryAvailable = root.device?.batteryAvailable;
+                        if (batteryAvailable && battery !== undefined && battery !== null && !isNaN(battery) && battery >= 0) {
+                            statusText += ` • ${Math.round(battery * 100)}%`;
+                        }
                         return statusText;
                     }
                 }
