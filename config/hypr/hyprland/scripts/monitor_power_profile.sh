@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Monitor power profile changes and sync Hyprland config
-# Optimized for minimal memory usage - lightweight daemon
+# Optimized for minimal memory usage and low latency
 
 # Redirect all output immediately to prevent memory accumulation
 exec >/dev/null 2>&1
@@ -10,7 +10,7 @@ exec >/dev/null 2>&1
 readonly HYPR_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland"
 readonly SWITCH_SCRIPT="$HYPR_CONFIG_DIR/scripts/switch_performance_profile.sh"
 readonly CURRENT_PROFILE_FILE="$HYPR_CONFIG_DIR/.current_profile"
-readonly POLL_INTERVAL=2
+readonly POLL_INTERVAL=0.5
 
 # Validate dependencies (fail silently for daemon)
 if ! command -v powerprofilesctl &> /dev/null || [ ! -f "$SWITCH_SCRIPT" ]; then
@@ -53,8 +53,19 @@ apply_if_changed() {
 last_profile=$(powerprofilesctl get 2>/dev/null || echo "")
 [ -n "$last_profile" ] && apply_if_changed "$last_profile"
 
-# Main monitoring loop - minimal memory usage
-# Reuse variables, no accumulation, single command per iteration
+# If gdbus is available, prefer event-based monitor (lower latency, less CPU)
+if command -v gdbus &> /dev/null; then
+    gdbus monitor --system --dest net.hadess.PowerProfiles 2>/dev/null | while read -r line; do
+        # Look for power profile strings in the signal line
+        if printf "%s" "$line" | grep -qE '"(performance|balanced|power-saver|power-save)"'; then
+            profile=$(printf "%s" "$line" | grep -oE '"(performance|balanced|power-saver|power-save)"' | head -1 | tr -d '"')
+            [ -n "$profile" ] && apply_if_changed "$profile"
+        fi
+    done
+    exit 0
+fi
+
+# Fallback: polling loop (still lightweight, reduced interval)
 while true; do
     current_profile=$(powerprofilesctl get 2>/dev/null || echo "")
     [ -n "$current_profile" ] && [ "$current_profile" != "$last_profile" ] && {
