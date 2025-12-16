@@ -131,6 +131,42 @@ dotfiles/
 ### Applications
 - **spicetify** - Spotify customization
 
+## Quickshell (ii) Customizations
+
+This configuration includes several customizations to the ii shell interface:
+
+### Calendar Widget
+- **Lunar Calendar Display**: Calendar shows both solar (Gregorian) and lunar (Vietnamese) dates
+- **Lunar Date Sizing**: Lunar dates are displayed 20% smaller than solar dates for visual distinction
+- **Special Days**: Automatically highlights important Vietnamese lunar calendar days:
+  - Lunar New Year (1/1 lunar)
+  - Lantern Festival (15/1 lunar)
+  - Hung Kings Festival (10/3 lunar)
+  - Buddha's Birthday (15/4 lunar)
+  - Dragon Boat Festival (5/5 lunar)
+  - Ghost Festival (15/7 lunar)
+  - Mid-Autumn Festival (15/8 lunar)
+  - Kitchen God Festival (23/12 lunar)
+  - New Year's Eve (30/12 or 29/12 lunar)
+  - New Moon (1st day of each lunar month)
+  - Full Moon (15th day of each lunar month)
+
+### Clock Widget (Topbar & Popup)
+- **Lunar Date Display**: Shows lunar calendar date alongside Gregorian date
+- **Special Day Indicators**: Displays special day names in English when applicable
+- **Compact Format**: Topbar shows lunar date in compact format, popup shows full details
+
+### Battery Indicator
+- **Color-Coded Energy Bar**: Battery energy bar changes color based on charge level:
+  - Green (>60%): Healthy battery
+  - Orange (20-60%): Medium battery
+  - Red (<20%): Low battery
+- **Wallpaper Integration**: Colors are mixed with wallpaper primary color (15% primary, 85% status color) for visual harmony
+- **Topbar & Popup**: Both topbar indicator and popup use the same color scheme
+
+### Quick Toggles
+- **Removed Game Mode**: Game mode toggle has been removed from the sidebar right quick toggles panel
+
 ## Package Management
 
 The `packages/` directory contains:
