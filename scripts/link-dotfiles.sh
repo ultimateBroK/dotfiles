@@ -199,6 +199,16 @@ ensure_dotfiles_structure() {
     mkdir -p "$DOTFILES_CONFIG_DIR"
 }
 
+# Function to list items inside config directory dynamically
+list_config_items() {
+    if [ ! -d "$DOTFILES_CONFIG_DIR" ]; then
+        echo -e "${RED}Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}"
+        return 1
+    fi
+
+    find "$DOTFILES_CONFIG_DIR" -mindepth 1 -maxdepth 1 -printf '%f\n' | sort
+}
+
 # Function to create individual symlinks (original behavior)
 link_individual_items() {
     echo "Setting up dotfiles symlinks..."
@@ -208,36 +218,17 @@ link_individual_items() {
     
     ensure_dotfiles_structure
     
-    # List of directories/files to symlink
-    # Add or remove items as needed
-    items=(
-        "hypr"
-        "quickshell"
-        "wlogout"
-        "foot"
-        "fuzzel"
-        "ghostty"
-        "kitty"
-        "fish"
-        "fastfetch"
-        "illogical-impulse"
-        "starship.toml"
-        "cava"
-        "mpv"
-        "btop"
-        "matugen"
-        "micro"
-        "fcitx5"
-        "gtk-3.0"
-        "gtk-4.0"
-        "qt5ct"
-        "qt6ct"
-        "Kvantum"
-        "sddm"
-        "spicetify"
-        "zshrc.d"
-    )
-    
+    # Build list of items directly from config directory
+    if ! mapfile -t items < <(list_config_items); then
+        echo -e "${RED}Failed to list config items. Aborting.${NC}"
+        return 1
+    fi
+
+    if [ ${#items[@]} -eq 0 ]; then
+        echo -e "${YELLOW}No items found in $DOTFILES_CONFIG_DIR${NC}"
+        return 0
+    fi
+
     for item in "${items[@]}"; do
         source="$DOTFILES_CONFIG_DIR/$item"
         target="$CONFIG_DIR/$item"
