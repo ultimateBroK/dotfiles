@@ -48,18 +48,47 @@ Singleton {
         }
     ]
 
-    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
-        .sort((a, b) => a.name.localeCompare(b.name))
+    // Cache desktop entries list
+    property list<DesktopEntry> _cachedList: []
+    property var _cachedPreppedNames: []
+    property var _cachedPreppedIcons: []
+    property int _lastApplicationsCount: -1
+    
+    function updateCache() {
+        const currentList = Array.from(DesktopEntries.applications.values)
+            .sort((a, b) => a.name.localeCompare(b.name));
+        
+        // Only recalculate if applications changed
+        if (_lastApplicationsCount === currentList.length && _cachedList.length > 0) {
+            return;
+        }
+        
+        _cachedList = currentList;
+        _lastApplicationsCount = currentList.length;
+        _cachedPreppedNames = currentList.map(a => ({
+            name: Fuzzy.prepare(`${a.name} `),
+            entry: a
+        }));
+        _cachedPreppedIcons = currentList.map(a => ({
+            name: Fuzzy.prepare(`${a.icon} `),
+            entry: a
+        }));
+    }
+    
+    readonly property list<DesktopEntry> list: {
+        updateCache();
+        return _cachedList;
+    }
 
-    readonly property var preppedNames: list.map(a => ({
-        name: Fuzzy.prepare(`${a.name} `),
-        entry: a
-    }))
+    readonly property var preppedNames: {
+        updateCache();
+        return _cachedPreppedNames;
+    }
 
-    readonly property var preppedIcons: list.map(a => ({
-        name: Fuzzy.prepare(`${a.icon} `),
-        entry: a
-    }))
+    readonly property var preppedIcons: {
+        updateCache();
+        return _cachedPreppedIcons;
+    }
 
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
         let results;

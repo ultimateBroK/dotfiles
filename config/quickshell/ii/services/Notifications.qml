@@ -177,10 +177,40 @@ Singleton {
         return groups;
     }
 
-    property var groupsByAppName: groupsForList(root.list)
-    property var popupGroupsByAppName: groupsForList(root.popupList)
-    property var appNameList: appNameListForGroups(root.groupsByAppName)
-    property var popupAppNameList: appNameListForGroups(root.popupGroupsByAppName)
+    // Cache groups to avoid recalculation
+    property var _cachedGroupsByAppName: ({})
+    property var _cachedPopupGroupsByAppName: ({})
+    property var _cachedAppNameList: []
+    property var _cachedPopupAppNameList: []
+    property int _lastListLength: -1
+    
+    function updateGroupsCache() {
+        if (_lastListLength === root.list.length && Object.keys(_cachedGroupsByAppName).length > 0) {
+            return;
+        }
+        _cachedGroupsByAppName = groupsForList(root.list);
+        _cachedPopupGroupsByAppName = groupsForList(root.popupList);
+        _cachedAppNameList = appNameListForGroups(_cachedGroupsByAppName);
+        _cachedPopupAppNameList = appNameListForGroups(_cachedPopupGroupsByAppName);
+        _lastListLength = root.list.length;
+    }
+    
+    property var groupsByAppName: {
+        updateGroupsCache();
+        return _cachedGroupsByAppName;
+    }
+    property var popupGroupsByAppName: {
+        updateGroupsCache();
+        return _cachedPopupGroupsByAppName;
+    }
+    property var appNameList: {
+        updateGroupsCache();
+        return _cachedAppNameList;
+    }
+    property var popupAppNameList: {
+        updateGroupsCache();
+        return _cachedPopupAppNameList;
+    }
 
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
     // can already contain higher IDs. This is for avoiding id collisions
@@ -317,6 +347,8 @@ Singleton {
     }
 
     function triggerListChange() {
+        // Invalidate cache when list changes
+        _lastListLength = -1;
         root.list = root.list.slice(0)
     }
 

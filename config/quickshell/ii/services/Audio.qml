@@ -56,46 +56,20 @@ Singleton {
     }
 
     function playSystemSound(soundName) {
-        // Try local sounds first, then system sounds
+        // Try local sounds first, then system sounds - only play one file
         const localOgaPath = `${Quickshell.env("HOME")}/.local/share/sounds/${root.audioTheme}/stereo/${soundName}.oga`;
         const localOggPath = `${Quickshell.env("HOME")}/.local/share/sounds/${root.audioTheme}/stereo/${soundName}.ogg`;
         const systemOgaPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.oga`;
         const systemOggPath = `/usr/share/sounds/${root.audioTheme}/stereo/${soundName}.ogg`;
 
-        // Try local .oga first
-        let command = [
-            "ffplay",
-            "-nodisp",
-            "-autoexit",
-            localOgaPath
-        ];
-        Quickshell.execDetached(command);
-
-        // Try local .ogg
-        command = [
-            "ffplay",
-            "-nodisp",
-            "-autoexit",
-            localOggPath
-        ];
-        Quickshell.execDetached(command);
-
-        // Try system .oga
-        command = [
-            "ffplay",
-            "-nodisp",
-            "-autoexit",
-            systemOgaPath
-        ];
-        Quickshell.execDetached(command);
-
-        // Try system .ogg
-        command = [
-            "ffplay",
-            "-nodisp",
-            "-autoexit",
-            systemOggPath
-        ];
-        Quickshell.execDetached(command);
+        // Use a single shell command to find and play the first existing file
+        // This avoids spawning multiple ffplay processes
+        Quickshell.execDetached(["sh", "-c", 
+            `test -f "${localOgaPath}" && ffplay -nodisp -autoexit "${localOgaPath}" || ` +
+            `test -f "${localOggPath}" && ffplay -nodisp -autoexit "${localOggPath}" || ` +
+            `test -f "${systemOgaPath}" && ffplay -nodisp -autoexit "${systemOgaPath}" || ` +
+            `test -f "${systemOggPath}" && ffplay -nodisp -autoexit "${systemOggPath}" || ` +
+            `true`
+        ]);
     }
 }

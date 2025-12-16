@@ -36,21 +36,24 @@ Singleton {
     }
 
     function updateMemoryUsageHistory() {
-        memoryUsageHistory = [...memoryUsageHistory, memoryUsedPercentage]
+        // Use slice instead of spread operator for better performance
+        memoryUsageHistory = memoryUsageHistory.slice().concat([memoryUsedPercentage])
         if (memoryUsageHistory.length > historyLength) {
-            memoryUsageHistory.shift()
+            memoryUsageHistory = memoryUsageHistory.slice(-historyLength)
         }
     }
     function updateSwapUsageHistory() {
-        swapUsageHistory = [...swapUsageHistory, swapUsedPercentage]
+        // Use slice instead of spread operator for better performance
+        swapUsageHistory = swapUsageHistory.slice().concat([swapUsedPercentage])
         if (swapUsageHistory.length > historyLength) {
-            swapUsageHistory.shift()
+            swapUsageHistory = swapUsageHistory.slice(-historyLength)
         }
     }
     function updateCpuUsageHistory() {
-        cpuUsageHistory = [...cpuUsageHistory, cpuUsage]
+        // Use slice instead of spread operator for better performance
+        cpuUsageHistory = cpuUsageHistory.slice().concat([cpuUsage])
         if (cpuUsageHistory.length > historyLength) {
-            cpuUsageHistory.shift()
+            cpuUsageHistory = cpuUsageHistory.slice(-historyLength)
         }
     }
     function updateHistories() {

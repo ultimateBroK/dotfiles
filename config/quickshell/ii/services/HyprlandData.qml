@@ -58,12 +58,22 @@ Singleton {
         updateAll();
     }
 
+    // Debounce updates to avoid excessive hyprctl calls
+    property Timer debounceTimer: Timer {
+        interval: 50
+        repeat: false
+        onTriggered: {
+            updateAll()
+        }
+    }
+    
     Connections {
         target: Hyprland
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
-            updateAll()
+            // Debounce rapid events to improve performance
+            debounceTimer.restart()
         }
     }
 

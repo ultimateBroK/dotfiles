@@ -28,7 +28,8 @@ Singleton {
     property string uptime: "0h, 0m"
 
     Timer {
-        interval: 10
+        // Use configured interval instead of 10ms to reduce file I/O
+        interval: Config.options?.resources?.updateInterval ?? 3000
         running: true
         repeat: true
         onTriggered: {
@@ -50,7 +51,6 @@ Singleton {
             if (minutes > 0 || !formatted)
                 formatted += `${formatted ? ", " : ""}${minutes}m`;
             uptime = formatted;
-            interval = Config.options?.resources?.updateInterval ?? 3000;
         }
     }
 

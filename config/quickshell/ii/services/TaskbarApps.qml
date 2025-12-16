@@ -16,7 +16,18 @@ Singleton {
         }
     }
 
-    property list<var> apps: {
+    // Cache apps list to avoid recalculation
+    property list<var> _cachedApps: []
+    property var _lastToplevelsHash: ""
+    
+    function computeAppsHash() {
+        // Create a simple hash from toplevels count and pinned apps
+        const toplevelsCount = ToplevelManager.toplevels.values.length;
+        const pinnedApps = Config.options?.dock.pinnedApps ?? [];
+        return `${toplevelsCount}-${pinnedApps.join(',')}`;
+    }
+    
+    function updateApps() {
         var map = new Map();
 
         // Pinned apps
@@ -52,7 +63,33 @@ Singleton {
             values.push(appEntryComp.createObject(null, { appId: key, toplevels: value.toplevels, pinned: value.pinned }));
         }
 
+        _cachedApps = values;
+        _lastToplevelsHash = computeAppsHash();
         return values;
+    }
+    
+    property list<var> apps: {
+        const currentHash = computeAppsHash();
+        if (_lastToplevelsHash === currentHash && _cachedApps.length > 0) {
+            return _cachedApps;
+        }
+        return updateApps();
+    }
+    
+    Connections {
+        target: ToplevelManager
+        function onToplevelsChanged() {
+            // Invalidate cache when toplevels change
+            _lastToplevelsHash = "";
+        }
+    }
+    
+    Connections {
+        target: Config.options?.dock ?? null
+        function onPinnedAppsChanged() {
+            // Invalidate cache when pinned apps change
+            _lastToplevelsHash = "";
+        }
     }
 
     component TaskbarAppEntry: QtObject {
