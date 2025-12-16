@@ -123,7 +123,8 @@ Item {
                 }
                 color: Appearance.colors.colOnLayer1
                 // Use a more compact weekday + day/month format (no year)
-                text: Qt.locale().toString(DateTime.clock.date, Config.options?.time?.shortDateFormat ? "ddd, " + Config.options?.time?.shortDateFormat : "ddd, dd/MM")
+                // Use en_US locale to display weekday in English (Tue, Wed, etc.)
+                text: Qt.locale("en_US").toString(DateTime.clock.date, Config.options?.time?.shortDateFormat ? "ddd, " + Config.options?.time?.shortDateFormat : "ddd, dd/MM")
             }
         }
 
