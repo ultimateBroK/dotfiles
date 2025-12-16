@@ -56,17 +56,10 @@ Singleton {
             break
 
         case PowerProfile.Balanced:
-            // Balanced: Good balance between performance and visual quality
+            // Balanced: use Hyprland's config defaults, don't override keywords.
+            // Reloading config resets any runtime tweaks from Performance / PowerSaver.
             commands = [
-                'hyprctl keyword "animations:enabled" "true"',
-                'hyprctl keyword "decoration:blur:enabled" "true"',
-                'hyprctl keyword "decoration:drop_shadow" "true"',
-                'hyprctl keyword "decoration:shadow_render_power" "2"',
-                'hyprctl keyword "misc:vfr" "1"',
-                'hyprctl keyword "misc:vrr" "1"',
-                'hyprctl keyword "misc:animate_manual_resizes" "true"',
-                'hyprctl keyword "misc:animate_mouse_windowdragging" "true"',
-                'hyprctl keyword "render:damage_tracking" "full"'
+                "hyprctl reload"
             ]
             break
 
@@ -85,17 +78,9 @@ Singleton {
             break
 
         default:
-            // Fallback to balanced if something unexpected happens
+            // Fallback: also just reload to restore config defaults
             commands = [
-                'hyprctl keyword "animations:enabled" "true"',
-                'hyprctl keyword "decoration:blur:enabled" "true"',
-                'hyprctl keyword "decoration:drop_shadow" "true"',
-                'hyprctl keyword "decoration:shadow_render_power" "2"',
-                'hyprctl keyword "misc:vfr" "1"',
-                'hyprctl keyword "misc:vrr" "1"',
-                'hyprctl keyword "misc:animate_manual_resizes" "true"',
-                'hyprctl keyword "misc:animate_mouse_windowdragging" "true"',
-                'hyprctl keyword "render:damage_tracking" "full"'
+                "hyprctl reload"
             ]
             break
         }

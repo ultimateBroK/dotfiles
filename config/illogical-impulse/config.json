@@ -290,7 +290,7 @@
             "enable": false
         },
         "night": {
-            "automatic": true,
+            "automatic": false,
             "colorTemperature": 3123,
             "from": "19:00",
             "to": "06:30"
