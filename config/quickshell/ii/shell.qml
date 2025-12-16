@@ -48,6 +48,8 @@ ShellRoot {
         Cliphist.refresh()
         Wallpapers.load()
         Updates.load()
+        // Ensure PowerProfileHyprlandSync is initialized
+        PowerProfileHyprlandSync
     }
 
     // Load enabled stuff
