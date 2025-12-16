@@ -71,10 +71,10 @@ Scope {
             Timer {
                 id: delayedGrabTimer
                 // Reduced delay for faster response - minimize delay to improve perceived performance
-                interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 20, 0)
+                interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 30, 0)
                 repeat: false
                 onTriggered: {
-                    if (!grab.canBeActive)
+                    if (!grab.canBeActive || !GlobalStates.overviewOpen)
                         return;
                     grab.active = GlobalStates.overviewOpen;
                 }
@@ -102,15 +102,15 @@ Scope {
                 Behavior on opacity {
                     // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 100
-                        easing.type: Easing.OutQuad
+                        duration: 80
+                        easing.type: Easing.OutCubic
                     }
                 }
                 Behavior on scale {
                     // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 100
-                        easing.type: Easing.OutQuad
+                        duration: 80
+                        easing.type: Easing.OutCubic
                     }
                 }
 
@@ -137,9 +137,9 @@ Scope {
                 Loader {
                     id: overviewLoader
                     anchors.horizontalCenter: parent.horizontalCenter
-                    // Preload widget immediately to avoid lag on first open
-                    active: (Config?.options.overview.enable ?? true)
-                    asynchronous: false // Load synchronously to ensure ready when needed
+                    // Load asynchronously to avoid blocking UI, but activate early for smooth experience
+                    active: (Config?.options.overview.enable ?? true) && GlobalStates.overviewOpen
+                    asynchronous: true // Load asynchronously to improve responsiveness
                     sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: GlobalStates.overviewOpen && (root.searchingText == "")

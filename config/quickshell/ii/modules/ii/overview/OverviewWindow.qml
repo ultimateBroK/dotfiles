@@ -77,23 +77,28 @@ Item { // Window
     }
 
     Behavior on x {
+        enabled: GlobalStates.overviewOpen
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on y {
+        enabled: GlobalStates.overviewOpen
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on width {
+        enabled: GlobalStates.overviewOpen
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on height {
+        enabled: GlobalStates.overviewOpen
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
 
     ScreencopyView {
         id: windowPreview
         anchors.fill: parent
-        captureSource: GlobalStates.overviewOpen ? root.toplevel : null
-        live: true
+        // Only capture when overview is open and window is visible to save resources
+        captureSource: (GlobalStates.overviewOpen && root.visible && root.opacity > 0.1) ? root.toplevel : null
+        live: GlobalStates.overviewOpen && root.visible
 
         // Color overlay for interactions
         Rectangle {

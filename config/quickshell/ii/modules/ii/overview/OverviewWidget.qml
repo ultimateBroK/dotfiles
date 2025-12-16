@@ -26,12 +26,48 @@ Item {
     property real scale: Config.options.overview.scale
     property color activeBorderColor: Appearance.colors.colSecondary
 
-    property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
-        ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
-        ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale)
-    property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
-        ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
-        ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
+    // Cache workspace dimensions to avoid recalculation
+    property real _cachedWorkspaceWidth: 0
+    property real _cachedWorkspaceHeight: 0
+    property int _cachedTransform: -1
+    property real _cachedScale: -1
+    
+    // Invalidate cache when scale or monitor changes
+    onScaleChanged: {
+        _cachedWorkspaceWidth = 0
+        _cachedWorkspaceHeight = 0
+    }
+    onMonitorChanged: {
+        _cachedWorkspaceWidth = 0
+        _cachedWorkspaceHeight = 0
+    }
+    
+    property real workspaceImplicitWidth: {
+        const transform = monitorData?.transform ?? 0
+        const currentScale = root.scale
+        if (_cachedWorkspaceWidth > 0 && _cachedTransform === transform && _cachedScale === currentScale) {
+            return _cachedWorkspaceWidth
+        }
+        const width = (transform % 2 === 1) ? 
+            ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * currentScale / monitor.scale) :
+            ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * currentScale / monitor.scale)
+        _cachedWorkspaceWidth = width
+        _cachedTransform = transform
+        _cachedScale = currentScale
+        return width
+    }
+    property real workspaceImplicitHeight: {
+        const transform = monitorData?.transform ?? 0
+        const currentScale = root.scale
+        if (_cachedWorkspaceHeight > 0 && _cachedTransform === transform && _cachedScale === currentScale) {
+            return _cachedWorkspaceHeight
+        }
+        const height = (transform % 2 === 1) ? 
+            ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * currentScale / monitor.scale) :
+            ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * currentScale / monitor.scale)
+        _cachedWorkspaceHeight = height
+        return height
+    }
     property real largeWorkspaceRadius: Appearance.rounding.large
     property real smallWorkspaceRadius: Appearance.rounding.verysmall
 
@@ -54,6 +90,7 @@ Item {
     // Cache filtered windows to reduce computation
     property var cachedFilteredWindows: []
     property int lastWorkspaceGroup: -1
+    property var cachedWindowByAddress: ({})
     
     function normalizeAddress(address) {
         if (address === null || address === undefined)
@@ -63,10 +100,12 @@ Item {
     }
     
     function updateFilteredWindows() {
+        // Use cached windowByAddress if available to reduce lookups
+        const winByAddr = windowByAddress || cachedWindowByAddress
         const filtered = [...ToplevelManager.toplevels.values.filter((toplevel) => {
             if (!toplevel?.HyprlandToplevel?.address) return false;
             const address = normalizeAddress(toplevel.HyprlandToplevel.address)
-            var win = windowByAddress[address]
+            var win = winByAddr[address]
             if (!win || !win.workspace) return false;
             const workspaceId = win.workspace.id;
             if (!workspaceId) return false;
@@ -75,6 +114,7 @@ Item {
         })].reverse()
         cachedFilteredWindows = filtered
         lastWorkspaceGroup = workspaceGroup
+        cachedWindowByAddress = winByAddr
         return filtered
     }
 
@@ -186,8 +226,8 @@ Item {
             Repeater { // Window repeater
                 model: ScriptModel {
                     values: {
-                        // Use cached result if workspace group hasn't changed, otherwise recalculate
-                        if (root.lastWorkspaceGroup === root.workspaceGroup && root.cachedFilteredWindows.length > 0) {
+                        // Use cached result if workspace group hasn't changed and overview is visible, otherwise recalculate
+                        if (GlobalStates.overviewOpen && root.lastWorkspaceGroup === root.workspaceGroup && root.cachedFilteredWindows.length > 0) {
                             return root.cachedFilteredWindows
                         }
                         return root.updateFilteredWindows()
@@ -240,7 +280,7 @@ Item {
 
                     Timer {
                         id: updateWindowPosition
-                        interval: Config.options.hacks.arbitraryRaceConditionDelay
+                        interval: Math.max(Config.options.hacks.arbitraryRaceConditionDelay - 10, 0)
                         repeat: false
                         running: false
                         onTriggered: {
@@ -332,21 +372,27 @@ Item {
                 border.width: 2
                 border.color: root.activeBorderColor
                 Behavior on x {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 Behavior on y {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 Behavior on topLeftRadius {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
                 Behavior on topRightRadius {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
                 Behavior on bottomLeftRadius {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
                 Behavior on bottomRightRadius {
+                    enabled: GlobalStates.overviewOpen
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
             }
