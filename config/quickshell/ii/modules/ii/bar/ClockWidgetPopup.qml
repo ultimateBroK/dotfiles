@@ -3,6 +3,7 @@ import qs.modules.common.widgets
 import qs.services
 import QtQuick
 import QtQuick.Layouts
+import "../sidebarRight/calendar/vn_lunar.js" as LunarVN
 
 StyledPopup {
     id: root
@@ -10,6 +11,79 @@ StyledPopup {
     property string formattedTime: DateTime.time
     property string formattedUptime: DateTime.uptime
     property var unfinishedTodos: Todo.list.filter(function (item) { return !item.done; })
+    
+    // Calculate lunar date
+    property var lunarDate: {
+        const date = DateTime.clock.date;
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return LunarVN.solar2lunar(day, month, year, 7);
+    }
+    property string lunarDateText: {
+        if (lunarDate.day === 1) {
+            return `${lunarDate.day}/${lunarDate.month}`;
+        }
+        return lunarDate.day.toString();
+    }
+    property bool isSpecialDay: {
+        const day = lunarDate.day;
+        const month = lunarDate.month;
+        
+        // Tết Nguyên Đán - mùng 1 tháng 1
+        if (day === 1 && month === 1) return true;
+        // Tết Nguyên Tiêu - rằm tháng 1
+        if (day === 15 && month === 1) return true;
+        // Giỗ Tổ Hùng Vương - 10/3
+        if (day === 10 && month === 3) return true;
+        // Lễ Phật Đản - rằm tháng 4
+        if (day === 15 && month === 4) return true;
+        // Tết Đoan Ngọ - 5/5
+        if (day === 5 && month === 5) return true;
+        // Rằm tháng 7 (Vu Lan)
+        if (day === 15 && month === 7) return true;
+        // Tết Trung Thu - rằm tháng 8
+        if (day === 15 && month === 8) return true;
+        // Tết Ông Táo - 23/12
+        if (day === 23 && month === 12) return true;
+        // Giao thừa - 30/12 (hoặc 29 nếu tháng thiếu)
+        if ((day === 30 || day === 29) && month === 12) return true;
+        // Mùng 1 và rằm các tháng khác
+        if (day === 1 || day === 15) return true;
+        
+        return false;
+    }
+    property string specialDayText: {
+        const day = lunarDate.day;
+        const month = lunarDate.month;
+        
+        // Tết Nguyên Đán - mùng 1 tháng 1
+        if (day === 1 && month === 1) return "Lunar New Year";
+        // Tết Nguyên Tiêu - rằm tháng 1
+        if (day === 15 && month === 1) return "Lantern Festival";
+        // Giỗ Tổ Hùng Vương - 10/3
+        if (day === 10 && month === 3) return "Hung Kings Festival";
+        // Lễ Phật Đản - rằm tháng 4
+        if (day === 15 && month === 4) return "Buddha's Birthday";
+        // Tết Đoan Ngọ - 5/5
+        if (day === 5 && month === 5) return "Dragon Boat Festival";
+        // Rằm tháng 7 (Vu Lan)
+        if (day === 15 && month === 7) return "Ghost Festival (Vu Lan)";
+        // Tết Trung Thu - rằm tháng 8
+        if (day === 15 && month === 8) return "Mid-Autumn Festival";
+        // Tết Ông Táo - 23/12
+        if (day === 23 && month === 12) return "Kitchen God Festival";
+        // Giao thừa - 30/12
+        if (day === 30 && month === 12) return "New Year's Eve";
+        // Giao thừa - 29/12 (nếu tháng thiếu)
+        if (day === 29 && month === 12) return "New Year's Eve";
+        // Mùng 1 các tháng khác
+        if (day === 1) return "New Moon";
+        // Rằm các tháng khác
+        if (day === 15) return "Full Moon";
+        
+        return "";
+    }
 
     ColumnLayout {
         id: columnLayout
@@ -20,7 +94,7 @@ StyledPopup {
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 280
-            Layout.preferredHeight: 80
+            Layout.preferredHeight: root.isSpecialDay ? 110 : 80
             radius: Appearance.rounding.medium
             color: Appearance.colors.colSurfaceContainer
             
@@ -39,13 +113,40 @@ StyledPopup {
                         color: Appearance.colors.colPrimary
                     }
                     
-                    StyledText {
-                        text: root.formattedDate
-                        font {
-                            pixelSize: Appearance.font.pixelSize.normal
-                            weight: Font.Medium
+                    ColumnLayout {
+                        spacing: 2
+                        
+                        StyledText {
+                            text: root.formattedDate
+                            font {
+                                pixelSize: Appearance.font.pixelSize.normal
+                                weight: Font.Medium
+                            }
+                            color: Appearance.colors.colOnSurface
                         }
-                        color: Appearance.colors.colOnSurface
+                        
+                        RowLayout {
+                            spacing: 4
+                            
+                            StyledText {
+                                text: `Lunar: ${root.lunarDateText}/${root.lunarDate.month}/${root.lunarDate.year}`
+                                font {
+                                    pixelSize: Appearance.font.pixelSize.smaller
+                                    weight: Font.Normal
+                                }
+                                color: Appearance.colors.colOnSurfaceVariant
+                            }
+                            
+                            StyledText {
+                                visible: root.isSpecialDay
+                                text: `• ${root.specialDayText}`
+                                font {
+                                    pixelSize: Appearance.font.pixelSize.smaller
+                                    weight: Font.Medium
+                                }
+                                color: Appearance.colors.colPrimary
+                            }
+                        }
                     }
                 }
                 

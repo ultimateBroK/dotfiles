@@ -187,11 +187,26 @@ StyledPopup {
                                 width: Math.max(6, parent.width * batteryIcon.percent)
                                 radius: parent.radius
                                 color: {
-                                    if (batteryIcon.full) return Appearance.colors.colPrimary;
-                                    if (Battery.isCharging) return Appearance.colors.colPrimary;
-                                    if (batteryIcon.percent <= 0.1) return Appearance.colors.colError;
-                                    if (batteryIcon.percent <= 0.3) return Appearance.colors.colWarning;
-                                    return Appearance.colors.colPrimary;
+                                    // Charging or full: use primary color
+                                    if (batteryIcon.full || Battery.isCharging) {
+                                        return Appearance.colors.colPrimary;
+                                    }
+                                    
+                                    // Color scale based on battery percentage:
+                                    // Green (>60%): healthy battery
+                                    // Yellow (20-60%): medium battery
+                                    // Red (<20%): low battery
+                                    const percent = batteryIcon.percent;
+                                    if (percent > 0.6) {
+                                        // Green for high battery (>60%)
+                                        return "#4caf50"; // Material Design Green 500
+                                    } else if (percent > 0.2) {
+                                        // Yellow/Orange for medium battery (20-60%)
+                                        return "#ff9800"; // Material Design Orange 500
+                                    } else {
+                                        // Red for low battery (<20%)
+                                        return Appearance.colors.colError;
+                                    }
                                 }
                                 Behavior on width { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
                                 Behavior on color { ColorAnimation { duration: 250 } }

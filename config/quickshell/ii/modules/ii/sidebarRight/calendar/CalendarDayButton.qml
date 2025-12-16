@@ -26,6 +26,7 @@ RippleButton {
         anchors.margins: 2
         spacing: 0
         StyledText {
+            id: solarDateText
             anchors.horizontalCenter: parent.horizontalCenter
             text: day
             horizontalAlignment: Text.AlignHCenter
@@ -41,8 +42,8 @@ RippleButton {
         StyledText {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: year > 0 && month > 0
-            // Smaller than normal to distinguish from Gregorian date
-            font.pixelSize: Appearance.font.pixelSize.tiny * 0.9
+            // 20% smaller than solar date (80% of solar date size)
+            font.pixelSize: solarDateText.font.pixelSize * 0.8
             color: {
                 if (isToday == 1) return Appearance.m3colors.m3onPrimary;
 

@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import qs.services
 import QtQuick
 import QtQuick.Layouts
@@ -92,7 +93,28 @@ MouseArea {
 
         Behavior on value { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }
         
-        property color baseColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
+        property color baseColor: {
+            // Charging or full: use primary color (from wallpaper)
+            if (isCharging || percentage >= 0.995) {
+                return Appearance.colors.colPrimary;
+            }
+            
+            // Color scale based on battery percentage, mixed with wallpaper primary color:
+            // Green (>60%): healthy battery - mix primary with green
+            // Yellow (20-60%): medium battery - mix primary with orange
+            // Red (<20%): low battery - mix primary with red
+            const primaryColor = Appearance.colors.colPrimary;
+            if (percentage > 0.6) {
+                // Green for high battery (>60%) - mix 15% primary with 85% green
+                return ColorUtils.mix(primaryColor, "#4caf50", 0.1);
+            } else if (percentage > 0.2) {
+                // Yellow/Orange for medium battery (20-60%) - mix 15% primary with 85% orange
+                return ColorUtils.mix(primaryColor, "#ff9800", 0.1);
+            } else {
+                // Red for low battery (<20%) - mix 15% primary with 85% red
+                return ColorUtils.mix(primaryColor, Appearance.colors.colError, 0.1);
+            }
+        }
         property color chargingColor: Appearance.colors.colPrimary
         
         highlightColor: isCharging ? chargingColor : baseColor
