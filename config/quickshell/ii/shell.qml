@@ -34,6 +34,7 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Services.UPower
 import qs.services
 
 ShellRoot {
@@ -104,6 +105,29 @@ ShellRoot {
         }
     }
 
+    function cyclePowerProfile() {
+        if (PowerProfiles.hasPerformanceProfile) {
+            switch (PowerProfiles.profile) {
+            case PowerProfile.PowerSaver:
+                PowerProfiles.profile = PowerProfile.Balanced
+                break
+            case PowerProfile.Balanced:
+                PowerProfiles.profile = PowerProfile.Performance
+                break
+            case PowerProfile.Performance:
+                PowerProfiles.profile = PowerProfile.PowerSaver
+                break
+            default:
+                PowerProfiles.profile = PowerProfile.Balanced
+                break
+            }
+        } else {
+            PowerProfiles.profile = PowerProfiles.profile == PowerProfile.Balanced
+                    ? PowerProfile.PowerSaver
+                    : PowerProfile.Balanced
+        }
+    }
+
     IpcHandler {
         target: "panelFamily"
 
@@ -144,6 +168,13 @@ ShellRoot {
         onPressed: {
             Config.options.bar.autoHide.enable = !Config.options.bar.autoHide.enable;
         }
+    }
+
+    GlobalShortcut {
+        name: "powerProfileCycle"
+        description: "Cycles power profiles"
+
+        onPressed: root.cyclePowerProfile()
     }
 }
 
