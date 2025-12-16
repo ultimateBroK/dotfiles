@@ -167,6 +167,23 @@ This configuration includes several customizations to the ii shell interface:
 ### Quick Toggles
 - **Removed Game Mode**: Game mode toggle has been removed from the sidebar right quick toggles panel
 
+### Performance Optimizations
+This configuration includes several performance optimizations for smoother operation and reduced resource usage:
+
+- **Brightness Service**: Fixed brightness rounding errors (prevents drift from 40% to 39%)
+- **Overview Widget**: 
+  - Asynchronous loading to prevent UI blocking
+  - Optimized animations (80ms duration, OutCubic easing)
+  - Screenshot capture only when overview is open and visible
+  - Cached workspace dimensions and filtered windows
+- **Resource Usage Service**: Optimized history updates using slice operations instead of shift()
+- **Hyprland Data Service**: Debounced updates (50ms) to reduce excessive hyprctl calls
+- **Audio Service**: Single-process sound playback instead of multiple processes
+- **Taskbar Apps**: Cached apps list with hash-based invalidation
+- **App Search**: Cached prepped names and icons to avoid recalculation
+- **DateTime Service**: Reduced uptime file I/O frequency (uses configured interval instead of 10ms)
+- **Notifications Service**: Cached notification groups to avoid repeated calculations
+
 ## Package Management
 
 The `packages/` directory contains:
