@@ -220,6 +220,7 @@ link_individual_items() {
         "kitty"
         "fish"
         "fastfetch"
+        "illogical-impulse"
         "starship.toml"
         "cava"
         "mpv"
