@@ -137,11 +137,11 @@ Singleton {
         function syncBrightness() {
             const brightnessValue = Math.max(monitor.multipliedBrightness, 0);
             if (isDdc) {
-                const rawValueRounded = Math.max(Math.floor(brightnessValue * monitor.rawMaxBrightness), 1);
+                const rawValueRounded = Math.max(Math.round(brightnessValue * monitor.rawMaxBrightness), 1);
                 setProc.command = ["ddcutil", "-b", busNum, "setvcp", "10", rawValueRounded];
                 setProc.startDetached();
             } else {
-                const valuePercentNumber = Math.floor(brightnessValue * 100);
+                const valuePercentNumber = Math.round(brightnessValue * 100);
                 let valuePercent = `${valuePercentNumber}%`;
                 if (valuePercentNumber == 0) valuePercent = "1"; // Prevent fully black
                 setProc.command = ["brightnessctl", "--class", "backlight", "s", valuePercent, "--quiet"];
