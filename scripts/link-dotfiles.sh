@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # Dotfiles symlink management script
-# This script creates symlinks from ~/.config to ~/Downloads/dotfiles/config
+# This script creates symlinks from ~/.config to the dotfiles config directory
+# Works from any location - automatically detects the script's directory
 
 set -euo pipefail
 
-DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# Get script directory and dotfiles root directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
 CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 
@@ -252,8 +255,8 @@ link_individual_items() {
     echo -e "${GREEN}Done!${NC}"
     echo ""
     echo "To add new configs:"
-    echo "  1. Copy to dotfiles: cp -r ~/.config/<config> ~/Downloads/dotfiles/config/"
-    echo "  2. Run this script again: ~/Downloads/dotfiles/link-dotfiles.sh"
+    echo "  1. Copy to dotfiles: cp -r ~/.config/<config> $DOTFILES_CONFIG_DIR/"
+    echo "  2. Run this script again: $DOTFILES_DIR/scripts/link-dotfiles.sh"
 }
 
 # Main function

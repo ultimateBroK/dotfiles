@@ -5,8 +5,9 @@
 
 set -euo pipefail
 
-# Get the directory of this script
+# Get the directory of this script and dotfiles root
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
 
 # Colors
 GREEN='\033[0;32m'
@@ -22,7 +23,7 @@ echo -e "${BLUE}=========================================${NC}"
 echo ""
 
 # Ensure helper scripts are executable
-for helper in "$SCRIPT_DIR/packages/install-packages.sh" "$SCRIPT_DIR/link-dotfiles.sh"; do
+for helper in "$DOTFILES_DIR/packages/install-packages.sh" "$SCRIPT_DIR/link-dotfiles.sh"; do
     if [ ! -f "$helper" ]; then
         echo -e "${RED}Missing helper: $helper${NC}"
         exit 1
@@ -33,7 +34,7 @@ done
 # Function to install packages
 install_packages() {
     echo -e "${YELLOW}Starting Package Installation...${NC}"
-    "$SCRIPT_DIR/packages/install-packages.sh"
+    "$DOTFILES_DIR/packages/install-packages.sh"
 }
 
 # Function to link dotfiles

@@ -12,9 +12,10 @@ dotfiles/
 │   ├── aur-packages.txt      # AUR-only packages
 │   ├── flatpak-packages.txt  # Flatpak packages
 │   └── install-packages.sh   # Package installation script
-├── setup.sh         # Master setup script
-├── link-dotfiles.sh # Symlink management script
-├── copy-configs.sh  # Helper script to copy configs
+├── scripts/         # Setup and management scripts
+│   ├── setup.sh         # Master setup script
+│   ├── link-dotfiles.sh # Symlink management script
+│   └── copy-configs.sh  # Helper script to copy configs
 └── README.md        # This file
 ```
 
@@ -28,8 +29,8 @@ dotfiles/
 2. Run the setup script:
    ```bash
    cd ~/Downloads/dotfiles
-   chmod +x setup.sh
-   ./setup.sh
+   chmod +x scripts/setup.sh
+   ./scripts/setup.sh
    ```
    
    The script will offer an interactive menu with options to:
@@ -40,9 +41,9 @@ dotfiles/
 
    Alternatively, you can use command-line arguments:
    ```bash
-   ./setup.sh --install  # Install packages only
-   ./setup.sh --link     # Link dotfiles only
-   ./setup.sh --all      # Do both
+   ./scripts/setup.sh --install  # Install packages only
+   ./scripts/setup.sh --link     # Link dotfiles only
+   ./scripts/setup.sh --all      # Do both
    ```
 
    **Note:** The script assumes you are running on an Arch-based system (uses `pacman` and `paru`). It will automatically install `paru` if not present.
@@ -57,8 +58,8 @@ dotfiles/
 
 2. Run the symlink script manually:
    ```bash
-   chmod +x ~/Downloads/dotfiles/link-dotfiles.sh
-   ~/Downloads/dotfiles/link-dotfiles.sh
+   chmod +x ~/Downloads/dotfiles/scripts/link-dotfiles.sh
+   ~/Downloads/dotfiles/scripts/link-dotfiles.sh
    ```
    
    The script supports multiple modes:
@@ -75,14 +76,14 @@ dotfiles/
    
    Or use the helper script (if available locally):
    ```bash
-   ~/Downloads/dotfiles/copy-configs.sh <config-name>
+   ~/Downloads/dotfiles/scripts/copy-configs.sh <config-name>
    ```
 
 2. If using `link-dotfiles.sh`, add it to the `items` array in the script
 
 3. Run the symlink script again (if using helper script):
    ```bash
-   ~/Downloads/dotfiles/link-dotfiles.sh
+   ~/Downloads/dotfiles/scripts/link-dotfiles.sh
    ```
    
    Or create symlinks manually:

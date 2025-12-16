@@ -6,7 +6,8 @@
 set -euo pipefail
 
 # Resolve repo location relative to this script for portability
-DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
 CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 
@@ -57,6 +58,6 @@ cp -a "$SOURCE" "$TARGET"
 echo -e "${GREEN}Done! Copied to $TARGET${NC}"
 echo ""
 echo "Next steps:"
-echo "  1. Add '$CONFIG_NAME' to the items array in link-dotfiles.sh"
-echo "  2. Run: ~/Downloads/dotfiles/link-dotfiles.sh"
+echo "  1. Add '$CONFIG_NAME' to the items array in scripts/link-dotfiles.sh"
+echo "  2. Run: $DOTFILES_DIR/scripts/link-dotfiles.sh"
 

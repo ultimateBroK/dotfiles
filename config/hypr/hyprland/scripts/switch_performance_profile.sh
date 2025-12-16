@@ -40,8 +40,12 @@ get_next_profile() {
 }
 
 # Function to set power profile
+# Set SKIP_POWER_PROFILE=1 to skip setting power profile (useful when syncing from external changes)
 set_power_profile() {
     local power_profile="$1"
+    if [ "${SKIP_POWER_PROFILE:-0}" = "1" ]; then
+        return 0
+    fi
     if command -v powerprofilesctl &> /dev/null; then
         powerprofilesctl set "$power_profile" 2>/dev/null || true
         notify-send "Power Profile" "Switched to $power_profile" -a "Hyprland" -t 2000 2>/dev/null || true
