@@ -220,7 +220,7 @@
         "code": "0;P;d;1;0l;10;0o;2;1b;0"
     },
     "dock": {
-        "enable": false,
+        "enable": true,
         "height": 60,
         "hoverRegionHeight": 2,
         "hoverToReveal": true,
