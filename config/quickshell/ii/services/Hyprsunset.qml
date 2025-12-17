@@ -77,12 +77,7 @@ Singleton {
         }
     }
 
-    function load() {
-        // Start fetching state when explicitly loaded (deferred from startup)
-        if (!fetchProc.running) {
-            fetchProc.running = true;
-        }
-    }
+    function load() { } // Dummy to force init
 
     function enable() {
         root.active = true;
@@ -102,7 +97,7 @@ Singleton {
 
     Process {
         id: fetchProc
-        running: false // Don't start automatically - wait for load() to be called
+        running: true
         command: ["bash", "-c", "hyprctl hyprsunset temperature"]
         stdout: StdioCollector {
             id: stateCollector

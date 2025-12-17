@@ -42,43 +42,15 @@ ShellRoot {
 
     // Force initialization of some singletons
     Component.onCompleted: {
-        // Critical: Load immediately (needed for UI)
         MaterialThemeLoader.reapplyTheme()
+        Hyprsunset.load()
         FirstRunExperience.load()
         ConflictKiller.load()
-        
-        // Ensure PowerProfileHyprlandSync is initialized (lazy, won't block)
+        Cliphist.refresh()
+        Wallpapers.load()
+        Updates.load()
+        // Ensure PowerProfileHyprlandSync is initialized
         PowerProfileHyprlandSync
-        
-        // Defer non-critical operations to speed up startup
-        // These will load after a short delay to avoid blocking startup
-        delayedInitTimer.start()
-    }
-    
-    // Defer non-critical service initialization to improve startup time
-    Timer {
-        id: delayedInitTimer
-        interval: 100 // Start after 100ms
-        repeat: false
-        onTriggered: {
-            // Load these services after initial startup
-            Hyprsunset.load()
-            Cliphist.refresh()
-            Wallpapers.load()
-            
-            // Defer Updates even further as it can be very slow
-            delayedUpdatesTimer.start()
-        }
-    }
-    
-    // Defer Updates service even more as checkupdates can take several seconds
-    Timer {
-        id: delayedUpdatesTimer
-        interval: 2000 // Wait 2 seconds before checking for updates
-        repeat: false
-        onTriggered: {
-            Updates.load()
-        }
     }
 
     // Load enabled stuff

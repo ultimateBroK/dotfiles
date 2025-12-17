@@ -18,12 +18,7 @@ Singleton {
     readonly property bool updateAdvised: available && count > Config.options.updates.adviseUpdateThreshold
     readonly property bool updateStronglyAdvised: available && count > Config.options.updates.stronglyAdviseUpdateThreshold
 
-    function load() {
-        // Start checking availability when explicitly loaded (deferred from startup)
-        if (!checkAvailabilityProc.running) {
-            checkAvailabilityProc.running = true;
-        }
-    }
+    function load() {}
     function refresh() {
         if (!available) return;
         print("[Updates] Checking for system updates")
@@ -33,7 +28,7 @@ Singleton {
     Timer {
         interval: Config.options.updates.checkInterval * 60 * 1000
         repeat: true
-        running: Config.ready && root.available
+        running: Config.ready
         onTriggered: {
             print("[Updates] Periodic update check due")
             root.refresh();
@@ -42,7 +37,7 @@ Singleton {
 
     Process {
         id: checkAvailabilityProc
-        running: false // Don't start automatically - wait for load() to be called
+        running: true
         command: ["which", "checkupdates"]
         onExited: (exitCode, exitStatus) => {
             root.available = (exitCode === 0);
