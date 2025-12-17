@@ -37,17 +37,18 @@ Item { // Bar content region
             target: barBackground
         }
     }
-    // Background (translucent for wallpaper readability)
+    // Background (translucent for wallpaper readability with blur)
     Rectangle {
         id: barBackground
         anchors {
             fill: parent
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
         }
-         color: "transparent"
+        color: "transparent"
+        // color: ColorUtils.transparentize(Appearance.colors.colLayer0, 0.7)
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
-         border.width: 0
-         border.color: "transparent"
+        border.width: 0
+        border.color: "transparent"
     }
     
     // Subtle accent gradient overlay for vibrant schemes
