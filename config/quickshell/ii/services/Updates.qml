@@ -28,7 +28,7 @@ Singleton {
     Timer {
         interval: Config.options.updates.checkInterval * 60 * 1000
         repeat: true
-        running: Config.ready
+        running: Config.ready && root.available
         onTriggered: {
             print("[Updates] Periodic update check due")
             root.refresh();
