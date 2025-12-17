@@ -1,176 +1,284 @@
-accountsservice
-adobe-source-han-sans-cn-fonts
-adobe-source-han-sans-jp-fonts
-adobe-source-han-sans-kr-fonts
-alacritty
-alsa-firmware
-alsa-plugins
-alsa-utils
-amd-ucode
-android-sdk-platform-tools
-antigravity-bin
-anytype-bin
-appimagelauncher
-aria2
-ast-grep
-asusctl
-asus-vivobook-rgb-keyboard
-awesome-terminal-fonts
-baobab
+# ============================================
+# SYSTEM BASE & ESSENTIALS
+# ============================================
 base
 base-devel
 bash-completion
-binance
-bind
-blanket
-bluez
-bluez-hid2hci
-bluez-libs
-bluez-utils
-bottles
-bpftune-git
-brave-bin
-bridge-utils
-btop
-btrfs-assistant
-btrfs-progs
-bun-bin
-cachyos-fish-config
-cachyos-gaming-applications
-cachyos-gaming-meta
-cachyos-hello
-cachyos-hooks
-cachyos-kernel-manager
-cachyos-keyring
-cachyos-micro-settings
-cachyos-mirrorlist
-cachyos-packageinstaller
-cachyos-plymouth-bootanimation
-cachyos-rate-mirrors
-cachyos-settings
-cachyos-snapper-support
-cachyos-v3-mirrorlist
-cachyos-v4-mirrorlist
-cachyos-wallpapers
-cachyos-zsh-config
-cachy-update
-calf
-cantarell-fonts
-chwd
-clinfo
-cloudflare-warp-nox-bin
-composer
-cpupower
-crush-bin
-cryptsetup
-cups
-cups-filters
-cups-pdf
-cursor-beta-bin
-decibels
-deno
-device-mapper
-dhclient
-diffutils
-discover
-dmidecode
-dmraid
-dnsmasq
-docker
-docker-compose
-dosfstools
-downgrade
-ducker
+sudo
+man-db
+man-pages
+texinfo
+which
+less
+nano
+nano-syntax-highlighting
+vi
+vim
+neovim
+neovide
+git
+tree
+lsd
 duf
-e2fsprogs
-easyeffects
+fastfetch
+neofetch
+wakafetch-git
+btop
+glances
+lazygit
+lazydocker
+ducker
+stacer
+fsearch
+diffutils
+pv
+logrotate
+lsb-release
+plocate
+pkgfile
+pacman-contrib
+downgrade
+rebuild-detector
+reflector
+paru
+yay-bin
+snapd
+flatpak
+appimagelauncher
+# ============================================
+# BOOTLOADER & FIRMWARE
+# ============================================
+limine
+limine-mkinitcpio-hook
+limine-snapper-sync
 efibootmgr
 efitools
-eog
-epiphany
-equibop-bin
-eslint
-ethtool
-evince
+mokutil
+amd-ucode
+linux-firmware
+sof-firmware
+alsa-firmware
 execstack
-exfatprogs
-f2fs-tools
-fastfetch
-faustus-dkms-git
-fcitx5-bamboo
-fcitx5-configtool
-fcitx5-qt
-ffmpegthumbnailer
-file-roller
-firefox
-firejail
-flatpak
-fluent-icon-theme-git
-foomatic-db
-foomatic-db-engine
-foomatic-db-gutenprint-ppds
-foomatic-db-nonfree
-foomatic-db-nonfree-ppds
-foomatic-db-ppds
-fsarchiver
-fsearch
-fwupd
+# ============================================
+# KERNEL
+# ============================================
+linux-cachyos
+linux-cachyos-headers
+linux-cachyos-bore
+linux-cachyos-bore-headers
+linux-cachyos-lts
+linux-cachyos-lts-headers
+mkinitcpio
+# ============================================
+# CACHYOS SPECIFIC
+# ============================================
+cachyos-keyring
+cachyos-mirrorlist
+cachyos-v3-mirrorlist
+cachyos-v4-mirrorlist
+cachyos-hello
+cachyos-hooks
+cachyos-settings
+cachyos-micro-settings
+cachyos-packageinstaller
+cachyos-kernel-manager
+cachyos-rate-mirrors
+cachyos-snapper-support
+cachyos-plymouth-bootanimation
+cachyos-wallpapers
+cachyos-fish-config
+cachyos-zsh-config
+cachyos-gaming-meta
+cachyos-gaming-applications
+cachy-update
+chwd
+# ============================================
+# DESKTOP ENVIRONMENT - GNOME
+# ============================================
 gdm
-gedit
-ghostscript
-ghostty
-git
-github-desktop-bin
-glances
-glew1.10
-gnome-backgrounds
-gnome-calculator
-gnome-calendar
-gnome-characters
-gnome-clocks
-gnome-color-manager
-gnome-connections
-gnome-console
-gnome-contacts
-gnome-control-center
-gnome-disk-utility
-gnome-font-viewer
-gnome-logs
-gnome-maps
-gnome-menus
-gnome-music
-gnome-nettool
-gnome-power-manager
-gnome-remote-desktop
-gnome-screenshot
 gnome-session
-gnome-settings-daemon
 gnome-shell
-gnome-software
-gnome-system-monitor
-gnome-terminal
-gnome-text-editor
-gnome-themes-extra
-gnome-tour
+gnome-settings-daemon
+gnome-control-center
 gnome-tweaks
-gnome-usage
+gnome-backgrounds
+gnome-themes-extra
+gnome-menus
 gnome-user-docs
 gnome-user-share
+gnome-remote-desktop
+gnome-power-manager
+gnome-software
+gnome-disk-utility
+gnome-system-monitor
+gnome-usage
+gnome-logs
+gnome-screenshot
+gnome-nettool
+gnome-connections
+gnome-console
+gnome-terminal
+gnome-text-editor
+gnome-calculator
+gnome-calendar
+gnome-clocks
+gnome-characters
+gnome-contacts
+gnome-font-viewer
+gnome-maps
+gnome-music
+gnome-tour
 gnome-weather
-gnu-free-fonts
-gollama-bin
-gpu-screen-recorder-gtk
+nautilus
+nautilus-admin-gtk4
+nautilus-bluetooth
+nautilus-launch
+eog
+evince
+gedit
+file-roller
+baobab
+discover
+simple-scan
+sushi
+loupe
+orca
+yelp
+malcontent
+rygel
 grilo-plugins
-gsfonts
+xdg-desktop-portal-gnome
+# ============================================
+# DESKTOP ENVIRONMENT - KDE
+# ============================================
+plasma-browser-integration
+kdeconnect
+# ============================================
+# DISPLAY SERVER & WAYLAND
+# ============================================
+xorg-server
+xorg-xinit
+xorg-xrandr
+xorg-xdpyinfo
+xorg-xinput
+xorg-xkill
+xorg-xwayland
+xf86-input-libinput
+xf86-input-synaptics
+xf86-video-amdgpu
+wlr-randr
+waypipe
+wofi
+# ============================================
+# AUDIO
+# ============================================
+pipewire-alsa
+alsa-utils
+alsa-plugins
+rtkit
+easyeffects
+calf
+lsp-plugins
+zam-plugins
+jamesdsp
+mda.lv2
+libdeep_filter_ladspa-git
+miniaudio-git
+wayvibes-git
+mechvibes
+lyrebird
+decibels
+blanket
+illogical-impulse-audio
+# ============================================
+# VIDEO & MULTIMEDIA
+# ============================================
+ffmpegthumbnailer
 gst-libav
 gst-plugin-pipewire
+gst-plugin-va
 gst-plugins-bad
 gst-plugins-ugly
-gst-plugin-va
 gstreamer-vaapi
-gtk-sharp-2
-gum
-gutenprint
+vlc-plugins-all
+totem
+gpu-screen-recorder-gtk
+showtime
+libdvdcss
+# ============================================
+# GRAPHICS & DISPLAY
+# ============================================
+mesa-utils
+opencl-mesa
+vulkan-radeon
+vkd3d
+lib32-mesa
+lib32-opencl-mesa
+lib32-vulkan-radeon
+lib32-vkd3d
+glew1.10
+lib32-glew1.10
+clinfo
+radeontop
+rocm-smi-lib
+libva-utils
+nwg-displays
+# ============================================
+# NETWORKING
+# ============================================
+networkmanager-openvpn
+nm-connection-editor
+iwd
+wpa_supplicant
+wireless-regdb
+bluez
+bluez-utils
+bluez-hid2hci
+bluez-libs
+libnma
+modemmanager
+dhclient
+dnsmasq
+bind
+bridge-utils
+iptables-nft
+ufw
+nmap
+iftop
+inetutils
+openssh
+xl2tpd
+nfs-utils
+nss-mdns
+ntp
+cloudflare-warp-nox-bin
+speedtest-cli-git
+speedtest-librespeed
+netctl
+# ============================================
+# STORAGE & FILESYSTEMS
+# ============================================
+btrfs-progs
+btrfs-assistant
+dosfstools
+e2fsprogs
+exfatprogs
+f2fs-tools
+jfsutils
+nilfs-utils
+xfsprogs
+cryptsetup
+device-mapper
+lvm2
+dmraid
+mdadm
+fsarchiver
+smartmontools
+hdparm
+sg3_utils
+lsscsi
+usbutils
+usb_modeswitch
 gvfs-afc
 gvfs-dnssd
 gvfs-google
@@ -180,241 +288,98 @@ gvfs-nfs
 gvfs-onedrive
 gvfs-smb
 gvfs-wsdd
-handlr-regex
-haveged
-hdparm
-hoppscotch-bin
-hplip
-httpie-desktop-bin
-hwdetect
-hwinfo
-ibus-lotus-bin
-icu69-bin
-iftop
-illogical-impulse-audio
-illogical-impulse-backlight
-illogical-impulse-basic
-illogical-impulse-bibata-modern-classic-bin
-illogical-impulse-fonts-themes
-illogical-impulse-hyprland
-illogical-impulse-kde
-illogical-impulse-microtex-git
-illogical-impulse-portal
-illogical-impulse-python
-illogical-impulse-screencapture
-illogical-impulse-toolkit
-illogical-impulse-widgets
-imageviewer
-inetutils
-iptables-nft
-irqbalance
-iwd
-jamesdsp
-jbig2enc
-jdk17-openjdk
-jetbrains-toolbox
-jfsutils
-julia
-kdeconnect
-kora-icon-theme
-lazydocker
-lazygit
-less
-lib32-gamemode
-lib32-glew1.10
-lib32-gtk2
-lib32-libappindicator-gtk2
-lib32-libgcrypt15
-lib32-libidn11
-lib32-libindicator-gtk2
-lib32-libjpeg6-turbo
-lib32-libpng12
-lib32-librtmp0
-lib32-libtiff4
-lib32-libudev0-shim
-lib32-libvpx1.3
-lib32-mesa
-lib32-opencl-mesa
-lib32-openssl-1.0
-lib32-vkd3d
-lib32-vulkan-radeon
-libappindicator
-libappindicator-gtk2
-libayatana-appindicator-glib
-libdeep_filter_ladspa-git
-libdvdcss
-libgcrypt15
-libgnome-keyring
-libgsf
+snapper
+snapshot
+profile-sync-daemon
+# ============================================
+# VIRTUALIZATION
+# ============================================
+qemu-base
 libguestfs
-libidn11
-libjpeg6-turbo
-libnma
-libopenraw
-libreoffice-fresh
-librtmp0
-libtiff4
-libva-utils
-libvpx1.3
-libwnck3
-limine
-limine-mkinitcpio-hook
-limine-snapper-sync
-linux-cachyos
-linux-cachyos-bore
-linux-cachyos-bore-headers
-linux-cachyos-headers
-linux-cachyos-lts
-linux-cachyos-lts-headers
-linux-firmware
-llama.cpp-vulkan
-lmstudio
-logrotate
-loupe
-lsb-release
-lsd
-lsp-plugins
-lsscsi
-lua51
-luarocks
-lua-sec
-lvm2
-lyrebird
-malcontent
-man-db
-man-pages
-materialgram-bin
-mdadm
-mda.lv2
-mechvibes
-megasync
-meld
-mesa-utils
-micro
-microsoft-edge-dev-bin
-miniaudio-git
-mkinitcpio
-modemmanager
-mokutil
-msty-bin
-mtools
-music-presence-bin
-nano
-nano-syntax-highlighting
-nautilus
-nautilus-admin-gtk4
-nautilus-bluetooth
-nautilus-launch
-neofetch
-neovide
-neovim
-netctl
-networkmanager-openvpn
-nfs-utils
-nilfs-utils
-nmap
-nm-connection-editor
-nodejs-lts-iron
-noto-color-emoji-fontconfig
+virt-manager
+virt-viewer
+vde2
+docker
+docker-compose
+# ============================================
+# PRINTING
+# ============================================
+cups
+cups-filters
+cups-pdf
+foomatic-db
+foomatic-db-engine
+foomatic-db-gutenprint-ppds
+foomatic-db-nonfree
+foomatic-db-nonfree-ppds
+foomatic-db-ppds
+gutenprint
+hplip
+splix
+system-config-printer
+ghostscript
+gsfonts
+# ============================================
+# FONTS
+# ============================================
+adobe-source-han-sans-cn-fonts
+adobe-source-han-sans-jp-fonts
+adobe-source-han-sans-kr-fonts
+cantarell-fonts
+gnu-free-fonts
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
 noto-fonts-extra
-nss-mdns
-ntp
-nwg-displays
-ocrmypdf
-octopi
-ollama
-ollama-vulkan
-openai-codex-autoup-bin
-opencl-mesa
-opencode-bin
+noto-color-emoji-fontconfig
 opendesktop-fonts
-openrgb
-openssh
-opera
-orca
-os-prober
-pacman-contrib
-pandoc-cli
-papers
-paru
-perl
-perplexity
-php
-pipewire-alsa
-pixi
-pkgfile
-plasma-browser-integration
-playwright
-plocate
-plymouth
+ttf-bitstream-vera
+ttf-dejavu
+ttf-liberation
+ttf-meslo-nerd
+ttf-noto-nerd
+ttf-opensans
+awesome-terminal-fonts
+illogical-impulse-fonts-themes
+# ============================================
+# THEMES & ICONS
+# ============================================
+fluent-icon-theme-git
+kora-icon-theme
+illogical-impulse-bibata-modern-classic-bin
+# ============================================
+# INPUT METHODS & IME
+# ============================================
+fcitx5-bamboo
+fcitx5-configtool
+fcitx5-qt
+ibus-lotus-bin
+# ============================================
+# DEVELOPMENT TOOLS
+# ============================================
+nodejs-lts-iron
 pnpm
-poppler-glib
-power-profiles-daemon
-profile-sync-daemon
-proton-authenticator-bin
-proton-mail-bin
-protonplus
-pv
-pyright
+yarn
+bun-bin
+deno
 python
-python-cobble
-python-dacite
-python-defusedxml
-python-duckduckgo-search
-python-funk
-python-magika
-python-mammoth
-python-markdownify
-python-markitdown
-python-packaging
 python-pip
-python-pynvim
-python-pyqt5
-python-pysdl3
-python-reportlab
-python-safetensors
-python-sentencepiece
-python-transformers
-qbittorrent-enhanced-git
-qemu-base
-quickshell-git
-qwen-code
-radeontop
-rebuild-detector
-reflector
-rocm-smi-lib
-rtkit
-ruby
+python-packaging
 rust-analyzer
-rustdesk-bin
-rygel
-ryzenadj-git
-sassc
-sddm
-sg3_utils
-showtime
-simple-scan
-smartmontools
-s-nail
-snapd
-snapper
-snapshot
-sof-firmware
-speedtest-cli-git
-speedtest-librespeed
-splix
-spotify
-stacer
-sudo
-supergfxctl
-sushi
-sysfsutils
-system-config-printer
-tecla
-texinfo
+ruby
+perl
+php
+composer
+julia
+lua51
+luarocks
+lua-sec
+jdk17-openjdk
+ast-grep
+eslint
+pyright
+typst
+pandoc-cli
 texlive-basic
 texlive-bibtexextra
 texlive-bin
@@ -438,62 +403,221 @@ texlive-plaingeneric
 texlive-pstricks
 texlive-publishers
 texlive-xetex
-tigervnc
-totem
-tradingview-bin-latest
-tree
-ttf-bitstream-vera
-ttf-dejavu
-ttf-liberation
-ttf-meslo-nerd
-ttf-noto-nerd
-ttf-opensans
-typst
-ubuntu-wallpapers
-ufw
-unrar
-unzip
-upscayl-bin
-usb_modeswitch
-usbutils
-uwsm
-vde2
-vi
-vim
-virt-manager
-virt-viewer
+illogical-impulse-microtex-git
+python-cobble
+python-dacite
+python-defusedxml
+python-duckduckgo-search
+python-funk
+python-magika
+python-mammoth
+python-markdownify
+python-markitdown
+python-pynvim
+python-pyqt5
+python-pysdl3
+python-reportlab
+python-safetensors
+python-sentencepiece
+python-transformers
+illogical-impulse-python
+pixi
+playwright
+# ============================================
+# CODE EDITORS & IDEs
+# ============================================
 visual-studio-code-bin
 visual-studio-code-insiders-bin
-vkd3d
-vlc-plugins-all
-vulkan-radeon
-wakafetch-git
-warp-terminal
-waterfox-bin
-waypipe
-wayvibes-git
-which
-wireless-regdb
-wlr-randr
-wofi
-wpa_supplicant
-xdg-desktop-portal-gnome
-xf86-input-libinput
-xf86-input-synaptics
-xf86-video-amdgpu
-xfsprogs
-xl2tpd
-xorg-server
-xorg-xdpyinfo
-xorg-xinit
-xorg-xinput
-xorg-xkill
-xorg-xrandr
-xorg-xwayland
-yarn
-yay-bin
-yelp
-yt-dlp
-zam-plugins
+cursor-beta-bin
 zed
+micro
+neovim
+neovide
+ghostty
+alacritty
+warp-terminal
+github-desktop-bin
+jetbrains-toolbox
+openai-codex-autoup-bin
+opencode-bin
+qwen-code
+# ============================================
+# WEB BROWSERS
+# ============================================
+firefox
+brave-bin
+microsoft-edge-dev-bin
+opera
+waterfox-bin
 zen-browser-bin
+epiphany
+# ============================================
+# PRODUCTIVITY & OFFICE
+# ============================================
+libreoffice-fresh
+meld
+papers
+ocrmypdf
+jbig2enc
+# ============================================
+# COMMUNICATION & SOCIAL
+# ============================================
+materialgram-bin
+proton-mail-bin
+proton-authenticator-bin
+protonplus
+tecla
+perplexity
+hoppscotch-bin
+httpie-desktop-bin
+music-presence-bin
+# ============================================
+# MEDIA PLAYERS & STREAMING
+# ============================================
+spotify
+totem
+showtime
+rygel
+# ============================================
+# DOWNLOAD & FILE SHARING
+# ============================================
+aria2
+qbittorrent-enhanced-git
+yt-dlp
+megasync
+uwsm
+# ============================================
+# GAMING
+# ============================================
+lib32-gamemode
+# ============================================
+# AI & MACHINE LEARNING
+# ============================================
+ollama
+ollama-vulkan
+llama.cpp-vulkan
+lmstudio
+gollama-bin
+antigravity-bin
+equibop-bin
+# ============================================
+# SYSTEM MONITORING & UTILITIES
+# ============================================
+btop
+glances
+neofetch
+fastfetch
+wakafetch-git
+duf
+lsd
+stacer
+fsearch
+irqbalance
+cpupower
+haveged
+hwdetect
+hwinfo
+dmidecode
+sysfsutils
+power-profiles-daemon
+supergfxctl
+asusctl
+asus-vivobook-rgb-keyboard
+faustus-dkms-git
+ryzenadj-git
+openrgb
+bpftune-git
+fwupd
+# ============================================
+# SECURITY & ENCRYPTION
+# ============================================
+firejail
+cryptsetup
+libgnome-keyring
+# ============================================
+# MISCELLANEOUS UTILITIES
+# ============================================
+handlr-regex
+octopi
+crush-bin
+msty-bin
+anytype-bin
+binance
+tradingview-bin-latest
+upscayl-bin
+imageviewer
+blanket
+decibels
+bottles
+quickshell-git
+illogical-impulse-basic
+illogical-impulse-backlight
+illogical-impulse-hyprland
+illogical-impulse-kde
+illogical-impulse-portal
+illogical-impulse-screencapture
+illogical-impulse-toolkit
+illogical-impulse-widgets
+sassc
+sddm
+gum
+# ============================================
+# LEGACY & COMPATIBILITY LIBRARIES
+# ============================================
+lib32-gtk2
+lib32-libappindicator-gtk2
+lib32-libgcrypt15
+lib32-libidn11
+lib32-libindicator-gtk2
+lib32-libjpeg6-turbo
+lib32-libpng12
+lib32-librtmp0
+lib32-libtiff4
+lib32-libudev0-shim
+lib32-libvpx1.3
+lib32-openssl-1.0
+libappindicator
+libappindicator-gtk2
+libayatana-appindicator-glib
+libgcrypt15
+libidn11
+libjpeg6-turbo
+librtmp0
+libtiff4
+libvpx1.3
+gtk-sharp-2
+icu69-bin
+libgsf
+libopenraw
+libwnck3
+# ============================================
+# REMOTE ACCESS & VNC
+# ============================================
+tigervnc
+rustdesk-bin
+waypipe
+# ============================================
+# ACCOUNT MANAGEMENT
+# ============================================
+accountsservice
+# ============================================
+# PLYMOUTH & BOOT ANIMATION
+# ============================================
+plymouth
+# ============================================
+# MISC
+# ============================================
+os-prober
+mtools
+unrar
+unzip
+ethtool
+gnome-color-manager
+s-nail
+
+# ============================================
+# REMAINING PACKAGES
+# ============================================
+android-sdk-platform-tools
+poppler-glib
+ubuntu-wallpapers

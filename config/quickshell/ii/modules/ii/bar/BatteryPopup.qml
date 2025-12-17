@@ -83,8 +83,8 @@ StyledPopup {
                                 color: {
                                     if (full) return Appearance.colors.colPrimary;
                                     if (charging) return Appearance.colors.colPrimary;
-                                    if (percent <= 0.1) return Appearance.colors.colError;
-                                    if (percent <= 0.3) return Appearance.colors.colWarning;
+                                    // Only apply warning color when battery is low and not charging
+                                    if (Battery.isLow && !charging) return Appearance.colors.colError;
                                     return Appearance.colors.colPrimary;
                                 }
                                 Behavior on width { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -127,11 +127,11 @@ StyledPopup {
                                 id: lowOverlay
                                 anchors.fill: body
                                 color: Appearance.colors.colError
-                                opacity: (percent <= 0.1 && !charging) ? 0.12 : 0
+                                opacity: (Battery.isLow && !charging) ? 0.12 : 0
 
                                 SequentialAnimation on opacity {
                                     id: lowPulse
-                                    running: (percent <= 0.1 && !charging)
+                                    running: (Battery.isLow && !charging)
                                     loops: Animation.Infinite
                                     PropertyAnimation { to: 0.22; duration: 700; easing.type: Easing.InOutQuad }
                                     PropertyAnimation { to: 0.08; duration: 700; easing.type: Easing.InOutQuad }
@@ -192,21 +192,14 @@ StyledPopup {
                                         return Appearance.colors.colPrimary;
                                     }
                                     
-                                    // Color scale based on battery percentage:
-                                    // Green (>60%): healthy battery
-                                    // Yellow (20-60%): medium battery
-                                    // Red (<20%): low battery
-                                    const percent = batteryIcon.percent;
-                                    if (percent > 0.6) {
-                                        // Green for high battery (>60%)
-                                        return "#4caf50"; // Material Design Green 500
-                                    } else if (percent > 0.2) {
-                                        // Yellow/Orange for medium battery (20-60%)
-                                        return "#ff9800"; // Material Design Orange 500
-                                    } else {
-                                        // Red for low battery (<20%)
+                                    // Only apply warning color when battery is low and not charging
+                                    // Otherwise use primary color (default)
+                                    if (Battery.isLow && !Battery.isCharging) {
                                         return Appearance.colors.colError;
                                     }
+                                    
+                                    // Default: use primary color when battery is not low
+                                    return Appearance.colors.colPrimary;
                                 }
                                 Behavior on width { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
                                 Behavior on color { ColorAnimation { duration: 250 } }

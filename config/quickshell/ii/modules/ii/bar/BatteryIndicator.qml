@@ -99,21 +99,16 @@ MouseArea {
                 return Appearance.colors.colPrimary;
             }
             
-            // Color scale based on battery percentage, mixed with wallpaper primary color:
-            // Green (>60%): healthy battery - mix primary with green
-            // Yellow (20-60%): medium battery - mix primary with orange
-            // Red (<20%): low battery - mix primary with red
-            const primaryColor = Appearance.colors.colPrimary;
-            if (percentage > 0.6) {
-                // Green for high battery (>60%) - mix 15% primary with 85% green
-                return ColorUtils.mix(primaryColor, "#4caf50", 0.1);
-            } else if (percentage > 0.2) {
-                // Yellow/Orange for medium battery (20-60%) - mix 15% primary with 85% orange
-                return ColorUtils.mix(primaryColor, "#ff9800", 0.1);
-            } else {
-                // Red for low battery (<20%) - mix 15% primary with 85% red
+            // Only apply warning color when battery is low and not charging
+            // Otherwise use primary color (default)
+            if (isLow && !isCharging) {
+                // Red for low battery - mix primary with error color
+                const primaryColor = Appearance.colors.colPrimary;
                 return ColorUtils.mix(primaryColor, Appearance.colors.colError, 0.1);
             }
+            
+            // Default: use primary color when battery is not low
+            return Appearance.colors.colPrimary;
         }
         property color chargingColor: Appearance.colors.colPrimary
         
