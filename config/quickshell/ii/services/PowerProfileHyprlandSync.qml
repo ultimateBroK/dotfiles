@@ -134,11 +134,21 @@ Singleton {
         }
     }
 
-    // Initialize on startup
+    // Initialize on startup - defer to avoid blocking startup
     Component.onCompleted: {
         const initialProfile = PowerProfiles.profile
         root.lastProfile = initialProfile
-        root.syncHyprlandConfig(initialProfile)
+        // Defer sync to avoid blocking startup with hyprctl commands
+        initTimer.start()
+    }
+    
+    Timer {
+        id: initTimer
+        interval: 500 // Wait 500ms before syncing power profile
+        repeat: false
+        onTriggered: {
+            root.syncHyprlandConfig(root.lastProfile)
         root.initialized = true
+        }
     }
 }
