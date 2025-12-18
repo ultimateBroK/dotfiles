@@ -8,8 +8,9 @@ import qs.modules.ii.bar
 
 StyledPopup {
     id: root
-    readonly property int popupWidth: 340
-    readonly property int maxContentHeight: 460
+    readonly property int popupWidth: 400
+    readonly property int maxContentHeight: 560
+    readonly property int maxWarningsToShow: 4
 
     ColumnLayout {
         id: columnLayout
@@ -111,55 +112,142 @@ StyledPopup {
             }
         }
 
-        // Warnings (storm / thunder / heavy rain heuristics)
+        // Warnings (global hazard heuristics)
         Rectangle {
             visible: Weather.warnings && Weather.warnings.length > 0
             Layout.fillWidth: true
             Layout.preferredWidth: root.popupWidth
+            implicitHeight: warningContent.implicitHeight + 20
+            Layout.preferredHeight: implicitHeight
             radius: Appearance.rounding.small
             color: Appearance.colors.colSurfaceContainerHigh
             border.width: 1
-            border.color: Appearance.colors.colError
+            border.color: warningHeader.anyDanger ? Appearance.colors.colError : Appearance.colors.colSecondary
 
             ColumnLayout {
+                id: warningContent
                 anchors.margins: 10
                 anchors.fill: parent
                 spacing: 6
 
                 RowLayout {
+                    id: warningHeader
                     spacing: 6
+                    readonly property bool anyDanger: {
+                        const arr = Weather.warnings || [];
+                        for (let i = 0; i < arr.length; i++) {
+                            if ((arr[i].severityLevel ?? 0) >= 2) return true;
+                            if (String(arr[i].severity || "").toLowerCase() === "danger") return true;
+                        }
+                        return false;
+                    }
                     MaterialSymbol {
                         fill: 0
                         text: "warning"
                         iconSize: Appearance.font.pixelSize.normal
-                        color: Appearance.colors.colError
+                        color: warningHeader.anyDanger ? Appearance.colors.colError : Appearance.colors.colSecondary
                     }
                     StyledText {
                         text: "Nearby alerts"
                         font.pixelSize: Appearance.font.pixelSize.small
                         font.weight: Font.Medium
                         color: Appearance.colors.colOnSurface
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
                     }
                 }
 
                 Repeater {
-                    model: Weather.warnings
-                    ColumnLayout {
-                        spacing: 2
-                        StyledText {
-                            text: `${modelData.title} • ${modelData.severity} • ${modelData.timeRange}`
-                            font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnSurface
-                            wrapMode: Text.WordWrap
-                        }
-                        StyledText {
-                            visible: modelData.details && modelData.details.length > 0
-                            text: modelData.details
-                            font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnSurfaceVariant
-                            wrapMode: Text.WordWrap
+                    model: (Weather.warnings || []).slice(0, root.maxWarningsToShow)
+                    Rectangle {
+                        Layout.fillWidth: true
+                        radius: Appearance.rounding.small
+                        color: Appearance.colors.colSurfaceContainer
+                        border.width: 1
+                        border.color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
+                        implicitHeight: warningItemContent.implicitHeight + 14
+
+                        RowLayout {
+                            id: warningItemContent
+                            anchors.fill: parent
+                            anchors.margins: 8
+                            spacing: 8
+
+                            Rectangle {
+                                Layout.preferredWidth: 4
+                                Layout.fillHeight: true
+                                radius: 2
+                                color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
+                            }
+
+                            MaterialSymbol {
+                                fill: 0
+                                text: modelData.icon || "warning"
+                                iconSize: Appearance.font.pixelSize.normal
+                                color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
+                            }
+
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 6
+
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: modelData.title || "Alert"
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        font.weight: Font.Medium
+                                        color: Appearance.colors.colOnSurface
+                                        wrapMode: Text.WordWrap
+                                    }
+
+                                    Rectangle {
+                                        radius: 999
+                                        color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
+                                        Layout.preferredHeight: 18
+                                        Layout.preferredWidth: severityLabel.implicitWidth + 10
+                                        opacity: 0.9
+                                        StyledText {
+                                            id: severityLabel
+                                            anchors.centerIn: parent
+                                            text: (modelData.severity || "").toUpperCase()
+                                            font.pixelSize: Appearance.font.pixelSize.smaller
+                                            font.weight: Font.DemiBold
+                                            color: Appearance.colors.colOnPrimary
+                                        }
+                                    }
+                                }
+
+                                StyledText {
+                                    visible: modelData.timeRange && modelData.timeRange.length > 0
+                                    Layout.fillWidth: true
+                                    text: modelData.timeRange
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    color: Appearance.colors.colOnSurfaceVariant
+                                    wrapMode: Text.WordWrap
+                                }
+
+                                StyledText {
+                                    visible: modelData.details && modelData.details.length > 0
+                                    Layout.fillWidth: true
+                                    text: modelData.details
+                                    font.pixelSize: Appearance.font.pixelSize.smaller
+                                    color: Appearance.colors.colOnSurfaceVariant
+                                    wrapMode: Text.WordWrap
+                                }
+                            }
                         }
                     }
+                }
+
+                StyledText {
+                    visible: (Weather.warnings || []).length > root.maxWarningsToShow
+                    text: `+${(Weather.warnings || []).length - root.maxWarningsToShow} more`
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnSurfaceVariant
                 }
             }
         }

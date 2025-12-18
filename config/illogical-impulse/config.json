@@ -188,7 +188,7 @@
         "verbose": true,
         "vertical": false,
         "weather": {
-            "city": "Moscow",
+            "city": "Hanoi",
             "enable": true,
             "enableGPS": false,
             "fetchInterval": 10,
