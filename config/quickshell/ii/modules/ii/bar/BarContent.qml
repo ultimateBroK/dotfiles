@@ -154,19 +154,41 @@ Item { // Bar content region
         }
         spacing: 4
 
-        BarGroup {
+        Item {
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
+            width: implicitWidth
+            implicitHeight: Appearance.sizes.baseBarHeight
+            height: implicitHeight
 
-            Resources {
-                alwaysShowAllResources: true
-                Layout.fillWidth: root.useShortenedForm === 2 ? true : false
-            }
+            RowLayout {
+                anchors.fill: parent
+                spacing: 4
 
-            Media {
-                visible: root.useShortenedForm < 2
-                Layout.fillWidth: true
+                // Group 1: system resources
+                BarGroup {
+                    id: resourcesGroup
+                    Layout.fillHeight: true
+                    Layout.fillWidth: root.useShortenedForm === 2
+
+                    Resources {
+                        alwaysShowAllResources: true
+                        Layout.fillWidth: true
+                    }
+                }
+
+                // Group 2: media player
+                BarGroup {
+                    id: mediaGroup
+                    visible: root.useShortenedForm < 2
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    Media {
+                        Layout.fillWidth: true
+                    }
+                }
             }
         }
 
