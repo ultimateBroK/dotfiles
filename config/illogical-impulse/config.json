@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -188,7 +188,7 @@
         "verbose": true,
         "vertical": false,
         "weather": {
-            "city": "Hanoi",
+            "city": "Moscow",
             "enable": true,
             "enableGPS": false,
             "fetchInterval": 10,

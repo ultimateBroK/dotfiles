@@ -22,61 +22,55 @@ Singleton {
     }
 
     readonly property var weatherIconMap: ({
-        "113": "clear_day",
-        "116": "partly_cloudy_day",
-        "119": "cloud",
-        "122": "cloud",
-        "143": "foggy",
-        "176": "rainy",
-        "179": "rainy",
-        "182": "rainy",
-        "185": "rainy",
-        "200": "thunderstorm",
-        "227": "cloudy_snowing",
-        "230": "snowing_heavy",
-        "248": "foggy",
-        "260": "foggy",
-        "263": "rainy",
-        "266": "rainy",
-        "281": "rainy",
-        "284": "rainy",
-        "293": "rainy",
-        "296": "rainy",
-        "299": "rainy",
-        "302": "weather_hail",
-        "305": "rainy",
-        "308": "weather_hail",
-        "311": "rainy",
-        "314": "rainy",
-        "317": "rainy",
-        "320": "cloudy_snowing",
-        "323": "cloudy_snowing",
-        "326": "cloudy_snowing",
-        "329": "snowing_heavy",
-        "332": "snowing_heavy",
-        "335": "snowing",
-        "338": "snowing_heavy",
-        "350": "rainy",
-        "353": "rainy",
-        "356": "rainy",
-        "359": "weather_hail",
-        "362": "rainy",
-        "365": "rainy",
-        "368": "cloudy_snowing",
-        "371": "snowing",
-        "374": "rainy",
-        "377": "rainy",
-        "386": "thunderstorm",
-        "389": "thunderstorm",
-        "392": "thunderstorm",
-        "395": "snowing"
+        // Open-Meteo uses WMO weather interpretation codes
+        "0": "clear_day",
+        "1": "partly_cloudy_day",
+        "2": "partly_cloudy_day",
+        "3": "cloud",
+        "45": "foggy",
+        "48": "foggy",
+
+        "51": "rainy",
+        "53": "rainy",
+        "55": "rainy",
+        "56": "rainy",
+        "57": "rainy",
+
+        "61": "rainy",
+        "63": "rainy",
+        "65": "rainy",
+        "66": "rainy",
+        "67": "rainy",
+
+        "71": "cloudy_snowing",
+        "73": "snowing",
+        "75": "snowing_heavy",
+        "77": "cloudy_snowing",
+
+        "80": "rainy",
+        "81": "rainy",
+        "82": "rainy",
+
+        "85": "snowing",
+        "86": "snowing_heavy",
+
+        "95": "thunderstorm",
+        "96": "thunderstorm",
+        "99": "thunderstorm"
     })
 
     
-    function getWeatherIcon(code) {
+    function getWeatherIcon(code, isDay = true) {
         const key = String(code)
+        if (key === "0") {
+            return isDay ? "clear_day" : "clear_night"
+        }
+        if (key === "1" || key === "2") {
+            return isDay ? "partly_cloudy_day" : "partly_cloudy_night"
+        }
         if (weatherIconMap.hasOwnProperty(key)) {
             return weatherIconMap[key]
         }
+        return isDay ? "cloud" : "cloud"
     }
 }

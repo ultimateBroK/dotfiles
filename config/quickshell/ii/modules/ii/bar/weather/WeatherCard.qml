@@ -8,8 +8,8 @@ Rectangle {
     id: root
     radius: Appearance.rounding.small
     color: Appearance.colors.colSurfaceContainerHigh
-    implicitWidth: columnLayout.implicitWidth + 14 * 2
-    implicitHeight: columnLayout.implicitHeight + 14 * 2
+    implicitWidth: columnLayout.implicitWidth + 10 * 2
+    implicitHeight: columnLayout.implicitHeight + 10 * 2
     Layout.fillWidth: parent
 
     property alias title: title.text
@@ -20,6 +20,7 @@ Rectangle {
         id: columnLayout
         anchors.fill: parent
         spacing: 2
+        anchors.margins: 10
         
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
