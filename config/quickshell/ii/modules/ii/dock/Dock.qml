@@ -93,9 +93,14 @@ Scope { // Scope
                             // - we keep the background semi-transparent + add a subtle highlight gradient
                             clip: true
                             color: ColorUtils.applyAlpha(
-                                Appearance.colors.colLayer0,
-                                // Lower alpha = clearer "glass" (less milky/opaque)
-                                Appearance.isDarkMode ? 0.42 : 0.32
+                                // "Smoky glass" tint (dark instead of milky/white)
+                                ColorUtils.mix(
+                                    Appearance.colors.colLayer0,
+                                    Appearance.m3colors.m3background,
+                                    Appearance.isDarkMode ? 0.22 : 0.30
+                                ),
+                                // Lower alpha = clearer glass
+                                Appearance.isDarkMode ? 0.34 : 0.26
                             )
                             border.width: 1
                             border.color: ColorUtils.applyAlpha(
@@ -113,14 +118,14 @@ Scope { // Scope
                                     GradientStop {
                                         position: 0.0
                                         color: Appearance.isDarkMode
-                                            ? Qt.rgba(1, 1, 1, 0.16)
-                                            : Qt.rgba(1, 1, 1, 0.22)
+                                            ? Qt.rgba(1, 1, 1, 0.08)
+                                            : Qt.rgba(1, 1, 1, 0.10)
                                     }
                                     GradientStop {
                                         position: 1.0
                                         color: Appearance.isDarkMode
-                                            ? Qt.rgba(0, 0, 0, 0.08)
-                                            : Qt.rgba(0, 0, 0, 0.05)
+                                            ? Qt.rgba(0, 0, 0, 0.12)
+                                            : Qt.rgba(0, 0, 0, 0.08)
                                     }
                                 }
                             }
@@ -133,8 +138,8 @@ Scope { // Scope
                                 color: "transparent"
                                 border.width: 1
                                 border.color: Appearance.isDarkMode
-                                    ? Qt.rgba(1, 1, 1, 0.12)
-                                    : Qt.rgba(1, 1, 1, 0.18)
+                                    ? Qt.rgba(1, 1, 1, 0.07)
+                                    : Qt.rgba(1, 1, 1, 0.09)
                             }
                         }
 
