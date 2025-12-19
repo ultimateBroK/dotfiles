@@ -69,6 +69,7 @@ function refine(payload, opts) {
     const hPrecipProb = hourlyData?.precipitation_probability || [];
     const hWind = hourlyData?.wind_speed_10m || [];
     const hGust = hourlyData?.wind_gusts_10m || [];
+    const hIsDay = hourlyData?.is_day || [];
     const hVis = hourlyData?.visibility || [];
     const hUv = hourlyData?.uv_index || [];
     const hApp = hourlyData?.apparent_temperature || [];
@@ -88,6 +89,7 @@ function refine(payload, opts) {
             timeIso: hTimes[i],
             temp: Format.formatTemp(Number(hTemp[i]), useUSCS),
             code: Number(hCode[i] ?? 0),
+            isDay: Number(hIsDay[i] ?? 1) === 1,
             precip: Format.formatPrecip(Number(hPrecip[i]), useUSCS),
             precipProb: Format.formatPercent(Number(hPrecipProb[i])),
             wind: Format.formatWind(Number(hWind[i]), useUSCS),

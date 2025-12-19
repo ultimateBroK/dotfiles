@@ -140,7 +140,7 @@ Singleton {
             `precipitation_unit=${precipUnit}`,
 
             "current=temperature_2m,relative_humidity_2m,apparent_temperature,dew_point_2m,weather_code,is_day,pressure_msl,cloud_cover,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,precipitation_probability,uv_index",
-            "hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,weather_code,precipitation,precipitation_probability,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,uv_index",
+            "hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,weather_code,is_day,precipitation,precipitation_probability,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,uv_index",
             "daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_probability_max,wind_gusts_10m_max,uv_index_max"
         ].join("&");
 

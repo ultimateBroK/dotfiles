@@ -34,7 +34,7 @@ MouseArea {
 
         MaterialSymbol {
             fill: 0
-            text: Icons.getWeatherIcon(Weather.data.weatherCode) ?? "cloud"
+            text: Icons.getWeatherIcon(Weather.data.weatherCode, Weather.data.isDay) ?? "cloud"
             iconSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             Layout.alignment: Qt.AlignVCenter

@@ -324,7 +324,7 @@ StyledPopup {
                                             }
                                             MaterialSymbol {
                                                 fill: 0
-                                                text: Icons.getWeatherIcon(modelData.code, Weather.data.isDay)
+                                                text: Icons.getWeatherIcon(modelData.code, modelData.isDay)
                                                 iconSize: 25
                                                 color: Appearance.colors.colPrimary
                                                 Layout.alignment: Qt.AlignHCenter
