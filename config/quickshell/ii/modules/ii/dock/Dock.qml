@@ -1,6 +1,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
@@ -87,10 +88,54 @@ Scope { // Scope
                             anchors.fill: parent
                             anchors.topMargin: Appearance.sizes.elevationMargin
                             anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
-                            color: Appearance.colors.colLayer0
+                            // macOS-like "frosted" dock:
+                            // - compositor blur comes from Hyprland layerrules
+                            // - we keep the background semi-transparent + add a subtle highlight gradient
+                            clip: true
+                            color: ColorUtils.applyAlpha(
+                                Appearance.colors.colLayer0,
+                                // Lower alpha = clearer "glass" (less milky/opaque)
+                                Appearance.isDarkMode ? 0.42 : 0.32
+                            )
                             border.width: 1
-                            border.color: Appearance.colors.colLayer0Border
-                            radius: Appearance.rounding.large
+                            border.color: ColorUtils.applyAlpha(
+                                Appearance.colors.colLayer0Border,
+                                Appearance.isDarkMode ? 0.32 : 0.24
+                            )
+                            radius: Appearance.rounding.windowRounding
+
+                            // Subtle glass highlight (top) + shade (bottom)
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: parent.radius
+                                color: "transparent"
+                                gradient: Gradient {
+                                    GradientStop {
+                                        position: 0.0
+                                        color: Appearance.isDarkMode
+                                            ? Qt.rgba(1, 1, 1, 0.16)
+                                            : Qt.rgba(1, 1, 1, 0.22)
+                                    }
+                                    GradientStop {
+                                        position: 1.0
+                                        color: Appearance.isDarkMode
+                                            ? Qt.rgba(0, 0, 0, 0.08)
+                                            : Qt.rgba(0, 0, 0, 0.05)
+                                    }
+                                }
+                            }
+
+                            // Inner highlight stroke for "glass" edge
+                            Rectangle {
+                                anchors.fill: parent
+                                anchors.margins: 1
+                                radius: Math.max(0, parent.radius - 1)
+                                color: "transparent"
+                                border.width: 1
+                                border.color: Appearance.isDarkMode
+                                    ? Qt.rgba(1, 1, 1, 0.12)
+                                    : Qt.rgba(1, 1, 1, 0.18)
+                            }
                         }
 
                         RowLayout {
