@@ -26,6 +26,7 @@ StyledPopup {
         }
         return lunarDate.day.toString();
     }
+    property string lunarFullDateText: `${lunarDate.day}/${lunarDate.month}/${lunarDate.year}`
     property string specialDayText: {
         const date = DateTime.clock.date;
         return LunarVN.getVietnamSpecialDayEnFromSolar(
@@ -103,7 +104,7 @@ StyledPopup {
                             spacing: 4
                             
                             StyledText {
-                                text: `Lunar: ${root.lunarDateText}/${root.lunarDate.month}/${root.lunarDate.year}`
+                                text: `Lunar: ${root.lunarFullDateText}`
                                 font {
                                     pixelSize: Appearance.font.pixelSize.smaller
                                     weight: Font.Normal

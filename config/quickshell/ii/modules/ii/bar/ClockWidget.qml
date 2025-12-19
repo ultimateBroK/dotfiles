@@ -26,6 +26,7 @@ Item {
         }
         return lunarDate.day.toString();
     }
+    property string lunarCompactText: `${lunarDate.day}/${lunarDate.month}`
     property bool isSpecialDay: {
         const day = lunarDate.day;
         const month = lunarDate.month;
@@ -142,7 +143,7 @@ Item {
                 }
                 color: Appearance.colors.colOnLayer1
                 opacity: 0.7
-                text: `Lunar: ${root.lunarDateText}/${root.lunarDate.month}`
+                text: `Lunar: ${root.lunarCompactText}`
             }
 
             StyledText {
