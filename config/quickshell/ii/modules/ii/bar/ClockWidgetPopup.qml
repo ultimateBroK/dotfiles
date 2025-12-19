@@ -46,14 +46,36 @@ StyledPopup {
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 280
-            Layout.preferredHeight: root.isSpecialDay ? 110 : 80
+            Layout.preferredHeight: root.isSpecialDay ? 118 : 88
             radius: Appearance.rounding.medium
             color: Appearance.colors.colSurfaceContainer
             
             ColumnLayout {
-                anchors.centerIn: parent
-                spacing: 4
+                anchors.fill: parent
+                anchors.margins: 10
+                spacing: 6
                 
+                RowLayout {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 8
+
+                    MaterialSymbol {
+                        fill: 0
+                        text: "schedule"
+                        iconSize: Appearance.font.pixelSize.huge
+                        color: Appearance.colors.colPrimary
+                    }
+
+                    StyledText {
+                        text: root.formattedTime
+                        font {
+                            pixelSize: Appearance.font.pixelSize.hugeass
+                            weight: Font.Bold
+                        }
+                        color: Appearance.colors.colOnSurface
+                    }
+                }
+
                 RowLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 8
@@ -100,16 +122,6 @@ StyledPopup {
                             }
                         }
                     }
-                }
-                
-                StyledText {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: root.formattedTime
-                    font {
-                        pixelSize: Appearance.font.pixelSize.huge
-                        weight: Font.Bold
-                    }
-                    color: Appearance.colors.colOnSurface
                 }
             }
         }
