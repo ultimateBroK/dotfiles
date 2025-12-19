@@ -126,3 +126,18 @@ function getCalendarLayout(dateObject, highlight) {
     return calendar;
 }
 
+// ISO week number (Monday-first, week 1 contains Jan 4th).
+// Returns { week: number, year: number } where year can differ around New Year.
+function getISOWeekInfo(dateObject) {
+    const d0 = dateObject ? new Date(dateObject) : new Date();
+    // Use UTC math to avoid local timezone DST edge cases.
+    const d = new Date(Date.UTC(d0.getFullYear(), d0.getMonth(), d0.getDate()));
+    const dayNum = d.getUTCDay() || 7; // Sunday(0) -> 7
+    // Nearest Thursday
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const isoYear = d.getUTCFullYear();
+    const yearStart = new Date(Date.UTC(isoYear, 0, 1));
+    const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return { week: week, year: isoYear };
+}
+

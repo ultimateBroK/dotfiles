@@ -12,14 +12,27 @@ Item {
     property int monthShift: 0
     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
     property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
-    property var selectedDate: (monthShift === 0 ? new Date() : new Date(viewingDate.getFullYear(), viewingDate.getMonth(), 1))
+    property var selectedDate: new Date()
     property string selectedSpecialDayName: {
         const d = selectedDate;
         if (!d) return "";
         return LunarVN.getVietnamSpecialDayEnFromSolar(d.getDate(), d.getMonth() + 1, d.getFullYear(), 7);
     }
+    property string selectedWeekText: {
+        const info = CalendarLayout.getISOWeekInfo(selectedDate);
+        return `W${info.week}`;
+    }
     width: calendarColumn.width
     implicitHeight: calendarColumn.height + 10 * 2
+
+    onMonthShiftChanged: {
+        // Keep the "selected date" in sync so week label is not stale.
+        if (monthShift === 0) {
+            selectedDate = new Date();
+        } else {
+            selectedDate = new Date(viewingDate.getFullYear(), viewingDate.getMonth(), 1);
+        }
+    }
 
     Keys.onPressed: (event) => {
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp)
@@ -54,11 +67,18 @@ Item {
             spacing: 5
             CalendarHeaderButton {
                 clip: true
-                buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
+                buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.getMonth() + 1}/${viewingDate.getFullYear()}`
                 tooltipText: (monthShift === 0) ? "" : Translation.tr("Jump to current month")
                 downAction: () => {
                     monthShift = 0;
                 }
+            }
+            CalendarHeaderButton {
+                clip: true
+                buttonText: selectedWeekText
+                tooltipText: `Week ${CalendarLayout.getISOWeekInfo(selectedDate).week} of ${CalendarLayout.getISOWeekInfo(selectedDate).year}`
+                enabled: false
+                pointingHandCursor: false
             }
             Item {
                 Layout.fillWidth: true
