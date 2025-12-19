@@ -297,10 +297,7 @@ StyledPopup {
                                 columns: 5
                                 columnSpacing: 6
                                 rowSpacing: 6
-                                uniformCellWidths: true
                                 Layout.fillWidth: true
-
-                                property real cellW: Math.floor((width - columnSpacing * (columns - 1)) / columns)
 
                                 Repeater {
                                     // Show 10 hours total => 2 rows, 5 items each row
@@ -308,8 +305,9 @@ StyledPopup {
                                     Rectangle {
                                         radius: Appearance.rounding.small
                                         color: Appearance.colors.colSurfaceContainer
-                                        Layout.preferredWidth: hourlyGrid.cellW
+                                        Layout.fillWidth: true
                                         Layout.preferredHeight: 90
+                                        Layout.minimumWidth: 60
 
                                         ColumnLayout {
                                             anchors.fill: parent
