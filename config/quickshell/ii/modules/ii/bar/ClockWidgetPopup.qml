@@ -26,64 +26,16 @@ StyledPopup {
         }
         return lunarDate.day.toString();
     }
-    property bool isSpecialDay: {
-        const day = lunarDate.day;
-        const month = lunarDate.month;
-        
-        // Tết Nguyên Đán - mùng 1 tháng 1
-        if (day === 1 && month === 1) return true;
-        // Tết Nguyên Tiêu - rằm tháng 1
-        if (day === 15 && month === 1) return true;
-        // Giỗ Tổ Hùng Vương - 10/3
-        if (day === 10 && month === 3) return true;
-        // Lễ Phật Đản - rằm tháng 4
-        if (day === 15 && month === 4) return true;
-        // Tết Đoan Ngọ - 5/5
-        if (day === 5 && month === 5) return true;
-        // Rằm tháng 7 (Vu Lan)
-        if (day === 15 && month === 7) return true;
-        // Tết Trung Thu - rằm tháng 8
-        if (day === 15 && month === 8) return true;
-        // Tết Ông Táo - 23/12
-        if (day === 23 && month === 12) return true;
-        // Giao thừa - 30/12 (hoặc 29 nếu tháng thiếu)
-        if ((day === 30 || day === 29) && month === 12) return true;
-        // Mùng 1 và rằm các tháng khác
-        if (day === 1 || day === 15) return true;
-        
-        return false;
-    }
     property string specialDayText: {
-        const day = lunarDate.day;
-        const month = lunarDate.month;
-        
-        // Tết Nguyên Đán - mùng 1 tháng 1
-        if (day === 1 && month === 1) return "Lunar New Year";
-        // Tết Nguyên Tiêu - rằm tháng 1
-        if (day === 15 && month === 1) return "Lantern Festival";
-        // Giỗ Tổ Hùng Vương - 10/3
-        if (day === 10 && month === 3) return "Hung Kings Festival";
-        // Lễ Phật Đản - rằm tháng 4
-        if (day === 15 && month === 4) return "Buddha's Birthday";
-        // Tết Đoan Ngọ - 5/5
-        if (day === 5 && month === 5) return "Dragon Boat Festival";
-        // Rằm tháng 7 (Vu Lan)
-        if (day === 15 && month === 7) return "Ghost Festival (Vu Lan)";
-        // Tết Trung Thu - rằm tháng 8
-        if (day === 15 && month === 8) return "Mid-Autumn Festival";
-        // Tết Ông Táo - 23/12
-        if (day === 23 && month === 12) return "Kitchen God Festival";
-        // Giao thừa - 30/12
-        if (day === 30 && month === 12) return "New Year's Eve";
-        // Giao thừa - 29/12 (nếu tháng thiếu)
-        if (day === 29 && month === 12) return "New Year's Eve";
-        // Mùng 1 các tháng khác
-        if (day === 1) return "New Moon";
-        // Rằm các tháng khác
-        if (day === 15) return "Full Moon";
-        
-        return "";
+        const date = DateTime.clock.date;
+        return LunarVN.getVietnamSpecialDayEnFromSolar(
+            date.getDate(),
+            date.getMonth() + 1,
+            date.getFullYear(),
+            7
+        );
     }
+    property bool isSpecialDay: specialDayText.length > 0
 
     ColumnLayout {
         id: columnLayout

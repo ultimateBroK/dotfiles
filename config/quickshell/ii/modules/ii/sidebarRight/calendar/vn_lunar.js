@@ -2,8 +2,6 @@
 // Ported from common public-domain implementations (amlich)
 // Works reliably for years ~1900-2100, which is sufficient for UI display.
 
-.pragma library
-
 function INT(d) {
     return Math.floor(d);
 }
@@ -153,6 +151,69 @@ function solar2lunar(dd, mm, yy, timeZone) {
         year: lunarYear,
         leap: lunarLeap
     };
+}
+
+// --- Vietnamese special days (English labels) ---
+// Returns an English label for notable Vietnamese days.
+//
+// Notes:
+// - Includes common Vietnam public holidays (solar/fixed dates)
+// - Includes common lunar festivals/traditions used in this UI
+// - Timezone defaults to Vietnam (UTC+7)
+
+function getVietnamSolarHolidayEn(dd, mm) {
+    dd = Number(dd);
+    mm = Number(mm);
+    if (!Number.isFinite(dd) || !Number.isFinite(mm)) return "";
+
+    // Public holidays (Gregorian)
+    if (dd === 1 && mm === 1) return "New Year's Day";
+    if (dd === 30 && mm === 4) return "Reunification Day";
+    if (dd === 1 && mm === 5) return "International Workers' Day";
+    if (dd === 2 && mm === 9) return "National Day";
+
+    return "";
+}
+
+function getVietnamLunarHolidayEn(lunarDay, lunarMonth) {
+    const day = Number(lunarDay);
+    const month = Number(lunarMonth);
+    if (!Number.isFinite(day) || !Number.isFinite(month)) return "";
+
+    // Tết Nguyên Đán - mùng 1 tháng 1
+    if (day === 1 && month === 1) return "Lunar New Year";
+    // Tết Nguyên Tiêu - rằm tháng 1
+    if (day === 15 && month === 1) return "Lantern Festival";
+    // Giỗ Tổ Hùng Vương - 10/3
+    if (day === 10 && month === 3) return "Hung Kings Festival";
+    // Lễ Phật Đản - rằm tháng 4
+    if (day === 15 && month === 4) return "Buddha's Birthday";
+    // Tết Đoan Ngọ - 5/5
+    if (day === 5 && month === 5) return "Dragon Boat Festival";
+    // Rằm tháng 7 (Vu Lan)
+    if (day === 15 && month === 7) return "Ghost Festival (Vu Lan)";
+    // Tết Trung Thu - rằm tháng 8
+    if (day === 15 && month === 8) return "Mid-Autumn Festival";
+    // Tết Ông Táo - 23/12
+    if (day === 23 && month === 12) return "Kitchen God Festival";
+    // Giao thừa - 30/12 (or 29 if short month)
+    if ((day === 30 || day === 29) && month === 12) return "New Year's Eve";
+
+    // Common lunar markers
+    if (day === 1) return "New Moon";
+    if (day === 15) return "Full Moon";
+
+    return "";
+}
+
+function getVietnamSpecialDayEnFromSolar(dd, mm, yy, timeZone) {
+    const tz = (timeZone === undefined || timeZone === null) ? 7 : Number(timeZone);
+    const solarName = getVietnamSolarHolidayEn(dd, mm);
+    const lunar = solar2lunar(Number(dd), Number(mm), Number(yy), tz);
+    const lunarName = getVietnamLunarHolidayEn(lunar.day, lunar.month);
+
+    if (solarName && lunarName) return `${solarName} • ${lunarName}`;
+    return solarName || lunarName || "";
 }
 
 

@@ -12,66 +12,95 @@ RippleButton {
     // Full Gregorian date for this cell (needed for lunar conversion)
     property int year: 0
     property int month: 0
+    property string specialDayName: {
+        if (year <= 0 || month <= 0) return "";
+        const solarDay = parseInt(day);
+        if (isNaN(solarDay)) return "";
+        return LunarVN.getVietnamSpecialDayEnFromSolar(solarDay, month, year, 7);
+    }
 
     Layout.fillWidth: false
     Layout.fillHeight: false
     implicitWidth: 38; 
     implicitHeight: 38;
+    hoverEnabled: true
 
     toggled: (isToday == 1)
     buttonRadius: Appearance.rounding.small
     
-    contentItem: Column {
+    contentItem: Item {
         anchors.fill: parent
-        anchors.margins: 2
-        spacing: 0
-        StyledText {
-            id: solarDateText
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: day
-            horizontalAlignment: Text.AlignHCenter
-            font.weight: bold ? Font.DemiBold : Font.Normal
-            color: (isToday == 1) ? Appearance.m3colors.m3onPrimary : 
-                (isToday == 0) ? Appearance.colors.colOnLayer1 : 
-                Appearance.colors.colOutlineVariant
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+        Column {
+            anchors.fill: parent
+            anchors.margins: 2
+            spacing: 0
+            StyledText {
+                id: solarDateText
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: day
+                horizontalAlignment: Text.AlignHCenter
+                font.weight: bold ? Font.DemiBold : Font.Normal
+                color: (isToday == 1) ? Appearance.m3colors.m3onPrimary :
+                    (isToday == 0) ? Appearance.colors.colOnLayer1 :
+                    Appearance.colors.colOutlineVariant
+                Behavior on color {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
             }
-        }
-        // Vietnamese lunar day (Âm lịch) - small secondary text
-        StyledText {
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: year > 0 && month > 0
-            // 20% smaller than solar date (80% of solar date size)
-            font.pixelSize: solarDateText.font.pixelSize * 0.8
-            color: {
-                if (isToday == 1) return Appearance.m3colors.m3onPrimary;
+            // Vietnamese lunar day (Âm lịch) - small secondary text
+            StyledText {
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: year > 0 && month > 0
+                // 20% smaller than solar date (80% of solar date size)
+                font.pixelSize: solarDateText.font.pixelSize * 0.8
+                color: {
+                    if (isToday == 1) return Appearance.m3colors.m3onPrimary;
 
-                // Highlight important lunar days (mùng 1 & rằm 15)
-                if (year > 0 && month > 0) {
-                    const solarDay = parseInt(day);
-                    if (!isNaN(solarDay)) {
-                        const lunar = LunarVN.solar2lunar(solarDay, month, year, 7);
-                        if (lunar.day === 1 || lunar.day === 15) {
-                            return Appearance.colors.colPrimary;
+                    // Highlight important lunar days (mùng 1 & rằm 15)
+                    if (year > 0 && month > 0) {
+                        const solarDay = parseInt(day);
+                        if (!isNaN(solarDay)) {
+                            const lunar = LunarVN.solar2lunar(solarDay, month, year, 7);
+                            if (lunar.day === 1 || lunar.day === 15) {
+                                return Appearance.colors.colPrimary;
+                            }
                         }
                     }
+                    return Appearance.colors.colOnLayer3;
                 }
-                return Appearance.colors.colOnLayer3;
-            }
-            horizontalAlignment: Text.AlignHCenter
-            text: {
-                if (year <= 0 || month <= 0) return "";
-                const solarDay = parseInt(day);
-                if (isNaN(solarDay)) return "";
-                const lunar = LunarVN.solar2lunar(solarDay, month, year, 7);
-                // Format: show day/month for first day of lunar month, otherwise only day
-                if (lunar.day === 1) {
-                    return `${lunar.day}/${lunar.month}`;
+                horizontalAlignment: Text.AlignHCenter
+                text: {
+                    if (year <= 0 || month <= 0) return "";
+                    const solarDay = parseInt(day);
+                    if (isNaN(solarDay)) return "";
+                    const lunar = LunarVN.solar2lunar(solarDay, month, year, 7);
+                    // Format: show day/month for first day of lunar month, otherwise only day
+                    if (lunar.day === 1) {
+                        return `${lunar.day}/${lunar.month}`;
+                    }
+                    return lunar.day.toString();
                 }
-                return lunar.day.toString();
             }
         }
+
+        // Tiny indicator for Vietnamese special days (doesn't affect layout)
+        Rectangle {
+            visible: button.specialDayName.length > 0
+            width: 6
+            height: 6
+            radius: 3
+            color: isToday == 1 ? Appearance.m3colors.m3onPrimary : Appearance.colors.colPrimary
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: 4
+            anchors.rightMargin: 4
+        }
+    }
+
+    // Show English special day name without changing cell size
+    StyledToolTip {
+        text: button.specialDayName
+        extraVisibleCondition: button.specialDayName.length > 0
     }
 }
 

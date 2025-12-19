@@ -2,6 +2,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import "calendar_layout.js" as CalendarLayout
+import "vn_lunar.js" as LunarVN
 import QtQuick
 import QtQuick.Layouts
 
@@ -11,6 +12,12 @@ Item {
     property int monthShift: 0
     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
     property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
+    property var selectedDate: (monthShift === 0 ? new Date() : new Date(viewingDate.getFullYear(), viewingDate.getMonth(), 1))
+    property string selectedSpecialDayName: {
+        const d = selectedDate;
+        if (!d) return "";
+        return LunarVN.getVietnamSpecialDayEnFromSolar(d.getDate(), d.getMonth() + 1, d.getFullYear(), 7);
+    }
     width: calendarColumn.width
     implicitHeight: calendarColumn.height + 10 * 2
 
@@ -83,6 +90,18 @@ Item {
             }
         }
 
+        // Fixed-height caption line (prevents layout jumps)
+        StyledText {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 18
+            text: selectedSpecialDayName.length > 0 ? `• ${selectedSpecialDayName}` : ""
+            font.pixelSize: Appearance.font.pixelSize.smaller
+            font.weight: Font.Medium
+            color: Appearance.colors.colPrimary
+            opacity: selectedSpecialDayName.length > 0 ? 1 : 0
+            elide: Text.ElideRight
+        }
+
         // Week days row
         RowLayout {
             id: weekDaysRow
@@ -116,6 +135,11 @@ Item {
                         isToday: calendarLayout[modelData][index].today
                         year: calendarLayout[modelData][index].year
                         month: calendarLayout[modelData][index].month
+                        releaseAction: () => {
+                            const d = parseInt(day);
+                            if (isNaN(d)) return;
+                            selectedDate = new Date(year, month - 1, d);
+                        }
                     }
                 }
             }
