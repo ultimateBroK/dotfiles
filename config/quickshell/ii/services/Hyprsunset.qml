@@ -97,7 +97,7 @@ Singleton {
 
     Process {
         id: fetchProc
-        running: true
+        running: false
         command: ["bash", "-c", "hyprctl hyprsunset temperature"]
         stdout: StdioCollector {
             id: stateCollector
@@ -110,6 +110,14 @@ Singleton {
                 // console.log("[Hyprsunset] Fetched state:", output, "->", root.active);
             }
         }
+    }
+
+    // Defer initial hyprctl call to reduce startup load.
+    Timer {
+        interval: 2000
+        repeat: false
+        running: true
+        onTriggered: root.fetchState()
     }
 
     function toggle(active = undefined) {

@@ -35,9 +35,19 @@ Singleton {
         }
     }
 
+    // checkupdates can be slow (pacman db / IO). Defer startup check a bit.
+    Timer {
+        interval: 4000
+        repeat: false
+        running: true
+        onTriggered: {
+            checkAvailabilityProc.running = true
+        }
+    }
+
     Process {
         id: checkAvailabilityProc
-        running: true
+        running: false
         command: ["which", "checkupdates"]
         onExited: (exitCode, exitStatus) => {
             root.available = (exitCode === 0);

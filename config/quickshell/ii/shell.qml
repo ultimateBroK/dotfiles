@@ -39,18 +39,45 @@ import qs.services
 
 ShellRoot {
     id: root
+    readonly property double _startupT0: Date.now()
+    function _startupLog(msg) {
+        const dt = Math.round(Date.now() - _startupT0)
+        console.info(`[Startup +${dt}ms] ${msg}`)
+    }
 
     // Force initialization of some singletons
     Component.onCompleted: {
+        _startupLog("ShellRoot Component.onCompleted")
         MaterialThemeLoader.reapplyTheme()
-        Hyprsunset.load()
-        FirstRunExperience.load()
-        ConflictKiller.load()
-        Cliphist.refresh()
-        Wallpapers.load()
-        Updates.load()
-        // Ensure PowerProfileHyprlandSync is initialized
-        PowerProfileHyprlandSync
+        _startupLog("Theme applied; scheduling deferred startup")
+        // Defer expensive init work so the UI appears faster.
+        deferredStartup.start()
+    }
+
+    Timer {
+        id: deferredStartup
+        interval: 1500
+        repeat: false
+        running: false
+        onTriggered: {
+            root._startupLog("Deferred startup triggered")
+            Hyprsunset.load()
+            FirstRunExperience.load()
+            ConflictKiller.load()
+            Cliphist.refresh()
+            Wallpapers.load()
+            Updates.load()
+            // Ensure PowerProfileHyprlandSync is initialized
+            PowerProfileHyprlandSync
+            root._startupLog("Deferred startup finished scheduling loads")
+        }
+    }
+
+    Connections {
+        target: Config
+        function onReadyChanged() {
+            root._startupLog(`Config.ready=${Config.ready}`)
+        }
     }
 
     // Load enabled stuff

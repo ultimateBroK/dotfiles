@@ -2,6 +2,7 @@ pragma Singleton
 
 import qs.modules.common
 import qs.modules.common.functions
+import QtQuick
 import Quickshell
 
 /**
@@ -53,6 +54,10 @@ Singleton {
     property var _cachedPreppedNames: []
     property var _cachedPreppedIcons: []
     property int _lastApplicationsCount: -1
+
+    // Pure binding used only as a change trigger (no side effects).
+    // When the app list changes, this should update and we recompute caches imperatively.
+    readonly property int applicationsCount: (DesktopEntries?.applications?.values?.length ?? 0)
     
     function updateCache() {
         const currentList = Array.from(DesktopEntries.applications.values)
@@ -75,20 +80,13 @@ Singleton {
         }));
     }
     
-    readonly property list<DesktopEntry> list: {
-        updateCache();
-        return _cachedList;
-    }
+    // NOTE: Avoid side effects in bindings to prevent binding loops.
+    readonly property list<DesktopEntry> list: _cachedList
+    readonly property var preppedNames: _cachedPreppedNames
+    readonly property var preppedIcons: _cachedPreppedIcons
 
-    readonly property var preppedNames: {
-        updateCache();
-        return _cachedPreppedNames;
-    }
-
-    readonly property var preppedIcons: {
-        updateCache();
-        return _cachedPreppedIcons;
-    }
+    onApplicationsCountChanged: updateCache()
+    Component.onCompleted: updateCache()
 
     function fuzzyQuery(search: string): var { // Idk why list<DesktopEntry> doesn't work
         let results;

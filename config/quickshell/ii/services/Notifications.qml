@@ -150,7 +150,11 @@ Singleton {
                 delete root.latestTimeForApp[appName];
             }
         });
+
+        root.recomputeGroups()
     }
+
+    onPopupListChanged: root.recomputeGroups()
 
     function appNameListForGroups(groups) {
         return Object.keys(groups).sort((a, b) => {
@@ -177,39 +181,19 @@ Singleton {
         return groups;
     }
 
-    // Cache groups to avoid recalculation
-    property var _cachedGroupsByAppName: ({})
-    property var _cachedPopupGroupsByAppName: ({})
-    property var _cachedAppNameList: []
-    property var _cachedPopupAppNameList: []
-    property int _lastListLength: -1
-    
-    function updateGroupsCache() {
-        if (_lastListLength === root.list.length && Object.keys(_cachedGroupsByAppName).length > 0) {
-            return;
-        }
-        _cachedGroupsByAppName = groupsForList(root.list);
-        _cachedPopupGroupsByAppName = groupsForList(root.popupList);
-        _cachedAppNameList = appNameListForGroups(_cachedGroupsByAppName);
-        _cachedPopupAppNameList = appNameListForGroups(_cachedPopupGroupsByAppName);
-        _lastListLength = root.list.length;
-    }
-    
-    property var groupsByAppName: {
-        updateGroupsCache();
-        return _cachedGroupsByAppName;
-    }
-    property var popupGroupsByAppName: {
-        updateGroupsCache();
-        return _cachedPopupGroupsByAppName;
-    }
-    property var appNameList: {
-        updateGroupsCache();
-        return _cachedAppNameList;
-    }
-    property var popupAppNameList: {
-        updateGroupsCache();
-        return _cachedPopupAppNameList;
+    // Computed caches (avoid side effects in bindings -> prevents binding loops)
+    property var groupsByAppName: ({})
+    property var popupGroupsByAppName: ({})
+    property var appNameList: []
+    property var popupAppNameList: []
+
+    function recomputeGroups() {
+        const groups = groupsForList(root.list);
+        const popupGroups = groupsForList(root.popupList);
+        root.groupsByAppName = groups;
+        root.popupGroupsByAppName = popupGroups;
+        root.appNameList = appNameListForGroups(groups);
+        root.popupAppNameList = appNameListForGroups(popupGroups);
     }
 
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
@@ -347,8 +331,7 @@ Singleton {
     }
 
     function triggerListChange() {
-        // Invalidate cache when list changes
-        _lastListLength = -1;
+        // Force list change signal
         root.list = root.list.slice(0)
     }
 

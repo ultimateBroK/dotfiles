@@ -47,10 +47,24 @@ Singleton {
     Component.onCompleted: {
         Quickshell.execDetached(["mkdir", "-p", `${shellConfig}`])
         Quickshell.execDetached(["mkdir", "-p", `${favicons}`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${coverArt}'; mkdir -p '${coverArt}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${latexOutput}'; mkdir -p '${latexOutput}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${cliphistDecode}'; mkdir -p '${cliphistDecode}'`])
+        Quickshell.execDetached(["mkdir", "-p", `${coverArt}`])
+        Quickshell.execDetached(["mkdir", "-p", `${latexOutput}`])
+        Quickshell.execDetached(["mkdir", "-p", `${cliphistDecode}`])
         Quickshell.execDetached(["mkdir", "-p", `${aiChats}`])
         Quickshell.execDetached(["rm", "-rf", `${tempImages}`])
+        deferredCleanup.start()
+    }
+
+    // rm -rf on startup can be expensive if caches are large; defer it.
+    Timer {
+        id: deferredCleanup
+        interval: 2500
+        repeat: false
+        running: false
+        onTriggered: {
+            Quickshell.execDetached(["bash", "-c", `rm -rf '${coverArt}'/*`])
+            Quickshell.execDetached(["bash", "-c", `rm -rf '${latexOutput}'/*`])
+            Quickshell.execDetached(["bash", "-c", `rm -rf '${cliphistDecode}'/*`])
+        }
     }
 }

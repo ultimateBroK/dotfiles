@@ -153,7 +153,24 @@ Singleton {
     Component.onCompleted: {
         if (!root.gpsActive) return;
         console.info("[WeatherService] Starting the GPS service.");
-        positionSource.start();
+        gpsStartDelay.start();
+    }
+
+    // Defer initial fetch/startup a bit to speed up shell startup.
+    Timer {
+        id: initialFetchDelay
+        interval: 4000
+        repeat: false
+        running: Config.ready && !root.gpsActive
+        onTriggered: root.getData()
+    }
+
+    Timer {
+        id: gpsStartDelay
+        interval: 2500
+        repeat: false
+        running: false
+        onTriggered: positionSource.start()
     }
 
     // --- Fetchers ---
@@ -250,7 +267,8 @@ Singleton {
         running: !root.gpsActive
         repeat: true
         interval: root.fetchInterval
-        triggeredOnStart: !root.gpsActive
+        // Initial fetch is handled by initialFetchDelay to reduce startup churn.
+        triggeredOnStart: false
         onTriggered: root.getData()
     }
 }

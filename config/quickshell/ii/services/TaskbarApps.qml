@@ -19,6 +19,12 @@ Singleton {
     // Cache apps list to avoid recalculation
     property list<var> _cachedApps: []
     property var _lastToplevelsHash: ""
+    property list<var> apps: []
+    property bool _rebuildScheduled: false
+
+    // Triggers (avoid relying on signals that may not exist in some Quickshell builds)
+    readonly property int toplevelsCount: (ToplevelManager?.toplevels?.values?.length ?? 0)
+    readonly property string pinnedAppsKey: (Config.options?.dock?.pinnedApps ?? []).join(",")
     
     function computeAppsHash() {
         // Create a simple hash from toplevels count and pinned apps
@@ -28,6 +34,15 @@ Singleton {
     }
     
     function updateApps() {
+        // Destroy previous entries to avoid leaks
+        try {
+            (root.apps || []).forEach(obj => {
+                if (obj && obj.destroy) obj.destroy()
+            })
+        } catch (e) {
+            // ignore
+        }
+
         var map = new Map();
 
         // Pinned apps
@@ -65,32 +80,41 @@ Singleton {
 
         _cachedApps = values;
         _lastToplevelsHash = computeAppsHash();
-        return values;
+        root.apps = values;
     }
     
-    property list<var> apps: {
+    function rebuildIfNeeded() {
         const currentHash = computeAppsHash();
         if (_lastToplevelsHash === currentHash && _cachedApps.length > 0) {
-            return _cachedApps;
+            root.apps = _cachedApps;
+            return;
         }
-        return updateApps();
+        updateApps();
     }
-    
-    Connections {
-        target: ToplevelManager
-        function onToplevelsChanged() {
-            // Invalidate cache when toplevels change
-            _lastToplevelsHash = "";
-        }
+
+    Timer {
+        id: rebuildDebounce
+        interval: 50
+        repeat: false
+        running: false
+        onTriggered: root.rebuildIfNeeded()
     }
-    
-    Connections {
-        target: Config.options?.dock ?? null
-        function onPinnedAppsChanged() {
-            // Invalidate cache when pinned apps change
-            _lastToplevelsHash = "";
-        }
+
+    function scheduleRebuild() {
+        rebuildDebounce.restart()
     }
+
+    onToplevelsCountChanged: {
+        _lastToplevelsHash = "";
+        root.scheduleRebuild()
+    }
+
+    onPinnedAppsKeyChanged: {
+        _lastToplevelsHash = "";
+        root.scheduleRebuild()
+    }
+
+    Component.onCompleted: root.scheduleRebuild()
 
     component TaskbarAppEntry: QtObject {
         id: wrapper

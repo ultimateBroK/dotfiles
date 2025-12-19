@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 
 Text {
