@@ -309,11 +309,12 @@ StyledPopup {
                                         radius: Appearance.rounding.small
                                         color: Appearance.colors.colSurfaceContainer
                                         Layout.preferredWidth: hourlyGrid.cellW
-                                        Layout.preferredHeight: 56
+                                        Layout.preferredHeight: 90
 
                                         ColumnLayout {
-                                            anchors.centerIn: parent
-                                            spacing: 2
+                                            anchors.fill: parent
+                                            anchors.margins: 6
+                                            spacing: 4
 
                                             StyledText {
                                                 text: modelData.timeLabel
@@ -321,11 +322,12 @@ StyledPopup {
                                                 color: Appearance.colors.colOnSurfaceVariant
                                                 horizontalAlignment: Text.AlignHCenter
                                                 Layout.alignment: Qt.AlignHCenter
+                                                Layout.fillWidth: true
                                             }
                                             MaterialSymbol {
                                                 fill: 0
                                                 text: Icons.getWeatherIcon(modelData.code, Weather.data.isDay)
-                                                iconSize: 18
+                                                iconSize: 25
                                                 color: Appearance.colors.colPrimary
                                                 Layout.alignment: Qt.AlignHCenter
                                             }
@@ -336,6 +338,7 @@ StyledPopup {
                                                 color: Appearance.colors.colOnSurface
                                                 horizontalAlignment: Text.AlignHCenter
                                                 Layout.alignment: Qt.AlignHCenter
+                                                Layout.fillWidth: true
                                                 elide: Text.ElideRight
                                             }
                                         }
