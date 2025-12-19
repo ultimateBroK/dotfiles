@@ -1,6 +1,6 @@
 # Dotfiles
 
-My personal dotfiles configuration for Linux (CachyOS/Arch) (from end-4's dotfiles)
+My personal dotfiles configuration for Linux (CachyOS/Arch), based on end-4's dotfiles.
 
 ## Structure
 
@@ -15,6 +15,7 @@ dotfiles/
 ├── scripts/         # Setup and management scripts
 │   ├── setup.sh         # Master setup script
 │   ├── link-dotfiles.sh # Symlink management script
+│   ├── unlink-dotfiles.sh # Remove symlinks created by this repo
 │   └── copy-configs.sh  # Helper script to copy configs
 └── README.md        # This file
 ```
@@ -46,7 +47,7 @@ dotfiles/
    ./scripts/setup.sh --all      # Do both
    ```
 
-   **Note:** The script assumes you are running on an Arch-based system (uses `pacman` and `paru`). It will automatically install `paru` if not present.
+   **Note:** This assumes an Arch-based system (uses `pacman` + `paru`). The installer will bootstrap `paru` if missing.
 
 ## Manual Setup (Alternative)
 
@@ -63,9 +64,9 @@ dotfiles/
    ```
    
    The script supports multiple modes:
-   - Default: Creates individual symlinks for each config item
-   - `-l, --link-config`: Symlink the entire config folder to `~/.config`
-   - `-u, --unlink-config`: Remove the symlink from `~/.config`
+   - Default: Creates individual symlinks for each item inside `dotfiles/config/`
+   - `-l, --link-config`: Symlink the entire `dotfiles/config` folder to `~/.config`
+   - `-u, --unlink-config`: Remove the `~/.config` symlink and restore `~/.config.backup` if present
 
 ## Adding New Configs
 
@@ -79,9 +80,7 @@ dotfiles/
    ~/Downloads/dotfiles/scripts/copy-configs.sh <config-name>
    ```
 
-2. If using `link-dotfiles.sh`, add it to the `items` array in the script
-
-3. Run the symlink script again (if using helper script):
+2. Run the symlink script again:
    ```bash
    ~/Downloads/dotfiles/scripts/link-dotfiles.sh
    ```
@@ -90,6 +89,20 @@ dotfiles/
    ```bash
    ln -sf ~/Downloads/dotfiles/config/<config-name> ~/.config/<config-name>
    ```
+
+## Uninstall / Undo
+
+- **Remove per-config symlinks** (created by the default mode):
+
+  ```bash
+  ~/Downloads/dotfiles/scripts/unlink-dotfiles.sh
+  ```
+
+- **If you symlinked the whole `~/.config` folder**:
+
+  ```bash
+  ~/Downloads/dotfiles/scripts/link-dotfiles.sh --unlink-config
+  ```
 
 ## Included Configs
 
@@ -134,6 +147,11 @@ dotfiles/
 ## Quickshell (ii) Customizations
 
 This configuration includes several customizations to the ii shell interface:
+
+### Weather
+- **Provider**: Open-Meteo (queried via `curl`, `timezone=auto`)
+- **Hourly icons**: Day/night is computed per-hour using Open-Meteo's `hourly.is_day` (so e.g. 09:00 shows a day icon even if you open the popup at night)
+- **Manual refresh**: Right click the weather indicator to refresh
 
 ### Calendar Widget
 - **Lunar Calendar Display**: Calendar shows both solar (Gregorian) and lunar (Vietnamese) dates

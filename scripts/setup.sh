@@ -80,16 +80,31 @@ show_menu() {
 }
 
 # Check for arguments
-if [ "$1" == "--install" ]; then
-    install_packages
-elif [ "$1" == "--link" ]; then
-    link_dotfiles
-elif [ "$1" == "--all" ]; then
-    install_packages
-    link_dotfiles
-else
-    show_menu
-fi
+case "${1:-}" in
+    --install)
+        install_packages
+        ;;
+    --link)
+        link_dotfiles
+        ;;
+    --all)
+        install_packages
+        link_dotfiles
+        ;;
+    "")
+        show_menu
+        ;;
+    *)
+        echo -e "${RED}Unknown option: ${1}${NC}"
+        echo ""
+        echo "Usage:"
+        echo "  $0              # interactive menu"
+        echo "  $0 --install    # install packages"
+        echo "  $0 --link       # link dotfiles"
+        echo "  $0 --all        # install + link"
+        exit 1
+        ;;
+esac
 
 echo ""
 echo -e "${GREEN}Setup script finished!${NC}"
