@@ -50,7 +50,27 @@ Scope {
                     }
                 }
                 property bool superShow: false
-                property bool mustShow: hoverRegion.containsMouse || superShow
+                // Show bar when hovered / super key, or when the active workspace is empty.
+                property int activeWorkspaceId: {
+                    const mons = HyprlandData.monitors || [];
+                    const targetName = barRoot.screen?.name || "";
+                    for (let i = 0; i < mons.length; i++) {
+                        if (String(mons[i]?.name || "") === String(targetName)) {
+                            return Number(mons[i]?.activeWorkspace?.id ?? HyprlandData.activeWorkspace?.id ?? -1);
+                        }
+                    }
+                    return Number(HyprlandData.activeWorkspace?.id ?? -1);
+                }
+                property bool workspaceEmpty: {
+                    const wsId = activeWorkspaceId;
+                    if (!Number.isFinite(wsId) || wsId < 0) return false;
+                    const wl = HyprlandData.windowList || [];
+                    for (let i = 0; i < wl.length; i++) {
+                        if (Number(wl[i]?.workspace?.id) === wsId) return false;
+                    }
+                    return true;
+                }
+                property bool mustShow: hoverRegion.containsMouse || superShow || workspaceEmpty
                 exclusionMode: ExclusionMode.Ignore
                 exclusiveZone: (Config?.options.bar.autoHide.enable && (!mustShow || !Config?.options.bar.autoHide.pushWindows)) ? 0 :
                     Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)

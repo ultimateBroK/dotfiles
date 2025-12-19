@@ -137,7 +137,7 @@
     },
     "bar": {
         "autoHide": {
-            "enable": false,
+            "enable": true,
             "hoverRegionWidth": 2,
             "pushWindows": false,
             "showWhenPressingSuper": {
@@ -250,7 +250,7 @@
             "org.gnome.solanum",
             "io.github.diegoivanme.flowtime"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",
