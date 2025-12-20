@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 
@@ -6,6 +7,25 @@ Item {
     id: root
     property bool vertical: false
     property real padding: 5
+    // Keep alpha high because Hyprland has `ignorealpha 0.79, quickshell:.*`.
+    // Also adapt to bright wallpapers so text stays readable.
+    readonly property real glassTransparency: {
+        // Balance readability vs "not too dark".
+        // Bright wallpaper -> slightly more opaque, but never "heavy".
+        // Range: [0.10..0.16] (alpha [0.90..0.84])
+        const l = Math.max(0, Math.min(1, Appearance?.wallpaperLightness ?? 0.5));
+        const t = 0.16 - l * 0.06; // l=1 => 0.10, l=0 => 0.16
+        return Math.max(0.10, Math.min(0.16, t));
+    }
+    readonly property color adaptiveGroupColor: {
+        // Very gently darken the surface on *very bright* wallpapers for extra contrast.
+        // Keep this subtle so the bar doesn't look "too dark".
+        const l = Math.max(0, Math.min(1, Appearance?.wallpaperLightness ?? 0.5));
+        // Only start darkening when wallpaper is quite bright.
+        // Cap to a small value so it stays natural.
+        const darken = Math.max(0, Math.min(0.12, (l - 0.70) * 0.60));
+        return ColorUtils.mix(Appearance.colors.colLayer1, "#000000", darken);
+    }
     implicitWidth: vertical ? Appearance.sizes.baseVerticalBarWidth : (gridLayout.implicitWidth + padding * 2)
     implicitHeight: vertical ? (gridLayout.implicitHeight + padding * 2) : Appearance.sizes.baseBarHeight
     default property alias items: gridLayout.children
@@ -19,7 +39,9 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        color: Config.options?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
+        color: Config.options?.bar.borderless
+            ? "transparent"
+            : ColorUtils.transparentize(root.adaptiveGroupColor, root.glassTransparency)
         radius: Appearance.rounding.small
     }
 

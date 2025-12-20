@@ -42,7 +42,12 @@ Item {
     }
 
     function closeOverflowMenu() {
+        root.trayOverflowOpen = false;
         focusGrab.active = false;
+        if (root.activeMenu) {
+            root.activeMenu.close();
+            root.activeMenu = null;
+        }
     }
 
     onTrayOverflowOpenChanged: {
@@ -120,7 +125,11 @@ Item {
                             item: modelData
                             Layout.fillHeight: !root.vertical
                             Layout.fillWidth: root.vertical
-                            onMenuClosed: root.releaseFocus();
+                            onActivated: root.closeOverflowMenu()
+                            onMenuClosed: {
+                                root.releaseFocus();
+                                root.trayOverflowOpen = false;
+                            }
                             onMenuOpened: (qsWindow) => root.setExtraWindowAndGrabFocus(qsWindow);
                         }
                     }
@@ -138,7 +147,11 @@ Item {
                 item: modelData
                 Layout.fillHeight: !root.vertical
                 Layout.fillWidth: root.vertical
-                onMenuClosed: root.releaseFocus();
+                onActivated: root.closeOverflowMenu()
+                onMenuClosed: {
+                    root.releaseFocus();
+                    root.trayOverflowOpen = false;
+                }
                 onMenuOpened: (qsWindow) => {
                     root.setExtraWindowAndGrabFocus(qsWindow);
                 }

@@ -33,11 +33,15 @@ Item { // Notification item area
     readonly property string normalizedAppName: normalizeText(notificationObject?.appName)
     readonly property string processedBodyText: processNotificationBody(notificationObject?.body ?? "", notificationObject?.appName || notificationObject?.summary)
     readonly property string normalizedBody: normalizeText(processedBodyText)
-    readonly property string safeBody: normalizedBody.length > 0 ? normalizedBody : Translation.tr("No additional details")
-    readonly property string safeBodyRich: safeBody.replace(/\n/g, "<br/>")
     readonly property string safeSummary: normalizedSummary.length > 0 ? normalizedSummary :
         (normalizedAppName.length > 0 ? normalizedAppName :
             (normalizedBody.length > 0 ? normalizedBody.split("\n")[0] : Translation.tr("Notification")))
+
+    // Avoid duplicated content when summary/body are the same (common with notify-send),
+    // or when summary is derived from the first line of body.
+    readonly property string dedupedBody: dedupeBody(root.safeSummary, normalizedBody)
+    readonly property bool hasBody: dedupedBody.length > 0
+    readonly property string bodyRich: dedupedBody.replace(/\n/g, "<br/>")
 
     implicitHeight: background.implicitHeight
 
@@ -73,6 +77,29 @@ Item { // Notification item area
         }
         
         return processedBody
+    }
+
+    function dedupeBody(summary, body) {
+        const s = normalizeText(summary);
+        const b = normalizeText(body);
+        if (b.length === 0) return "";
+        if (s.length === 0) return b;
+
+        // Exact duplicate -> hide body.
+        if (b === s) return "";
+
+        // Body begins with summary then newline(s) -> drop the duplicated first line.
+        if (b.startsWith(s + "\n")) {
+            return b.slice(s.length).replace(/^\n+/, "").trim();
+        }
+
+        // If the first line matches the summary, drop only that first line.
+        const lines = b.split("\n");
+        if (lines.length > 1 && normalizeText(lines[0]) === s) {
+            return lines.slice(1).join("\n").trim();
+        }
+
+        return b;
     }
 
     function destroyWithAnimation(left = false) {
@@ -210,7 +237,7 @@ Item { // Notification item area
                 }
                 StyledText {
                     opacity: !root.expanded ? 1 : 0
-                    visible: opacity > 0
+                    visible: opacity > 0 && root.hasBody
                     Layout.fillWidth: true
                     clip: true
                     Behavior on opacity {
@@ -222,7 +249,7 @@ Item { // Notification item area
                     wrapMode: Text.NoWrap
                     maximumLineCount: 1
                     textFormat: Text.StyledText
-                    text: root.safeBodyRich
+                    text: root.bodyRich
                 }
             }
 
@@ -237,12 +264,13 @@ Item { // Notification item area
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                     Layout.fillWidth: true
+                    visible: root.hasBody
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colSubtext
                     wrapMode: Text.Wrap
                     elide: Text.ElideRight
                     textFormat: Text.RichText
-                    text: `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>${root.safeBodyRich}`
+                    text: `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>${root.bodyRich}`
 
                     onLinkActivated: (link) => {
                         Qt.openUrlExternally(link)

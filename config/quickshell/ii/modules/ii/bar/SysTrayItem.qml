@@ -14,6 +14,7 @@ MouseArea {
 
     signal menuOpened(qsWindow: var)
     signal menuClosed()
+    signal activated()
 
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -23,6 +24,7 @@ MouseArea {
         switch (event.button) {
         case Qt.LeftButton:
             item.activate();
+            root.activated();
             break;
         case Qt.RightButton:
             if (item.hasMenu) menu.open();
@@ -78,7 +80,9 @@ MouseArea {
         sourceComponent: Item {
             Desaturate {
                 id: desaturatedIcon
-                visible: false // There's already color overlay
+                // Keep it rendered (opacity 0) so ColorOverlay always has a valid source.
+                // If we set visible:false, some Qt versions won't render the effect source.
+                opacity: 0
                 anchors.fill: parent
                 source: trayIcon
                 desaturation: 0.8 // 1.0 means fully grayscale
@@ -86,7 +90,8 @@ MouseArea {
             ColorOverlay {
                 anchors.fill: desaturatedIcon
                 source: desaturatedIcon
-                color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.9)
+                // Stronger tint for readability on bright wallpapers.
+                color: Appearance.colors.colOnLayer1
             }
         }
     }
