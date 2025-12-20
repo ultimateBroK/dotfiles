@@ -16,6 +16,12 @@ Item {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
     // Media progress should update faster than the generic resource interval
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
+    readonly property real progress: {
+        const len = activePlayer?.length ?? 0;
+        if (!activePlayer || len <= 0) return 0;
+        const p = (activePlayer?.position ?? 0) / len;
+        return Math.max(0, Math.min(1, p));
+    }
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
@@ -25,21 +31,35 @@ Item {
         running: activePlayer?.playbackState == MprisPlaybackState.Playing
         interval: positionUpdateInterval
         repeat: true
-        onTriggered: activePlayer.positionChanged()
+        onTriggered: {
+            // Quickshell's MPRIS position can be "lazy"; poke bindings while playing.
+            if (activePlayer) activePlayer.positionChanged()
+        }
     }
 
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
         onPressed: (event) => {
+            // Left click toggles the popup. Right click always opens it.
+            if (event.button === Qt.LeftButton) {
+                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
+                return;
+            }
+            if (event.button === Qt.RightButton) {
+                GlobalStates.mediaControlsOpen = true;
+                return;
+            }
+
+            // No active player -> ignore media control buttons (avoid QML errors).
+            if (!activePlayer) return;
+
             if (event.button === Qt.MiddleButton) {
-                activePlayer.togglePlaying();
+                MprisController.togglePlaying();
             } else if (event.button === Qt.BackButton) {
-                activePlayer.previous();
-            } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
-                activePlayer.next();
-            } else if (event.button === Qt.LeftButton) {
-                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
+                MprisController.previous();
+            } else if (event.button === Qt.ForwardButton) {
+                MprisController.next();
             }
         }
     }
@@ -55,7 +75,7 @@ Item {
             visible: !!activePlayer
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
-            value: activePlayer?.position / activePlayer?.length
+            value: root.progress
             implicitSize: 20
             colPrimary: Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
@@ -68,7 +88,7 @@ Item {
                 MaterialSymbol {
                     anchors.centerIn: parent
                     fill: 1
-                    text: activePlayer?.isPlaying ? "pause" : "music_note"
+                    text: activePlayer?.isPlaying ? "pause" : "play_arrow"
                     iconSize: Appearance.font.pixelSize.normal
                     color: Appearance.m3colors.m3onSecondaryContainer
                 }

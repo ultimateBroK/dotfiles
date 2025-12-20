@@ -17,6 +17,12 @@ MouseArea {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
     // Keep media progress updates snappy and closer to real playback
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
+    readonly property real progress: {
+        const len = activePlayer?.length ?? 0;
+        if (!activePlayer || len <= 0) return 0;
+        const p = (activePlayer?.position ?? 0) / len;
+        return Math.max(0, Math.min(1, p));
+    }
 
     Layout.fillHeight: true
     implicitHeight: mediaCircProg.implicitHeight
@@ -26,20 +32,31 @@ MouseArea {
         running: activePlayer?.playbackState == MprisPlaybackState.Playing
         interval: positionUpdateInterval
         repeat: true
-        onTriggered: activePlayer.positionChanged()
+        onTriggered: {
+            if (activePlayer) activePlayer.positionChanged()
+        }
     }
 
     acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
     onPressed: (event) => {
+        if (event.button === Qt.LeftButton) {
+            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
+            return;
+        }
+        if (event.button === Qt.RightButton) {
+            GlobalStates.mediaControlsOpen = true;
+            return;
+        }
+
+        if (!activePlayer) return;
+
         if (event.button === Qt.MiddleButton) {
-            activePlayer.togglePlaying();
+            MprisController.togglePlaying();
         } else if (event.button === Qt.BackButton) {
-            activePlayer.previous();
-        } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
-            activePlayer.next();
-        } else if (event.button === Qt.LeftButton) {
-            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
+            MprisController.previous();
+        } else if (event.button === Qt.ForwardButton) {
+            MprisController.next();
         }
     }
 
@@ -49,7 +66,7 @@ MouseArea {
         implicitSize: 20
 
         lineWidth: Appearance.rounding.unsharpen
-        value: activePlayer?.position / activePlayer?.length
+        value: root.progress
         colPrimary: Appearance.colors.colOnSecondaryContainer
         enableAnimation: false
 
@@ -61,7 +78,7 @@ MouseArea {
             MaterialSymbol {
                 anchors.centerIn: parent
                 fill: 1
-                text: activePlayer?.isPlaying ? "pause" : "music_note"
+                text: activePlayer ? (activePlayer.isPlaying ? "pause" : "play_arrow") : "music_note"
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3onSecondaryContainer
             }

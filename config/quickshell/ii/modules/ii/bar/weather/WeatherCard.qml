@@ -6,7 +6,7 @@ import qs.modules.common.widgets
 
 Rectangle {
     id: root
-    radius: Appearance.rounding.small
+    radius: Appearance.rounding.normal
     color: Appearance.colors.colSurfaceContainerHigh
     implicitWidth: columnLayout.implicitWidth + 10 * 2
     implicitHeight: columnLayout.implicitHeight + 10 * 2

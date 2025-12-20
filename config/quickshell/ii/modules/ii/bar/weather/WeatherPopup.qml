@@ -51,7 +51,7 @@ StyledPopup {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: root.popupWidth
                 Layout.preferredHeight: 80
-                radius: Appearance.rounding.medium
+                radius: Appearance.rounding.large
                 color: Appearance.colors.colSurfaceContainer
                 
                 RowLayout {
@@ -303,7 +303,7 @@ StyledPopup {
                                     // Show 10 hours total => 2 rows, 5 items each row
                                     model: (Weather.hourly || []).slice(0, 10)
                                     Rectangle {
-                                        radius: Appearance.rounding.small
+                                        radius: Appearance.rounding.normal
                                         color: Appearance.colors.colSurfaceContainer
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 90

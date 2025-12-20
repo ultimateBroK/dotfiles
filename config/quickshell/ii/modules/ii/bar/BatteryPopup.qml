@@ -21,7 +21,7 @@ StyledPopup {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.preferredWidth: 200
                 Layout.preferredHeight: 80
-                radius: Appearance.rounding.medium
+                radius: Appearance.rounding.large
                 color: Appearance.colors.colSurfaceContainer
                 
                 RowLayout {

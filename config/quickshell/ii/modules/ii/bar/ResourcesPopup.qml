@@ -40,7 +40,7 @@ StyledPopup {
             Rectangle {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 100
-                radius: Appearance.rounding.medium
+                radius: Appearance.rounding.large
                 color: Appearance.colors.colSurfaceContainer
                 
                 ColumnLayout {
@@ -78,7 +78,7 @@ StyledPopup {
             Rectangle {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 100
-                radius: Appearance.rounding.medium
+                radius: Appearance.rounding.large
                 color: Appearance.colors.colSurfaceContainer
                 
                 ColumnLayout {
@@ -117,7 +117,7 @@ StyledPopup {
                 visible: ResourceUsage.swapTotal > 0
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 100
-                radius: Appearance.rounding.medium
+                radius: Appearance.rounding.large
                 color: Appearance.colors.colSurfaceContainer
                 
                 ColumnLayout {

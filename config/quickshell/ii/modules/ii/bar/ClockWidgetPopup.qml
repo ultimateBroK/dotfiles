@@ -48,7 +48,7 @@ StyledPopup {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 280
             Layout.preferredHeight: root.isSpecialDay ? 118 : 88
-            radius: Appearance.rounding.medium
+            radius: Appearance.rounding.large
             color: Appearance.colors.colSurfaceContainer
             
             ColumnLayout {
@@ -244,7 +244,7 @@ StyledPopup {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 240
             Layout.preferredHeight: 60
-            radius: Appearance.rounding.small
+            radius: Appearance.rounding.normal
             color: Appearance.colors.colSurfaceContainerHigh
             
             RowLayout {

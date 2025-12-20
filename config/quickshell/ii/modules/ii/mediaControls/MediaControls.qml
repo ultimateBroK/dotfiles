@@ -117,7 +117,20 @@ Scope {
             // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
-                if (p1.trackTitle && p2.trackTitle && (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle)) || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
+                const titleMatch =
+                    p1.trackTitle && p2.trackTitle &&
+                    (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle));
+
+                const p1Len = p1.length ?? 0;
+                const p2Len = p2.length ?? 0;
+                const p1Pos = p1.position ?? 0;
+                const p2Pos = p2.position ?? 0;
+                const timingMatch =
+                    (p1Len > 0 && p2Len > 0) &&
+                    (Math.abs(p1Pos - p2Pos) <= 2) &&
+                    (Math.abs(p1Len - p2Len) <= 2);
+
+                if (titleMatch || timingMatch) {
                     group.push(j);
                 }
             }
