@@ -30,47 +30,16 @@ Item {
         (root.activeWindow?.title || "") :
         (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
 
-    readonly property string indicatorIconId: {
-        if (showFocusedWindow) {
-            return root.activeWindow?.appId ?? "";
-        }
-        // hyprctl client objects usually expose `class` for icon lookup
-        const cls = root.biggestWindow?.class ?? root.biggestWindow?.initialClass ?? root.biggestWindow?.appId ?? "";
-        return AppSearch.guessIcon(cls) ?? cls;
-    }
-    readonly property string indicatorIconPath: Quickshell.iconPath(indicatorIconId, "image-missing")
-
-    implicitWidth: Math.min(rowLayout.implicitWidth, 320)
+    implicitWidth: Math.min(titleText.contentWidth, 250)
     implicitHeight: Appearance.sizes.barHeight
 
-    RowLayout {
-        id: rowLayout
-        anchors.fill: parent
-        spacing: 8
-
-        Image {
-            id: appIcon
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 18
-            Layout.preferredHeight: 18
-            source: root.indicatorIconPath
-            sourceSize.width: 18
-            sourceSize.height: 18
-            asynchronous: true
-            cache: true
-            smooth: true
-            visible: root.indicatorIconId.length > 0
-        }
-
-        PingPongScrollingText {
-            id: titleText
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            width: Math.min(parent.width, 300)
-            fontPixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer1
-            centerStaticText: true
-            text: root.indicatorTitle
-        }
+    PingPongScrollingText {
+        id: titleText
+        anchors.verticalCenter: parent.verticalCenter
+        width: Math.min(parent.width, 250)
+        fontPixelSize: Appearance.font.pixelSize.small
+        color: Appearance.colors.colOnLayer1
+        centerStaticText: true
+        text: root.indicatorTitle
     }
 }
