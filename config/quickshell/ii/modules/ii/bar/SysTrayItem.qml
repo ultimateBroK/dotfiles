@@ -67,11 +67,20 @@ MouseArea {
 
     IconImage {
         id: trayIcon
-        visible: !Config.options.bar.tray.monochromeIcons
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
+    }
+
+    // Render-source for effects. `hideSource` lets us keep the icon available for
+    // shaders/effects without drawing it twice on screen.
+    ShaderEffectSource {
+        id: trayIconSource
+        anchors.fill: trayIcon
+        sourceItem: trayIcon
+        live: true
+        hideSource: Config.options.bar.tray.monochromeIcons
     }
 
     Loader {
@@ -80,11 +89,8 @@ MouseArea {
         sourceComponent: Item {
             Desaturate {
                 id: desaturatedIcon
-                // Keep it rendered (opacity 0) so ColorOverlay always has a valid source.
-                // If we set visible:false, some Qt versions won't render the effect source.
-                opacity: 0
                 anchors.fill: parent
-                source: trayIcon
+                source: trayIconSource
                 desaturation: 0.8 // 1.0 means fully grayscale
             }
             ColorOverlay {
