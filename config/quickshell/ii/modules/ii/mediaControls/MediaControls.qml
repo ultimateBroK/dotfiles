@@ -83,25 +83,28 @@ Scope {
     property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
     property list<real> visualizerPoints: []
 
-    property bool hasPlasmaIntegration: false
-    Process { // one-shot check for plasma-browser-integration
-        id: plasmaIntegrationAvailabilityCheckProc
-        running: true
-        command: ["bash", "-c", "command -v plasma-browser-integration-host"]
-        onExited: (exitCode, exitStatus) => {
-            root.hasPlasmaIntegration = (exitCode === 0);
-        }
+    // NOTE: Don't detect plasma browser integration by checking for the host binary.
+    // If the package exists but the extension/service isn't active, dropping native browser
+    // MPRIS buses causes "no active player" and no now-playing events.
+    readonly property bool hasPlasmaIntegrationService: {
+        // Force re-evaluation when Mpris.players changes
+        const _ = Mpris.players.count;
+        return Mpris.players.values.some(p =>
+            ((p?.dbusName ?? "").toLowerCase()).startsWith("org.mpris.mediaplayer2.plasma-browser-integration")
+        );
     }
     function isRealPlayer(player) {
+        if (!player) return false;
         if (!Config.options.media.filterDuplicatePlayers) return true;
+        const dbus = (player.dbusName ?? "").toLowerCase();
         return (
             // Drop native browser buses when plasma integration is available
-            !(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.firefox")) &&
-            !(hasPlasmaIntegration && player.dbusName.startsWith("org.mpris.MediaPlayer2.chromium")) &&
+            !(hasPlasmaIntegrationService && dbus.startsWith("org.mpris.mediaplayer2.firefox")) &&
+            !(hasPlasmaIntegrationService && dbus.startsWith("org.mpris.mediaplayer2.chromium")) &&
             // playerctld just mirrors other buses
-            !player.dbusName?.startsWith("org.mpris.MediaPlayer2.playerctld") &&
+            !dbus.startsWith("org.mpris.mediaplayer2.playerctld") &&
             // Non-instance mpd bus
-            !(player.dbusName?.endsWith(".mpd") && !player.dbusName.endsWith("MediaPlayer2.mpd"))
+            !(dbus.endsWith(".mpd") && !dbus.endsWith("mediaplayer2.mpd"))
         );
     }
     function filterDuplicatePlayers(players) {
