@@ -28,6 +28,14 @@ Item { // Player instance
     // Faster tick for progress/position so the UI matches the real playback time better
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
 
+    // Convert player time (which may be reported in microseconds) to seconds for display.
+    // Many MPRIS implementations expose time in microseconds; using a simple heuristic
+    // we convert values > 1_000_000 to seconds by dividing by 1_000_000.
+    function secondsForDisplay(value) {
+        if (value === undefined || value === null || isNaN(value)) return 0;
+        return value > 1000000 ? value / 1000000 : value;
+    }
+
     property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
 
     component TrackChangeButton: RippleButton {
@@ -221,7 +229,7 @@ Item { // Player instance
                         font.pixelSize: Appearance.font.pixelSize.small
                         color: blendedColors.colSubtext
                         elide: Text.ElideRight
-                        text: `${StringUtils.friendlyTimeForSeconds(root.player?.position)} / ${StringUtils.friendlyTimeForSeconds(root.player?.length)}`
+                        text: `${StringUtils.friendlyTimeForSeconds(root.secondsForDisplay(root.player?.position))} / ${StringUtils.friendlyTimeForSeconds(root.secondsForDisplay(root.player?.length))}`
                     }
                     RowLayout {
                         id: sliderRow

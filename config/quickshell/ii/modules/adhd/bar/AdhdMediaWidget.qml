@@ -15,10 +15,30 @@ Item {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
     // Media progress should update faster than the generic resource interval
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
+    // Last-known position + timestamp to estimate progress between updates
+    property real lastKnownPosition: activePlayer?.position ?? 0
+    property int lastPositionTimestamp: Date.now()
+
+    Connections {
+        target: activePlayer
+        function onPositionChanged() {
+            root.lastKnownPosition = activePlayer.position ?? root.lastKnownPosition;
+            root.lastPositionTimestamp = Date.now();
+        }
+        function onPlaybackStateChanged() {
+            root.lastKnownPosition = activePlayer?.position ?? root.lastKnownPosition;
+            root.lastPositionTimestamp = Date.now();
+        }
+    }
+
     readonly property real progress: {
         const len = activePlayer?.length ?? 0;
         if (!activePlayer || len <= 0) return 0;
-        const p = (activePlayer?.position ?? 0) / len;
+        let pos = activePlayer?.position ?? root.lastKnownPosition;
+        if (activePlayer?.isPlaying) {
+            pos = root.lastKnownPosition + ((Date.now() - root.lastPositionTimestamp) / 1000);
+        }
+        const p = pos / len;
         return Math.max(0, Math.min(1, p));
     }
 

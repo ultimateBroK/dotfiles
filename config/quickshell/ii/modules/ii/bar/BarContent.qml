@@ -12,8 +12,10 @@ import qs.modules.common.functions
 Item { // Bar content region
     id: root
 
-    // Global topbar background is disabled; individual groups provide surfaces.
-    readonly property bool topbarHasBackground: false
+    // Global topbar background is disabled by default; individual groups provide surfaces.
+    // When autoHide is enabled we want a subtle translucent background so the bar
+    // remains readable when it appears over the wallpaper.
+    readonly property bool topbarHasBackground: (Config.options.bar.showBackground || Config.options.bar.autoHide.enable)
 
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
@@ -37,15 +39,15 @@ Item { // Bar content region
             target: barBackground
         }
     }
-    // Background (translucent for wallpaper readability with blur)
+    // Background (translucent for wallpaper readability; slightly stronger when autohide is enabled)
     Rectangle {
         id: barBackground
         anchors {
             fill: parent
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
         }
-        color: "transparent"
-        // color: ColorUtils.transparentize(Appearance.colors.colLayer0, 0.7)
+        color: topbarHasBackground ? ColorUtils.transparentize(Appearance.colors.colLayer0, Config.options.bar.autoHide.enable ? 0.2 : 1) : "transparent"
+        Behavior on color { ColorAnimation { duration: 220 } }
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
         border.width: 0
         border.color: "transparent"
