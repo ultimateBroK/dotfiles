@@ -20,16 +20,56 @@ MouseArea {
     // Last-known position + timestamp (ms) to estimate progress between updates
     property real lastKnownPosition: activePlayer?.position ?? 0
     property int lastPositionTimestamp: Date.now()
+    property string lastTrackUniqueId: activePlayer?.uniqueId ?? ""
+    property real lastTrackLength: activePlayer?.length ?? 0
+    property bool trackChanging: false
+
+    Timer {
+        id: trackChangeDelayTimer
+        interval: 200  // Wait for browser to update position/length
+        onTriggered: {
+            // Reset tracking after browser has updated position/length
+            root.lastKnownPosition = activePlayer?.position ?? 0;
+            root.lastPositionTimestamp = Date.now();
+            root.lastTrackUniqueId = activePlayer?.uniqueId ?? "";
+            root.lastTrackLength = activePlayer?.length ?? 0;
+            root.trackChanging = false;
+        }
+    }
 
     Connections {
         target: activePlayer
         function onPositionChanged() {
-            root.lastKnownPosition = activePlayer.position ?? root.lastKnownPosition;
-            root.lastPositionTimestamp = Date.now();
+            // Don't update during track change transition
+            if (!root.trackChanging) {
+                root.lastKnownPosition = activePlayer.position ?? root.lastKnownPosition;
+                root.lastPositionTimestamp = Date.now();
+            }
         }
         function onPlaybackStateChanged() {
-            root.lastKnownPosition = activePlayer?.position ?? root.lastKnownPosition;
-            root.lastPositionTimestamp = Date.now();
+            if (!root.trackChanging) {
+                root.lastKnownPosition = activePlayer?.position ?? root.lastKnownPosition;
+                root.lastPositionTimestamp = Date.now();
+            }
+        }
+        function onPostTrackChanged() {
+            // Detect track change - wait for position/length to update
+            const currentTrackId = activePlayer?.uniqueId ?? "";
+            const currentLength = activePlayer?.length ?? 0;
+            if (currentTrackId !== root.lastTrackUniqueId ||
+                Math.abs(currentLength - root.lastTrackLength) > 1000) {
+                root.trackChanging = true;
+                trackChangeDelayTimer.restart();
+            }
+        }
+    }
+
+    Connections {
+        target: MprisController
+        function onTrackChanged() {
+            // Also trigger on controller track change signal
+            root.trackChanging = true;
+            trackChangeDelayTimer.restart();
         }
     }
 
