@@ -86,7 +86,7 @@ Item {
             visible: !!activePlayer
             Layout.alignment: Qt.AlignVCenter
             lineWidth: Appearance.rounding.unsharpen
-            value: root.progress
+            value: activePlayer?.position / activePlayer?.length
             implicitSize: 20
             colPrimary: Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
