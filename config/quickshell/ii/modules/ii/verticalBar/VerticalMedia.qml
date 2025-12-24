@@ -17,7 +17,7 @@ MouseArea {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
     // Keep media progress updates snappy and closer to real playback
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
-    // Last-known position + timestamp to estimate progress between updates
+    // Last-known position + timestamp (ms) to estimate progress between updates
     property real lastKnownPosition: activePlayer?.position ?? 0
     property int lastPositionTimestamp: Date.now()
 
@@ -33,16 +33,7 @@ MouseArea {
         }
     }
 
-    readonly property real progress: {
-        const len = activePlayer?.length ?? 0;
-        if (!activePlayer || len <= 0) return 0;
-        let pos = activePlayer?.position ?? root.lastKnownPosition;
-        if (activePlayer?.isPlaying) {
-            pos = root.lastKnownPosition + ((Date.now() - root.lastPositionTimestamp) / 1000);
-        }
-        const p = pos / len;
-        return Math.max(0, Math.min(1, p));
-    }
+    readonly property real progress: MprisUtils.smoothProgress(activePlayer, root.lastKnownPosition, root.lastPositionTimestamp)
 
     Layout.fillHeight: true
     implicitHeight: mediaCircProg.implicitHeight
