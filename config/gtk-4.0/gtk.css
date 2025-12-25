@@ -9,13 +9,14 @@
     @define-color accent_bg_color #006b54;
     @define-color window_bg_color #effdf5;
     @define-color window_fg_color #121e1a;
-    @define-color headerbar_bg_color #cfddd6;
+    /* Use surface container ladder for clearer elevation steps */
+    @define-color headerbar_bg_color #e3f1ea;
     @define-color headerbar_fg_color #121e1a;
-    @define-color popover_bg_color #cfddd6;
+    @define-color popover_bg_color #ddebe4;
     @define-color popover_fg_color #121e1a;
-    @define-color view_bg_color #effdf5;
+    @define-color view_bg_color #e9f7ef;
     @define-color view_fg_color #121e1a;
-    @define-color card_bg_color #effdf5;
+    @define-color card_bg_color #e9f7ef;
     @define-color card_fg_color #121e1a;
     @define-color sidebar_bg_color @window_bg_color;
     @define-color sidebar_fg_color @window_fg_color;
@@ -29,13 +30,14 @@
     @define-color accent_bg_color #00e0b2;
     @define-color window_bg_color #0a1611;
     @define-color window_fg_color #d8e6de;
-    @define-color headerbar_bg_color #0a1611;
+    /* Use surface container ladder for clearer elevation steps */
+    @define-color headerbar_bg_color #16221d;
     @define-color headerbar_fg_color #d8e6de;
-    @define-color popover_bg_color #0a1611;
+    @define-color popover_bg_color #202c28;
     @define-color popover_fg_color #d8e6de;
-    @define-color view_bg_color #0a1611;
+    @define-color view_bg_color #121e1a;
     @define-color view_fg_color #d8e6de;
-    @define-color card_bg_color #0a1611;
+    @define-color card_bg_color #121e1a;
     @define-color card_fg_color #d8e6de;
     @define-color sidebar_bg_color @window_bg_color;
     @define-color sidebar_fg_color @window_fg_color;

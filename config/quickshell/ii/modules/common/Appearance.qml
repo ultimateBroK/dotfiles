@@ -267,11 +267,17 @@ Singleton {
         }
         property color colLayer0Hover: {
             var mixRatio = 0.9 * root.schemeContrastBoost;
-            return ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.95, mixRatio), root.contentTransparency));
+            return ColorUtils.transparentize(
+                ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.95, mixRatio)),
+                root.contentTransparency
+            );
         }
         property color colLayer0Active: {
             var mixRatio = 0.8 * root.schemeContrastBoost;
-            return ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.9, mixRatio), root.contentTransparency));
+            return ColorUtils.transparentize(
+                ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.9, mixRatio)),
+                root.contentTransparency
+            );
         }
         property color colLayer0Border: {
             var borderColor = root.m3colors.m3outlineVariant;
