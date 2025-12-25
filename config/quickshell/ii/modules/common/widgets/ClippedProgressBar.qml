@@ -25,6 +25,7 @@ ProgressBar {
         StyledText {
             anchors.centerIn: parent
             font: root.font
+            nativeRendering: true
             text: root.text
         }
     }

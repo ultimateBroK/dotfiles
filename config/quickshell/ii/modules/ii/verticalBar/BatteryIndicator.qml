@@ -156,6 +156,7 @@ MouseArea {
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     font: batteryProgress.font
+                    nativeRendering: true
                     text: batteryProgress.text
                 }
             }
