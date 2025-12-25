@@ -1,91 +1,50 @@
-# ============================================
-# FLATPAK PACKAGES - PRODUCTIVITY & OFFICE
-# ============================================
-org.gnome.gitlab.somas.Apostrophe
-org.standardnotes.standardnotes
+app.drey.Elastic
+com.adilhanney.saber
+com.github.IsmaelMartinez.teams_for_linux
+com.github.marhkb.Pods
+com.github.neithern.g4music
+com.github.taiko2k.tauonmb
+com.github.tchx84.Flatseal
+com.github.unrud.VideoDownloader
+com.google.Chrome
+com.jeffser.Alpaca
+com.mattjakeman.ExtensionManager
+com.obsproject.Studio
+com.rafaelmardojai.Blanket
+com.system76.Popsicle
 com.vixalien.sticky
-io.github.alainm23.planify
+de.haeckerfelix.AudioSharing
+de.haeckerfelix.Shortwave
 dev.geopjr.Calligraphy
 dev.qwery.AddWater
-
-# ============================================
-# FLATPAK PACKAGES - MEDIA PLAYERS & AUDIO
-# ============================================
 io.bassi.Amberol
-de.haeckerfelix.Shortwave
-org.strawberrymusicplayer.strawberry
-com.github.taiko2k.tauonmb
-com.github.neithern.g4music
+io.emeric.watchflower
+io.github.alainm23.planify
+io.github.amit9838.mousam
+io.github.diegoivanme.flowtime
 io.github.ecotubehq.player
-rocks.shy.VacuumTube
-space.rirusha.Cassette
 io.github.efogdev.mpris-timer
-de.haeckerfelix.AudioSharing
-com.rafaelmardojai.Blanket
+io.github.josephmawa.Egghead
 io.github.mmarco94.tambourine
 io.github.revisto.drum-machine
-
-# ============================================
-# FLATPAK PACKAGES - VIDEO & STREAMING
-# ============================================
-com.github.unrud.VideoDownloader
-com.obsproject.Studio
-
-# ============================================
-# FLATPAK PACKAGES - WEB BROWSERS
-# ============================================
-com.google.Chrome
-
-# ============================================
-# FLATPAK PACKAGES - COMMUNICATION
-# ============================================
-com.github.IsmaelMartinez.teams_for_linux
-
-# ============================================
-# FLATPAK PACKAGES - DEVELOPMENT TOOLS
-# ============================================
-com.mattjakeman.ExtensionManager
-me.iepure.devtoolbox
-io.github.josephmawa.Egghead
 io.github.rfrench3.scopebuddy-gui
-
-# ============================================
-# FLATPAK PACKAGES - SYSTEM UTILITIES
-# ============================================
-com.github.tchx84.Flatseal
-io.missioncenter.MissionCenter
-net.nokyan.Resources
 io.github.thetumultuousunicornofdarkness.cpu-x
-org.gnome.PowerStats
-org.kde.filelight
-com.system76.Popsicle
-org.localsend.localsend_app
-
-# ============================================
-# FLATPAK PACKAGES - GAMING & EMULATION
-# ============================================
+io.missioncenter.MissionCenter
+me.iepure.devtoolbox
 net.lutris.Lutris
+net.nokyan.Resources
 org.DolphinEmu.dolphin-emu
-
-# ============================================
-# FLATPAK PACKAGES - VIRTUALIZATION
-# ============================================
 org.gnome.Boxes
-
-# ============================================
-# FLATPAK PACKAGES - SECURITY & BACKUP
-# ============================================
-org.gnome.seahorse.Application
-org.gnome.World.PikaBackup
-
-# ============================================
-# FLATPAK PACKAGES - UTILITIES & TOOLS
-# ============================================
-com.github.marhkb.Pods
-io.emeric.watchflower
-io.github.amit9838.mousam
-com.adilhanney.saber
-com.jeffser.Alpaca
-xyz.safeworlds.hiit
-app.drey.Elastic
 org.gnome.Crosswords
+org.gnome.gitlab.somas.Apostrophe
+org.gnome.PowerStats
+org.gnome.seahorse.Application
+org.gnome.Solanum
+org.gnome.World.PikaBackup
+org.kde.filelight
+org.localsend.localsend_app
+org.standardnotes.standardnotes
+org.strawberrymusicplayer.strawberry
+rocks.shy.VacuumTube
+space.rirusha.Cassette
+xyz.safeworlds.hiit

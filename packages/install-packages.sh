@@ -27,14 +27,25 @@ if ! command -v paru &> /dev/null; then
     cd ~
 fi
 
+# Helper: filter out empty lines and comments
+filter_pkg_list() {
+    # - drop blank lines
+    # - drop comment lines beginning with optional whitespace then '#'
+    grep -v -E '^[[:space:]]*$' "$1" | grep -v -E '^[[:space:]]*#'
+}
+
 # Step 1: Install packages from all-packages.txt (both official and AUR)
 echo "Step 1: Installing packages from all-packages.txt..."
 echo "This may take a while and will require sudo password for official packages..."
-read -p "Press Enter to continue or Ctrl+C to cancel..."
+if [ -t 0 ]; then
+    read -p "Press Enter to continue or Ctrl+C to cancel..."
+else
+    echo "(non-interactive) Continuing..."
+fi
 
 if [ -f "$ALL_PACKAGES" ]; then
     # Filter out empty lines and install using paru (handles both official and AUR)
-    PACKAGES=$(cat "$ALL_PACKAGES" | grep -v '^$' | tr '\n' ' ')
+    PACKAGES=$(filter_pkg_list "$ALL_PACKAGES" | tr '\n' ' ')
     paru -S --needed --noconfirm $PACKAGES || {
         echo "Some packages failed to install (may already be installed or unavailable, continuing...)"
     }
@@ -52,7 +63,7 @@ echo "This may take a while..."
 
 if [ -f "$AUR_PACKAGES" ]; then
     # Filter out empty lines and install
-    AUR_PACKAGE_LIST=$(cat "$AUR_PACKAGES" | grep -v '^$' | tr '\n' ' ')
+    AUR_PACKAGE_LIST=$(filter_pkg_list "$AUR_PACKAGES" | tr '\n' ' ')
     paru -S --needed --noconfirm $AUR_PACKAGE_LIST || {
         echo "Some AUR packages failed to install (this is normal if they're already installed or unavailable)"
     }
@@ -76,6 +87,10 @@ fi
 if [ -f "$FLATPAK_PACKAGES" ]; then
     # Filter out empty lines and install
     while IFS= read -r line; do
+        # skip empty + comment lines
+        if [ -z "$line" ] || [[ "$line" =~ ^[[:space:]]*# ]]; then
+            continue
+        fi
         if [ -n "$line" ]; then
             echo "Installing $line..."
             flatpak install -y "$line" || {

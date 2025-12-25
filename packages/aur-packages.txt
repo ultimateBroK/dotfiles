@@ -1,160 +1,52 @@
-# ============================================
-# AUR PACKAGES - THEMES & ICONS
-# ============================================
 adw-gtk-theme-git
-fluent-icon-theme-git
-kora-icon-theme
-breeze-plus
-otf-space-grotesk
-ttf-gabarito-git
-ttf-material-symbols-variable-git
-ttf-readex-pro
-ttf-roboto-flex
-ttf-rubik-vf
-ttf-twemoji
-
-# ============================================
-# AUR PACKAGES - DEVELOPMENT TOOLS
-# ============================================
+ampcode
 android-sdk-platform-tools
 antigravity-bin
-equibop-bin
-gollama-bin
-illogical-impulse-microtex-git
-illogical-impulse-python
-python-cobble
-python-dacite
-python-duckduckgo-search
-python-funk
-python-magika
-python-mammoth
-python-markdownify
-python-markitdown
-python-pocketsphinx
-python-pptx
-python-precisely
-python-primp
-python-pysdl3
-python-sounddevice
-python-speechrecognition
-python-youtube-transcript-api
-qwen-code
-openai-codex-autoup-bin
-opencode-bin
-
-# ============================================
-# AUR PACKAGES - CODE EDITORS & IDEs
-# ============================================
-cursor-beta-bin
-visual-studio-code-bin
-visual-studio-code-insiders-bin
-github-desktop-bin
-jetbrains-toolbox
-
-# ============================================
-# AUR PACKAGES - WEB BROWSERS
-# ============================================
-brave-bin
-microsoft-edge-dev-bin
-opera
-waterfox-bin
-zen-browser-bin
-
-# ============================================
-# AUR PACKAGES - PRODUCTIVITY & UTILITIES
-# ============================================
 anytype-bin
 appimagelauncher
+asus-vivobook-rgb-keyboard
 binance
 bottles
-crush-bin
-fsearch
-hoppscotch-bin
-httpie-desktop-bin
-imageviewer
-msty-bin
-ocrmypdf
-perplexity
-tradingview-bin-latest
-upscayl-bin
-wakafetch-git
-
-# ============================================
-# AUR PACKAGES - COMMUNICATION & SOCIAL
-# ============================================
-materialgram-bin
-proton-authenticator-bin
-proton-mail-bin
-protonplus
-music-presence-bin
-
-# ============================================
-# AUR PACKAGES - DOWNLOAD & FILE SHARING
-# ============================================
-qbittorrent-enhanced-git
-megasync
-
-# ============================================
-# AUR PACKAGES - MEDIA & STREAMING
-# ============================================
-spotify
-showtime
-wayvibes-git
-
-# ============================================
-# AUR PACKAGES - AUDIO
-# ============================================
-jamesdsp
-libdeep_filter_ladspa-git
-miniaudio-git
-mechvibes
-lyrebird
-illogical-impulse-audio
-
-# ============================================
-# AUR PACKAGES - SYSTEM UTILITIES
-# ============================================
-asus-vivobook-rgb-keyboard
-bpftune-git
+breeze-plus
 cloudflare-warp-nox-bin
+crush-bin
+cursor-bin
+darkly-bin
+dee
+electron39-bin
+equibop-bin
 execstack
 faustus-dkms-git
-illogical-impulse-basic
+fluent-icon-theme-git
+fsearch
+github-desktop-bin
+glew1.10
+gollama-bin
+gtk-sharp-2
+hoppscotch-bin
+httpie-desktop-bin
+ibus-lotus-bin
+icu69-bin
+illogical-impulse-audio
 illogical-impulse-backlight
+illogical-impulse-basic
+illogical-impulse-bibata-modern-classic-bin
+illogical-impulse-fonts-themes
 illogical-impulse-hyprland
 illogical-impulse-kde
+illogical-impulse-microtex-git
 illogical-impulse-portal
+illogical-impulse-python
 illogical-impulse-screencapture
 illogical-impulse-toolkit
 illogical-impulse-widgets
-illogical-impulse-bibata-modern-classic-bin
-illogical-impulse-fonts-themes
-nautilus-admin-gtk4
-nautilus-bluetooth
-nautilus-launch
-openrgb
-quickshell-git
-ryzenadj-git
-rustdesk-bin
-snapd
-speedtest-cli-git
-speedtest-librespeed
-supergfxctl
-
-# ============================================
-# AUR PACKAGES - AI & MACHINE LEARNING
-# ============================================
-llama.cpp-vulkan
-lmstudio
-ollama-vulkan
-
-# ============================================
-# AUR PACKAGES - LEGACY & COMPATIBILITY
-# ============================================
-glew1.10
-gtk-sharp-2
-ibus-lotus-bin
-icu69-bin
+imageviewer
+jamesdsp
+jbig2enc
+jetbrains-toolbox
+kiro-cli
+kiro-ide
+letta-code-bin
 lib32-glew1.10
 lib32-gtk2
 lib32-libappindicator-gtk2
@@ -172,6 +64,7 @@ lib32-openssl-1.0
 libappindicator-gtk2
 libayatana-appindicator-glib
 libdbusmenu-gtk2
+libdeep_filter_ladspa-git
 libgcrypt15
 libidn11
 libindicator-gtk2
@@ -179,15 +72,73 @@ libjpeg6-turbo
 librtmp0
 libtiff4
 libudev0-shim
+libunity
 libvpx1.3
-openssl-1.0
-
-# ============================================
-# AUR PACKAGES - MISCELLANEOUS
-# ============================================
-darkly-bin
-electron39-bin
+llama.cpp-vulkan
+lmstudio
+lyrebird
+materialgram-bin
 matugen-bin
+mechvibes
+megasync
+microsoft-edge-stable-bin
+miniaudio-git
+morgen-bin
+mpvpaper
+msty-bin
+music-presence-bin
+nautilus-admin-gtk4
+nautilus-bluetooth
+nautilus-launch
+ocrmypdf
+openai-codex-autoup-bin
+opencode-bin
+openssl-1.0
+opera
+otf-space-grotesk
+pear-desktop-bin
+perplexity
 playwright
+proton-authenticator-bin
+python-cobble
+python-dacite
+python-duckduckgo-search
+python-funk
+python-magika
+python-mammoth
+python-markdownify
+python-markitdown
+python-pocketsphinx
+python-pptx
+python-precisely
+python-primp
+python-pysdl3
+python-sounddevice
+python-speechrecognition
+python-youtube-transcript-api
+qbittorrent-enhanced-git
 qt6-avif-image-plugin
+quickshell-git
+qwen-code
+rocm-gfx1150-bin
+rustdesk-bin
+ryzenadj-git
+snapd
+speedtest-cli-git
+speedtest-librespeed
+spotify
+tradingview-bin-latest
+ttf-gabarito-git
+ttf-material-symbols-variable-git
+ttf-readex-pro
+ttf-roboto-flex
+ttf-rubik-vf
+ttf-twemoji
 ubuntu-wallpapers
+upscayl-bin
+visual-studio-code-bin
+visual-studio-code-insiders-bin
+wakafetch-git
+wayvibes-git
+windsurf
+windsurf-next
