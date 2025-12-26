@@ -38,7 +38,7 @@ filter_pkg_list() {
 echo "Step 1: Installing packages from all-packages.txt..."
 echo "This may take a while and will require sudo password for official packages..."
 if [ -t 0 ]; then
-    read -p "Press Enter to continue or Ctrl+C to cancel..."
+read -p "Press Enter to continue or Ctrl+C to cancel..."
 else
     echo "(non-interactive) Continuing..."
 fi

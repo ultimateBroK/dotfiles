@@ -17,7 +17,8 @@ getdate() {
     date '+%Y-%m-%d_%H.%M.%S'
 }
 getaudiooutput() {
-    pactl list sources | grep 'Name' | grep 'monitor' | cut -d ' ' -f2
+    # Use default_output for gpu-screen-recorder (simpler and more reliable)
+    echo "default_output"
 }
 getactivemonitor() {
     hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name'
@@ -46,16 +47,19 @@ for ((i=0;i<${#ARGS[@]};i++)); do
     fi
 done
 
-if pgrep wf-recorder > /dev/null; then
+if pgrep -f "gpu-screen-recorder" > /dev/null; then
     notify-send "Recording Stopped" "Stopped" -a 'Recorder' &
-    pkill wf-recorder &
+    pkill -f "gpu-screen-recorder" &
 else
+    OUTPUT_FILE="./recording_$(getdate).mp4"
+    
     if [[ $FULLSCREEN_FLAG -eq 1 ]]; then
-        notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        notify-send "Starting recording" "$(basename "$OUTPUT_FILE")" -a 'Recorder' & disown
+        MONITOR=$(getactivemonitor)
         if [[ $SOUND_FLAG -eq 1 ]]; then
-            wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --audio="$(getaudiooutput)"
+            gpu-screen-recorder -w "$MONITOR" -o "$OUTPUT_FILE" -a "$(getaudiooutput)" -f 60 -q very_high -k hevc -cr full -tune quality &
         else
-            wf-recorder -o "$(getactivemonitor)" --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t
+            gpu-screen-recorder -w "$MONITOR" -o "$OUTPUT_FILE" -f 60 -q very_high -k hevc -cr full -tune quality &
         fi
     else
         # If a manual region was provided via --region, use it; otherwise run slurp as before.
@@ -68,11 +72,11 @@ else
             fi
         fi
 
-        notify-send "Starting recording" 'recording_'"$(getdate)"'.mp4' -a 'Recorder' & disown
+        notify-send "Starting recording" "$(basename "$OUTPUT_FILE")" -a 'Recorder' & disown
         if [[ $SOUND_FLAG -eq 1 ]]; then
-            wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region" --audio="$(getaudiooutput)"
+            gpu-screen-recorder -w region -region "$region" -o "$OUTPUT_FILE" -a "$(getaudiooutput)" -f 60 -q very_high -k hevc -cr full -tune quality &
         else
-            wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$region"
+            gpu-screen-recorder -w region -region "$region" -o "$OUTPUT_FILE" -f 60 -q very_high -k hevc -cr full -tune quality &
         fi
     fi
 fi
