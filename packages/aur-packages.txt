@@ -18,9 +18,11 @@ equibop-bin
 execstack
 faustus-dkms-git
 fluent-icon-theme-git
+fresh-editor-bin
 fsearch
 github-desktop-bin
 glew1.10
+gnome-bluetooth
 gollama-bin
 gtk-sharp-2
 hoppscotch-bin
@@ -127,6 +129,7 @@ snapd
 speedtest-cli-git
 speedtest-librespeed
 spotify
+tenere-bin
 tradingview-bin-latest
 ttf-gabarito-git
 ttf-material-symbols-variable-git

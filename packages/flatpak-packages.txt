@@ -1,6 +1,7 @@
 app.drey.Elastic
 com.adilhanney.saber
 com.github.IsmaelMartinez.teams_for_linux
+com.github.johnfactotum.Foliate
 com.github.marhkb.Pods
 com.github.neithern.g4music
 com.github.taiko2k.tauonmb
@@ -28,6 +29,7 @@ io.github.josephmawa.Egghead
 io.github.mmarco94.tambourine
 io.github.revisto.drum-machine
 io.github.rfrench3.scopebuddy-gui
+io.github.shonebinu.Brief
 io.github.thetumultuousunicornofdarkness.cpu-x
 io.missioncenter.MissionCenter
 me.iepure.devtoolbox

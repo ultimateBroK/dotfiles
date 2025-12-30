@@ -12,6 +12,7 @@ android-sdk-platform-tools
 antigravity-bin
 anytype-bin
 appimagelauncher
+arch-wiki-docs
 aria2
 ast-grep
 asusctl
@@ -115,6 +116,7 @@ foomatic-db-gutenprint-ppds
 foomatic-db-nonfree
 foomatic-db-nonfree-ppds
 foomatic-db-ppds
+fresh-editor-bin
 fsarchiver
 fsearch
 fwupd
@@ -123,9 +125,11 @@ gedit
 ghostscript
 ghostty
 git
+github-cli
 github-desktop-bin
 glances
 glew1.10
+glow
 gnome-backgrounds
 gnome-calculator
 gnome-calendar
@@ -363,6 +367,7 @@ plymouth
 pnpm
 poppler-glib
 power-profiles-daemon
+presenterm
 profile-sync-daemon
 proton-authenticator-bin
 proton-mail-bin
@@ -424,6 +429,7 @@ sushi
 sysfsutils
 system-config-printer
 tecla
+tenere-bin
 texinfo
 texlive-basic
 texlive-bibtexextra
@@ -448,6 +454,7 @@ texlive-plaingeneric
 texlive-pstricks
 texlive-publishers
 texlive-xetex
+tgpt
 tigervnc
 totem
 tradingview-bin-latest
@@ -458,6 +465,8 @@ ttf-liberation
 ttf-meslo-nerd
 ttf-noto-nerd
 ttf-opensans
+ttyper
+tui-journal
 typst
 ubuntu-wallpapers
 ufw
@@ -483,6 +492,8 @@ waterfox-bin
 waypipe
 wayvibes-git
 which
+wikiman
+wiki-tui
 windsurf
 windsurf-next
 wireless-regdb
