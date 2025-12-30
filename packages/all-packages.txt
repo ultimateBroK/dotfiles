@@ -74,6 +74,7 @@ deno
 device-mapper
 dhclient
 diffutils
+dijo-1995parham
 direnv
 discover
 dmidecode

@@ -13,6 +13,7 @@ crush-bin
 cursor-bin
 darkly-bin
 dee
+dijo-1995parham
 electron39-bin
 equibop-bin
 execstack
