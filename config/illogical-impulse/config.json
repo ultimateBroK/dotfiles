@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": 0.1304799784039955,
+            "contentTransparency": 0.3245147322546115,
             "enable": true
         },
         "wallpaperTheming": {
@@ -243,14 +243,13 @@
             "spotify",
             "io.github.kukuruzka165.materialgram",
             "tradingview",
-            "code",
             "code-insiders",
             "cursor",
             "io.github.diegoivanme.flowtime",
             "jetbrains-pycharm",
             "floorp"
         ],
-        "pinnedOnStartup": false
+        "pinnedOnStartup": true
     },
     "enabledPanels": [
         "iiBar",
