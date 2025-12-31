@@ -60,7 +60,7 @@ Singleton {
     function copy(entry) {
         const mime = entryMime(entry)
         if (root.cliphistBinary.includes("cliphist")) { // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""}`]);
+            Quickshell.execDetached(["bash", "-c", `printf '%s\\n' '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""}`]);
         } else { // Stash
             const entryNumber = entry.split("\t")[0];
             Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""}`]);
@@ -70,7 +70,7 @@ Singleton {
     function paste(entry) {
         const mime = entryMime(entry)
         if (root.cliphistBinary.includes("cliphist")) { // Classic cliphist
-            Quickshell.execDetached(["bash", "-c", `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`]);
+            Quickshell.execDetached(["bash", "-c", `printf '%s\\n' '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`]);
         } else { // Stash
             const entryNumber = entry.split("\t")[0];
             Quickshell.execDetached(["bash", "-c", `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`]);
@@ -86,7 +86,7 @@ Singleton {
         const pasteCommands = [...targetEntries].reverse().map(entry => {
             const mime = entryMime(entry)
             if (root.cliphistBinary.includes("cliphist")) {
-                return `printf '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`
+                return `printf '%s\\n' '${StringUtils.shellSingleQuoteEscape(entry)}' | ${root.cliphistBinary} decode | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`
             } else {
                 const entryNumber = entry.split("\t")[0]
                 return `${root.cliphistBinary} decode ${entryNumber} | wl-copy${mime ? ` -t ${mime}` : ""} && sleep ${root.pasteDelay} && ${root.pressPasteCommand}`
@@ -99,7 +99,7 @@ Singleton {
     Process {
         id: deleteProc
         property string entry: ""
-        command: ["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(deleteProc.entry)}' | ${root.cliphistBinary} delete`]
+        command: ["bash", "-c", `printf '%s\\n' '${StringUtils.shellSingleQuoteEscape(deleteProc.entry)}' | ${root.cliphistBinary} delete`]
         function deleteEntry(entry) {
             deleteProc.entry = entry;
             deleteProc.running = true;
