@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
+            "backgroundTransparency": 0.11,
+            "contentTransparency": 0.57,
             "enable": true
         },
         "wallpaperTheming": {
@@ -250,7 +250,7 @@
             "jetbrains-pycharm",
             "floorp"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",
