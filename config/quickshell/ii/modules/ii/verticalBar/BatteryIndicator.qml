@@ -158,6 +158,7 @@ MouseArea {
                     font: batteryProgress.font
                     nativeRendering: true
                     text: batteryProgress.text
+                    visible: Config.options.battery.showPercentageInIcon
                 }
             }
         }

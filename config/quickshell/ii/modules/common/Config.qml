@@ -288,6 +288,8 @@ Singleton {
                 property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
+                // UI: show/hide the numeric percentage inside the bar battery icon
+                property bool showPercentageInIcon: false
             }
 
             property JsonObject cheatsheet: JsonObject {

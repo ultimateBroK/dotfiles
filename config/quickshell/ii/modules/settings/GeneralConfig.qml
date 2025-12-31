@@ -62,6 +62,18 @@ ContentPage {
         icon: "battery_android_full"
         title: Translation.tr("Battery")
 
+        ConfigSwitch {
+            buttonIcon: "pin"
+            text: Translation.tr("Show percentage in battery icon")
+            checked: Config.options.battery.showPercentageInIcon
+            onCheckedChanged: {
+                Config.options.battery.showPercentageInIcon = checked;
+            }
+            StyledToolTip {
+                text: Translation.tr("Toggles the number shown inside the bar battery icon")
+            }
+        }
+
         ContentSubsection {
             title: Translation.tr("Warnings")
 

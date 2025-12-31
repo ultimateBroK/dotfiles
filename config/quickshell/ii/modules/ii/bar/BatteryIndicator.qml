@@ -157,6 +157,7 @@ MouseArea {
                     font: batteryProgress.font
                     // Use animated displayPercentage (0..1) and convert to percent
                     text: Math.round(root.displayPercentage * 100)
+                    visible: Config.options.battery.showPercentageInIcon
                 }
             }
         }
