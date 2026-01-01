@@ -46,8 +46,25 @@ Rectangle {
 
     color: Appearance.colors.colLayer1
     radius: Appearance.rounding.small
-    implicitHeight: imageHeight * scale
-    implicitWidth: imageWidth * scale
+    // Important: keep implicit sizes bounded so extremely wide images don't make the
+    // delegate grow horizontally and push action buttons (e.g. delete) off-screen.
+    //
+    // Also: during initial layout passes `maxWidth` can be 0, so avoid falling back
+    // to the raw image width as an implicit size.
+    implicitWidth: {
+        if (root.maxWidth > 0 && root.imageWidth > 0)
+            return Math.min(root.imageWidth * root.scale, root.maxWidth);
+        if (root.maxWidth > 0)
+            return root.maxWidth;
+        return 0;
+    }
+    implicitHeight: {
+        if (root.maxHeight > 0 && root.imageHeight > 0)
+            return Math.min(root.imageHeight * root.scale, root.maxHeight);
+        if (root.maxHeight > 0)
+            return root.maxHeight;
+        return 0;
+    }
 
     function startDecode() {
         root.source = "";

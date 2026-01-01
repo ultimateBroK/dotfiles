@@ -211,8 +211,10 @@ RippleButton {
             }
             Loader { // Clipboard image preview
                 active: root.cliphistRawString && Cliphist.entryIsImage(root.cliphistRawString)
+                Layout.fillWidth: true
                 sourceComponent: CliphistImage {
                     Layout.fillWidth: true
+                    width: contentColumn.width
                     entry: root.cliphistRawString
                     maxWidth: contentColumn.width
                     maxHeight: 140

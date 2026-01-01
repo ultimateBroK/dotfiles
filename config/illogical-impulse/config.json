@@ -248,7 +248,8 @@
             "cursor",
             "io.github.diegoivanme.flowtime",
             "jetbrains-pycharm",
-            "floorp"
+            "floorp",
+            "fontforge"
         ],
         "pinnedOnStartup": false
     },
