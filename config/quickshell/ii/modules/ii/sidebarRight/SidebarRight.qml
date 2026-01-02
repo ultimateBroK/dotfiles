@@ -86,11 +86,11 @@ Scope {
             active: GlobalStates.sidebarRightOpen || Config?.options.sidebar.keepRightSidebarLoaded
             anchors {
                 fill: parent
-                margins: Appearance.sizes.hyprlandGapsOut
-                leftMargin: Appearance.sizes.elevationMargin
+                margins: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
+                leftMargin: Math.max(Appearance.sizes.elevationMargin - 2, 2)
             }
-            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
-            height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+            width: sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
+            height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
 
             focus: GlobalStates.sidebarRightOpen
             Keys.onPressed: (event) => {

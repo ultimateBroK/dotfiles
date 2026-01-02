@@ -134,10 +134,10 @@ Scope { // Scope
                 id: sidebarLeftBackground
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.topMargin: Appearance.sizes.hyprlandGapsOut
-                anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
-                width: sidebarRoot.sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
-                height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+                anchors.topMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
+                anchors.leftMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
+                width: sidebarRoot.sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
+                height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
                 color: Appearance.colors.colLayer0
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border

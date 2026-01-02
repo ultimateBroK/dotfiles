@@ -20,7 +20,7 @@ import qs.modules.ii.sidebarRight.wifiNetworks
 Item {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 10
+    property int sidebarPadding: 6
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property bool showAudioOutputDialog: false
     property bool showAudioInputDialog: false
@@ -61,13 +61,13 @@ Item {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: sidebarPadding
-            spacing: 8
+            spacing: 6
 
             SystemButtonRow {
                 Layout.fillHeight: false
                 Layout.fillWidth: true
                 // Layout.margins: 10
-                Layout.topMargin: 5
+                Layout.topMargin: 3
                 Layout.bottomMargin: 0
             }
 
