@@ -14,6 +14,33 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    property int overviewOpenedOnMonitorId: -1
+    
+    Connections {
+        target: Hyprland
+        function onFocusedMonitorChanged() {
+            // Close overview if mouse moves to a different monitor while overview is open
+            if (GlobalStates.overviewOpen && overviewScope.overviewOpenedOnMonitorId !== -1) {
+                if (Hyprland.focusedMonitor?.id !== overviewScope.overviewOpenedOnMonitorId) {
+                    GlobalStates.overviewOpen = false;
+                }
+            }
+        }
+    }
+    
+    Connections {
+        target: GlobalStates
+        function onOverviewOpenChanged() {
+            if (GlobalStates.overviewOpen) {
+                // Track which monitor overview was opened on
+                overviewScope.overviewOpenedOnMonitorId = Hyprland.focusedMonitor?.id ?? -1;
+            } else {
+                // Reset when closed
+                overviewScope.overviewOpenedOnMonitorId = -1;
+            }
+        }
+    }
+    
     Variants {
         id: overviewVariants
         model: Quickshell.screens
@@ -24,7 +51,7 @@ Scope {
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
             property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
             screen: modelData
-            visible: columnLayout.opacity > 0
+            visible: columnLayout.opacity > 0 && monitorIsFocused
 
             WlrLayershell.namespace: "quickshell:overview"
             WlrLayershell.layer: WlrLayer.Overlay
@@ -92,25 +119,35 @@ Scope {
                 id: columnLayout
                 visible: opacity > 0
                 opacity: GlobalStates.overviewOpen ? 1 : 0
-                scale: GlobalStates.overviewOpen ? 1 : 0.95
+                scale: GlobalStates.overviewOpen ? 1 : 0.9
+                property real yOffset: GlobalStates.overviewOpen ? 0 : -30
+                property bool isOpening: GlobalStates.overviewOpen
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     top: parent.top
+                    topMargin: columnLayout.yOffset
                 }
                 spacing: -8
 
                 Behavior on opacity {
-                    // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 80
-                        easing.type: Easing.OutCubic
+                        duration: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.duration : Appearance.animation.elementMoveExit.duration
+                        easing.type: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.type : Appearance.animation.elementMoveExit.type
+                        easing.bezierCurve: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.bezierCurve : Appearance.animation.elementMoveExit.bezierCurve
                     }
                 }
                 Behavior on scale {
-                    // Optimized animation for instant feel
                     NumberAnimation {
-                        duration: 80
-                        easing.type: Easing.OutCubic
+                        duration: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.duration : Appearance.animation.elementMoveExit.duration
+                        easing.type: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.type : Appearance.animation.elementMoveExit.type
+                        easing.bezierCurve: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.bezierCurve : Appearance.animation.elementMoveExit.bezierCurve
+                    }
+                }
+                Behavior on yOffset {
+                    NumberAnimation {
+                        duration: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.duration : Appearance.animation.elementMoveExit.duration
+                        easing.type: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.type : Appearance.animation.elementMoveExit.type
+                        easing.bezierCurve: columnLayout.isOpening ? Appearance.animation.elementMoveEnter.bezierCurve : Appearance.animation.elementMoveExit.bezierCurve
                     }
                 }
 

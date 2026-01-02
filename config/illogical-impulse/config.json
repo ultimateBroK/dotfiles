@@ -251,7 +251,7 @@
             "floorp",
             "fontforge"
         ],
-        "pinnedOnStartup": false
+        "pinnedOnStartup": true
     },
     "enabledPanels": [
         "iiBar",
