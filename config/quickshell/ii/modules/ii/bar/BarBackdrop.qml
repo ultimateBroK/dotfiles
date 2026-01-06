@@ -30,9 +30,17 @@ Item {
             fill: parent
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
         }
-        color: root.hasBackground
-            ? ColorUtils.transparentize(Appearance.colors.colLayer0, Config.options.bar.autoHide.enable ? 0.2 : 1)
-            : "transparent"
+        color: {
+            if (!root.hasBackground) return "transparent";
+
+            // For vibrant-like palettes, keep the TOP bar fully transparent.
+            // (Avoid tinting the entire topbar background with the primary/accent color.)
+            var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
+            var isVibrantScheme = (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad");
+            if (isVibrantScheme && !root.vertical) return "transparent";
+
+            return ColorUtils.transparentize(Appearance.colors.colLayer0, Config.options.bar.autoHide.enable ? 0.2 : 1);
+        }
         Behavior on color { ColorAnimation { duration: 220 } }
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
         border.width: 0
@@ -46,7 +54,8 @@ Item {
         radius: barBackground.radius
         visible: {
             var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
-            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && root.hasBackground;
+            // Only apply the accent tint on the vertical bar; keep topbar clean/transparent.
+            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && root.hasBackground && root.vertical;
         }
         opacity: 0.35
         gradient: Gradient {

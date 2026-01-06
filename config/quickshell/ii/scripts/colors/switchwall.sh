@@ -270,7 +270,16 @@ switch() {
         fi
     fi
     [[ -n "$type_flag" ]] && matugen_args+=(--type "$type_flag") && generate_colors_material_args+=(--scheme "$type_flag")
-    generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
+
+    enable_terminal="true"
+    if [ -f "$SHELL_CONFIG_FILE" ]; then
+        enable_terminal=$(jq -r '.appearance.wallpaperTheming.enableTerminal' "$SHELL_CONFIG_FILE")
+    fi
+
+    if [ "$enable_terminal" = "true" ]; then
+        generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
+    fi
+
     generate_colors_material_args+=(--cache "$STATE_DIR/user/generated/color.txt")
 
     pre_process "$mode_flag"
@@ -284,8 +293,8 @@ switch() {
         fi
     fi
 
-    # Set harmony and related properties
-    if [ -f "$SHELL_CONFIG_FILE" ]; then
+    # Set harmony and related terminal generation properties (only if terminal theming enabled)
+    if [ "$enable_terminal" = "true" ] && [ -f "$SHELL_CONFIG_FILE" ]; then
         harmony=$(jq -r '.appearance.wallpaperTheming.terminalGenerationProps.harmony' "$SHELL_CONFIG_FILE")
         harmonize_threshold=$(jq -r '.appearance.wallpaperTheming.terminalGenerationProps.harmonizeThreshold' "$SHELL_CONFIG_FILE")
         term_fg_boost=$(jq -r '.appearance.wallpaperTheming.terminalGenerationProps.termFgBoost' "$SHELL_CONFIG_FILE")

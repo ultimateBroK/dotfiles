@@ -58,7 +58,7 @@ def main():
         #'#fff': color_data['term10'],
         #'#5a5a5a': color_data['surfaceVariant'],
         #'#acb1bc': color_data['onPrimaryFixed'],
-        '#ffffff': color_data['term11'],
+        '#ffffff': color_data['onBackground'],
         '#5a616e': color_data['surfaceVariant'],
         '#f04a50': color_data['error'],
         '#4285f4': color_data['secondary'],
@@ -75,7 +75,7 @@ def main():
         '#b74aff': color_data['tertiary'],
         #'#b6b6b6': color_data['onSurfaceVariant'],
         '#1a1a1a': color_data['background'],
-        '#333': color_data['term0'],
+        '#333': color_data['surfaceContainerHigh'],
         '#212121': color_data['background'],
     }
 

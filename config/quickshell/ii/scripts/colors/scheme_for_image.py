@@ -57,12 +57,14 @@ def is_mostly_monochrome(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     saturation = hsv[:, :, 1]
     # If average saturation is very low, it's mostly monochrome
-    return np.mean(saturation) < 30
+    return np.mean(saturation) < 22
 
 def has_many_colors(image):
     """Check if image has many distinct colors"""
     diversity = image_color_diversity(image)
-    return diversity > 50
+    # The diversity metric tends to be high for photos; keep this threshold conservative
+    # so we don't over-select rainbow/fruit-salad.
+    return diversity > 120
 
 def pick_scheme(image):
     """
@@ -84,32 +86,31 @@ def pick_scheme(image):
             return "scheme-neutral"
     
     # Very colorful images with many distinct colors
-    if many_colors and colorfulness > 60:
-        if saturation > 100:
+    if many_colors and colorfulness > 70:
+        # Reserve rainbow for truly high saturation + high colorfulness
+        if saturation > 140 and colorfulness > 85:
             return "scheme-rainbow"
-        elif colorfulness > 80:
+        # Fruit-salad for high colorfulness but not necessarily extreme saturation
+        if colorfulness > 78:
             return "scheme-fruit-salad"
-        else:
-            return "scheme-expressive"
-    
+        return "scheme-expressive"
+
     # Moderately colorful images
-    if colorfulness > 50:
-        if saturation > 120:
+    if colorfulness > 55:
+        if saturation > 125:
             return "scheme-vibrant"
-        elif diversity > 40:
-            return "scheme-tonal-spot"
-        else:
+        if diversity > 90:
             return "scheme-expressive"
+        return "scheme-tonal-spot"
     
     # Less colorful but still has some color
-    if colorfulness > 30:
-        if saturation > 80:
+    if colorfulness > 32:
+        if saturation > 85:
             return "scheme-fidelity"
-        else:
-            return "scheme-content"
+        return "scheme-content"
     
     # Low colorfulness - preserve what color exists
-    if colorfulness > 20:
+    if colorfulness > 22:
         return "scheme-content"
     
     # Very low colorfulness

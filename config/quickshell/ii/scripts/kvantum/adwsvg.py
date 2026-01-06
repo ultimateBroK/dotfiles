@@ -62,7 +62,7 @@ def main():
         '#333': color_data['inverseSurface'],
         '#212121': color_data['onSecondaryFixed'],
         '#5b9bf8': color_data['secondaryContainer'],
-        '#26272a': color_data['term7'],
+        '#26272a': color_data['onBackground'],
         #'#b3b3b3': color_data['surfaceBright'],
         #'#b74aff': color_data['tertiary'],
         #'#989898': color_data['surfaceContainerHighest'],

@@ -138,8 +138,9 @@ if args.termscheme is not None:
     term_source_colors = json.loads(json_termscheme)['dark' if darkmode else 'light']
 
     primary_color_argb = hex_to_argb(material_colors['primary_paletteKeyColor'])
+    is_monochrome_scheme = (args.scheme == 'scheme-monochrome' or args.scheme == 'monochrome')
     for color, val in term_source_colors.items():
-        if(args.scheme == 'monochrome') :
+        if is_monochrome_scheme:
             term_colors[color] = val
             continue
         if args.blend_bg_fg and color == "term0":
