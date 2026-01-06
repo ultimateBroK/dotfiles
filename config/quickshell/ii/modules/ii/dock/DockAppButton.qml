@@ -26,8 +26,8 @@ DockButton {
         active: isSeparator
         anchors {
             fill: parent
-            topMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
-            bottomMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
+            topMargin: Appearance.rounding.normal
+            bottomMargin: Appearance.rounding.normal
         }
         sourceComponent: DockSeparator {}
     }

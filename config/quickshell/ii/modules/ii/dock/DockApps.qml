@@ -12,6 +12,7 @@ import qs.modules.common.functions
 
 Item {
     id: root
+    property bool dockAtTop: false
     property real maxWindowPreviewHeight: 200
     property real maxWindowPreviewWidth: 300
     property real windowControlsHeight: 30
@@ -22,7 +23,6 @@ Item {
     property bool requestDockShow: previewPopup.show
 
     Layout.fillHeight: true
-    Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
     implicitWidth: listView.implicitWidth
     
     StyledListView {
@@ -48,8 +48,8 @@ Item {
             appToplevel: modelData
             appListRoot: root
 
-            topInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
-            bottomInset: Appearance.sizes.hyprlandGapsOut + root.buttonPadding
+            topInset: 0
+            bottomInset: 0
         }
     }
 
@@ -97,8 +97,8 @@ Item {
         anchor {
             window: root.QsWindow.window
             adjustment: PopupAdjustment.None
-            gravity: Edges.Top | Edges.Right
-            edges: Edges.Top | Edges.Left
+            gravity: (root.dockAtTop ? Edges.Bottom : Edges.Top) | Edges.Right
+            edges: (root.dockAtTop ? Edges.Bottom : Edges.Top) | Edges.Left
 
         }
         visible: popupBackground.visible
@@ -108,7 +108,8 @@ Item {
 
         MouseArea {
             id: popupMouseArea
-            anchors.bottom: parent.bottom
+            anchors.bottom: root.dockAtTop ? undefined : parent.bottom
+            anchors.top: root.dockAtTop ? parent.top : undefined
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
             implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
             hoverEnabled: true
@@ -135,8 +136,10 @@ Item {
                 clip: true
                 color: Appearance.colors.colSurfaceContainer
                 radius: Appearance.rounding.normal
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: Appearance.sizes.elevationMargin
+                anchors.bottom: root.dockAtTop ? undefined : parent.bottom
+                anchors.top: root.dockAtTop ? parent.top : undefined
+                anchors.bottomMargin: root.dockAtTop ? 0 : Appearance.sizes.elevationMargin
+                anchors.topMargin: root.dockAtTop ? Appearance.sizes.elevationMargin : 0
                 anchors.horizontalCenter: parent.horizontalCenter
                 implicitHeight: previewRowLayout.implicitHeight + padding * 2
                 implicitWidth: previewRowLayout.implicitWidth + padding * 2

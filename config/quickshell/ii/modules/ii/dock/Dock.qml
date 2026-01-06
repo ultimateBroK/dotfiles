@@ -28,21 +28,30 @@ Scope { // Scope
             screen: modelData
             visible: !GlobalStates.screenLocked
 
+            // When the horizontal bar is moved to the bottom, move the dock to the top edge.
+            // Note: `Config.options.bar.bottom` is overloaded (horizontal: bottom; vertical: right).
+            readonly property bool dockAtTop: (!Config.options.bar.vertical && Config.options.bar.bottom)
+            readonly property real dockShadowPad: Appearance.sizes.elevationMargin
+            // Bring dock closer to the screen edge than the default Hyprland outer gap.
+            readonly property real dockEdgeGap: Appearance.sizes.hyprlandGapsOut * 0.5
+
             property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
 
             anchors {
-                bottom: true
+                top: dockRoot.dockAtTop
+                bottom: !dockRoot.dockAtTop
                 left: true
                 right: true
             }
 
-            exclusiveZone: root.pinned ? implicitHeight - (Appearance.sizes.hyprlandGapsOut) - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
+            // Reserve the visible dock surface (+ edge gap) when pinned.
+            exclusiveZone: root.pinned ? ((Config.options?.dock.height ?? 70) + dockRoot.dockEdgeGap) : 0
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
             color: "transparent"
 
-            implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
+            implicitHeight: (Config.options?.dock.height ?? 70) + dockRoot.dockShadowPad + dockRoot.dockEdgeGap
 
             mask: Region {
                 item: dockMouseArea
@@ -52,14 +61,32 @@ Scope { // Scope
                 id: dockMouseArea
                 height: parent.height
                 anchors {
-                    top: parent.top
-                    topMargin: dockRoot.reveal ? 0 : Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) : (dockRoot.implicitHeight + 1)
+                    top: dockRoot.dockAtTop ? undefined : parent.top
+                    bottom: dockRoot.dockAtTop ? parent.bottom : undefined
+                    topMargin: dockRoot.dockAtTop
+                        ? 0
+                        : (dockRoot.reveal
+                            ? 0
+                            : (Config.options?.dock.hoverToReveal
+                                ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight)
+                                : (dockRoot.implicitHeight + 1)))
+                    bottomMargin: dockRoot.dockAtTop
+                        ? (dockRoot.reveal
+                            ? 0
+                            : (Config.options?.dock.hoverToReveal
+                                ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight)
+                                : (dockRoot.implicitHeight + 1)))
+                        : 0
                     horizontalCenter: parent.horizontalCenter
                 }
                 implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
                 hoverEnabled: true
 
                 Behavior on anchors.topMargin {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+
+                Behavior on anchors.bottomMargin {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
 
@@ -76,18 +103,20 @@ Scope { // Scope
                             horizontalCenter: parent.horizontalCenter
                         }
 
-                        implicitWidth: dockRow.implicitWidth + 5 * 2
-                        height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
+                        implicitWidth: dockVisualBackground.implicitWidth
+
+                        height: parent.height - dockRoot.dockShadowPad - dockRoot.dockEdgeGap
 
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
-                            property real margin: Appearance.sizes.elevationMargin
+                            property real margin: dockRoot.dockShadowPad
                             anchors.fill: parent
-                            anchors.topMargin: Appearance.sizes.elevationMargin
-                            anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
+                            anchors.topMargin: dockRoot.dockAtTop ? dockRoot.dockEdgeGap : dockRoot.dockShadowPad
+                            anchors.bottomMargin: dockRoot.dockAtTop ? dockRoot.dockShadowPad : dockRoot.dockEdgeGap
+                            implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
                             // macOS-like "frosted" dock:
                             // - compositor blur comes from Hyprland layerrules
                             // - we keep the background semi-transparent + add a subtle highlight gradient
@@ -141,52 +170,51 @@ Scope { // Scope
                                     ? Qt.rgba(1, 1, 1, 0.07)
                                     : Qt.rgba(1, 1, 1, 0.09)
                             }
-                        }
 
-                        RowLayout {
-                            id: dockRow
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: 3
-                            property real padding: 5
+                            RowLayout {
+                                id: dockRow
+                                anchors.fill: parent
+                                anchors.margins: padding
+                                spacing: 3
+                                property real padding: 5
 
-                            VerticalButtonGroup {
-                                Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
-                                GroupButton {
-                                    // Pin button
-                                    baseWidth: 35
-                                    baseHeight: 35
-                                    clickedWidth: baseWidth
-                                    clickedHeight: baseHeight + 20
-                                    buttonRadius: Appearance.rounding.normal
-                                    toggled: root.pinned
-                                    onClicked: root.pinned = !root.pinned
-                                    contentItem: MaterialSymbol {
-                                        text: "keep"
-                                        horizontalAlignment: Text.AlignHCenter
-                                        iconSize: Appearance.font.pixelSize.larger
-                                        color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                VerticalButtonGroup {
+                                    GroupButton {
+                                        // Pin button
+                                        baseWidth: 35
+                                        baseHeight: 35
+                                        clickedWidth: baseWidth
+                                        clickedHeight: baseHeight + 20
+                                        buttonRadius: Appearance.rounding.normal
+                                        toggled: root.pinned
+                                        onClicked: root.pinned = !root.pinned
+                                        contentItem: MaterialSymbol {
+                                            text: "keep"
+                                            horizontalAlignment: Text.AlignHCenter
+                                            iconSize: Appearance.font.pixelSize.larger
+                                            color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                        }
                                     }
                                 }
-                            }
-                            DockSeparator {}
-                            DockApps {
-                                id: dockApps
-                                buttonPadding: dockRow.padding
-                            }
-                            DockSeparator {}
-                            DockButton {
-                                Layout.fillHeight: true
-                                onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
-                                topInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
-                                bottomInset: Appearance.sizes.hyprlandGapsOut + dockRow.padding
-                                contentItem: MaterialSymbol {
-                                    anchors.fill: parent
-                                    horizontalAlignment: Text.AlignHCenter
-                                    font.pixelSize: parent.width / 2
-                                    text: "apps"
-                                    color: Appearance.colors.colOnLayer0
+                                DockSeparator {}
+                                DockApps {
+                                    id: dockApps
+                                    buttonPadding: dockRow.padding
+                                    dockAtTop: dockRoot.dockAtTop
+                                }
+                                DockSeparator {}
+                                DockButton {
+                                    Layout.fillHeight: true
+                                    onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
+                                    topInset: 0
+                                    bottomInset: 0
+                                    contentItem: MaterialSymbol {
+                                        anchors.fill: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        font.pixelSize: parent.width / 2
+                                        text: "apps"
+                                        color: Appearance.colors.colOnLayer0
+                                    }
                                 }
                             }
                         }

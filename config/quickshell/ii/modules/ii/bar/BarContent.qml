@@ -8,6 +8,7 @@ import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import qs.modules.ii.bar
 
 Item { // Bar content region
     id: root
@@ -30,48 +31,10 @@ Item { // Bar content region
         color: Appearance.colors.colOutlineVariant
     }
 
-    // Background shadow
-    Loader {
-        active: topbarHasBackground && Config.options.bar.cornerStyle === 1 && Config.options.bar.floatStyleShadow
-        anchors.fill: barBackground
-        sourceComponent: StyledRectangularShadow {
-            anchors.fill: undefined // The loader's anchors act on this, and this should not have any anchor
-            target: barBackground
-        }
-    }
-    // Background (translucent for wallpaper readability; slightly stronger when autohide is enabled)
-    Rectangle {
-        id: barBackground
-        anchors {
-            fill: parent
-            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0
-        }
-        color: topbarHasBackground ? ColorUtils.transparentize(Appearance.colors.colLayer0, Config.options.bar.autoHide.enable ? 0.2 : 1) : "transparent"
-        Behavior on color { ColorAnimation { duration: 220 } }
-        radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
-        border.width: 0
-        border.color: "transparent"
-    }
-    
-    // Subtle accent gradient overlay for vibrant schemes
-    Rectangle {
-        id: barAccentGradient
-        anchors.fill: barBackground
-        radius: barBackground.radius
-        visible: {
-            var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
-            return (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad") && topbarHasBackground;
-        }
-        opacity: 0.35
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0.0; color: "transparent" }
-            GradientStop { 
-                position: 1.0; 
-                color: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colLayer0, Appearance.colors.colPrimary, 0.12), 0.5)
-            }
-        }
-        z: -1
+    BarBackdrop {
+        anchors.fill: parent
+        hasBackground: root.topbarHasBackground
+        vertical: false
     }
 
     FocusedScrollMouseArea { // Left side | scroll to change brightness
@@ -246,7 +209,7 @@ Item { // Bar content region
             }
         }
 
-        // Status group: Battery + Weather
+        // Status group: Weather + Battery
         BarGroup {
             id: statusGroup
             anchors.verticalCenter: parent.verticalCenter
@@ -254,14 +217,14 @@ Item { // Bar content region
             visible: ((root.useShortenedForm < 2 && Battery.available) || Config.options.bar.weather.enable)
             padding: 8
 
-            BatteryIndicator {
-                visible: (root.useShortenedForm < 2 && Battery.available)
-                Layout.alignment: Qt.AlignVCenter
-            }
-
             Loader {
                 active: Config.options.bar.weather.enable
                 sourceComponent: WeatherBar {}
+            }
+
+            BatteryIndicator {
+                visible: (root.useShortenedForm < 2 && Battery.available)
+                Layout.alignment: Qt.AlignVCenter
             }
         }
 
@@ -420,24 +383,11 @@ Item { // Bar content region
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
-                    MaterialSymbol {
-                        id: volumeStatusIcon
+                    VolumeStatusIcon {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
-                        property real volumeValue: (Audio?.value ?? Audio.sink?.audio?.volume ?? 0)
-                        property bool muted: Audio.sink?.audio?.muted ?? false
-
-                        text: {
-                            if (muted || volumeValue <= 0.001)
-                                return "volume_off";
-                            if (volumeValue <= 0.40)
-                                return "volume_mute";
-                            if (volumeValue <= 0.70)
-                                return "volume_down";
-                            return "volume_up";
-                        }
-                        iconSize: Appearance.font.pixelSize.larger
-                        color: rightSidebarButton.colText
+                        iconPixelSize: Appearance.font.pixelSize.larger
+                        iconColor: rightSidebarButton.colText
                     }
                     MaterialSymbol {
                         visible: BluetoothStatus.available

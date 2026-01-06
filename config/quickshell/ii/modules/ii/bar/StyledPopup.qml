@@ -28,6 +28,10 @@ LazyLoader {
         id: popupWindow
         color: "transparent"
 
+        // Ensure the popup is placed on the same output as the bar when possible.
+        // This also allows us to clamp positioning to the correct screen bounds.
+        screen: root.QsWindow?.window?.screen
+
         anchors.left: !Config.options.bar.vertical || (Config.options.bar.vertical && !Config.options.bar.bottom)
         anchors.right: Config.options.bar.vertical && Config.options.bar.bottom
         anchors.top: Config.options.bar.vertical || (!Config.options.bar.vertical && !Config.options.bar.bottom)
@@ -35,6 +39,25 @@ LazyLoader {
 
         implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2 + root.popupBackgroundMargin
         implicitHeight: popupBackground.implicitHeight + Appearance.sizes.elevationMargin * 2 + root.popupBackgroundMargin
+
+        readonly property real _pad: Appearance.sizes.elevationMargin
+        readonly property real _screenWidth: popupWindow.screen?.width ?? root.QsWindow?.window?.screen?.width ?? 0
+        readonly property real _screenHeight: popupWindow.screen?.height ?? root.QsWindow?.window?.screen?.height ?? 0
+
+        function _clamp(v, lo, hi) {
+            if (hi < lo) return lo;
+            return Math.max(lo, Math.min(hi, v));
+        }
+
+        function _clampX(x) {
+            const maxX = Math.max(0, _screenWidth - popupWindow.implicitWidth - _pad);
+            return _clamp(x, _pad, maxX);
+        }
+
+        function _clampY(y) {
+            const maxY = Math.max(0, _screenHeight - popupWindow.implicitHeight - _pad);
+            return _clamp(y, _pad, maxY);
+        }
 
         mask: Region {
             item: popupBackground
@@ -44,18 +67,31 @@ LazyLoader {
         exclusiveZone: 0
         margins {
             left: {
-                if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
-                    root.hoverTarget, 
-                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
-                ).x;
+                if (!Config.options.bar.vertical) {
+                    const mapped = root.QsWindow?.mapFromItem(
+                        root.hoverTarget,
+                        (root.hoverTarget.width - popupBackground.implicitWidth) / 2,
+                        0
+                    );
+                    const x = mapped?.x ?? 0;
+
+                    return popupWindow._clampX(x);
+                }
                 return Appearance.sizes.verticalBarWidth
             }
             top: {
+                // Horizontal bar popups always start after the bar.
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;
-                return root.QsWindow?.mapFromItem(
-                    root.hoverTarget, 
-                    (root.hoverTarget.height - popupBackground.implicitHeight) / 2, 0
-                ).y;
+
+                // Vertical bar popups are centered on the hover target, but clamped to screen bounds.
+                const mapped = root.QsWindow?.mapFromItem(
+                    root.hoverTarget,
+                    (root.hoverTarget.height - popupBackground.implicitHeight) / 2,
+                    0
+                );
+                const y = mapped?.y ?? 0;
+
+                return popupWindow._clampY(y);
             }
             right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight

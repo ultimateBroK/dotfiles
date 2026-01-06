@@ -9,9 +9,13 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import qs.modules.ii.bar as Bar
+import qs.modules.ii.verticalBar
 
 Item { // Bar content region
     id: root
+
+    // Match horizontal: bar background is shown if explicitly enabled OR when autoHide is enabled
+    readonly property bool topbarHasBackground: (Config.options.bar.showBackground || Config.options.bar.autoHide.enable)
 
     property var screen: root.QsWindow.window?.screen
     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
@@ -24,26 +28,10 @@ Item { // Bar content region
         color: Appearance.colors.colOutlineVariant
     }
 
-    // Background shadow
-    Loader {
-        active: Config.options.bar.showBackground && Config.options.bar.cornerStyle === 1
-        anchors.fill: barBackground
-        sourceComponent: StyledRectangularShadow {
-            anchors.fill: undefined // The loader's anchors act on this, and this should not have any anchor
-            target: barBackground
-        }
-    }
-    // Background
-    Rectangle {
-        id: barBackground
-        anchors {
-            fill: parent
-            margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
-        }
-        color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
-        radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
-        border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
-        border.color: Appearance.colors.colLayer0Border
+    Bar.BarBackdrop {
+        anchors.fill: parent
+        hasBackground: root.topbarHasBackground
+        vertical: true
     }
 
     FocusedScrollMouseArea { // Top section | scroll to change brightness
@@ -51,7 +39,8 @@ Item { // Bar content region
         anchors.top: parent.top
         implicitHeight: topSectionColumnLayout.implicitHeight
         implicitWidth: Appearance.sizes.baseVerticalBarWidth
-        height: (root.height - middleSection.height) / 2
+        // Keep a flexible spacer above the middle section, but never go negative
+        height: Math.max(topSectionColumnLayout.implicitHeight, (root.height - middleSection.height) / 2)
         width: Appearance.sizes.verticalBarWidth
 
         onScrollDown: root.brightnessMonitor.setBrightness(root.brightnessMonitor.brightness - 0.05)
@@ -146,9 +135,23 @@ Item { // Bar content region
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }
+            
+        }
+
+        // Status group: Weather + Battery (matches horizontal ordering)
+        Bar.BarGroup {
+            id: statusGroup
+            vertical: true
+            padding: 8
+            visible: (Battery.available || Config.options.bar.weather.enable)
+
+            Loader {
+                active: Config.options.bar.weather.enable
+                sourceComponent: VerticalWeatherWidget {}
+            }
 
             HorizontalBarSeparator {
-                visible: Battery.available
+                visible: Battery.available && Config.options.bar.weather.enable
             }
 
             BatteryIndicator {
@@ -156,7 +159,29 @@ Item { // Bar content region
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }
-            
+        }
+
+        // Utilities group (vertical equivalent of UtilButtons)
+        Bar.BarGroup {
+            id: utilsGroup
+            vertical: true
+            padding: 8
+            visible: (
+                Config.options.bar.verbose && (
+                    Config.options.bar.utilButtons.showScreenSnip ||
+                    Config.options.bar.utilButtons.showScreenRecord ||
+                    Config.options.bar.utilButtons.showColorPicker ||
+                    Config.options.bar.utilButtons.showKeyboardToggle ||
+                    Config.options.bar.utilButtons.showMicToggle ||
+                    Config.options.bar.utilButtons.showDarkModeToggle ||
+                    Config.options.bar.utilButtons.showPerformanceProfileToggle
+                )
+            )
+
+            VerticalUtilButtons {
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+            }
         }
     }
 
@@ -292,6 +317,12 @@ Item { // Bar content region
                         text: Network.materialSymbol
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
+                    }
+
+                    Bar.VolumeStatusIcon {
+                        Layout.bottomMargin: indicatorsColumnLayout.realSpacing
+                        iconPixelSize: Appearance.font.pixelSize.larger
+                        iconColor: rightSidebarButton.colText
                     }
                     MaterialSymbol {
                         visible: BluetoothStatus.available

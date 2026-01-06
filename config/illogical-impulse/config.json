@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -124,8 +124,8 @@
                 "showOnlyWhenLocked": false,
                 "style": "digital",
                 "styleLocked": "cookie",
-                "x": 188,
-                "y": 261
+                "x": 498.5,
+                "y": 271
             },
             "weather": {
                 "enable": false,
@@ -244,12 +244,10 @@
             "spotify",
             "io.github.kukuruzka165.materialgram",
             "tradingview",
-            "code-insiders",
-            "cursor",
-            "io.github.diegoivanme.flowtime",
             "jetbrains-pycharm",
-            "floorp",
-            "fontforge"
+            "code",
+            "code-insiders",
+            "cursor"
         ],
         "pinnedOnStartup": true
     },
