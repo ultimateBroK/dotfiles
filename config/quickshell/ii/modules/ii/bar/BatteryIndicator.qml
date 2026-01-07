@@ -88,8 +88,10 @@ MouseArea {
     ClippedProgressBar {
         id: batteryProgress
         anchors.centerIn: parent
-        valueBarWidth: 36
+        // Make the battery indicator longer on the top bar.
+        valueBarWidth: 48
         value: percentage
+        showTextMaskOnTop: (isCharging || Config.options.battery.showPercentageInIcon)
 
         Behavior on value { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }
         
@@ -157,6 +159,7 @@ MouseArea {
                     font: batteryProgress.font
                     // Use animated displayPercentage (0..1) and convert to percent
                     text: Math.round(root.displayPercentage * 100)
+                    color: Appearance.colors.colOnSurface
                     visible: Config.options.battery.showPercentageInIcon
                 }
             }

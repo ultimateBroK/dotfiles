@@ -13,6 +13,10 @@ ProgressBar {
     property bool vertical: false
     property real valueBarWidth: 30
     property real valueBarHeight: 18
+    // When enabled, the provided textMask (often battery % + icons) is drawn on top
+    // of the bar, instead of only acting as a cutout mask. Useful when the cutout
+    // makes the text look too faint on certain themes/backgrounds.
+    property bool showTextMaskOnTop: false
     property color highlightColor: Appearance?.colors.colOnSecondaryContainer ?? "#685496"
     property color trackColor: ColorUtils.transparentize(highlightColor, 0.5) ?? "#F1D3F9"
     property alias radius: contentItem.radius
@@ -122,9 +126,24 @@ ProgressBar {
     }
 
     OpacityMask {
+        id: cutoutMask
         anchors.fill: parent
         source: roundingMask
         invert: true
         maskSource: root.textMask
+    }
+
+    // Keep default behavior (masked cutout only) unless explicitly enabled.
+    Binding {
+        target: root.textMask
+        property: "z"
+        value: root.showTextMaskOnTop ? 2 : -1
+    }
+
+    // Ensure the masked bar stays below the optional overlay text.
+    Binding {
+        target: cutoutMask
+        property: "z"
+        value: 0
     }
 }
