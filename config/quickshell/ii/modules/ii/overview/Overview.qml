@@ -278,6 +278,12 @@ Scope {
                 GlobalStates.superReleaseMightTrigger = true;
                 return;
             }
+
+            // When the topbar is "unpinned" (auto-hide enabled), do not toggle overview on Super release.
+            if (Config?.options?.bar?.autoHide?.enable) {
+                return;
+            }
+
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
     }
