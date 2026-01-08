@@ -271,6 +271,7 @@ Scope {
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = true;
+            GlobalStates.superPressedAtMs = Date.now();
         }
 
         onReleased: {
@@ -279,10 +280,14 @@ Scope {
                 return;
             }
 
-            // When the topbar is "unpinned" (auto-hide enabled), do not toggle overview on Super release.
-            if (Config?.options?.bar?.autoHide?.enable) {
-                return;
-            }
+            const barAutoHideEnabled = (Config?.options?.bar?.autoHide?.enable ?? false);
+            const showBarDelay = (Config?.options?.bar?.autoHide?.showWhenPressingSuper?.delay ?? 140);
+            const holdThresholdMs = Math.max(220, showBarDelay);
+            const heldMs = Date.now() - (GlobalStates.superPressedAtMs ?? 0);
+
+            // When topbar is "unpinned" (auto-hide enabled), don't open overview on a long hold + release.
+            // A quick tap still toggles overview.
+            if (barAutoHideEnabled && heldMs >= holdThresholdMs) return;
 
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
         }
