@@ -96,26 +96,30 @@ Singleton {
             "scheme-tonal-spot": 1.05
         }[colorSchemeType] ?? 1.0
         
-        // Light mode: slightly reduce saturation boost to avoid being too intense
+        // Light mode: reduce saturation boost more aggressively to keep colors balanced.
         if (!isDarkMode && base > 1.0) {
-            return base * 0.92
+            return base * 0.85
         }
         // Dark mode can handle full saturation
         return base
     }
     readonly property real schemePrimaryMix: {
+        // Light mode: reduce accent-tinting of surfaces so the UI doesn't look "over-tinted".
+        const lightScale = root.isDarkMode ? 1.0 : 0.55;
+        let base = 0.08;
         switch(colorSchemeType) {
-            case "scheme-vibrant": return 0.12;
-            case "scheme-rainbow": return 0.15;
-            case "scheme-fruit-salad": return 0.18;
-            case "scheme-expressive": return 0.10;
-            case "scheme-fidelity": return 0.08;
-            case "scheme-content": return 0.06;
-            case "scheme-neutral": return 0.03;
-            case "scheme-monochrome": return 0.0;
-            case "scheme-tonal-spot": return 0.09;
-            default: return 0.08;
+            case "scheme-vibrant": base = 0.12; break;
+            case "scheme-rainbow": base = 0.15; break;
+            case "scheme-fruit-salad": base = 0.18; break;
+            case "scheme-expressive": base = 0.10; break;
+            case "scheme-fidelity": base = 0.08; break;
+            case "scheme-content": base = 0.06; break;
+            case "scheme-neutral": base = 0.03; break;
+            case "scheme-monochrome": base = 0.0; break;
+            case "scheme-tonal-spot": base = 0.09; break;
+            default: base = 0.08; break;
         }
+        return base * lightScale;
     }
     readonly property real schemeContrastBoost: {
         let base = {
@@ -232,7 +236,9 @@ Singleton {
         // Base layer0 with scheme-aware primary mixing and mode-aware adjustments
         property color colLayer0Base: {
             var bg = ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency);
+            // Keep the base surface closer to pure background in light mode to avoid "tint wash".
             var mixRatio = Config.options.appearance.extraBackgroundTint ? (0.99 - root.schemePrimaryMix) : (1.0 - root.schemePrimaryMix);
+            if (!root.isDarkMode) mixRatio = Math.max(mixRatio, 0.94);
             var mixed = ColorUtils.mix(bg, m3colors.m3primary, mixRatio);
             
             // Apply lightness adjustment for light mode
@@ -285,9 +291,9 @@ Singleton {
                 // Enhance border visibility for vibrant schemes
                 var base = Qt.color(borderColor);
                 var enhanced = Qt.hsla(base.hslHue, Math.min(1.0, base.hslSaturation * 1.1), base.hslLightness, base.a);
-                return ColorUtils.mix(enhanced, colLayer0, 0.4);
+                return ColorUtils.mix(enhanced, colLayer0, root.isDarkMode ? 0.4 : 0.55);
             }
-            return ColorUtils.mix(borderColor, colLayer0, 0.4);
+            return ColorUtils.mix(borderColor, colLayer0, root.isDarkMode ? 0.4 : 0.55);
         }
         property color colLayer1: {
             var base = ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency);

@@ -414,6 +414,63 @@ ContentPage {
             }
             
         }
+
+        ContentSubsection {
+            title: Translation.tr("System resources")
+
+            ConfigSwitch {
+                buttonIcon: "memory"
+                text: Translation.tr("Show resources on bar")
+                checked: Config.options.bar.resources.enable
+                onCheckedChanged: {
+                    Config.options.bar.resources.enable = checked;
+                }
+            }
+
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "memory"
+                    text: Translation.tr("RAM")
+                    checked: Config.options.bar.resources.showMemory
+                    enabled: Config.options.bar.resources.enable
+                    onCheckedChanged: {
+                        Config.options.bar.resources.showMemory = checked;
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "developer_board"
+                    text: Translation.tr("GPU")
+                    checked: Config.options.bar.resources.showGpu
+                    enabled: Config.options.bar.resources.enable
+                    onCheckedChanged: {
+                        Config.options.bar.resources.showGpu = checked;
+                    }
+                }
+            }
+
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    buttonIcon: "planner_review"
+                    text: Translation.tr("CPU")
+                    checked: Config.options.bar.resources.showCpu
+                    enabled: Config.options.bar.resources.enable
+                    onCheckedChanged: {
+                        Config.options.bar.resources.showCpu = checked;
+                    }
+                }
+                ConfigSwitch {
+                    buttonIcon: "swap_horiz"
+                    text: Translation.tr("Swap (popup)")
+                    checked: Config.options.bar.resources.showSwap
+                    enabled: Config.options.bar.resources.enable
+                    onCheckedChanged: {
+                        Config.options.bar.resources.showSwap = checked;
+                    }
+                }
+            }
+        }
     }
 
     NoticeBox {

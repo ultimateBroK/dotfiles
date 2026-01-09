@@ -233,10 +233,18 @@ Singleton {
                 property bool verbose: true
                 property bool vertical: false
                 property JsonObject resources: JsonObject {
+                    property bool enable: true
+                    property bool showMemory: true
+                    property bool showGpu: true
+                    property bool showCpu: true
+                    // Swap is not shown in the bar by default (GPU replaced it), but can be shown in the popup details.
+                    property bool showSwap: true
                     property bool alwaysShowSwap: true
+                    property bool alwaysShowGpu: true
                     property bool alwaysShowCpu: true
                     property int memoryWarningThreshold: 95
                     property int swapWarningThreshold: 85
+                    property int gpuWarningThreshold: 90
                     property int cpuWarningThreshold: 90
                 }
                 property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command

@@ -10,6 +10,7 @@ MouseArea {
     implicitHeight: columnLayout.implicitHeight
     implicitWidth: columnLayout.implicitWidth
     hoverEnabled: !Config.options.bar.tooltips.clickToShow
+    visible: Config.options.bar.resources.enable
 
     ColumnLayout {
         id: columnLayout
@@ -18,6 +19,7 @@ MouseArea {
 
         Resource {
             Layout.alignment: Qt.AlignHCenter
+            visible: Config.options.bar.resources.showMemory
             iconName: "memory"
             percentage: ResourceUsage.memoryUsedPercentage
             warningThreshold: Config.options.bar.resources.memoryWarningThreshold
@@ -25,13 +27,15 @@ MouseArea {
 
         Resource {
             Layout.alignment: Qt.AlignHCenter
-            iconName: "swap_horiz"
-            percentage: ResourceUsage.swapUsedPercentage
-            warningThreshold: Config.options.bar.resources.swapWarningThreshold
+            visible: Config.options.bar.resources.showGpu && ResourceUsage.gpuAvailable
+            iconName: "developer_board"
+            percentage: ResourceUsage.gpuUsage
+            warningThreshold: Config.options.bar.resources.gpuWarningThreshold
         }
 
         Resource {
             Layout.alignment: Qt.AlignHCenter
+            visible: Config.options.bar.resources.showCpu
             iconName: "planner_review"
             percentage: ResourceUsage.cpuUsage
             warningThreshold: Config.options.bar.resources.cpuWarningThreshold

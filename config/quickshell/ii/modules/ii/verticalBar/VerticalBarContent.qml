@@ -77,6 +77,11 @@ Item { // Bar content region
         Bar.BarGroup {
             vertical: true
             padding: 8
+            visible: Config.options.bar.resources.enable && (
+                Config.options.bar.resources.showMemory ||
+                Config.options.bar.resources.showGpu ||
+                Config.options.bar.resources.showCpu
+            )
             Resources {
                 Layout.fillWidth: true
                 Layout.fillHeight: false

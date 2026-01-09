@@ -134,6 +134,11 @@ Item { // Bar content region
                 // Group 1: system resources
                 BarGroup {
                     id: resourcesGroup
+                    visible: Config.options.bar.resources.enable && (
+                        Config.options.bar.resources.showMemory ||
+                        Config.options.bar.resources.showGpu ||
+                        Config.options.bar.resources.showCpu
+                    )
                     Layout.fillHeight: true
                     Layout.fillWidth: root.useShortenedForm === 2
 
