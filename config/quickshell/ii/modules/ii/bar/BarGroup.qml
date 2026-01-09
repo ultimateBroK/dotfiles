@@ -27,11 +27,13 @@ Item {
         // Keep this subtle so the bar doesn't look "too dark".
         const l = Math.max(0, Math.min(1, Appearance?.wallpaperLightness ?? 0.5));
         const isDark = Appearance?.isDarkMode ?? true;
-        // IMPORTANT: use an *opaque* base surface here. Appearance.colors.colLayer1 already
-        // includes contentTransparency; applying another transparentize() on top makes the
-        // group background effectively double-transparent and can look like a dark overlay
-        // in light mode (dark wallpaper bleeds through).
-        const baseSurface = Appearance?.m3colors?.m3surfaceContainerLow ?? Appearance.colors.colLayer1;
+        // Avoid "double transparency" in light mode:
+        // Appearance.colors.colLayer1 is already transparentized by contentTransparency.
+        // BarGroup also transparentizes for the glass effect; doing both makes the group
+        // overly see-through, so dark wallpaper bleeds through and looks like a black overlay.
+        const baseSurface = isDark
+            ? Appearance.colors.colLayer1
+            : (Appearance?.m3colors?.m3surfaceContainerLow ?? Appearance.colors.colLayer1);
         // Light mode should stay airy: start later and cap lower.
         const start = isDark ? 0.70 : 0.82;
         const cap = isDark ? 0.12 : 0.06;

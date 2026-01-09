@@ -48,23 +48,14 @@ GroupButton {
     horizontalPadding: padding
     verticalPadding: padding
 
-    readonly property bool isDarkMode: Appearance?.isDarkMode ?? true
-    // Use more opaque surfaces in light mode to avoid low-contrast "washed" tiles on white backgrounds.
-    colBackground: isDarkMode ? Appearance.colors.colLayer2 : Appearance.m3colors.m3surfaceContainerHigh
-    colBackgroundHover: isDarkMode ? Appearance.colors.colLayer2Hover : ColorUtils.mix(Appearance.m3colors.m3surfaceContainerHigh, Appearance.m3colors.m3onSurface, 0.92)
-    colBackgroundActive: isDarkMode ? Appearance.colors.colLayer2Active : ColorUtils.mix(Appearance.m3colors.m3surfaceContainerHigh, Appearance.m3colors.m3onSurface, 0.86)
+    colBackground: Appearance.colors.colLayer2
     colBackgroundToggled: (altAction && expandedSize) ? Appearance.colors.colLayer2 : Appearance.colors.colPrimary
     colBackgroundToggledHover: (altAction && expandedSize) ? Appearance.colors.colLayer2Hover : Appearance.colors.colPrimaryHover
     colBackgroundToggledActive: (altAction && expandedSize) ? Appearance.colors.colLayer2Active : Appearance.colors.colPrimaryActive
     buttonRadius: toggled ? Appearance.rounding.large : height / 2
     buttonRadiusPressed: Appearance.rounding.normal
-    property color colText: {
-        if (toggled && !(altAction && expandedSize) && enabled) return Appearance.colors.colOnPrimary;
-        if (isDarkMode) return ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7);
-        // Light mode: use strong foreground for readability on light tiles.
-        return enabled ? Appearance.m3colors.m3onSurface : ColorUtils.mix(Appearance.m3colors.m3onSurface, Appearance.m3colors.m3surface, 0.55);
-    }
-    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colOnPrimary : (isDarkMode ? Appearance.colors.colOnLayer3 : Appearance.m3colors.m3onSurfaceVariant)) : colText
+    property color colText: (toggled && !(altAction && expandedSize) && enabled) ? Appearance.colors.colOnPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7)
+    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
 
     onClicked: {
         if (root.expandedSize && root.altAction) root.altAction();
