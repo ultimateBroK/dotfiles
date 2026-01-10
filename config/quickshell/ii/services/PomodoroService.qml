@@ -9,8 +9,7 @@ import Quickshell.Io
 import QtQuick
 
 /**
- * Pomodoro timer service for ADHD focus management.
- * Standard pomodoro: 25 minutes work, 5 minutes break
+ * Simple Pomodoro timer service with basic logic
  */
 Singleton {
     id: root
@@ -28,15 +27,13 @@ Singleton {
     property bool soundEnabled: Config.options?.adhd?.pomodoro?.sound?.enable ?? true
     property string alertSound: Config.options?.adhd?.pomodoro?.sound?.name ?? "complete"
 
-    // Use explicit bindings to Persistent state for reactivity
+    // Basic timer state
     property bool running: false
-    property int currentPhase: 0
+    property int currentPhase: PomodoroService.Phase.Work
     property int remainingSeconds: workDuration * 60
-    property int startTime: 0
-    property int totalDuration: workDuration * 60
     property int completedSessions: 0
 
-    function currentPhaseDurationSeconds() {
+    function getPhaseDuration() {
         if (currentPhase === PomodoroService.Phase.Work) {
             return workDuration * 60;
         }
@@ -46,60 +43,10 @@ Singleton {
         return longBreakDuration * 60;
     }
 
-    function resyncDurationIfIdle() {
-        if (running) return;
-        const duration = currentPhaseDurationSeconds();
-        totalDuration = duration;
-        remainingSeconds = duration;
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.totalDuration = duration;
-            Persistent.states.pomodoro.startTime = 0;
-            Persistent.states.pomodoro.running = false;
-        }
-    }
-
     function playAlert(soundOverride = "") {
         const soundName = (soundOverride && soundOverride.length > 0) ? soundOverride : alertSound;
         if (!soundEnabled || !soundName) return;
         Audio.playSystemSound(soundName);
-    }
-
-    // Sync state from Persistent when it changes
-    Connections {
-        target: Persistent.states?.pomodoro ?? null
-        function onRunningChanged() {
-            root.running = Persistent.states.pomodoro.running
-        }
-        function onCurrentPhaseChanged() {
-            root.currentPhase = Persistent.states.pomodoro.currentPhase
-        }
-        function onStartTimeChanged() {
-            root.startTime = Persistent.states.pomodoro.startTime
-        }
-        function onTotalDurationChanged() {
-            root.totalDuration = Persistent.states.pomodoro.totalDuration
-        }
-        function onCompletedSessionsChanged() {
-            root.completedSessions = Persistent.states.pomodoro.completedSessions
-        }
-    }
-
-    onWorkDurationChanged: resyncDurationIfIdle()
-    onShortBreakDurationChanged: resyncDurationIfIdle()
-    onLongBreakDurationChanged: resyncDurationIfIdle()
-
-    function getCurrentTimeInSeconds() {
-        return Math.floor(Date.now() / 1000);
-    }
-
-    function refreshTimer() {
-        if (!running) return;
-        const elapsed = getCurrentTimeInSeconds() - startTime;
-        remainingSeconds = Math.max(0, totalDuration - elapsed);
-        
-        if (remainingSeconds <= 0) {
-            completeSession();
-        }
     }
 
     Timer {
@@ -107,158 +54,66 @@ Singleton {
         interval: 1000 // Update every second
         running: root.running
         repeat: true
-        onTriggered: refreshTimer()
-    }
-
-    Component.onCompleted: {
-        // Initialize state from Persistent
-        if (Persistent.states?.pomodoro) {
-            running = Persistent.states.pomodoro.running ?? false
-            currentPhase = Persistent.states.pomodoro.currentPhase ?? 0
-            startTime = Persistent.states.pomodoro.startTime ?? 0
-            totalDuration = Persistent.states.pomodoro.totalDuration ?? (workDuration * 60)
-            completedSessions = Persistent.states.pomodoro.completedSessions ?? 0
-            
-            if (running && startTime > 0) {
-                refreshTimer();
+        onTriggered: {
+            if (remainingSeconds > 0) {
+                remainingSeconds = remainingSeconds - 1;
             } else {
-                remainingSeconds = totalDuration > 0 ? totalDuration : workDuration * 60;
+                completeSession();
             }
         }
     }
 
     function startTimer() {
-        const duration = currentPhaseDurationSeconds();
-        
-        // Update local state
-        running = true;
-        startTime = getCurrentTimeInSeconds();
-        totalDuration = duration;
-        remainingSeconds = duration;
-        
-        // Persist to storage
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.running = true;
-            Persistent.states.pomodoro.startTime = startTime;
-            Persistent.states.pomodoro.totalDuration = duration;
+        if (remainingSeconds <= 0) {
+            remainingSeconds = getPhaseDuration();
         }
-        
-        refreshTimer();
+        running = true;
     }
 
     function pauseTimer() {
-        // Update local state
         running = false;
-        
-        // Persist to storage
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.running = false;
-        }
-    }
-
-    function resumeTimer() {
-        if (remainingSeconds > 0) {
-            const newStartTime = getCurrentTimeInSeconds() - (totalDuration - remainingSeconds);
-            
-            // Update local state
-            running = true;
-            startTime = newStartTime;
-            
-            // Persist to storage
-            if (Persistent.states?.pomodoro) {
-                Persistent.states.pomodoro.running = true;
-                Persistent.states.pomodoro.startTime = newStartTime;
-            }
-            
-            refreshTimer();
-        }
     }
 
     function toggleTimer() {
         if (running) {
             pauseTimer();
         } else {
-            if (remainingSeconds <= 0) {
-                resetTimer();
-            }
             startTimer();
         }
     }
 
     function resetTimer() {
-        // Update local state
         running = false;
         currentPhase = PomodoroService.Phase.Work;
-        startTime = 0;
-        totalDuration = workDuration * 60;
         remainingSeconds = workDuration * 60;
-        
-        // Persist to storage
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.running = false;
-            Persistent.states.pomodoro.currentPhase = PomodoroService.Phase.Work;
-            Persistent.states.pomodoro.startTime = 0;
-            Persistent.states.pomodoro.totalDuration = workDuration * 60;
-        }
+        completedSessions = 0;
     }
 
     function completeSession() {
-        pauseTimer();
+        running = false;
         
-        const completedPhase = currentPhase;
-        let nextPhase = PomodoroService.Phase.Work;
-        
-        if (completedPhase === PomodoroService.Phase.Work) {
+        if (currentPhase === PomodoroService.Phase.Work) {
             completedSessions = completedSessions + 1;
-            if (Persistent.states?.pomodoro) {
-                Persistent.states.pomodoro.completedSessions = completedSessions;
-            }
             
             // Determine next phase
             if (completedSessions >= sessionsUntilLongBreak) {
-                nextPhase = PomodoroService.Phase.LongBreak;
+                currentPhase = PomodoroService.Phase.LongBreak;
                 completedSessions = 0;
-                if (Persistent.states?.pomodoro) {
-                    Persistent.states.pomodoro.completedSessions = 0;
-                }
             } else {
-                nextPhase = PomodoroService.Phase.ShortBreak;
+                currentPhase = PomodoroService.Phase.ShortBreak;
             }
         } else {
             // Break finished, start work session
-            nextPhase = PomodoroService.Phase.Work;
+            currentPhase = PomodoroService.Phase.Work;
         }
         
-        // Update local and persistent state
-        currentPhase = nextPhase;
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.currentPhase = nextPhase;
-        }
-        
-        // Reset timer for new phase
-        running = false;
-        startTime = 0;
-        
-        if (nextPhase === PomodoroService.Phase.Work) {
-            totalDuration = workDuration * 60;
-        } else if (nextPhase === PomodoroService.Phase.ShortBreak) {
-            totalDuration = shortBreakDuration * 60;
-        } else {
-            totalDuration = longBreakDuration * 60;
-        }
-        remainingSeconds = totalDuration;
-        
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.running = false;
-            Persistent.states.pomodoro.startTime = 0;
-            Persistent.states.pomodoro.totalDuration = totalDuration;
-        }
+        remainingSeconds = getPhaseDuration();
         
         // Show notification
         if (Notifications.available) {
-            const phaseName = completedPhase === PomodoroService.Phase.Work ? 
+            const phaseName = currentPhase === PomodoroService.Phase.Work ? 
                 Translation.tr("Work") : 
-                (completedPhase === PomodoroService.Phase.LongBreak ? 
+                (currentPhase === PomodoroService.Phase.LongBreak ? 
                     Translation.tr("Long Break") : 
                     Translation.tr("Short Break"));
             Notifications.send({
@@ -271,39 +126,15 @@ Singleton {
     }
 
     function skipToNextPhase() {
-        pauseTimer();
-        
-        let nextPhase;
-        if (currentPhase === PomodoroService.Phase.Work) {
-            nextPhase = PomodoroService.Phase.ShortBreak;
-        } else {
-            nextPhase = PomodoroService.Phase.Work;
-        }
-        
-        // Update local state
-        currentPhase = nextPhase;
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.currentPhase = nextPhase;
-        }
-        
-        // Reset timer for new phase
         running = false;
-        startTime = 0;
         
-        if (nextPhase === PomodoroService.Phase.Work) {
-            totalDuration = workDuration * 60;
-        } else if (nextPhase === PomodoroService.Phase.ShortBreak) {
-            totalDuration = shortBreakDuration * 60;
+        if (currentPhase === PomodoroService.Phase.Work) {
+            currentPhase = PomodoroService.Phase.ShortBreak;
         } else {
-            totalDuration = longBreakDuration * 60;
+            currentPhase = PomodoroService.Phase.Work;
         }
-        remainingSeconds = totalDuration;
         
-        if (Persistent.states?.pomodoro) {
-            Persistent.states.pomodoro.running = false;
-            Persistent.states.pomodoro.startTime = 0;
-            Persistent.states.pomodoro.totalDuration = totalDuration;
-        }
+        remainingSeconds = getPhaseDuration();
     }
 
     function formatTime(seconds) {
@@ -317,5 +148,22 @@ Singleton {
         if (currentPhase === PomodoroService.Phase.Work) return Translation.tr("Work");
         if (currentPhase === PomodoroService.Phase.LongBreak) return Translation.tr("Long Break");
         return Translation.tr("Break");
+    }
+
+    // Update duration when config changes
+    onWorkDurationChanged: {
+        if (!running && currentPhase === PomodoroService.Phase.Work) {
+            remainingSeconds = workDuration * 60;
+        }
+    }
+    onShortBreakDurationChanged: {
+        if (!running && currentPhase === PomodoroService.Phase.ShortBreak) {
+            remainingSeconds = shortBreakDuration * 60;
+        }
+    }
+    onLongBreakDurationChanged: {
+        if (!running && currentPhase === PomodoroService.Phase.LongBreak) {
+            remainingSeconds = longBreakDuration * 60;
+        }
     }
 }

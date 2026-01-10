@@ -119,61 +119,34 @@ Item { // Bar content region
         }
         spacing: 4
 
-        Item {
-            id: leftCenterGroup
+        // System resources - independent component
+        BarGroup {
+            id: resourcesGroup
             anchors.verticalCenter: parent.verticalCenter
-            implicitWidth: root.centerSideModuleWidth
-            width: implicitWidth
-            implicitHeight: Appearance.sizes.baseBarHeight
-            height: implicitHeight
+            visible: Config.options.bar.resources.enable && (
+                Config.options.bar.resources.showMemory ||
+                Config.options.bar.resources.showGpu ||
+                Config.options.bar.resources.showCpu
+            )
+            padding: 8
 
-            RowLayout {
-                anchors.fill: parent
-                spacing: 4
-
-                // Group 1: system resources
-                BarGroup {
-                    id: resourcesGroup
-                    visible: Config.options.bar.resources.enable && (
-                        Config.options.bar.resources.showMemory ||
-                        Config.options.bar.resources.showGpu ||
-                        Config.options.bar.resources.showCpu
-                    )
-                    Layout.fillHeight: true
-                    Layout.fillWidth: root.useShortenedForm === 2
-
-                    Resources {
-                        alwaysShowAllResources: true
-                        Layout.fillWidth: true
-                    }
-                }
-
-                // Group 2: media player
-                BarGroup {
-                    id: mediaGroup
-                    visible: root.useShortenedForm < 2
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-
-                    Media {
-                        Layout.fillWidth: true
-                    }
-                }
+            Resources {
+                alwaysShowAllResources: true
             }
         }
 
         VerticalBarSeparator {
-            visible: Config.options?.bar.borderless
+            visible: Config.options?.bar.borderless && resourcesGroup.visible
         }
 
+        // Workspaces - independent component
         BarGroup {
-            id: middleCenterGroup
+            id: workspacesGroup
             anchors.verticalCenter: parent.verticalCenter
             padding: workspacesWidget.widgetPadding
 
             Workspaces {
                 id: workspacesWidget
-                Layout.fillHeight: true
                 MouseArea {
                     // Right-click to toggle overview
                     anchors.fill: parent
@@ -189,7 +162,25 @@ Item { // Bar content region
         }
 
         VerticalBarSeparator {
-            visible: Config.options?.bar.borderless
+            visible: Config.options?.bar.borderless && mediaGroup.visible
+        }
+
+        // Media player - independent component
+        BarGroup {
+            id: mediaGroup
+            anchors.verticalCenter: parent.verticalCenter
+            visible: root.useShortenedForm < 2
+            padding: 8
+            width: Math.max(250, mediaWidget.implicitWidth + padding * 2)
+
+            Media {
+                id: mediaWidget
+                anchors.fill: parent
+            }
+        }
+
+        VerticalBarSeparator {
+            visible: Config.options?.bar.borderless && mediaGroup.visible
         }
 
         MouseArea {

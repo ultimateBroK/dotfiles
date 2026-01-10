@@ -1,4 +1,5 @@
 import qs.modules.ii.bar
+import qs.modules.ii.bar.weather
 import qs.modules.adhd.bar
 import QtQuick
 import QtQuick.Layouts
@@ -21,7 +22,7 @@ Item {
         radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
     }
 
-    // Left side: Media Player and DateTime
+    // Left side: DateTime and Weather (far left)
     RowLayout {
         id: leftSection
         anchors {
@@ -31,33 +32,57 @@ Item {
         }
         spacing: 10
 
-        // Media Player Widget
-        BarGroup {
-            id: mediaGroup
-            Layout.alignment: Qt.AlignVCenter
-            padding: 8
-
-            Item {
-                Layout.alignment: Qt.AlignVCenter
-                implicitWidth: 220
-                implicitHeight: Appearance.sizes.barHeight
-
-                AdhdMediaWidget {
-                    id: mediaWidget
-                    anchors.fill: parent
-                }
-            }
-        }
-
-        // DateTime Widget
+        // DateTime Widget (using default ClockWidget)
         BarGroup {
             id: dateTimeGroup
             Layout.alignment: Qt.AlignVCenter
             padding: 8
 
-            AdhdDateTimeWidget {
+            ClockWidget {
                 id: dateTimeWidget
+                showDate: Config.options.bar.verbose
                 Layout.alignment: Qt.AlignVCenter
+            }
+        }
+
+        // Weather Widget (using default WeatherBar)
+        BarGroup {
+            id: weatherGroup
+            Layout.alignment: Qt.AlignVCenter
+            visible: Config.options.bar.weather.enable
+            padding: 8
+
+            WeatherBar {
+                Layout.alignment: Qt.AlignVCenter
+            }
+        }
+    }
+
+    // Middle section: Media Player (centered)
+    Item {
+        id: middleSection
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+        }
+        width: Math.max(300, Math.min(400, parent.width - leftSection.implicitWidth - rightSection.implicitWidth - 40))
+        implicitHeight: Appearance.sizes.barHeight
+
+        BarGroup {
+            id: mediaGroup
+            anchors.fill: parent
+            padding: 8
+
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
+
+                // Media Widget (using default Media component)
+                Media {
+                    id: mediaWidget
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
             }
         }
     }
