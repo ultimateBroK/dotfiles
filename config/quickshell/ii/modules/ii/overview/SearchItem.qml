@@ -33,14 +33,22 @@ RippleButton {
     property int buttonVerticalPadding: 6
     property bool keyboardDown: false
 
+    // Make the keyboard-selected item readable too (ListView currentIndex navigation)
+    readonly property bool isCurrentItem: ListView.isCurrentItem
+    readonly property bool isHighlighted: (root.hovered || root.focus || root.isCurrentItem)
+
+    // Stronger-than-default container colors for better contrast inside the launcher list
+    readonly property color entryBgHover: ColorUtils.mix(Appearance.colors.colPrimaryContainer, Appearance.colors.colOnPrimaryContainer, 0.75)
+    readonly property color entryBgActive: ColorUtils.mix(Appearance.colors.colPrimaryContainer, Appearance.colors.colOnPrimaryContainer, 0.65)
+
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
-    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colPrimaryContainerActive : 
-        ((root.hovered || root.focus) ? Appearance.colors.colPrimaryContainer : 
+    colBackground: (root.down || root.keyboardDown) ? root.entryBgActive :
+        (root.isHighlighted ? root.entryBgHover :
         ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1))
-    colBackgroundHover: Appearance.colors.colPrimaryContainer
-    colRipple: Appearance.colors.colPrimaryContainerActive
+    colBackgroundHover: root.entryBgHover
+    colRipple: root.entryBgActive
 
     property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
     property string highlightSuffix: `</font></u>`
@@ -227,7 +235,7 @@ RippleButton {
         // Action text
         StyledText {
             Layout.fillWidth: false
-            visible: (root.hovered || root.focus)
+            visible: root.isHighlighted
             id: clickAction
             font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnPrimaryContainer

@@ -253,7 +253,7 @@
       "cursor",
       "floorp"
     ],
-    "pinnedOnStartup": false
+    "pinnedOnStartup": true
   },
   "enabledPanels": [
     "iiBar",
