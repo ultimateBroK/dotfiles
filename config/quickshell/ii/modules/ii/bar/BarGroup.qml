@@ -60,6 +60,12 @@ Item {
             ? "transparent"
             : ColorUtils.transparentize(root.adaptiveGroupColor, root.glassTransparency)
         radius: Appearance.rounding.small
+
+        border.width: Config.options?.bar.borderless ? 0 : 1
+        border.color: ColorUtils.applyAlpha(
+            Appearance.colors.colLayer0Border,
+            Appearance.isDarkMode ? 0.35 : 0.15
+        )
     }
 
     GridLayout {
