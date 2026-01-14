@@ -27,6 +27,7 @@ io.github.ecotubehq.player
 io.github.efogdev.mpris-timer
 io.github.josephmawa.Egghead
 io.github.mmarco94.tambourine
+io.github.redddfoxxyy.samaya
 io.github.revisto.drum-machine
 io.github.rfrench3.scopebuddy-gui
 io.github.shonebinu.Brief

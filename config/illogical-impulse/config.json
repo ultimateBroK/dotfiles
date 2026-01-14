@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
+            "backgroundTransparency": 0.11,
+            "contentTransparency": 0.57,
             "enable": true
         },
         "wallpaperTheming": {
@@ -163,7 +163,7 @@
             "gpuWarningThreshold": 90,
             "memoryWarningThreshold": 95,
             "showCpu": true,
-            "showGpu": true,
+            "showGpu": false,
             "showMemory": true,
             "showSwap": true,
             "swapWarningThreshold": 85
@@ -197,7 +197,7 @@
         "weather": {
             "city": "Hanoi",
             "enable": true,
-            "enableGPS": false,
+            "enableGPS": true,
             "fetchInterval": 10,
             "useUSCS": false
         },
@@ -258,7 +258,7 @@
             "floorp",
             "com.mitchellh.ghostty"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",

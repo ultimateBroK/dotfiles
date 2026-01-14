@@ -7,10 +7,10 @@ node-gyp@12.1.0
 nopt@7.2.1
 npm@11.7.0
 playwright@1.56.1
-pnpm@10.25.0
+pnpm@10.28.0
 pyright@1.1.407
 @qwen-code/qwen-code@0.5.0-preview.0
 semver@7.7.3
-@sourcegraph/amp@0.0.1767038477-g5f7c9f
+@sourcegraph/amp@0.0.1768291296-g18aa0d
 vtop@0.6.1
 yarn@1.22.22

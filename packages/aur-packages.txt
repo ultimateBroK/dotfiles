@@ -24,12 +24,12 @@ fsearch
 github-desktop-bin
 glew1.10
 gnome-bluetooth
-gollama-bin
 gtk-sharp-2
 hoppscotch-bin
 httpie-desktop-bin
 ibus-lotus-bin
 icu69-bin
+ik-llama.cpp-vulkan
 illogical-impulse-audio
 illogical-impulse-backlight
 illogical-impulse-basic
@@ -49,7 +49,7 @@ jbig2enc
 jetbrains-toolbox
 kiro-cli
 kiro-ide
-letta-code-bin
+letta-code
 lib32-glew1.10
 lib32-gtk2
 lib32-libappindicator-gtk2
@@ -69,6 +69,7 @@ libayatana-appindicator-glib
 libdbusmenu-gtk2
 libdeep_filter_ladspa-git
 libgcrypt15
+libgnome-keyring
 libidn11
 libindicator-gtk2
 libjpeg6-turbo
@@ -77,7 +78,6 @@ libtiff4
 libudev0-shim
 libunity
 libvpx1.3
-llama.cpp-vulkan
 lmstudio
 lyrebird
 materialgram-bin
@@ -88,7 +88,6 @@ microsoft-edge-stable-bin
 miniaudio-git
 morgen-bin
 mpvpaper
-msty-bin
 music-presence-bin
 nautilus-admin-gtk4
 nautilus-bluetooth
@@ -103,6 +102,7 @@ pear-desktop-bin
 perplexity
 playwright
 proton-authenticator-bin
+python-backports-zstd
 python-cobble
 python-dacite
 python-duckduckgo-search
@@ -115,12 +115,10 @@ python-pocketsphinx
 python-pptx
 python-precisely
 python-primp
-python-pysdl3
 python-sounddevice
 python-speechrecognition
 python-youtube-transcript-api
 qbittorrent-enhanced-git
-qt6-avif-image-plugin
 quickshell-git
 qwen-code
 rocm-gfx1150-bin
