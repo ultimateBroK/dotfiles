@@ -136,7 +136,8 @@ Scope { // Scope
                                 Appearance.colors.colLayer0Border,
                                 Appearance.isDarkMode ? 0.32 : 0.24
                             )
-                            radius: Appearance.rounding.large
+
+                            radius: 15
 
                             // Subtle glass highlight (top) + shade (bottom)
                             Rectangle {
