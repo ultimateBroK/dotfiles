@@ -136,7 +136,7 @@ Scope { // Scope
                                 Appearance.colors.colLayer0Border,
                                 Appearance.isDarkMode ? 0.32 : 0.24
                             )
-                            radius: Appearance.rounding.windowRounding
+                            radius: Appearance.rounding.large
 
                             // Subtle glass highlight (top) + shade (bottom)
                             Rectangle {
@@ -171,38 +171,19 @@ Scope { // Scope
                                     : Qt.rgba(1, 1, 1, 0.09)
                             }
 
-                            RowLayout {
-                                id: dockRow
-                                anchors.fill: parent
-                                anchors.margins: padding
-                                spacing: 3
-                                property real padding: 5
+                                RowLayout {
+                                    id: dockRow
+                                    anchors.fill: parent
+                                    anchors.margins: padding
+                                    spacing: 3
+                                    property real padding: 5
 
-                                VerticalButtonGroup {
-                                    GroupButton {
-                                        // Pin button
-                                        baseWidth: 35
-                                        baseHeight: 35
-                                        clickedWidth: baseWidth
-                                        clickedHeight: baseHeight + 20
-                                        buttonRadius: Appearance.rounding.normal
-                                        toggled: root.pinned
-                                        onClicked: root.pinned = !root.pinned
-                                        contentItem: MaterialSymbol {
-                                            text: "keep"
-                                            horizontalAlignment: Text.AlignHCenter
-                                            iconSize: Appearance.font.pixelSize.larger
-                                            color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
-                                        }
+                                    DockApps {
+                                        id: dockApps
+                                        buttonPadding: dockRow.padding
+                                        dockAtTop: dockRoot.dockAtTop
                                     }
-                                }
-                                DockSeparator {}
-                                DockApps {
-                                    id: dockApps
-                                    buttonPadding: dockRow.padding
-                                    dockAtTop: dockRoot.dockAtTop
-                                }
-                                DockSeparator {}
+                                    DockSeparator {}
                                 DockButton {
                                     Layout.fillHeight: true
                                     onClicked: GlobalStates.overviewOpen = !GlobalStates.overviewOpen
