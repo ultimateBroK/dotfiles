@@ -124,8 +124,8 @@
         "showOnlyWhenLocked": false,
         "style": "digital",
         "styleLocked": "cookie",
-        "x": 467.03515625,
-        "y": 421.51171875
+        "x": 544,
+        "y": 271
       },
       "weather": {
         "enable": false,
@@ -163,7 +163,7 @@
       "gpuWarningThreshold": 90,
       "memoryWarningThreshold": 95,
       "showCpu": true,
-      "showGpu": false,
+      "showGpu": true,
       "showMemory": true,
       "showSwap": true,
       "swapWarningThreshold": 85
@@ -212,7 +212,7 @@
   "battery": {
     "automaticSuspend": true,
     "critical": 5,
-    "full": 85,
+    "full": 80,
     "low": 20,
     "showPercentageInIcon": true,
     "suspend": 3
