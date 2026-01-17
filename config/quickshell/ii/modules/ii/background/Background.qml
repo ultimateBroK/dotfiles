@@ -161,7 +161,14 @@ Variants {
                 x: -(bgRoot.movableXSpace) - (effectiveValueX - 0.5) * 2 * bgRoot.movableXSpace
                 y: -(bgRoot.movableYSpace) - (effectiveValueY - 0.5) * 2 * bgRoot.movableYSpace
                 source: bgRoot.wallpaperSafetyTriggered ? "" : bgRoot.wallpaperPath
-                fillMode: Image.PreserveAspectCrop
+                fillMode: {
+                    const mode = Config.options.background.fillMode || "crop";
+                    if (mode === "fit") return Image.PreserveAspectFit;
+                    if (mode === "stretch") return Image.Stretch;
+                    if (mode === "tile") return Image.Tile;
+                    if (mode === "pad") return Image.Pad;
+                    return Image.PreserveAspectCrop; // default: "crop"
+                }
                 Behavior on x {
                     NumberAnimation {
                         duration: 600

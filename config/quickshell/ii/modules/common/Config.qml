@@ -204,6 +204,7 @@ Singleton {
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
                 property bool hideWhenFullscreen: true
+                property string fillMode: "crop" // "crop", "fit", "stretch", "tile", "pad"
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
                     property bool autoVertical: false

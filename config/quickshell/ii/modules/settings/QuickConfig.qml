@@ -208,6 +208,75 @@ ContentPage {
         }
 
         ContentSubsection {
+            title: Translation.tr("Wallpaper Scale")
+            tooltip: Translation.tr("Adjust the zoom level and scaling mode of your wallpaper.\nHigher zoom values allow more parallax movement when switching workspaces.")
+            
+            ConfigSelectionArray {
+                currentValue: Config.options.background.fillMode || "crop"
+                onSelected: newValue => {
+                    Config.options.background.fillMode = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Crop"),
+                        icon: "crop",
+                        value: "crop"
+                    },
+                    {
+                        displayName: Translation.tr("Fit"),
+                        icon: "fit_screen",
+                        value: "fit"
+                    },
+                    {
+                        displayName: Translation.tr("Stretch"),
+                        icon: "open_in_full",
+                        value: "stretch"
+                    },
+                    {
+                        displayName: Translation.tr("Tile"),
+                        icon: "grid_on",
+                        value: "tile"
+                    },
+                    {
+                        displayName: Translation.tr("Pad"),
+                        icon: "crop_free",
+                        value: "pad"
+                    }
+                ]
+            }
+            
+            ConfigSpinBox {
+                icon: "loupe"
+                text: Translation.tr("Wallpaper zoom (%)")
+                value: Config.options.background.parallax.workspaceZoom * 100
+                from: 100
+                to: 150
+                stepSize: 1
+                enabled: Config.options.background.fillMode === "crop" || Config.options.background.fillMode === "fit"
+                onValueChanged: {
+                    Config.options.background.parallax.workspaceZoom = value / 100;
+                }
+                
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                    propagateComposedEvents: true
+                    StyledToolTip {
+                        extraVisibleCondition: false
+                        alternativeVisibleCondition: parent.containsMouse
+                        text: {
+                            if (!parent.parent.enabled) {
+                                return Translation.tr("Zoom only works with Crop and Fit modes");
+                            }
+                            return Translation.tr("Controls how much the wallpaper is zoomed in.\n100% = fit to screen, 150% = maximum zoom for parallax effect");
+                        }
+                    }
+                }
+            }
+        }
+
+        ContentSubsection {
             title: Translation.tr("Transparency")
             tooltip: Translation.tr("Control transparency of backgrounds and content.\nAutomatic mode adjusts based on wallpaper and color scheme.")
             
