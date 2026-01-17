@@ -1,556 +1,552 @@
 {
-    "adhd": {
-        "animations": {
-            "enable": true
-        },
-        "enable": false,
-        "pomodoro": {
-            "longBreakDuration": 15,
-            "sessionsUntilLongBreak": 4,
-            "shortBreakDuration": 5,
-            "sound": {
-                "enable": true,
-                "name": "complete"
-            },
-            "workDuration": 25
-        }
+  "adhd": {
+    "animations": {
+      "enable": true
     },
-    "ai": {
-        "extraModels": [
-            {
-                "api_format": "openai",
-                "description": "This is a custom model. Edit the config to add more! | Anyway, this is DeepSeek R1 Distill LLaMA 70B",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "homepage": "https://openrouter.ai/deepseek/deepseek-r1-distill-llama-70b:free",
-                "icon": "spark-symbolic",
-                "key_get_link": "https://openrouter.ai/settings/keys",
-                "key_id": "openrouter",
-                "model": "deepseek/deepseek-r1-distill-llama-70b:free",
-                "name": "Custom: DS R1 Dstl. LLaMA 70B",
-                "requires_key": true
-            }
-        ],
-        "systemPrompt": "## Style\n- Use casual tone, don't be formal! Make sure you answer precisely without hallucination and prefer bullet points over walls of text. You can have a friendly greeting at the beginning of the conversation, but don't repeat the user's question\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a {DISTRO} Linux system\n- Desktop environment: {DE}\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with h2 headers and a relevant emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless you're offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the user's use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX '$$' delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n",
-        "tool": "search"
-    },
-    "appearance": {
-        "extraBackgroundTint": true,
-        "fakeScreenRounding": 1,
-        "fonts": {
-            "expressive": "Space Grotesk",
-            "iconNerd": "JetBrains Mono NF",
-            "main": "Google Sans Flex",
-            "monospace": "JetBrains Mono NF",
-            "numbers": "Google Sans Flex",
-            "reading": "Readex Pro",
-            "title": "Google Sans Flex"
-        },
-        "palette": {
-            "type": "auto"
-        },
-        "transparency": {
-            "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
-            "enable": true
-        },
-        "wallpaperTheming": {
-            "enableAppsAndShell": true,
-            "enableQtApps": true,
-            "enableTerminal": true,
-            "terminalGenerationProps": {
-                "forceDarkMode": false,
-                "harmonizeThreshold": 100,
-                "harmony": 0.6,
-                "termFgBoost": 0.35
-            }
-        }
-    },
-    "apps": {
-        "bluetooth": "kcmshell6 kcm_bluetooth",
-        "changePassword": "kitty -1 --hold=yes fish -i -c 'passwd'",
-        "manageUser": "kcmshell6 kcm_users",
-        "network": "kitty -1 fish -c nmtui",
-        "networkEthernet": "kcmshell6 kcm_networkmanagement",
-        "taskManager": "plasma-systemmonitor --page-name Processes",
-        "terminal": "kitty -1",
-        "update": "kitty -1 --hold=yes fish -i -c 'sudo pacman -Syu'",
-        "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
-    },
-    "audio": {
-        "protection": {
-            "enable": false,
-            "maxAllowed": 70,
-            "maxAllowedIncrease": 10
-        }
-    },
-    "background": {
-        "fillMode": "fit",
-        "hideWhenFullscreen": true,
-        "parallax": {
-            "autoVertical": false,
-            "enableSidebar": true,
-            "enableWorkspace": false,
-            "vertical": false,
-            "widgetsFactor": 1.2,
-            "workspaceZoom": 1
-        },
-        "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-8k-3840x2160-16834.jpg",
-        "widgets": {
-            "clock": {
-                "cookie": {
-                    "aiStyling": true,
-                    "constantlyRotate": false,
-                    "dateInClock": true,
-                    "dateStyle": "bubble",
-                    "dialNumberStyle": "full",
-                    "hourHandStyle": "hollow",
-                    "hourMarks": false,
-                    "minuteHandStyle": "thin",
-                    "secondHandStyle": "line",
-                    "sides": 12,
-                    "timeIndicators": false,
-                    "useSineCookie": true
-                },
-                "digital": {
-                    "animateChange": true
-                },
-                "enable": true,
-                "placementStrategy": "leastBusy",
-                "quote": {
-                    "enable": true,
-                    "text": "Fuck The Matrix"
-                },
-                "showOnlyWhenLocked": false,
-                "style": "digital",
-                "styleLocked": "cookie",
-                "x": 544,
-                "y": 271
-            },
-            "weather": {
-                "enable": false,
-                "placementStrategy": "mostBusy",
-                "x": 89.328125,
-                "y": 122.47265625
-            }
-        }
-    },
-    "bar": {
-        "autoHide": {
-            "enable": false,
-            "hoverRegionWidth": 2,
-            "pushWindows": false,
-            "showWhenPressingSuper": {
-                "delay": 140,
-                "enable": true
-            }
-        },
-        "borderless": false,
-        "bottom": false,
-        "cornerStyle": 2,
-        "floatStyleShadow": true,
-        "indicators": {
-            "notifications": {
-                "showUnreadCount": true
-            }
-        },
-        "resources": {
-            "alwaysShowCpu": true,
-            "alwaysShowGpu": true,
-            "alwaysShowSwap": true,
-            "cpuWarningThreshold": 90,
-            "enable": true,
-            "gpuWarningThreshold": 90,
-            "memoryWarningThreshold": 95,
-            "showCpu": true,
-            "showGpu": true,
-            "showMemory": true,
-            "showSwap": true,
-            "swapWarningThreshold": 85
-        },
-        "screenList": [
-        ],
-        "showBackground": true,
-        "tooltips": {
-            "clickToShow": false
-        },
-        "topLeftIcon": "spark",
-        "tray": {
-            "filterPassive": true,
-            "invertPinnedItems": true,
-            "monochromeIcons": false,
-            "pinnedItems": [
-            ],
-            "showItemId": false
-        },
-        "utilButtons": {
-            "showColorPicker": false,
-            "showDarkModeToggle": false,
-            "showKeyboardToggle": false,
-            "showMicToggle": true,
-            "showPerformanceProfileToggle": true,
-            "showScreenRecord": false,
-            "showScreenSnip": false
-        },
-        "verbose": true,
-        "vertical": false,
-        "weather": {
-            "city": "Hanoi",
-            "enable": true,
-            "enableGPS": false,
-            "fetchInterval": 10,
-            "useUSCS": false
-        },
-        "workspaces": {
-            "alwaysShowNumbers": false,
-            "monochromeIcons": false,
-            "numberMap": [
-            ],
-            "showAppIcons": true,
-            "showNumberDelay": 300,
-            "shown": 5,
-            "useNerdFont": false
-        }
-    },
-    "battery": {
-        "automaticSuspend": true,
-        "critical": 5,
-        "full": 80,
-        "low": 20,
-        "showPercentageInIcon": true,
-        "suspend": 3
-    },
-    "cheatsheet": {
-        "fontSize": {
-            "comment": 12,
-            "key": 12
-        },
-        "splitButtons": true,
-        "superKey": "",
-        "useFnSymbol": false,
-        "useMacSymbol": false,
-        "useMouseSymbol": true
-    },
-    "conflictKiller": {
-        "autoKillNotificationDaemons": false,
-        "autoKillTrays": false
-    },
-    "crosshair": {
-        "code": "0;P;d;1;0l;10;0o;2;1b;0"
-    },
-    "dock": {
+    "enable": false,
+    "pomodoro": {
+      "longBreakDuration": 15,
+      "sessionsUntilLongBreak": 4,
+      "shortBreakDuration": 5,
+      "sound": {
         "enable": true,
-        "height": 60,
-        "hoverRegionHeight": 2,
-        "hoverToReveal": true,
-        "ignoredAppRegexes": [
-        ],
-        "monochromeIcons": false,
-        "pinnedApps": [
-            "org.gnome.nautilus",
-            "spotify",
-            "io.github.kukuruzka165.materialgram",
-            "tradingview",
-            "jetbrains-pycharm",
-            "code",
-            "code-insiders",
-            "cursor",
-            "floorp",
-            "com.mitchellh.ghostty"
-        ],
-        "pinnedOnStartup": true
-    },
-    "enabledPanels": [
-        "iiBar",
-        "iiBackground",
-        "iiCheatsheet",
-        "iiDock",
-        "iiLock",
-        "iiMediaControls",
-        "iiNotificationPopup",
-        "iiOnScreenDisplay",
-        "iiOnScreenKeyboard",
-        "iiOverlay",
-        "iiOverview",
-        "iiPolkit",
-        "iiRegionSelector",
-        "iiReloadPopup",
-        "iiScreenCorners",
-        "iiSessionScreen",
-        "iiSidebarLeft",
-        "iiSidebarRight",
-        "iiVerticalBar",
-        "iiWallpaperSelector"
+        "name": "complete"
+      },
+      "workDuration": 25
+    }
+  },
+  "ai": {
+    "extraModels": [
+      {
+        "api_format": "openai",
+        "description": "This is a custom model. Edit the config to add more! | Anyway, this is DeepSeek R1 Distill LLaMA 70B",
+        "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+        "homepage": "https://openrouter.ai/deepseek/deepseek-r1-distill-llama-70b:free",
+        "icon": "spark-symbolic",
+        "key_get_link": "https://openrouter.ai/settings/keys",
+        "key_id": "openrouter",
+        "model": "deepseek/deepseek-r1-distill-llama-70b:free",
+        "name": "Custom: DS R1 Dstl. LLaMA 70B",
+        "requires_key": true
+      }
     ],
-    "hacks": {
-        "arbitraryRaceConditionDelay": 20
+    "systemPrompt": "## Style\n- Use casual tone, don't be formal! Make sure you answer precisely without hallucination and prefer bullet points over walls of text. You can have a friendly greeting at the beginning of the conversation, but don't repeat the user's question\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a {DISTRO} Linux system\n- Desktop environment: {DE}\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with h2 headers and a relevant emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless you're offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the user's use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX '$$' delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n",
+    "tool": "search"
+  },
+  "appearance": {
+    "extraBackgroundTint": true,
+    "fakeScreenRounding": 1,
+    "fonts": {
+      "expressive": "Space Grotesk",
+      "iconNerd": "JetBrains Mono NF",
+      "main": "Google Sans Flex",
+      "monospace": "JetBrains Mono NF",
+      "numbers": "Google Sans Flex",
+      "reading": "Readex Pro",
+      "title": "Google Sans Flex"
     },
-    "interactions": {
-        "deadPixelWorkaround": {
-            "enable": false
+    "palette": {
+      "type": "auto"
+    },
+    "transparency": {
+      "automatic": true,
+      "backgroundTransparency": 0.11,
+      "contentTransparency": 0.57,
+      "enable": true
+    },
+    "wallpaperTheming": {
+      "enableAppsAndShell": true,
+      "enableQtApps": true,
+      "enableTerminal": true,
+      "terminalGenerationProps": {
+        "forceDarkMode": false,
+        "harmonizeThreshold": 100,
+        "harmony": 0.6,
+        "termFgBoost": 0.35
+      }
+    }
+  },
+  "apps": {
+    "bluetooth": "kcmshell6 kcm_bluetooth",
+    "changePassword": "kitty -1 --hold=yes fish -i -c 'passwd'",
+    "manageUser": "kcmshell6 kcm_users",
+    "network": "kitty -1 fish -c nmtui",
+    "networkEthernet": "kcmshell6 kcm_networkmanagement",
+    "taskManager": "plasma-systemmonitor --page-name Processes",
+    "terminal": "kitty -1",
+    "update": "kitty -1 --hold=yes fish -i -c 'sudo pacman -Syu'",
+    "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
+  },
+  "audio": {
+    "protection": {
+      "enable": false,
+      "maxAllowed": 70,
+      "maxAllowedIncrease": 10
+    }
+  },
+  "background": {
+    "fillMode": "fit",
+    "hideWhenFullscreen": true,
+    "parallax": {
+      "autoVertical": false,
+      "enableSidebar": true,
+      "enableWorkspace": false,
+      "vertical": false,
+      "widgetsFactor": 1.2,
+      "workspaceZoom": 1
+    },
+    "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
+    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-8k-3840x2160-16834.jpg",
+    "widgets": {
+      "clock": {
+        "cookie": {
+          "aiStyling": true,
+          "constantlyRotate": false,
+          "dateInClock": true,
+          "dateStyle": "bubble",
+          "dialNumberStyle": "full",
+          "hourHandStyle": "hollow",
+          "hourMarks": false,
+          "minuteHandStyle": "thin",
+          "secondHandStyle": "line",
+          "sides": 12,
+          "timeIndicators": false,
+          "useSineCookie": true
         },
-        "scrolling": {
-            "fasterTouchpadScroll": false,
-            "mouseScrollDeltaThreshold": 120,
-            "mouseScrollFactor": 120,
-            "touchpadScrollFactor": 450
-        }
-    },
-    "language": {
-        "translator": {
-            "engine": "auto",
-            "sourceLanguage": "auto",
-            "targetLanguage": "Tiếng Việt"
+        "digital": {
+          "animateChange": true
         },
-        "ui": "auto"
-    },
-    "light": {
-        "antiFlashbang": {
-            "enable": false
-        },
-        "night": {
-            "automatic": true,
-            "colorTemperature": 4900,
-            "from": "19:00",
-            "to": "06:30"
-        }
-    },
-    "lock": {
-        "blur": {
-            "enable": true,
-            "extraZoom": 1,
-            "radius": 100
-        },
-        "centerClock": true,
-        "launchOnStartup": false,
-        "materialShapeChars": true,
-        "security": {
-            "requirePasswordToPower": false,
-            "unlockKeyring": true
-        },
-        "showLockedText": true,
-        "useHyprlock": false
-    },
-    "media": {
-        "filterDuplicatePlayers": true
-    },
-    "musicRecognition": {
-        "interval": 4,
-        "timeout": 16
-    },
-    "networking": {
-        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-    },
-    "notifications": {
-        "timeout": 10000
-    },
-    "osd": {
-        "timeout": 1000
-    },
-    "osk": {
-        "layout": "qwerty_full",
-        "pinnedOnStartup": false
-    },
-    "overlay": {
-        "clickthroughOpacity": 0.8,
-        "darkenScreen": true,
-        "floatingImage": {
-            "imageSource": "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif",
-            "scale": 0.5
-        },
-        "openingZoomAnimation": true
-    },
-    "overview": {
-        "centerIcons": true,
-        "columns": 5,
         "enable": true,
-        "rows": 4,
-        "scale": 0.14
-    },
-    "panelFamily": "ii",
-    "policies": {
-        "ai": 1
-    },
-    "regionSelector": {
-        "circle": {
-            "padding": 10,
-            "strokeWidth": 6
+        "placementStrategy": "leastBusy",
+        "quote": {
+          "enable": true,
+          "text": "Fuck The Matrix"
         },
-        "rect": {
-            "showAimLines": true
-        },
-        "targetRegions": {
-            "content": true,
-            "contentRegionOpacity": 0.8,
-            "layers": true,
-            "opacity": 0.3,
-            "selectionPadding": 5,
-            "showLabel": false,
-            "windows": true
-        }
+        "showOnlyWhenLocked": false,
+        "style": "digital",
+        "styleLocked": "cookie",
+        "x": 544,
+        "y": 271
+      },
+      "weather": {
+        "enable": false,
+        "placementStrategy": "mostBusy",
+        "x": 89.328125,
+        "y": 122.47265625
+      }
+    }
+  },
+  "bar": {
+    "autoHide": {
+      "enable": false,
+      "hoverRegionWidth": 2,
+      "pushWindows": false,
+      "showWhenPressingSuper": {
+        "delay": 140,
+        "enable": true
+      }
+    },
+    "borderless": false,
+    "bottom": false,
+    "cornerStyle": 2,
+    "floatStyleShadow": true,
+    "indicators": {
+      "notifications": {
+        "showUnreadCount": true
+      }
     },
     "resources": {
-        "historyLength": 60,
-        "updateInterval": 2500
+      "alwaysShowCpu": true,
+      "alwaysShowGpu": true,
+      "alwaysShowSwap": true,
+      "cpuWarningThreshold": 90,
+      "enable": true,
+      "gpuWarningThreshold": 90,
+      "memoryWarningThreshold": 95,
+      "showCpu": true,
+      "showGpu": true,
+      "showMemory": true,
+      "showSwap": true,
+      "swapWarningThreshold": 85
     },
-    "screenRecord": {
-        "savePath": "/home/ultimatebrok/Videos"
+    "screenList": [],
+    "showBackground": true,
+    "tooltips": {
+      "clickToShow": false
     },
-    "screenSnip": {
-        "savePath": ""
+    "topLeftIcon": "spark",
+    "tray": {
+      "filterPassive": true,
+      "invertPinnedItems": true,
+      "monochromeIcons": false,
+      "pinnedItems": [],
+      "showItemId": false
     },
-    "search": {
-        "engineBaseUrl": "https://www.google.com/search?q=",
-        "excludedSites": [
-            "quora.com",
-            "facebook.com"
-        ],
-        "imageSearch": {
-            "imageSearchEngineBaseUrl": "https://lens.google.com/uploadbyurl?url=",
-            "useCircleSelection": false
-        },
-        "nonAppResultDelay": 30,
-        "prefix": {
-            "action": "/",
-            "app": ">",
-            "clipboard": ";",
-            "emojis": ":",
-            "math": "=",
-            "shellCommand": "$",
-            "showDefaultActionsWithoutPrefix": true,
-            "webSearch": "?"
-        },
-        "sloppy": false
+    "utilButtons": {
+      "showColorPicker": false,
+      "showDarkModeToggle": false,
+      "showKeyboardToggle": false,
+      "showMicToggle": true,
+      "showPerformanceProfileToggle": true,
+      "showScreenRecord": false,
+      "showScreenSnip": false
     },
-    "sidebar": {
-        "ai": {
-            "textFadeIn": false
-        },
-        "cornerOpen": {
-            "bottom": false,
-            "clickless": false,
-            "clicklessCornerEnd": true,
-            "clicklessCornerVerticalOffset": 1,
-            "cornerRegionHeight": 1,
-            "cornerRegionWidth": 250,
-            "enable": false,
-            "valueScroll": true,
-            "visualize": false
-        },
-        "keepRightSidebarLoaded": true,
-        "quickSliders": {
-            "enable": true,
-            "showBrightness": true,
-            "showMic": true,
-            "showVolume": true
-        },
-        "quickToggles": {
-            "android": {
-                "columns": 5,
-                "toggles": [
-                    {
-                        "size": 2,
-                        "type": "network"
-                    },
-                    {
-                        "size": 2,
-                        "type": "bluetooth"
-                    },
-                    {
-                        "size": 1,
-                        "type": "idleInhibitor"
-                    },
-                    {
-                        "size": 2,
-                        "type": "powerProfile"
-                    },
-                    {
-                        "size": 1,
-                        "type": "nightLight"
-                    },
-                    {
-                        "size": 1,
-                        "type": "mic"
-                    },
-                    {
-                        "size": 1,
-                        "type": "audio"
-                    }
-                ]
-            },
-            "style": "android"
-        },
-        "translator": {
-            "delay": 300,
-            "enable": true
-        }
+    "verbose": true,
+    "vertical": false,
+    "weather": {
+      "city": "Hanoi",
+      "enable": true,
+      "enableGPS": false,
+      "fetchInterval": 10,
+      "useUSCS": false
     },
-    "sounds": {
-        "battery": true,
-        "theme": "freedesktop"
-    },
-    "time": {
-        "dateFormat": "ddd, dd/MM",
-        "dateWithYearFormat": "dd/MM/yyyy",
-        "format": "hh:mm",
-        "secondPrecision": true,
-        "shortDateFormat": "dd/MM"
-    },
-    "updates": {
-        "adviseUpdateThreshold": 75,
-        "checkInterval": 120,
-        "stronglyAdviseUpdateThreshold": 200
-    },
-    "wallpaperSelector": {
-        "useSystemFileDialog": false
-    },
-    "windows": {
-        "centerTitle": true,
-        "showTitlebar": true
-    },
-    "workSafety": {
-        "enable": {
-            "clipboard": true,
-            "wallpaper": true
-        },
-        "triggerCondition": {
-            "fileKeywords": [
-                "anime",
-                "booru",
-                "ecchi",
-                "hentai",
-                "yande.re",
-                "konachan",
-                "breast",
-                "nipples",
-                "pussy",
-                "nsfw",
-                "spoiler",
-                "girl"
-            ],
-            "linkKeywords": [
-                "hentai",
-                "porn",
-                "sukebei",
-                "hitomi.la",
-                "rule34",
-                "gelbooru",
-                "fanbox",
-                "dlsite"
-            ],
-            "networkNameKeywords": [
-                "airport",
-                "cafe",
-                "college",
-                "company",
-                "eduroam",
-                "free",
-                "guest",
-                "public",
-                "school",
-                "university"
-            ]
-        }
+    "workspaces": {
+      "alwaysShowNumbers": false,
+      "monochromeIcons": false,
+      "numberMap": [],
+      "showAppIcons": true,
+      "showNumberDelay": 300,
+      "shown": 5,
+      "useNerdFont": false
     }
+  },
+  "battery": {
+    "automaticSuspend": true,
+    "critical": 5,
+    "full": 80,
+    "low": 20,
+    "showPercentageInIcon": true,
+    "suspend": 3
+  },
+  "cheatsheet": {
+    "fontSize": {
+      "comment": 12,
+      "key": 12
+    },
+    "splitButtons": true,
+    "superKey": "",
+    "useFnSymbol": false,
+    "useMacSymbol": false,
+    "useMouseSymbol": true
+  },
+  "conflictKiller": {
+    "autoKillNotificationDaemons": false,
+    "autoKillTrays": false
+  },
+  "crosshair": {
+    "code": "0;P;d;1;0l;10;0o;2;1b;0"
+  },
+  "dock": {
+    "enable": true,
+    "height": 60,
+    "hoverRegionHeight": 2,
+    "hoverToReveal": true,
+    "ignoredAppRegexes": [],
+    "monochromeIcons": false,
+    "pinnedApps": [
+      "org.gnome.nautilus",
+      "spotify",
+      "io.github.kukuruzka165.materialgram",
+      "tradingview",
+      "jetbrains-pycharm",
+      "code",
+      "code-insiders",
+      "cursor",
+      "floorp",
+      "com.mitchellh.ghostty"
+    ],
+    "pinnedOnStartup": true
+  },
+  "enabledPanels": [
+    "iiBar",
+    "iiBackground",
+    "iiCheatsheet",
+    "iiDock",
+    "iiLock",
+    "iiMediaControls",
+    "iiNotificationPopup",
+    "iiOnScreenDisplay",
+    "iiOnScreenKeyboard",
+    "iiOverlay",
+    "iiOverview",
+    "iiPolkit",
+    "iiRegionSelector",
+    "iiReloadPopup",
+    "iiScreenCorners",
+    "iiSessionScreen",
+    "iiSidebarLeft",
+    "iiSidebarRight",
+    "iiVerticalBar",
+    "iiWallpaperSelector"
+  ],
+  "hacks": {
+    "arbitraryRaceConditionDelay": 20
+  },
+  "interactions": {
+    "deadPixelWorkaround": {
+      "enable": false
+    },
+    "scrolling": {
+      "fasterTouchpadScroll": false,
+      "mouseScrollDeltaThreshold": 120,
+      "mouseScrollFactor": 120,
+      "touchpadScrollFactor": 450
+    }
+  },
+  "language": {
+    "translator": {
+      "engine": "auto",
+      "sourceLanguage": "auto",
+      "targetLanguage": "Tiếng Việt"
+    },
+    "ui": "auto"
+  },
+  "light": {
+    "antiFlashbang": {
+      "enable": false
+    },
+    "night": {
+      "automatic": true,
+      "colorTemperature": 4900,
+      "from": "19:00",
+      "to": "06:30"
+    }
+  },
+  "lock": {
+    "blur": {
+      "enable": true,
+      "extraZoom": 1,
+      "radius": 100
+    },
+    "centerClock": true,
+    "launchOnStartup": false,
+    "materialShapeChars": true,
+    "security": {
+      "requirePasswordToPower": false,
+      "unlockKeyring": true
+    },
+    "showLockedText": true,
+    "useHyprlock": false
+  },
+  "media": {
+    "filterDuplicatePlayers": true
+  },
+  "musicRecognition": {
+    "interval": 4,
+    "timeout": 16
+  },
+  "networking": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+  },
+  "notifications": {
+    "timeout": 10000
+  },
+  "osd": {
+    "timeout": 1000
+  },
+  "osk": {
+    "layout": "qwerty_full",
+    "pinnedOnStartup": false
+  },
+  "overlay": {
+    "clickthroughOpacity": 0.8,
+    "darkenScreen": true,
+    "floatingImage": {
+      "imageSource": "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif",
+      "scale": 0.5
+    },
+    "openingZoomAnimation": true
+  },
+  "overview": {
+    "centerIcons": true,
+    "columns": 5,
+    "enable": true,
+    "rows": 4,
+    "scale": 0.14
+  },
+  "panelFamily": "ii",
+  "policies": {
+    "ai": 1
+  },
+  "regionSelector": {
+    "circle": {
+      "padding": 10,
+      "strokeWidth": 6
+    },
+    "rect": {
+      "showAimLines": true
+    },
+    "targetRegions": {
+      "content": true,
+      "contentRegionOpacity": 0.8,
+      "layers": true,
+      "opacity": 0.3,
+      "selectionPadding": 5,
+      "showLabel": false,
+      "windows": true
+    }
+  },
+  "resources": {
+    "historyLength": 60,
+    "updateInterval": 2500
+  },
+  "screenRecord": {
+    "savePath": "/home/ultimatebrok/Videos"
+  },
+  "screenSnip": {
+    "savePath": ""
+  },
+  "search": {
+    "engineBaseUrl": "https://www.google.com/search?q=",
+    "excludedSites": [
+      "quora.com",
+      "facebook.com"
+    ],
+    "imageSearch": {
+      "imageSearchEngineBaseUrl": "https://lens.google.com/uploadbyurl?url=",
+      "useCircleSelection": false
+    },
+    "nonAppResultDelay": 30,
+    "prefix": {
+      "action": "/",
+      "app": ">",
+      "clipboard": ";",
+      "emojis": ":",
+      "math": "=",
+      "shellCommand": "$",
+      "showDefaultActionsWithoutPrefix": true,
+      "webSearch": "?"
+    },
+    "sloppy": false
+  },
+  "sidebar": {
+    "ai": {
+      "textFadeIn": false
+    },
+    "cornerOpen": {
+      "bottom": false,
+      "clickless": false,
+      "clicklessCornerEnd": true,
+      "clicklessCornerVerticalOffset": 1,
+      "cornerRegionHeight": 1,
+      "cornerRegionWidth": 250,
+      "enable": false,
+      "valueScroll": true,
+      "visualize": false
+    },
+    "keepRightSidebarLoaded": true,
+    "quickSliders": {
+      "enable": true,
+      "showBrightness": true,
+      "showMic": true,
+      "showVolume": true
+    },
+    "quickToggles": {
+      "android": {
+        "columns": 5,
+        "toggles": [
+          {
+            "size": 2,
+            "type": "network"
+          },
+          {
+            "size": 2,
+            "type": "bluetooth"
+          },
+          {
+            "size": 1,
+            "type": "idleInhibitor"
+          },
+          {
+            "size": 2,
+            "type": "powerProfile"
+          },
+          {
+            "size": 1,
+            "type": "nightLight"
+          },
+          {
+            "size": 1,
+            "type": "mic"
+          },
+          {
+            "size": 1,
+            "type": "audio"
+          }
+        ]
+      },
+      "style": "android"
+    },
+    "translator": {
+      "delay": 300,
+      "enable": true
+    }
+  },
+  "sounds": {
+    "battery": true,
+    "theme": "freedesktop"
+  },
+  "time": {
+    "dateFormat": "ddd, dd/MM",
+    "dateWithYearFormat": "dd/MM/yyyy",
+    "format": "hh:mm",
+    "secondPrecision": true,
+    "shortDateFormat": "dd/MM"
+  },
+  "updates": {
+    "adviseUpdateThreshold": 75,
+    "checkInterval": 120,
+    "stronglyAdviseUpdateThreshold": 200
+  },
+  "wallpaperSelector": {
+    "useSystemFileDialog": false
+  },
+  "windows": {
+    "centerTitle": true,
+    "showTitlebar": true
+  },
+  "workSafety": {
+    "enable": {
+      "clipboard": true,
+      "wallpaper": true
+    },
+    "triggerCondition": {
+      "fileKeywords": [
+        "anime",
+        "booru",
+        "ecchi",
+        "hentai",
+        "yande.re",
+        "konachan",
+        "breast",
+        "nipples",
+        "pussy",
+        "nsfw",
+        "spoiler",
+        "girl"
+      ],
+      "linkKeywords": [
+        "hentai",
+        "porn",
+        "sukebei",
+        "hitomi.la",
+        "rule34",
+        "gelbooru",
+        "fanbox",
+        "dlsite"
+      ],
+      "networkNameKeywords": [
+        "airport",
+        "cafe",
+        "college",
+        "company",
+        "eduroam",
+        "free",
+        "guest",
+        "public",
+        "school",
+        "university"
+      ]
+    }
+  }
 }

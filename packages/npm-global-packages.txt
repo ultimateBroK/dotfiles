@@ -11,6 +11,6 @@ pnpm@10.28.0
 pyright@1.1.407
 @qwen-code/qwen-code@0.5.0-preview.0
 semver@7.7.3
-@sourcegraph/amp@0.0.1768291296-g18aa0d
+@sourcegraph/amp@0.0.1768651300-g35f783
 vtop@0.6.1
 yarn@1.22.22

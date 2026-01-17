@@ -435,6 +435,7 @@ s-nail
 snapd
 snapper
 snapshot
+sni-qt
 sof-firmware
 speedtest-cli-git
 speedtest-librespeed

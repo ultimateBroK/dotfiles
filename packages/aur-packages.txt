@@ -67,6 +67,7 @@ lib32-openssl-1.0
 libappindicator-gtk2
 libayatana-appindicator-glib
 libdbusmenu-gtk2
+libdbusmenu-qt4
 libdeep_filter_ladspa-git
 libgcrypt15
 libgnome-keyring
@@ -109,7 +110,6 @@ python-duckduckgo-search
 python-funk
 python-magika
 python-mammoth
-python-markdownify
 python-markitdown
 python-pocketsphinx
 python-pptx
@@ -119,12 +119,14 @@ python-sounddevice
 python-speechrecognition
 python-youtube-transcript-api
 qbittorrent-enhanced-git
+qt4
 quickshell-git
 qwen-code
 rocm-gfx1150-bin
 rustdesk-bin
 ryzenadj-git
 snapd
+sni-qt
 speedtest-cli-git
 speedtest-librespeed
 spotify
