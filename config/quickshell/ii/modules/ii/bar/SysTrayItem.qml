@@ -1,11 +1,12 @@
-import qs.modules.common
-import qs.modules.common.widgets
-import qs.modules.common.functions
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 MouseArea {
     id: root
@@ -14,7 +15,6 @@ MouseArea {
 
     signal menuOpened(qsWindow: var)
     signal menuClosed()
-    signal activated()
 
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -24,7 +24,6 @@ MouseArea {
         switch (event.button) {
         case Qt.LeftButton:
             item.activate();
-            root.activated();
             break;
         case Qt.RightButton:
             if (item.hasMenu) menu.open();
@@ -33,10 +32,7 @@ MouseArea {
         event.accepted = true;
     }
     onEntered: {
-        tooltip.text = item.tooltipTitle.length > 0 ? item.tooltipTitle
-                : (item.title.length > 0 ? item.title : item.id);
-        if (item.tooltipDescription.length > 0) tooltip.text += " • " + item.tooltipDescription;
-        if (Config.options.bar.tray.showItemId) tooltip.text += "\n[" + item.id + "]";
+        tooltip.text = TrayService.getTooltipForItem(root.item);
     }
 
     Loader {
@@ -67,20 +63,11 @@ MouseArea {
 
     IconImage {
         id: trayIcon
+        visible: !Config.options.bar.tray.monochromeIcons
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
-    }
-
-    // Render-source for effects. `hideSource` lets us keep the icon available for
-    // shaders/effects without drawing it twice on screen.
-    ShaderEffectSource {
-        id: trayIconSource
-        anchors.fill: trayIcon
-        sourceItem: trayIcon
-        live: true
-        hideSource: Config.options.bar.tray.monochromeIcons
     }
 
     Loader {
@@ -89,15 +76,15 @@ MouseArea {
         sourceComponent: Item {
             Desaturate {
                 id: desaturatedIcon
+                visible: false // There's already color overlay
                 anchors.fill: parent
-                source: trayIconSource
+                source: trayIcon
                 desaturation: 0.8 // 1.0 means fully grayscale
             }
             ColorOverlay {
                 anchors.fill: desaturatedIcon
                 source: desaturatedIcon
-                // Stronger tint for readability on bright wallpapers.
-                color: Appearance.colors.colOnLayer1
+                color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.9)
             }
         }
     }

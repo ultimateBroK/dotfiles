@@ -95,7 +95,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/CachyOS-Goon.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-3840x2160-16800.png",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -188,7 +188,7 @@
             "showDarkModeToggle": false,
             "showKeyboardToggle": false,
             "showMicToggle": true,
-            "showPerformanceProfileToggle": false,
+            "showPerformanceProfileToggle": true,
             "showScreenRecord": false,
             "showScreenSnip": false
         },
@@ -310,7 +310,7 @@
         },
         "night": {
             "automatic": true,
-            "colorTemperature": 3536,
+            "colorTemperature": 4900,
             "from": "19:00",
             "to": "06:30"
         }
@@ -318,7 +318,7 @@
     "lock": {
         "blur": {
             "enable": true,
-            "extraZoom": 1.1,
+            "extraZoom": 1,
             "radius": 100
         },
         "centerClock": true,
