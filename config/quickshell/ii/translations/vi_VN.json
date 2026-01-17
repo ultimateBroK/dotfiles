@@ -295,6 +295,7 @@
   "Toggles bar on press": "Mở/đóng bar khi ấn",
   "Saved to %1": "Đã lưu vào %1",
   "Elements": "Nguyên tố",
+  "Commands": "Lệnh",
   "Save chat to %1": "Lưu chat vào %1",
   "Connection failed. Please inspect manually with the <tt>warp-cli</tt> command": "Kết nối không thành công. Hãy xem lại với lệnh <tt>warp-cli</tt>",
   "Weather Service": "Thời tiết",

@@ -19,8 +19,8 @@ Scope { // Scope
             "name": Translation.tr("Keybinds")
         },
         {
-            "icon": "experiment",
-            "name": Translation.tr("Elements")
+            "icon": "terminal",
+            "name": Translation.tr("Commands")
         },
     ]
 
@@ -162,7 +162,7 @@ Scope { // Scope
                         }
 
                         CheatsheetKeybinds {}
-                        CheatsheetPeriodicTable {}
+                        CheatsheetShellCommands {}
                     }
                 }
             }
