@@ -14,6 +14,7 @@ GroupButton {
     verticalPadding: 8
     bounce: false
     property string buttonIcon
+    property string buttonTooltip: ""
     property bool leftmost: false
     property bool rightmost: false
     leftRadius: (toggled || leftmost) ? (height / 2) : Appearance.rounding.unsharpenmore
@@ -57,6 +58,18 @@ GroupButton {
                 color: root.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
                 text: root.buttonText
             }
+        }
+    }
+    
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.NoButton
+        propagateComposedEvents: true
+        
+        StyledToolTip {
+            text: root.buttonTooltip
+            visible: root.buttonTooltip.length > 0 && parent.containsMouse
         }
     }
 }

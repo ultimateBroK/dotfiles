@@ -8,7 +8,7 @@ import qs.modules.common.functions
 Flow {
     id: root
     Layout.fillWidth: true
-    spacing: 2
+    spacing: 6
     property list<var> options: [
         {
             "displayName": "Option 1",
@@ -111,6 +111,7 @@ Flow {
             
             buttonIcon: modelData.icon || ""
             buttonText: modelData.displayName
+            buttonTooltip: modelData.description || ""
             toggled: root.currentValue == modelData.value
             onClicked: {
                 root.selected(modelData.value);
