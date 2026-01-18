@@ -292,6 +292,45 @@ ContentPage {
                 Config.options.notifications.timeout = value;
             }
         }
+
+        ConfigSelectionArray {
+            Layout.fillWidth: false
+            currentValue: {
+                switch (Config.options.notifications.position) {
+                    case "top-right": return 0;
+                    case "top-left": return 1;
+                    case "bottom-right": return 2;
+                    case "bottom-left": return 3;
+                    default: return 0;
+                }
+            }
+            onSelected: newValue => {
+                const positions = ["top-right", "top-left", "bottom-right", "bottom-left"];
+                Config.options.notifications.position = positions[newValue];
+            }
+            options: [
+                {
+                    displayName: Translation.tr("Top Right"),
+                    icon: "north_east",
+                    value: 0
+                },
+                {
+                    displayName: Translation.tr("Top Left"),
+                    icon: "north_west",
+                    value: 1
+                },
+                {
+                    displayName: Translation.tr("Bottom Right"),
+                    icon: "south_east",
+                    value: 2
+                },
+                {
+                    displayName: Translation.tr("Bottom Left"),
+                    icon: "south_west",
+                    value: 3
+                }
+            ]
+        }
     }
 
     ContentSection {
