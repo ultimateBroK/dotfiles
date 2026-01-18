@@ -96,7 +96,7 @@
       "workspaceZoom": 1
     },
     "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-8k-3840x2160-16834.jpg",
+    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-3840x2160-16800.png",
     "widgets": {
       "clock": {
         "cookie": {
@@ -255,7 +255,7 @@
       "floorp",
       "com.mitchellh.ghostty"
     ],
-    "pinnedOnStartup": true
+    "pinnedOnStartup": false
   },
   "enabledPanels": [
     "iiBar",
@@ -307,7 +307,7 @@
     },
     "night": {
       "automatic": true,
-      "colorTemperature": 4900,
+      "colorTemperature": 3616,
       "from": "19:00",
       "to": "06:30"
     }
