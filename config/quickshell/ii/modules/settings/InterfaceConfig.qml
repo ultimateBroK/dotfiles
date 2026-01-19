@@ -817,6 +817,71 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Appearance")
+
+            ConfigSwitch {
+                buttonIcon: "label"
+                text: Translation.tr("Show workspace labels")
+                checked: Config.options.overview.showWorkspaceLabels
+                onCheckedChanged: {
+                    Config.options.overview.showWorkspaceLabels = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "title"
+                text: Translation.tr("Show window titles")
+                checked: Config.options.overview.showWindowTitles
+                onCheckedChanged: {
+                    Config.options.overview.showWindowTitles = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "highlight"
+                text: Translation.tr("Highlight active workspace")
+                checked: Config.options.overview.highlightActiveWorkspace
+                onCheckedChanged: {
+                    Config.options.overview.highlightActiveWorkspace = checked;
+                }
+            }
+
+            ConfigSpinBox {
+                icon: "opacity"
+                text: Translation.tr("Background opacity (%)")
+                value: Config.options.overview.backgroundOpacity * 100
+                from: 0
+                to: 100
+                stepSize: 5
+                onValueChanged: {
+                    Config.options.overview.backgroundOpacity = value / 100;
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Behavior")
+
+            ConfigSwitch {
+                buttonIcon: "animation"
+                text: Translation.tr("Animate window transitions")
+                checked: Config.options.overview.animateWindowTransitions
+                onCheckedChanged: {
+                    Config.options.overview.animateWindowTransitions = checked;
+                }
+            }
+
+            ConfigSwitch {
+                buttonIcon: "close"
+                text: Translation.tr("Close window on middle click")
+                checked: Config.options.overview.closeWindowOnMiddleClick
+                onCheckedChanged: {
+                    Config.options.overview.closeWindowOnMiddleClick = checked;
+                }
+            }
+        }
     }
 
     ContentSection {
