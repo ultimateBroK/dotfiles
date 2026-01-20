@@ -17,20 +17,35 @@ PopupWindow {
     color: "transparent"
     property real padding: Appearance.sizes.elevationMargin
 
-    implicitHeight: {
-        let result = 0;
-        for (let child of stackView.children) {
-            result = Math.max(child.implicitHeight, result);
+    // Cache implicit dimensions to avoid recalculating on every access
+    property real _cachedImplicitHeight: 0
+    property real _cachedImplicitWidth: 0
+
+    function updateImplicitDimensions() {
+        if (!stackView || stackView.destroyed || !popupBackground) return;
+        let maxHeight = 0;
+        let maxWidth = 0;
+        // Use currentItem instead of iterating all children for better performance
+        // StackView only shows currentItem, so we only need its dimensions
+        if (stackView.currentItem && !stackView.currentItem.destroyed) {
+            maxHeight = stackView.currentItem.implicitHeight || 0;
+            maxWidth = stackView.currentItem.implicitWidth || 0;
         }
-        return result + popupBackground.padding * 2 + root.padding * 2;
+        root._cachedImplicitHeight = maxHeight + popupBackground.padding * 2 + root.padding * 2;
+        root._cachedImplicitWidth = maxWidth + popupBackground.padding * 2 + root.padding * 2;
     }
-    implicitWidth: {
-        let result = 0;
-        for (let child of stackView.children) {
-            result = Math.max(child.implicitWidth, result);
+
+    implicitHeight: _cachedImplicitHeight
+    implicitWidth: _cachedImplicitWidth
+
+    Connections {
+        target: stackView
+        function onChildrenChanged() {
+            root.updateImplicitDimensions();
         }
-        return result + popupBackground.padding * 2 + root.padding * 2;
     }
+
+    Component.onCompleted: updateImplicitDimensions()
 
     function open() {
         root.visible = true;
@@ -39,17 +54,46 @@ PopupWindow {
 
     function close() {
         root.visible = false;
-        while (stackView.depth > 1)
+        // Ensure all submenu items are properly destroyed
+        while (stackView.depth > 1) {
+            const item = stackView.currentItem;
             stackView.pop();
+            // StackView.onRemoved will call destroy(), but ensure cleanup
+            if (item && !item.parent) {
+                Qt.callLater(() => {
+                    if (item && item.destroy) item.destroy();
+                });
+            }
+        }
         root.menuClosed();
     }
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons: Qt.BackButton | Qt.RightButton
+        acceptedButtons: Qt.AllButtons
+        z: -1
+        propagateComposedEvents: false
         onPressed: event => {
-            if ((event.button === Qt.BackButton || event.button === Qt.RightButton) && stackView.depth > 1)
+            // Handle back/right button for submenu navigation
+            if ((event.button === Qt.BackButton || event.button === Qt.RightButton) && stackView.depth > 1) {
                 stackView.pop();
+                event.accepted = true;
+                return;
+            }
+            
+            // Close menu if clicking outside the popupBackground (in the padding area)
+            const clickX = event.x;
+            const clickY = event.y;
+            const bgX = popupBackground.x;
+            const bgY = popupBackground.y;
+            const bgWidth = popupBackground.width;
+            const bgHeight = popupBackground.height;
+            
+            if (clickX < bgX || clickX > bgX + bgWidth || 
+                clickY < bgY || clickY > bgY + bgHeight) {
+                root.close();
+                event.accepted = true;
+            }
         }
 
         StyledRectangularShadow {
@@ -80,14 +124,19 @@ PopupWindow {
             implicitWidth: stackView.implicitWidth + popupBackground.padding * 2
             implicitHeight: stackView.implicitHeight + popupBackground.padding * 2
 
+            // Reuse animation objects to avoid creating new ones on each property change
+            property NumberAnimation opacityAnimation: Appearance.animation.elementMoveFast.numberAnimation.createObject(popupBackground)
+            property NumberAnimation heightAnimation: Appearance.animation.elementResize.numberAnimation.createObject(popupBackground)
+            property NumberAnimation widthAnimation: Appearance.animation.elementResize.numberAnimation.createObject(popupBackground)
+
             Behavior on opacity {
-                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                animation: popupBackground.opacityAnimation
             }
             Behavior on implicitHeight {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                animation: popupBackground.heightAnimation
             }
             Behavior on implicitWidth {
-                animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+                animation: popupBackground.widthAnimation
             }
 
             StackView {
@@ -101,11 +150,22 @@ PopupWindow {
                 popEnter: NoAnim {}
                 popExit: NoAnim {}
 
-                implicitWidth: currentItem.implicitWidth
-                implicitHeight: currentItem.implicitHeight
+                implicitWidth: currentItem ? currentItem.implicitWidth : 0
+                implicitHeight: currentItem ? currentItem.implicitHeight : 0
 
                 initialItem: SubMenu {
                     handle: root.trayItemMenuHandle
+                }
+
+                onCurrentItemChanged: {
+                    // Update cached dimensions when current item changes
+                    if (root && !root.destroyed) {
+                        Qt.callLater(() => {
+                            if (root && !root.destroyed) {
+                                root.updateImplicitDimensions();
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -124,14 +184,22 @@ PopupWindow {
         property bool shown: false
         opacity: shown ? 1 : 0
 
+        // Reuse animation object to avoid creating new ones
+        property NumberAnimation opacityAnimation: Appearance.animation.elementMoveFast.numberAnimation.createObject(submenu)
+
         Behavior on opacity {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            animation: submenu.opacityAnimation
         }
 
         Component.onCompleted: shown = true
         StackView.onActivating: shown = true
         StackView.onDeactivating: shown = false
-        StackView.onRemoved: destroy()
+        StackView.onRemoved: {
+            // Ensure proper cleanup, check if already destroyed
+            if (!submenu.destroyed) {
+                destroy();
+            }
+        }
 
         QsMenuOpener {
             id: menuOpener
@@ -176,20 +244,35 @@ PopupWindow {
 
         Repeater {
             id: menuEntriesRepeater
-            property bool iconColumnNeeded: {
-                for (let i = 0; i < menuOpener.children.values.length; i++) {
-                    if (menuOpener.children.values[i].icon.length > 0)
-                        return true;
+            // Cache computed properties to avoid recalculating on every access
+            property bool iconColumnNeeded: false
+            property bool specialInteractionColumnNeeded: false
+
+            function updateColumnNeeded() {
+                let iconNeeded = false;
+                let specialNeeded = false;
+                const values = menuOpener.children.values;
+                for (let i = 0; i < values.length; i++) {
+                    if (values[i].icon.length > 0)
+                        iconNeeded = true;
+                    if (values[i].buttonType !== QsMenuButtonType.None)
+                        specialNeeded = true;
                 }
-                return false;
+                menuEntriesRepeater.iconColumnNeeded = iconNeeded;
+                menuEntriesRepeater.specialInteractionColumnNeeded = specialNeeded;
             }
-            property bool specialInteractionColumnNeeded: {
-                for (let i = 0; i < menuOpener.children.values.length; i++) {
-                    if (menuOpener.children.values[i].buttonType !== QsMenuButtonType.None)
-                        return true;
+
+            Component.onCompleted: updateColumnNeeded()
+
+            Connections {
+                target: menuOpener.children
+                function onValuesChanged() {
+                    if (menuEntriesRepeater && !menuEntriesRepeater.destroyed) {
+                        menuEntriesRepeater.updateColumnNeeded();
+                    }
                 }
-                return false;
             }
+
             model: menuOpener.children
             delegate: SysTrayMenuEntry {
                 required property QsMenuEntry modelData
@@ -201,7 +284,8 @@ PopupWindow {
 
                 onDismiss: root.close()
                 onOpenSubmenu: handle => {
-                    stackView.push(subMenuComponent.createObject(null, {
+                    // Use stackView as parent to ensure proper cleanup when menu closes
+                    stackView.push(subMenuComponent.createObject(stackView, {
                         handle: handle,
                         isSubMenu: true
                     }));
