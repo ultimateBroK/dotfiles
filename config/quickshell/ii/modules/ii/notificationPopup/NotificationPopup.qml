@@ -20,14 +20,11 @@ Scope {
         WlrLayershell.layer: WlrLayer.Overlay
         exclusiveZone: 0
 
-        property bool isTopPosition: Config.options.notifications.position.startsWith("top")
-        property bool isRightPosition: Config.options.notifications.position.endsWith("right")
-
         anchors {
-            top: isTopPosition
-            bottom: !isTopPosition
-            left: !isRightPosition
-            right: isRightPosition
+            top: true
+            bottom: true
+            right: Config.options.notifications.position.endsWith("right")
+            left: Config.options.notifications.position.endsWith("left")
         }
 
         mask: Region {
@@ -40,15 +37,16 @@ Scope {
         NotificationListView {
             id: listview
             anchors {
-                top: root.isTopPosition ? parent.top : undefined
-                bottom: !root.isTopPosition ? parent.bottom : undefined
-                left: !root.isRightPosition ? parent.left : undefined
-                right: root.isRightPosition ? parent.right : undefined
-                leftMargin: !root.isRightPosition ? 4 : 0
-                rightMargin: root.isRightPosition ? 4 : 0
-                topMargin: root.isTopPosition ? 4 : 0
-                bottomMargin: !root.isTopPosition ? 4 : 0
+                top: parent.top
+                bottom: parent.bottom
+                right: Config.options.notifications.position.endsWith("right") ? parent.right : undefined
+                left: Config.options.notifications.position.endsWith("left") ? parent.left : undefined
+                rightMargin: Config.options.notifications.position.endsWith("right") ? 4 : 0
+                leftMargin: Config.options.notifications.position.endsWith("left") ? 4 : 0
+                topMargin: Config.options.notifications.position.startsWith("top") ? 4 : 0
+                bottomMargin: Config.options.notifications.position.startsWith("bottom") ? 4 : 0
             }
+            verticalLayoutDirection: Config.options.notifications.position.startsWith("bottom") ? ListView.BottomToTop : ListView.TopToBottom
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
         }

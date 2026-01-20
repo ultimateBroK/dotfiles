@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -343,7 +343,7 @@
         "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     },
     "notifications": {
-        "position": "top-right",
+        "position": "bottom-right",
         "timeout": 10000
     },
     "osd": {

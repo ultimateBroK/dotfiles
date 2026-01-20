@@ -74,6 +74,10 @@ MouseArea {
         active: Config.options.bar.tray.monochromeIcons
         anchors.fill: trayIcon
         sourceComponent: Item {
+            // Cache the effect output; tray icons are mostly static.
+            // This helps reduce GPU usage when monochrome icons are enabled.
+            layer.enabled: true
+            layer.smooth: true
             Desaturate {
                 id: desaturatedIcon
                 visible: false // There's already color overlay
