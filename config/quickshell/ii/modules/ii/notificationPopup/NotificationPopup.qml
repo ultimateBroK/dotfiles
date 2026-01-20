@@ -28,7 +28,7 @@ Scope {
         }
 
         mask: Region {
-            item: listview.contentItem
+            item: listview
         }
 
         color: "transparent"
@@ -37,18 +37,20 @@ Scope {
         NotificationListView {
             id: listview
             anchors {
-                top: parent.top
-                bottom: parent.bottom
+                top: Config.options.notifications.position.startsWith("top") ? parent.top : undefined
+                bottom: Config.options.notifications.position.startsWith("bottom") ? parent.bottom : undefined
                 right: Config.options.notifications.position.endsWith("right") ? parent.right : undefined
                 left: Config.options.notifications.position.endsWith("left") ? parent.left : undefined
-                rightMargin: Config.options.notifications.position.endsWith("right") ? 4 : 0
-                leftMargin: Config.options.notifications.position.endsWith("left") ? 4 : 0
-                topMargin: Config.options.notifications.position.startsWith("top") ? 4 : 0
-                bottomMargin: Config.options.notifications.position.startsWith("bottom") ? 4 : 0
+                rightMargin: Config.options.notifications.position.endsWith("right") ? 10 : 0
+                leftMargin: Config.options.notifications.position.endsWith("left") ? 10 : 0
+                topMargin: Config.options.notifications.position.startsWith("top") ? 10 : 0
+                bottomMargin: Config.options.notifications.position.startsWith("bottom") ? 10 : 0
             }
+            height: Math.min(contentHeight + 10, parent.height - 20)
             verticalLayoutDirection: Config.options.notifications.position.startsWith("bottom") ? ListView.BottomToTop : ListView.TopToBottom
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
+            bottomAlign: Config.options.notifications.position.startsWith("bottom")
         }
     }
 }

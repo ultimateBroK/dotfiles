@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
+            "backgroundTransparency": 0.11,
+            "contentTransparency": 0.57,
             "enable": true
         },
         "wallpaperTheming": {
@@ -259,7 +259,7 @@
             "floorp",
             "com.mitchellh.ghostty"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",
@@ -343,7 +343,7 @@
         "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     },
     "notifications": {
-        "position": "bottom-right",
+        "position": "top-right",
         "timeout": 10000
     },
     "osd": {

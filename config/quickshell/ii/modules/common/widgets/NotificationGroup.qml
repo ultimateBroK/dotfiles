@@ -19,6 +19,7 @@ MouseArea { // Notification group area
     property bool multipleNotifications: notificationCount > 1
     property bool expanded: false
     property bool popup: false
+    property bool bottomAlign: false
     property real padding: 12
     implicitHeight: background.implicitHeight
     readonly property var latestNotification: (notificationCount > 0) ? notifications[notificationCount - 1] : null
@@ -184,14 +185,15 @@ MouseArea { // Notification group area
 
         RowLayout { // Left column for icon, right column for content
             id: row
-            anchors.top: parent.top
+            anchors.top: root.bottomAlign ? undefined : parent.top
+            anchors.bottom: root.bottomAlign ? parent.bottom : undefined
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: root.padding
             spacing: 10
 
             NotificationAppIcon { // Icons
-                Layout.alignment: Qt.AlignTop
+                Layout.alignment: root.bottomAlign ? Qt.AlignBottom : Qt.AlignTop
                 Layout.fillWidth: false
                 image: root?.multipleNotifications ? "" : root.latestImage
                 appIcon: notificationGroup?.appIcon
@@ -211,85 +213,103 @@ MouseArea { // Notification group area
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
 
-                Item { // App name (or summary when there's only 1 notif) and time
-                    id: topRow
-                    // spacing: 0
+                Loader {
                     Layout.fillWidth: true
-                    property real fontSize: Appearance.font.pixelSize.smaller
-                    property bool showAppName: root.multipleNotifications
-                    implicitHeight: Math.max(topTextRow.implicitHeight, expandButton.implicitHeight)
-
-                    RowLayout {
-                        id: topTextRow
-                        anchors.left: parent.left
-                        anchors.right: expandButton.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 5
-                        StyledText {
-                            id: appName
-                            elide: Text.ElideRight
-                            Layout.fillWidth: true
-                            text: topRow.showAppName ? root.safeAppName : root.safeSummary
-                            font.pixelSize: topRow.showAppName ?
-                                topRow.fontSize :
-                                Appearance.font.pixelSize.small
-                            color: topRow.showAppName ?
-                                Appearance.colors.colSubtext :
-                                Appearance.colors.colOnLayer2
-                        }
-                        StyledText {
-                            id: timeText
-                            // Layout.fillWidth: true
-                            Layout.rightMargin: 10
-                            horizontalAlignment: Text.AlignLeft
-                            text: NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
-                            font.pixelSize: topRow.fontSize
-                            color: Appearance.colors.colSubtext
-                        }
-                    }
-                    NotificationGroupExpandButton {
-                        id: expandButton
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        count: root.notificationCount
-                        expanded: root.expanded
-                        fontSize: topRow.fontSize
-                        onClicked: { root.toggleExpanded() }
-                        altAction: () => { root.toggleExpanded() }
-
-                        StyledToolTip {
-                            text: Translation.tr("Tip: right-clicking a group\nalso expands it")
-                        }
-                    }
+                    sourceComponent: root.bottomAlign ? contentComponent : headerComponent
                 }
-
-                StyledListView { // Notification body (expanded)
-                    id: notificationsColumn
-                    implicitHeight: contentHeight
+                
+                Loader {
                     Layout.fillWidth: true
-                    spacing: expanded ? 5 : 3
-                    // clip: true
-                    interactive: false
-                    Behavior on spacing {
-                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-                    }
-                    model: ScriptModel {
-                        values: root.expanded ? root.notifications.slice().reverse() : 
-                            root.notifications.slice().reverse().slice(0, 2)
-                    }
-                    delegate: NotificationItem {
-                        required property int index
-                        required property var modelData
-                        notificationObject: modelData
-                        expanded: root.expanded
-                        onlyNotification: (root.notificationCount === 1)
-                        opacity: (!root.expanded && index == 1 && root.notificationCount > 2) ? 0.5 : 1
-                        visible: root.expanded || (index < 2)
-                        anchors.left: parent?.left
-                        anchors.right: parent?.right
-                    }
+                    sourceComponent: root.bottomAlign ? headerComponent : contentComponent
                 }
+            }
+        }
+    }
 
+    Component {
+        id: headerComponent
+        Item { // App name (or summary when there's only 1 notif) and time
+            id: topRow
+            // spacing: 0
+            // Layout.fillWidth: true
+            property real fontSize: Appearance.font.pixelSize.smaller
+            property bool showAppName: root.multipleNotifications
+            implicitHeight: Math.max(topTextRow.implicitHeight, expandButton.implicitHeight)
+            width: parent ? parent.width : 0
+
+            RowLayout {
+                id: topTextRow
+                anchors.left: parent.left
+                anchors.right: expandButton.left
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 5
+                StyledText {
+                    id: appName
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                    text: topRow.showAppName ? root.safeAppName : root.safeSummary
+                    font.pixelSize: topRow.showAppName ?
+                        topRow.fontSize :
+                        Appearance.font.pixelSize.small
+                    color: topRow.showAppName ?
+                        Appearance.colors.colSubtext :
+                        Appearance.colors.colOnLayer2
+                }
+                StyledText {
+                    id: timeText
+                    // Layout.fillWidth: true
+                    Layout.rightMargin: 10
+                    horizontalAlignment: Text.AlignLeft
+                    text: NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
+                    font.pixelSize: topRow.fontSize
+                    color: Appearance.colors.colSubtext
+                }
+            }
+            NotificationGroupExpandButton {
+                id: expandButton
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                count: root.notificationCount
+                expanded: root.expanded
+                fontSize: topRow.fontSize
+                onClicked: { root.toggleExpanded() }
+                altAction: () => { root.toggleExpanded() }
+
+                StyledToolTip {
+                    text: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                }
+            }
+        }
+    }
+
+    Component {
+        id: contentComponent
+        StyledListView { // Notification body (expanded)
+            id: notificationsColumn
+            implicitHeight: contentHeight
+            // Layout.fillWidth: true
+            width: parent ? parent.width : 0
+            verticalLayoutDirection: root.bottomAlign ? ListView.BottomToTop : ListView.TopToBottom
+            spacing: expanded ? 5 : 3
+            // clip: true
+            interactive: false
+            Behavior on spacing {
+                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            }
+            model: ScriptModel {
+                values: root.expanded ? root.notifications.slice().reverse() : 
+                    root.notifications.slice().reverse().slice(0, 2)
+            }
+            delegate: NotificationItem {
+                required property int index
+                required property var modelData
+                notificationObject: modelData
+                expanded: root.expanded
+                onlyNotification: (root.notificationCount === 1)
+                opacity: (!root.expanded && index == 1 && root.notificationCount > 2) ? 0.5 : 1
+                visible: root.expanded || (index < 2)
+                anchors.left: parent?.left
+                anchors.right: parent?.right
             }
         }
     }

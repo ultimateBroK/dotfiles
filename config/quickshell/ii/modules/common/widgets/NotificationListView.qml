@@ -8,6 +8,7 @@ import Quickshell
 StyledListView { // Scrollable window
     id: root
     property bool popup: false
+    property bool bottomAlign: false
 
     spacing: 3
 
@@ -22,5 +23,6 @@ StyledListView { // Scrollable window
         notificationGroup: popup ? 
             Notifications.popupGroupsByAppName[modelData] :
             Notifications.groupsByAppName[modelData]
+        bottomAlign: root.bottomAlign
     }
 }
