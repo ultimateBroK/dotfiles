@@ -85,7 +85,7 @@
         }
     },
     "background": {
-        "fillMode": "fit",
+        "fillMode": "crop",
         "hideWhenFullscreen": true,
         "parallax": {
             "autoVertical": false,
@@ -96,7 +96,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-dark-mode-stock-official-black-background-3840x2401-5668.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-bloom-3840x2160-16800.png",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -251,15 +251,14 @@
             "org.gnome.nautilus",
             "spotify",
             "io.github.kukuruzka165.materialgram",
-            "tradingview",
             "jetbrains-pycharm",
             "code",
             "code-insiders",
             "cursor",
             "floorp",
-            "com.mitchellh.ghostty"
+            "tradingview"
         ],
-        "pinnedOnStartup": false
+        "pinnedOnStartup": true
     },
     "enabledPanels": [
         "iiBar",
@@ -320,7 +319,7 @@
         "blur": {
             "enable": true,
             "extraZoom": 1,
-            "radius": 100
+            "radius": 30
         },
         "centerClock": true,
         "launchOnStartup": false,
