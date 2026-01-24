@@ -50,8 +50,8 @@
     },
     "transparency": {
       "automatic": true,
-      "backgroundTransparency": 0.10251372040053958,
-      "contentTransparency": 0.30346303832517313,
+      "backgroundTransparency": null,
+      "contentTransparency": null,
       "enable": true
     },
     "wallpaperTheming": {

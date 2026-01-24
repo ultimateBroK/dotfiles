@@ -118,7 +118,8 @@ Scope {
             onShouldPushChanged: {
                 if (shouldPush) {
                     root.saveWindowPositionAndTile();
-                    Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, ${verticalMovementDistance}, ${-verticalMovementDistance}, ${horizontalSqueeze}, ${horizontalSqueeze}`])
+                    // Fixed: Use 0 instead of negative value to prevent crash (v0.53.2 fix: desktop/reservedArea: clamp to 0)
+                    Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, ${verticalMovementDistance}, 0, ${horizontalSqueeze}, ${horizontalSqueeze}`])
                 } else {
                     Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, 0, 0, 0, 0`])
                     root.restoreWindowPositionAndTile();
