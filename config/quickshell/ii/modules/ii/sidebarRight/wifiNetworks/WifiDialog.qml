@@ -162,6 +162,31 @@ WindowDialog {
         Layout.leftMargin: -Appearance.rounding.large
         Layout.rightMargin: -Appearance.rounding.large
     }
+    // Cache sorted networks to avoid sorting on every render
+    property var sortedNetworks: {
+        const networks = Network.wifiNetworks;
+        // Create a copy and sort
+        return [...networks].sort((a, b) => {
+            // Active networks first
+            if (a.active && !b.active) return -1;
+            if (!a.active && b.active) return 1;
+            // Then by signal strength (descending)
+            return b.strength - a.strength;
+        });
+    }
+
+    Connections {
+        target: Network
+        function onWifiNetworksChanged() {
+            // Update sorted list when networks change
+            root.sortedNetworks = [...Network.wifiNetworks].sort((a, b) => {
+                if (a.active && !b.active) return -1;
+                if (!a.active && b.active) return 1;
+                return b.strength - a.strength;
+            });
+        }
+    }
+
     ListView {
         Layout.fillHeight: true
         Layout.fillWidth: true
@@ -174,13 +199,7 @@ WindowDialog {
         spacing: 0
 
         model: ScriptModel {
-            values: [...Network.wifiNetworks].sort((a, b) => {
-                if (a.active && !b.active)
-                    return -1;
-                if (!a.active && b.active)
-                    return 1;
-                return b.strength - a.strength;
-            })
+            values: root.sortedNetworks
         }
         delegate: WifiNetworkItem {
             required property WifiAccessPoint modelData

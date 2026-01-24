@@ -29,6 +29,28 @@ Item { // Player instance
     readonly property int positionUpdateInterval: Math.max(250, Math.min(Config.options.resources.updateInterval, 1000))
 
     property string displayedArtFilePath: root.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+    property bool fileExists: false
+
+    // Fast file existence check
+    Process {
+        id: fileExistsChecker
+        property string checkPath: root.artFilePath
+        command: ["test", "-f", checkPath]
+        onExited: (exitCode) => {
+            const exists = (exitCode === 0)
+            root.fileExists = exists
+            if (exists) {
+                // File exists, mark as downloaded immediately
+                root.downloaded = true
+            } else if (root.artUrl.length > 0) {
+                // File doesn't exist, start download
+                root.downloaded = false
+                coverArtDownloader.targetFile = root.artUrl 
+                coverArtDownloader.artFilePath = root.artFilePath
+                coverArtDownloader.running = true
+            }
+        }
+    }
 
     component TrackChangeButton: RippleButton {
         implicitWidth: 24
@@ -64,24 +86,26 @@ Item { // Player instance
     onArtFilePathChanged: {
         if (root.artUrl.length == 0) {
             root.artDominantColor = Appearance.m3colors.m3secondaryContainer
+            root.downloaded = false
+            root.fileExists = false
             return;
         }
 
-        // Binding does not work in Process
-        coverArtDownloader.targetFile = root.artUrl 
-        coverArtDownloader.artFilePath = root.artFilePath
-        // Download
-        root.downloaded = false
-        coverArtDownloader.running = true
+        // Check if file exists first (fast check) - this will trigger download if needed
+        fileExistsChecker.checkPath = root.artFilePath
+        fileExistsChecker.running = true
     }
 
     Process { // Cover art downloader
         id: coverArtDownloader
         property string targetFile: root.artUrl
         property string artFilePath: root.artFilePath
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -sSL '${targetFile}' -o '${artFilePath}'` ]
+        // Only download if file doesn't exist, with timeout to avoid hanging
+        command: [ "bash", "-c", `mkdir -p '$(dirname '${artFilePath}')' && [ ! -f '${artFilePath}' ] && curl -sSL --max-time 5 --connect-timeout 2 '${targetFile}' -o '${artFilePath}' && [ -f '${artFilePath}' ] || true` ]
         onExited: (exitCode, exitStatus) => {
-            root.downloaded = true
+            // Re-check file existence after download attempt
+            fileExistsChecker.checkPath = root.artFilePath
+            fileExistsChecker.running = true
         }
     }
 
@@ -119,10 +143,10 @@ Item { // Player instance
             id: blurredArt
             anchors.fill: parent
             source: root.displayedArtFilePath
-            sourceSize.width: background.width
-            sourceSize.height: background.height
+            sourceSize.width: background.width * 2  // Higher resolution for blur quality
+            sourceSize.height: background.height * 2
             fillMode: Image.PreserveAspectCrop
-            cache: false
+            cache: true  // Enable caching for faster subsequent loads
             antialiasing: true
             asynchronous: true
 
@@ -176,13 +200,13 @@ Item { // Player instance
 
                     source: root.displayedArtFilePath
                     fillMode: Image.PreserveAspectCrop
-                    cache: false
+                    cache: true  // Enable caching for faster subsequent loads
                     antialiasing: true
 
                     width: size
                     height: size
-                    sourceSize.width: size
-                    sourceSize.height: size
+                    sourceSize.width: size * 2  // Higher resolution for better quality
+                    sourceSize.height: size * 2
                 }
             }
 

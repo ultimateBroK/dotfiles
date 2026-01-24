@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": 0.10251372040053958,
+            "contentTransparency": 0.30346303832517313,
             "enable": true
         },
         "wallpaperTheming": {
@@ -189,7 +189,7 @@
             "showDarkModeToggle": false,
             "showKeyboardToggle": false,
             "showMicToggle": true,
-            "showPerformanceProfileToggle": true,
+            "showPerformanceProfileToggle": false,
             "showScreenRecord": false,
             "showScreenSnip": false
         },
@@ -255,8 +255,9 @@
             "code",
             "code-insiders",
             "cursor",
+            "tradingview",
             "floorp",
-            "tradingview"
+            "anytype"
         ],
         "pinnedOnStartup": true
     },
@@ -309,7 +310,7 @@
             "enable": false
         },
         "night": {
-            "automatic": false,
+            "automatic": true,
             "colorTemperature": 3616,
             "from": "19:00",
             "to": "06:30"

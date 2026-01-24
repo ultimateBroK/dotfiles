@@ -101,7 +101,7 @@ Singleton {
         stdout: SplitParser {
             onRead: line => {
                 // print(line)
-                getNetworks.running = true
+                root.requestNetworkUpdate()
             }
         }
         stderr: SplitParser {
@@ -121,7 +121,7 @@ Singleton {
     Process {
         id: disconnectProc
         stdout: SplitParser {
-            onRead: getNetworks.running = true
+            onRead: root.requestNetworkUpdate()
         }
     }
 
@@ -139,7 +139,7 @@ Singleton {
         stdout: SplitParser {
             onRead: {
                 wifiScanning = false;
-                getNetworks.running = true;
+                root.requestNetworkUpdate();
             }
         }
     }
@@ -150,6 +150,10 @@ Singleton {
         wifiStatusProcess.running = true
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
+        // Only request network update if WiFi is enabled
+        if (root.wifiEnabled) {
+            root.requestNetworkUpdate();
+        }
     }
 
     Process {
@@ -248,6 +252,25 @@ Singleton {
         }
     }
 
+    // Debounce timer to avoid too frequent updates
+    Timer {
+        id: getNetworksDebounce
+        interval: 300  // Wait 300ms before updating
+        onTriggered: {
+            if (!getNetworks.running) {
+                getNetworks.running = true
+            }
+        }
+    }
+
+    function requestNetworkUpdate() {
+        // Only debounce if process is not currently running
+        // If running, the update will happen when it finishes anyway
+        if (!getNetworks.running) {
+            getNetworksDebounce.restart()
+        }
+    }
+
     Process {
         id: getNetworks
         running: true
@@ -266,15 +289,16 @@ Singleton {
                     const net = n.replace(rep, PLACEHOLDER).split(":");
                     return {
                         active: net[0] === "yes",
-                        strength: parseInt(net[1]),
-                        frequency: parseInt(net[2]),
-                        ssid: net[3],
+                        strength: parseInt(net[1]) || 0,
+                        frequency: parseInt(net[2]) || 0,
+                        ssid: net[3] || "",
                         bssid: net[4]?.replace(rep2, ":") ?? "",
                         security: net[5] || ""
                     };
                 }).filter(n => n.ssid && n.ssid.length > 0);
 
                 // Group networks by SSID and prioritize connected ones
+                // Use Map for faster lookups
                 const networkMap = new Map();
                 for (const network of allNetworks) {
                     const existing = networkMap.get(network.ssid);
@@ -295,17 +319,49 @@ Singleton {
                 }
 
                 const wifiNetworks = Array.from(networkMap.values());
-
                 const rNetworks = root.wifiNetworks;
 
-                const destroyed = rNetworks.filter(rn => !wifiNetworks.find(n => n.frequency === rn.frequency && n.ssid === rn.ssid && n.bssid === rn.bssid));
-                for (const network of destroyed)
-                    rNetworks.splice(rNetworks.indexOf(network), 1).forEach(n => n.destroy());
+                // Create lookup maps for faster comparison
+                const newNetworkMap = new Map();
+                wifiNetworks.forEach(n => {
+                    const key = `${n.ssid}:${n.frequency}:${n.bssid}`;
+                    newNetworkMap.set(key, n);
+                });
 
+                const existingNetworkMap = new Map();
+                rNetworks.forEach(n => {
+                    const key = `${n.ssid}:${n.frequency}:${n.bssid}`;
+                    existingNetworkMap.set(key, n);
+                });
+
+                // Find networks to remove (more efficient)
+                const toRemove = [];
+                for (let i = rNetworks.length - 1; i >= 0; i--) {
+                    const network = rNetworks[i];
+                    const key = `${network.ssid}:${network.frequency}:${network.bssid}`;
+                    if (!newNetworkMap.has(key)) {
+                        toRemove.push(i);
+                    }
+                }
+                // Remove from end to beginning to preserve indices
+                toRemove.forEach(i => {
+                    const network = rNetworks.splice(i, 1)[0];
+                    network.destroy();
+                });
+
+                // Update existing or add new networks
                 for (const network of wifiNetworks) {
-                    const match = rNetworks.find(n => n.frequency === network.frequency && n.ssid === network.ssid && n.bssid === network.bssid);
+                    const key = `${network.ssid}:${network.frequency}:${network.bssid}`;
+                    const match = existingNetworkMap.get(key);
                     if (match) {
-                        match.lastIpcObject = network;
+                        // Only update if data changed to avoid unnecessary updates
+                        const current = match.lastIpcObject;
+                        if (current.active !== network.active || 
+                            current.strength !== network.strength ||
+                            current.security !== network.security ||
+                            current.frequency !== network.frequency) {
+                            match.lastIpcObject = network;
+                        }
                     } else {
                         rNetworks.push(apComp.createObject(root, {
                             lastIpcObject: network
