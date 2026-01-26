@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import qs.modules.common
+import qs.services
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -17,13 +18,22 @@ Singleton {
     }
 
     readonly property bool barResourcesEnabled: Config?.options?.bar?.resources?.enable ?? true
-    readonly property bool wantMemory: barResourcesEnabled && (Config?.options?.bar?.resources?.showMemory ?? true)
-    readonly property bool wantSwap: barResourcesEnabled && (Config?.options?.bar?.resources?.showSwap ?? true)
-    readonly property bool wantCpu: barResourcesEnabled && (Config?.options?.bar?.resources?.showCpu ?? true)
-    readonly property bool wantGpu: barResourcesEnabled && (Config?.options?.bar?.resources?.showGpu ?? true)
+    readonly property bool _mprisHasTrack: (MprisController?.activePlayer?.trackTitle?.length ?? 0) > 0
+
+    // "Need" signals = at least one visible/active consumer on-screen.
+    // This matches the topbar widget behavior where CPU/GPU may be hidden while media is shown,
+    // unless alwaysShow* is enabled. Overlay always counts as "need".
+    readonly property bool needMemory: overlayResourcesEnabled || (barResourcesEnabled && (Config?.options?.bar?.resources?.showMemory ?? true))
+    readonly property bool needSwap: overlayResourcesEnabled || (barResourcesEnabled && (Config?.options?.bar?.resources?.showSwap ?? true))
+    readonly property bool needCpu: overlayResourcesEnabled || (barResourcesEnabled
+        && (Config?.options?.bar?.resources?.showCpu ?? true)
+        && ((Config?.options?.bar?.resources?.alwaysShowCpu ?? false) || !_mprisHasTrack))
+    readonly property bool needGpu: overlayResourcesEnabled || (barResourcesEnabled
+        && (Config?.options?.bar?.resources?.showGpu ?? true)
+        && ((Config?.options?.bar?.resources?.alwaysShowGpu ?? false) || !_mprisHasTrack))
 
     // Whether any on-screen consumer currently needs these metrics.
-    readonly property bool active: overlayResourcesEnabled || wantMemory || wantSwap || wantCpu || wantGpu
+    readonly property bool active: needMemory || needSwap || needCpu || needGpu
 
 	property real memoryTotal: 0
 	property real memoryFree: 0
@@ -93,11 +103,10 @@ Singleton {
     }
     function updateHistories() {
         if (!root.active) return;
-        const overlay = root.overlayResourcesEnabled;
-        if (overlay || root.wantMemory) updateMemoryUsageHistory()
-        if (overlay || root.wantSwap) updateSwapUsageHistory()
-        if (overlay || root.wantCpu) updateCpuUsageHistory()
-        if (root.wantGpu) updateGpuUsageHistory()
+        if (root.needMemory) updateMemoryUsageHistory()
+        if (root.needSwap) updateSwapUsageHistory()
+        if (root.needCpu) updateCpuUsageHistory()
+        if (root.needGpu) updateGpuUsageHistory()
     }
 
     function _clamp01(v) {
@@ -143,7 +152,7 @@ Singleton {
 
     function _maybePollCpuTemp() {
         if (!root.active) return;
-        if (!root.wantCpu) return;
+        if (!root.needCpu) return;
         if (cpuTempProc.running) return;
         const now = Date.now();
         const minInterval = Math.max(root.cpuTempMinIntervalMs, Config.options?.resources?.updateInterval ?? 3000);
@@ -154,7 +163,7 @@ Singleton {
 
     function _maybePollGpu() {
         if (!root.active) return;
-        if (!root.wantGpu) return;
+        if (!root.needGpu) return;
         if (gpuProc.running) return;
         const now = Date.now();
         const minInterval = Math.max(root.gpuMinIntervalMs, Config.options?.resources?.updateInterval ?? 3000);
@@ -163,16 +172,28 @@ Singleton {
         gpuProc.running = true;
     }
 
+    property int cpuMaxFreqMinIntervalMs: 3600000 // 1h (should rarely change)
+    property double _lastCpuMaxFreqPollMs: 0
+    function _maybePollCpuMaxFreq() {
+        if (!root.active) return;
+        if (!root.needCpu) return;
+        if (findCpuMaxFreqProc.running) return;
+        const now = Date.now();
+        if (root.maxAvailableCpuString !== "--" && (now - root._lastCpuMaxFreqPollMs) < root.cpuMaxFreqMinIntervalMs) return;
+        root._lastCpuMaxFreqPollMs = now;
+        findCpuMaxFreqProc.running = true;
+    }
+
     function refreshNow() {
         if (!root.active) return;
         const overlay = root.overlayResourcesEnabled;
 
         // Reload files
-        if (overlay || root.wantMemory || root.wantSwap) fileMeminfo.reload()
-        if (overlay || root.wantCpu) fileStat.reload()
+        if (overlay || root.needMemory || root.needSwap) fileMeminfo.reload()
+        if (overlay || root.needCpu) fileStat.reload()
 
         // Parse memory and swap usage
-        if (overlay || root.wantMemory || root.wantSwap) {
+        if (overlay || root.needMemory || root.needSwap) {
             const textMeminfo = fileMeminfo.text()
             memoryTotal = Number(textMeminfo.match(/MemTotal: *(\d+)/)?.[1] ?? 0)
             memoryFree = Number(textMeminfo.match(/MemAvailable: *(\d+)/)?.[1] ?? 0)
@@ -181,7 +202,7 @@ Singleton {
         }
 
         // Parse CPU usage
-        if (overlay || root.wantCpu) {
+        if (overlay || root.needCpu) {
             const textStat = fileStat.text()
             const cpuLine = textStat.match(/^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/)
             if (cpuLine) {
@@ -202,6 +223,7 @@ Singleton {
         // Poll CPU temp and GPU stats separately (async, throttled)
         root._maybePollCpuTemp();
         root._maybePollGpu();
+        root._maybePollCpuMaxFreq();
 
         root.updateHistories()
     }
@@ -220,8 +242,8 @@ Singleton {
 
     Process {
         id: findCpuMaxFreqProc
+        running: false
         command: ["bash", "-c", "lscpu | grep 'CPU max MHz' | awk '{print $4}'"]
-        running: root.active && (root.overlayResourcesEnabled || root.wantCpu)
         stdout: StdioCollector {
             id: outputCollector
             onStreamFinished: {
