@@ -15,6 +15,8 @@ MouseArea {
     readonly property bool isPluggedIn: Battery.isPluggedIn
     readonly property real percentage: Battery.percentage
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
+    // UPower can report PendingCharge while still plugged; keep visuals stable
+    readonly property bool chargeFxActive: isPluggedIn && percentage < 0.999
     
     readonly property real energyRate: Battery.energyRate
     readonly property int pulseDuration: {
@@ -48,7 +50,7 @@ MouseArea {
         width: batteryProgress.width + glowMargin * 2
         height: batteryProgress.height + glowMargin * 2
         radius: height / 2
-        visible: isCharging
+        visible: root.chargeFxActive
         opacity: 1
         color: "transparent"
         antialiasing: true
@@ -72,7 +74,7 @@ MouseArea {
         }
 
         SequentialAnimation on glowStrength {
-            running: isCharging
+            running: root.chargeFxActive
             loops: Animation.Infinite
             NumberAnimation {
                 to: 1.0
@@ -87,7 +89,7 @@ MouseArea {
         }
         
         SequentialAnimation on scale {
-            running: isCharging
+            running: root.chargeFxActive
             loops: Animation.Infinite
             NumberAnimation {
                 to: 1.08
@@ -108,19 +110,19 @@ MouseArea {
         // Make the battery indicator longer on the top bar.
         valueBarWidth: 48
         value: percentage
-        showTextMaskOnTop: (isCharging || Config.options.battery.showPercentageInIcon)
+        showTextMaskOnTop: (root.chargeFxActive || Config.options.battery.showPercentageInIcon)
 
         Behavior on value { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }
         
         property color baseColor: {
             // Charging or full: use primary color (from wallpaper)
-            if (isCharging || percentage >= 0.995) {
+            if (root.chargeFxActive || percentage >= 0.995) {
                 return Appearance.colors.colPrimary;
             }
             
             // Only apply warning color when battery is low and not charging
             // Otherwise use primary color (default)
-            if (isLow && !isCharging) {
+            if (isLow && !root.chargeFxActive) {
                 // Red for low battery - mix primary with error color
                 const primaryColor = Appearance.colors.colPrimary;
                 return ColorUtils.mix(primaryColor, Appearance.colors.colError, 0.1);
@@ -131,9 +133,9 @@ MouseArea {
         }
         property color chargingColor: Appearance.colors.colPrimary
         
-        highlightColor: isCharging ? chargingColor : baseColor
+        highlightColor: root.chargeFxActive ? chargingColor : baseColor
         
-        pulsing: isCharging
+        pulsing: root.chargeFxActive
         pulseDuration: root.pulseDuration
 
         Item {
@@ -153,11 +155,11 @@ MouseArea {
                     fill: 1
                     text: "bolt"
                     iconSize: Appearance.font.pixelSize.smaller
-                    visible: isCharging && percentage < 1
-                    opacity: isCharging ? 1 : 0
+                    visible: root.chargeFxActive && percentage < 1
+                    opacity: root.chargeFxActive ? 1 : 0
                     
                     SequentialAnimation on opacity {
-                        running: isCharging && percentage < 1
+                        running: root.chargeFxActive && percentage < 1
                         loops: Animation.Infinite
                         NumberAnimation {
                             to: 0.1

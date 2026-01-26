@@ -15,6 +15,8 @@ MouseArea {
     readonly property bool isPluggedIn: Battery.isPluggedIn
     readonly property real percentage: Battery.percentage
     readonly property bool isLow: percentage <= Config.options.battery.low / 100
+    // UPower can report PendingCharge while still plugged; keep visuals stable
+    readonly property bool chargeFxActive: isPluggedIn && percentage < 0.999
     readonly property real energyRate: Battery.energyRate
     readonly property int pulseDuration: {
         if (energyRate >= 60) return 300; // Very Fast charging (>60W)
@@ -40,7 +42,7 @@ MouseArea {
         width: batteryProgress.width + glowMargin * 2
         height: batteryProgress.height + glowMargin * 2
         radius: height / 2
-        visible: isCharging
+        visible: root.chargeFxActive
         opacity: 1
         color: "transparent"
         antialiasing: true
@@ -64,7 +66,7 @@ MouseArea {
         }
 
         SequentialAnimation on glowStrength {
-            running: isCharging
+            running: root.chargeFxActive
             loops: Animation.Infinite
             NumberAnimation {
                 to: 1.0
@@ -79,7 +81,7 @@ MouseArea {
         }
         
         SequentialAnimation on scale {
-            running: isCharging
+            running: root.chargeFxActive
             loops: Animation.Infinite
             NumberAnimation {
                 to: 1.08
@@ -102,13 +104,13 @@ MouseArea {
         valueBarHeight: 40
         value: percentage
         
-        property color baseColor: (isLow && !isCharging) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
+        property color baseColor: (isLow && !root.chargeFxActive) ? Appearance.m3colors.m3error : Appearance.colors.colOnSecondaryContainer
         property color chargingGlowColor: Appearance.colors.colOnSecondaryContainer
         
-        highlightColor: isCharging ? chargingGlowColor : baseColor
+        highlightColor: root.chargeFxActive ? chargingGlowColor : baseColor
         
         SequentialAnimation on chargingGlowColor {
-            running: isCharging
+            running: root.chargeFxActive
             loops: Animation.Infinite
             ColorAnimation {
                 from: Appearance.colors.colOnSecondaryContainer
@@ -142,14 +144,14 @@ MouseArea {
                     id: boltIcon
                     Layout.alignment: Qt.AlignHCenter
                     fill: 1
-                    text: isCharging ? "bolt" : "battery_android_full"
+                    text: root.chargeFxActive ? "bolt" : "battery_android_full"
                     iconSize: Appearance.font.pixelSize.normal
                     animateChange: true
                     opacity: 1.0
                     scale: 1.0
                     
                     SequentialAnimation on opacity {
-                        running: isCharging
+                        running: root.chargeFxActive
                         loops: Animation.Infinite
                         NumberAnimation {
                             to: 0.5
@@ -164,7 +166,7 @@ MouseArea {
                     }
                     
                     SequentialAnimation on scale {
-                        running: isCharging
+                        running: root.chargeFxActive
                         loops: Animation.Infinite
                         NumberAnimation {
                             to: 1.15
