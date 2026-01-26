@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -96,7 +96,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/macos-tahoe-26-6016x6016-22673.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-stock-official-colorful-3840x2160-5658.jpg",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -256,8 +256,8 @@
             "code-insiders",
             "cursor",
             "tradingview",
-            "floorp",
-            "anytype"
+            "anytype",
+            "floorp"
         ],
         "pinnedOnStartup": false
     },

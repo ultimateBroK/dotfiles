@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
@@ -38,32 +39,48 @@ MouseArea {
     Rectangle {
         id: haloEffect
         anchors.centerIn: batteryProgress
-        width: batteryProgress.width + 40
-        height: batteryProgress.height + 40
-        radius: width / 2
+        property real glowMargin: 22
+        // Use the same color the battery uses while charging
+        property color glowColor: batteryProgress.highlightColor
+        // Animate "strength" instead of item opacity for smoother look
+        property real glowStrength: 0.0
+
+        width: batteryProgress.width + glowMargin * 2
+        height: batteryProgress.height + glowMargin * 2
+        radius: height / 2
         visible: isCharging
-        opacity: 0
+        opacity: 1
         color: "transparent"
+        antialiasing: true
         
         layer.enabled: true
+        layer.samples: 4
         layer.effect: RadialGradient {
             gradient: Gradient {
-                GradientStop { position: 0.0; color: Qt.rgba(Appearance.colors.colPrimary.r, Appearance.colors.colPrimary.g, Appearance.colors.colPrimary.b, 0.4) }
-                GradientStop { position: 0.5; color: Qt.rgba(Appearance.colors.colPrimary.r, Appearance.colors.colPrimary.g, Appearance.colors.colPrimary.b, 0.15) }
+                GradientStop { position: 0.0; color: Qt.rgba(haloEffect.glowColor.r, haloEffect.glowColor.g, haloEffect.glowColor.b, 0.30 * haloEffect.glowStrength) }
+                GradientStop { position: 0.35; color: Qt.rgba(haloEffect.glowColor.r, haloEffect.glowColor.g, haloEffect.glowColor.b, 0.16 * haloEffect.glowStrength) }
+                GradientStop { position: 0.65; color: Qt.rgba(haloEffect.glowColor.r, haloEffect.glowColor.g, haloEffect.glowColor.b, 0.06 * haloEffect.glowStrength) }
                 GradientStop { position: 1.0; color: "transparent" }
             }
         }
         
-        SequentialAnimation on opacity {
+        onVisibleChanged: {
+            if (!visible) {
+                glowStrength = 0.0;
+                scale = 1.0;
+            }
+        }
+
+        SequentialAnimation on glowStrength {
             running: isCharging
             loops: Animation.Infinite
             NumberAnimation {
-                to: 0.8
+                to: 1.0
                 duration: root.pulseDuration
                 easing.type: Easing.InOutQuad
             }
             NumberAnimation {
-                to: 0.3
+                to: 0.45
                 duration: root.pulseDuration
                 easing.type: Easing.InOutQuad
             }
@@ -73,12 +90,12 @@ MouseArea {
             running: isCharging
             loops: Animation.Infinite
             NumberAnimation {
-                to: 1.1
+                to: 1.08
                 duration: root.pulseDuration
                 easing.type: Easing.InOutQuad
             }
             NumberAnimation {
-                to: 0.95
+                to: 0.98
                 duration: root.pulseDuration
                 easing.type: Easing.InOutQuad
             }
