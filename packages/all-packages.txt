@@ -9,7 +9,7 @@ alsa-utils
 amd-ucode
 ampcode
 android-sdk-platform-tools
-antigravity-bin
+antigravity
 anytype-bin
 appimagelauncher
 arch-wiki-docs
@@ -37,7 +37,6 @@ bridge-utils
 btop
 btrfs-assistant
 btrfs-progs
-bun-bin
 cachyos-fish-config
 cachyos-gaming-applications
 cachyos-gaming-meta
@@ -99,6 +98,7 @@ ethtool
 evince
 execstack
 exfatprogs
+ex-vi-compat
 f2fs-tools
 fastfetch
 faustus-dkms-git
@@ -167,6 +167,7 @@ gnome-user-docs
 gnome-user-share
 gnome-weather
 gnu-free-fonts
+goofcord-bin
 gpsd
 gpu-screen-recorder-gtk
 grilo-plugins
@@ -224,6 +225,8 @@ jbig2enc
 jdk17-openjdk
 jetbrains-toolbox
 jfsutils
+jre21-openjdk
+jre8-openjdk
 julia
 kdeconnect
 kiro-cli
@@ -282,6 +285,7 @@ linux-cachyos-lts-headers
 linux-firmware
 lmstudio
 logrotate
+logseq-desktop
 loupe
 lsb-release
 lsd
@@ -327,7 +331,7 @@ nfs-utils
 nilfs-utils
 nmap
 nm-connection-editor
-nodejs-lts-iron
+nodejs-lts-jod
 noto-color-emoji-fontconfig
 noto-fonts
 noto-fonts-cjk
@@ -336,6 +340,7 @@ noto-fonts-extra
 nss-mdns
 ntp
 nwg-displays
+obsidian
 ocrmypdf
 octopi
 ollama-vulkan
@@ -368,10 +373,12 @@ pnpm
 poppler-glib
 power-profiles-daemon
 presenterm
+prismlauncher
 profile-sync-daemon
 proton-authenticator-bin
 proton-mail-bin
 protonplus
+proton-vpn-gtk-app
 pv
 pyright
 python
@@ -430,6 +437,7 @@ sddm
 sg3_utils
 showtime
 simple-scan
+siyuan
 smartmontools
 s-nail
 snapd
@@ -496,12 +504,13 @@ usb_modeswitch
 usbutils
 uwsm
 vde2
-vi
+vesktop
 vim
 virt-manager
 virt-viewer
 visual-studio-code-bin
 visual-studio-code-insiders-bin
+visualvm
 vkd3d
 vlc-plugins-all
 vulkan-radeon
@@ -525,6 +534,7 @@ xf86-input-synaptics
 xf86-video-amdgpu
 xfsprogs
 xl2tpd
+xmcl-launcher
 xorg-server
 xorg-xdpyinfo
 xorg-xinit

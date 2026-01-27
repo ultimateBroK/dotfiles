@@ -1,7 +1,7 @@
 adw-gtk-theme-git
 ampcode
 android-sdk-platform-tools
-antigravity-bin
+antigravity
 anytype-bin
 appimagelauncher
 asus-vivobook-rgb-keyboard
@@ -15,6 +15,7 @@ darkly-bin
 dee
 dijo-1995parham
 electron39-bin
+electron40-bin
 equibop-bin
 execstack
 faustus-dkms-git
@@ -24,6 +25,7 @@ fsearch
 github-desktop-bin
 glew1.10
 gnome-bluetooth
+goofcord-bin
 gtk-sharp-2
 hoppscotch-bin
 httpie-desktop-bin
@@ -80,6 +82,7 @@ libudev0-shim
 libunity
 libvpx1.3
 lmstudio
+logseq-desktop
 lyrebird
 materialgram-bin
 matugen-bin
@@ -103,7 +106,6 @@ pear-desktop-bin
 perplexity
 playwright
 proton-authenticator-bin
-python-backports-zstd
 python-cobble
 python-dacite
 python-duckduckgo-search
@@ -125,6 +127,7 @@ qwen-code
 rocm-gfx1150-bin
 rustdesk-bin
 ryzenadj-git
+siyuan
 snapd
 sni-qt
 speedtest-cli-git
@@ -146,3 +149,4 @@ wakafetch-git
 wayvibes-git
 windsurf
 windsurf-next
+xmcl-launcher

@@ -50,8 +50,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": 0.08003741331116682,
+            "contentTransparency": 0.2784699690592676,
             "enable": true
         },
         "wallpaperTheming": {
@@ -259,7 +259,7 @@
             "anytype",
             "floorp"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",
