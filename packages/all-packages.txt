@@ -76,6 +76,7 @@ dhclient
 diffutils
 dijo-1995parham
 direnv
+discord
 discover
 dmidecode
 dmraid
@@ -344,7 +345,7 @@ obsidian
 ocrmypdf
 octopi
 ollama-vulkan
-openai-codex-autoup-bin
+openai-codex-bin
 opencl-mesa
 opencode-bin
 opendesktop-fonts
@@ -420,6 +421,20 @@ python-wcwidth
 python-whatthepatch
 qbittorrent-enhanced-git
 qemu-base
+qt6-3d
+qt6-datavis3d
+qt6-doc
+qt6-examples
+qt6-grpc
+qt6-httpserver
+qt6-languageserver
+qt6-lottie
+qt6-quick3dphysics
+qt6-quickeffectmaker
+qt6-remoteobjects
+qt6-scxml
+qt6-serialbus
+qt6-serialport
 quickshell-git
 qwen-code
 radeontop
@@ -512,6 +527,7 @@ visual-studio-code-bin
 visual-studio-code-insiders-bin
 visualvm
 vkd3d
+vlc
 vlc-plugins-all
 vulkan-radeon
 wakafetch-git

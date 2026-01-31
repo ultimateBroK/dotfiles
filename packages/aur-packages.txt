@@ -8,6 +8,7 @@ asus-vivobook-rgb-keyboard
 binance
 bottles
 breeze-plus
+bridge-utils
 cloudflare-warp-nox-bin
 crush-bin
 cursor-bin
@@ -97,9 +98,10 @@ nautilus-admin-gtk4
 nautilus-bluetooth
 nautilus-launch
 ocrmypdf
-openai-codex-autoup-bin
+openai-codex-bin
 opencode-bin
 openssl-1.0
+openssl-1.1
 opera
 otf-space-grotesk
 pear-desktop-bin
