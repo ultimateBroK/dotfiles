@@ -1,0 +1,35 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// INPUT — tương đương general.conf { input {}, cursor {} } + env
+// ═══════════════════════════════════════════════════════════════════════════════
+// Đã sát: kb_layout = us, numlock, repeat_delay 250, repeat_rate 35; touchpad
+// natural_scroll, disable_while_typing, clickfinger_behavior, scroll_factor 1.2.
+//
+// --- NIRI KHÔNG CÓ TƯƠNG ĐƯƠNG (chỉ comment tham khảo) ---
+// input: follow_mouse = 1, off_window_axis_events = 2
+// cursor { zoom_factor, zoom_rigid, hotspot_padding } — niri: đặt cursor qua env
+// misc: enable_swallow, swallow_regex = (foot|kitty|...)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+input {
+  keyboard {
+    xkb {
+      layout "us"
+      // variant ""; options "compose:ralt,ctrl:nocaps"
+    }
+    // input: repeat_delay = 250, repeat_rate = 35
+    repeat-delay 250
+    repeat-rate 35
+    numlock
+  }
+  touchpad {
+    tap
+    natural-scroll
+    // disable_while_typing = true
+    dwt
+    // clickfinger_behavior = true
+    click-method "clickfinger"
+    scroll-factor 1.2
+  }
+  mouse {}
+  // follow_mouse: có thể dùng focus-follows-mouse, warp-mouse-to-focus (xem wiki niri)
+}

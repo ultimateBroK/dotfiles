@@ -1,0 +1,66 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// NIRI CONFIG — chuyển từ Hyprland (dotfiles)
+// ═══════════════════════════════════════════════════════════════════════════════
+// File này include các file trong thư mục niri (tương tự source= trong hyprland.conf).
+// Thêm/sửa trong từng file tương ứng. Chạy `niri validate` để kiểm tra.
+// Live-reload: sửa và lưu là áp dụng.
+//
+// Tương đương Hyprland:
+//   source=hyprland/env.conf     → biến môi trường: đặt trong shell/systemd (xem env.niri.md)
+//   source=hyprland/execs.conf   → spawn-at-startup bên dưới
+//   source=hyprland/general.conf → input.kdl, layout.kdl, outputs.kdl, animations.kdl
+//   source=hyprland/rules.conf   → window-rules.kdl (layer rules: niri khác, xem comment trong file)
+//   source=hyprland/colors.conf  → layout.kdl (màu border/background)
+//   source=hyprland/keybinds.conf→ binds.kdl
+//   source=layouts/*.conf        → niri dùng layout cột/workspace, không có master/dwindle (xem README)
+//   source=workspaces.conf       → niri workspace động; workspace 11–20: xem comment trong binds.kdl
+//   source=monitors.conf         → outputs.kdl
+// ═══════════════════════════════════════════════════════════════════════════════
+
+include "input.kdl"
+include "outputs.kdl"
+include "layout.kdl"
+include "animations.kdl"
+include "window-rules.kdl"
+include "binds.kdl"
+
+// Screenshot path (strftime) — cùng format với scripts/screenshot.sh Hyprland
+screenshot-path "~/Pictures/Screenshots/Screenshot_%Y-%m-%d_%H-%M-%S.png"
+
+// Yêu cầu app bỏ client-side decoration khi có thể (border/focus ring đẹp hơn)
+// Hyprland: prefer-no-csd / decoration
+prefer-no-csd
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ SPAWN-AT-STARTUP — sát execs.conf (thứ tự + nội dung giống Hyprland)          │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// Bar, wallpaper — trước qs cần D-Bus sẵn (auth, lock, notification)
+spawn-sh-at-startup "~/.config/hypr/hyprland/scripts/start_geoclue_agent.sh"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
+// exec-once = hypridle — niri không có; dùng systemd/logind hoặc idle daemon khác
+spawn-sh-at-startup "dbus-update-activation-environment --all"
+spawn-sh-at-startup "sleep 1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+// Quickshell — hệt Hyprland ($qsConfig = ii trong hyprland.conf)
+spawn-sh-at-startup "qs -c ii &"
+spawn-at-startup "fcitx5"
+// exec-once = hyprpm reload -n — chỉ Hyprland
+spawn-at-startup "vicinae" "server"
+spawn-sh-at-startup "sleep 1 && ~/.config/hypr/hyprland/scripts/play_sound.sh desktop-login"
+spawn-at-startup "easyeffects" "--gapplication-service"
+// Clipboard: hệt Hyprland — cliphist store + qs ipc cliphistService update
+spawn-sh-at-startup "wl-paste --type text --watch bash -c 'cliphist store && qs -c ii ipc call cliphistService update'"
+spawn-sh-at-startup "wl-paste --type image --watch bash -c 'cliphist store && qs -c ii ipc call cliphistService update'"
+// Cursor — Hyprland: hyprctl setcursor Bibata-Modern-Ice 24; niri: đặt env (env.niri.md) XCURSOR_THEME, XCURSOR_SIZE
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ NIRI KHÔNG CÓ TƯƠNG ĐƯƠNG — tham khảo general.conf misc/binds/cursor/xwayland  │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// misc { disable_hyprland_logo, disable_splash_rendering, vfr, vrr, mouse_move_enables_dpms,
+//   key_press_enables_dpms, animate_manual_resizes, animate_mouse_windowdragging, enable_swallow,
+//   swallow_regex, on_focus_under_fullscreen, allow_session_lock_restore, session_lock_xray,
+//   initial_workspace_tracking, focus_on_activate }
+// binds { scroll_event_delay, hide_special_on_workspace_change }
+// cursor { zoom_factor, zoom_rigid, hotspot_padding }
+// xwayland { force_zero_scaling, use_nearest_neighbor }
+
+hotkey-overlay {}

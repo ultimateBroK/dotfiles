@@ -36,3 +36,7 @@ output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
 [templates.ghostty]
 input_path = '~/.config/matugen/templates/ghostty/colors'
 output_path = '~/.config/ghostty/colors'
+
+[templates.niri]
+input_path = '~/.config/matugen/templates/niri/layout.kdl'
+output_path = '~/.config/niri/layout.kdl'

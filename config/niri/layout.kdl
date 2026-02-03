@@ -1,0 +1,40 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// LAYOUT — tương đương general.conf { general, dwindle, decoration } + colors.conf
+// ═══════════════════════════════════════════════════════════════════════════════
+// Màu focus-ring, border, background-color do Matugen sinh từ wallpaper.
+// Chạy: matugen generate
+// ═══════════════════════════════════════════════════════════════════════════════
+
+layout {
+  gaps 3
+  center-focused-column "never"
+  default-column-width { proportion 0.5; }
+  preset-column-widths {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+  preset-window-heights {
+    proportion 0.33333
+    proportion 0.5
+    proportion 0.66667
+  }
+  focus-ring {
+    width 2
+    active-color "#9ccaff"
+    inactive-color "#41475088"
+    urgent-color "#ffb4ab"
+  }
+  border {
+    on
+    width 2
+    active-color "#9ccaff"
+    inactive-color "#41475088"
+    urgent-color "#ffb4ab"
+  }
+  shadow {
+    off
+  }
+  struts {}
+  background-color "#0d141c"
+}

@@ -1,0 +1,230 @@
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║  NIRI WINDOW RULES — chuyển từ Hyprland rules.conf                           ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+// Match: title / app-id (regex). Không có: tag+preset, class (dùng app-id).
+// Hyprland: windowrule = float on, match:title ... → open-floating true + match title=...
+// Layer rules (layerrule) ở Hyprland: niri có layer-rule {} khác cú pháp; ghi lại cuối file.
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 1. GLOBAL SETTINGS                                                            │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// Hyprland: windowrule = opacity 0.89 override ... (uncomment nếu cần)
+// Hyprland: no shadow for tiled — niri layout shadow off toàn cục
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 2. WORKSPACE ASSIGNMENTS (tham khảo, niri: open-on-workspace)                 │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// windowrule = workspace 1 silent, match:class ^(floorp)$
+// → window-rule { match app-id="floorp" open-on-workspace "1"; } (nếu dùng named workspace)
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 3. FLOATING PRESETS — Hyprland dùng tag + fp_45x45; niri dùng size/position   │
+// │    preset-float-center, 45x45, 55x70, top-right, bottom-right...             │
+// └──────────────────────────────────────────────────────────────────────────────┘
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 4. FILE DIALOGS (FLOATING)                                                    │
+// └──────────────────────────────────────────────────────────────────────────────┘
+window-rule {
+  match title=r#"^Open File"#
+  open-floating true
+}
+window-rule {
+  match title=r#"^Select a File"#
+  open-floating true
+}
+window-rule {
+  match title=r#"^Save As"#
+  open-floating true
+}
+window-rule {
+  match title=r#"^Open Folder"#
+  open-floating true
+}
+window-rule {
+  match title=r#"^File Upload"#
+  open-floating true
+}
+window-rule {
+  match title=r#"wants to save$"#
+  open-floating true
+}
+window-rule {
+  match title=r#"wants to open$"#
+  open-floating true
+}
+window-rule {
+  match title=r#"^Choose wallpaper"#
+  open-floating true
+  default-column-width { proportion 0.6; }
+  default-window-height { proportion 0.65; }
+}
+window-rule {
+  match title=r#"^Library"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+
+// Dolphin copy dialog — Hyprland: move (monitor_w*0.4) (monitor_h*0.8)
+window-rule {
+  match title=r#"^Copying — Dolphin$"#
+  open-floating true
+  default-floating-position x=32 y=32 relative-to="bottom-left"
+  default-column-width { proportion 0.4; }
+  default-window-height { proportion 0.2; }
+}
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 5. APP-SPECIFIC RULES                                                         │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// --- System utilities (fp_45x45 / fp_55x70) ---
+window-rule {
+  match app-id=r#"^pavucontrol$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+window-rule {
+  match app-id=r#"^org\.pulseaudio\.pavucontrol$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+window-rule {
+  match app-id=r#"^pavucontrol-qt$"#
+  open-floating true
+  default-column-width { proportion 0.55; }
+  default-window-height { proportion 0.7; }
+}
+window-rule {
+  match app-id=r#"^nm-connection-editor$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+window-rule {
+  match app-id=r#"^kcm_bluetooth$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+window-rule {
+  match app-id=r#"^org\.kde\.bluedevilwizard$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.55; }
+}
+window-rule {
+  match app-id=r#"^blueberry\.py$"#
+  open-floating true
+}
+// --- KDE/Plasma ---
+window-rule {
+  match app-id=r#"plasmawindowed"#
+  open-floating true
+}
+window-rule {
+  match app-id=r#"kcm_"#
+  open-floating true
+}
+window-rule {
+  match app-id=r#"bluedevilwizard"#
+  open-floating true
+}
+window-rule {
+  match app-id=r#"^org\.freedesktop\.impl\.portal\.desktop\.kde$"#
+  open-floating true
+  default-column-width { proportion 0.6; }
+  default-window-height { proportion 0.65; }
+}
+window-rule {
+  match app-id=r#"^plasma-changeicons$"#
+  open-floating true
+  open-focused false
+}
+// --- Specific apps ---
+window-rule {
+  match app-id=r#"^protonvpn-app$"#
+  open-floating true
+  default-floating-position x=80 y=20 relative-to="top-right"
+  default-column-width { proportion 0.2; }
+  default-window-height { proportion 0.5; }
+}
+window-rule {
+  match app-id=r#"^Zotero$"#
+  open-floating true
+  default-column-width { proportion 0.45; }
+  default-window-height { proportion 0.45; }
+}
+window-rule {
+  match title=r#"^illogical-impulse Settings$"#
+  open-floating true
+  default-column-width { proportion 0.55; }
+  default-window-height { proportion 0.7; }
+}
+window-rule {
+  match app-id=r#"^guifetch$"#
+  open-floating true
+}
+window-rule {
+  match title=r#"Welcome"#
+  open-floating true
+}
+window-rule {
+  match title=r#"Shell conflicts"#
+  open-floating true
+}
+window-rule {
+  match app-id=r#"^dev\.warp\.Warp$"#
+  open-floating false
+}
+// JetBrains: no_initial_focus cho float + title trống
+window-rule {
+  match app-id=r#"^jetbrains-"#
+  match title=r#"^$|^win\d+$"#
+  open-focused false
+}
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 6. PICTURE-IN-PICTURE — Hyprland: float, size 0.25x0.25, move 0.73x0.72, pin  │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// PiP chung (mọi app) — regex giống Hyprland; đặt trước để Firefox override bên dưới
+window-rule {
+  match title=r#"^[Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture"#
+  open-floating true
+  default-column-width { proportion 0.25; }
+  default-window-height { proportion 0.25; }
+  default-floating-position x=32 y=32 relative-to="bottom-right"
+}
+window-rule {
+  match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+  open-floating true
+  default-column-width { fixed 480; }
+  default-window-height { fixed 270; }
+  default-floating-position x=32 y=32 relative-to="bottom-right"
+}
+// WezTerm workaround (default niri)
+window-rule {
+  match app-id=r#"^org\.wezfurlong\.wezterm$"#
+  default-column-width {}
+}
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ 7. XWAYLAND / WINE / PERFORMANCE                                              │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// Hyprland: immediate, no_blur, no_shadow, no_anim cho xwayland/wine.
+// niri không có immediate/no_blur/no_anim window rule; có variable-refresh-rate.
+// Giữ font nét / ổn định Wine: dùng env (xem env.niri.md). Nếu dialog Wine không
+// nhận click: winecfg → Graphics → bỏ "Emulate a virtual desktop".
+// Gaming / TradingView: Hyprland immediate — trên niri tắt hiệu ứng toàn cục nếu cần.
+
+// ┌──────────────────────────────────────────────────────────────────────────────┐
+// │ LAYER RULES (Hyprland) — tham khảo, niri dùng layer-rule {} khác cú pháp      │
+// └──────────────────────────────────────────────────────────────────────────────┘
+// layerrule = xray 1, match:namespace .*
+// layerrule = no_anim on, match:namespace walker|anyrun|selection|hyprpicker|gtk4-layer-shell
+// layerrule = blur on, match:namespace gtk-layer-shell|launcher|notifications|quickshell:.*
+// layerrule = animation slide left/right/bottom, match:namespace quickshell:sidebarLeft|Right|dock|...
+// layerrule = no_anim on, match:namespace quickshell:overview|session|screenshot|...

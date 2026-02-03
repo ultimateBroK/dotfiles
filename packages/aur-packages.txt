@@ -82,7 +82,7 @@ libtiff4
 libudev0-shim
 libunity
 libvpx1.3
-lmstudio
+lmstudio-bin
 logseq-desktop
 lyrebird
 materialgram-bin
@@ -127,7 +127,6 @@ qt4
 quickshell-git
 qwen-code
 rocm-gfx1150-bin
-rustdesk-bin
 ryzenadj-git
 siyuan
 snapd

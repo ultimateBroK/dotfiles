@@ -1,0 +1,200 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// NIRI BINDS — chuyển từ Hyprland keybinds.conf
+// ═══════════════════════════════════════════════════════════════════════════════
+// Mod = Super khi chạy trên TTY (giống Hyprland Super). Dòng [hidden] = không hiện cheatsheet.
+// Quickshell (qs): nếu dùng qs -c ii thì đổi spawn "fuzzel" thành spawn-sh "qs -c ii ipc call ..." tương ứng.
+// Workspace 11–20: Hyprland Ctrl+Super+1..0; niri dùng Mod+Shift+1..0 (tránh trùng Mod+Ctrl = move 1–10).
+// Chi tiết rà soát: xem KEYBINDS-AUDIT.md trong thư mục này.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+binds {
+  // ─── Shell: Overview & Launcher ───
+  Mod+Shift+Slash { show-hotkey-overlay; }
+  Mod+O repeat=false hotkey-overlay-title="Toggle overview" { toggle-overview; }
+  Mod+D hotkey-overlay-title="Launcher" { spawn "fuzzel"; }
+  Mod+L hotkey-overlay-title="Lock" { spawn "loginctl" "lock-session"; }
+  Super+Alt+L allow-inhibiting=false hotkey-overlay-title=null { spawn "loginctl" "lock-session"; }
+
+  // Super+Tab: focus current or last — niri không có focuscurrentorlast; dùng focus-workspace-previous hoặc bỏ
+  // Mod+Tab repeat=false { focus-workspace-previous; }
+
+  // ─── Quick Actions: Clipboard / Emoji ───
+  Mod+V hotkey-overlay-title="Clipboard history" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+  Mod+Period hotkey-overlay-title="Emoji" { spawn-sh "~/.config/hypr/hyprland/scripts/fuzzel-emoji.sh copy 2>/dev/null || wl-copy"; }
+
+  // ─── Sidebars & Panels (Quickshell: bind tới qs ipc nếu dùng) ───
+  // Mod+A sidebar left, Mod+Ctrl+A pin; Mod+N sidebar right; Mod+J bar; Mod+Shift+D dock; Mod+Slash cheatsheet; Mod+K osk; Mod+G overlay; Mod+M media. Session menu: Mod+Shift+Delete
+  Mod+Shift+Delete { spawn-sh "pkill wlogout 2>/dev/null; wlogout -p layer-shell 2>/dev/null || true"; }
+
+  // ─── Hardware: Brightness & Audio ───
+  XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl set 5%+"; }
+  XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl set 5%-"; }
+  XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5"; }
+  XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"; }
+  XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+  XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+  Mod+Shift+M { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+  Alt+XF86AudioMute { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+  Mod+Alt+M { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+  Mod+Alt+K { spawn-sh "~/.config/hypr/hyprland/scripts/toggle_wayvibes.sh 2>/dev/null || true"; }
+  // Media: sát Hyprland Super+Shift+N/B/P
+  Mod+Shift+N { spawn-sh "playerctl next 2>/dev/null || true"; }
+  Mod+Shift+B { spawn-sh "playerctl previous 2>/dev/null || true"; }
+  Mod+Shift+P { spawn-sh "playerctl play-pause 2>/dev/null || true"; }
+
+  // ─── Utilities: Screenshots ───
+  Mod+Shift+S hotkey-overlay-title="Screen snip" { screenshot; }
+  Print { screenshot-screen; }
+  Ctrl+Print { screenshot-screen; }
+  Alt+Print { screenshot-window; }
+  Shift+Print { spawn-sh "~/.config/hypr/hyprland/scripts/screenshot.sh --cursor --clipboard 2>/dev/null || grim -g \"$(slurp)\" - | wl-copy"; }
+  Shift+Ctrl+Print { spawn-sh "~/.config/hypr/hyprland/scripts/screenshot.sh --cursor --both 2>/dev/null || true"; }
+  // Mod+Shift+A: region search (snip_to_search)
+  Mod+Shift+A { spawn-sh "~/.config/hypr/hyprland/scripts/snip_to_search.sh 2>/dev/null || true"; }
+  // Mod+Shift+X / T: OCR
+  Mod+Shift+X { spawn-sh "grim -g \"$(slurp)\" /tmp/ocr_image.png && tesseract /tmp/ocr_image.png stdout | wl-copy && rm /tmp/ocr_image.png"; }
+  Mod+Shift+C hotkey-overlay-title="Color picker" { spawn-sh "hyprpicker -a 2>/dev/null || wl-copy"; }
+
+  // ─── Recording — sát Hyprland: Super+Shift+R region, Super+Shift+Alt+R fullscreen+sound ───
+  Mod+Shift+R { spawn-sh "~/.config/quickshell/ii/scripts/videos/record.sh 2>/dev/null || true"; }
+  Mod+Shift+Alt+R { spawn-sh "~/.config/quickshell/ii/scripts/videos/record.sh --fullscreen --sound 2>/dev/null || true"; }
+
+  // ─── Window: Close, Focus, Move ───
+  Mod+Q repeat=false { close-window; }
+  Alt+F4 repeat=false { close-window; }
+  Mod+Left { focus-column-left; }
+  Mod+Right { focus-column-right; }
+  Mod+Up { focus-window-up; }
+  Mod+Down { focus-window-down; }
+  Mod+H { focus-column-left; }
+  Mod+K { focus-window-up; }
+  Mod+J { focus-window-down; }
+  // Mod+L = Lock (sát Hyprland Super+L); focus right = Mod+Right
+  Mod+Ctrl+Left { move-column-left; }
+  Mod+Ctrl+Right { move-column-right; }
+  Mod+Ctrl+Up { move-window-up; }
+  Mod+Ctrl+Down { move-window-down; }
+  Mod+Ctrl+H { move-column-left; }
+  Mod+Ctrl+L { move-column-right; }
+  Mod+Ctrl+J { move-window-down; }
+  Mod+Ctrl+K { move-window-up; }
+  // Resize: Hyprland Super+Alt arrow → niri set-column-width / set-window-height
+  Mod+Alt+Right { set-column-width "+20"; }
+  Mod+Alt+Left { set-column-width "-20"; }
+  Mod+Alt+Up { set-window-height "-10%"; }
+  Mod+Alt+Down { set-window-height "+10%"; }
+  Mod+Alt+Space { toggle-window-floating; }
+  Mod+F { maximize-column; }
+  Mod+Shift+F { fullscreen-window; }
+  Mod+M { maximize-window-to-edges; }
+  Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+  Mod+R { switch-preset-column-width; }
+  Mod+Alt+R { switch-preset-window-height; }
+  Mod+Ctrl+R { reset-window-height; }
+  Mod+Shift+W { toggle-column-tabbed-display; }
+  Mod+Minus { set-column-width "-10%"; }
+  Mod+Equal { set-column-width "+10%"; }
+  Mod+BracketLeft { consume-or-expel-window-left; }
+  Mod+BracketRight { consume-or-expel-window-right; }
+  Mod+Comma { consume-window-into-column; }
+  Mod+Ctrl+Period hotkey-overlay-title=null { expel-window-from-column; }
+  // Zoom (Hyprland Super+Minus/Equal) — dùng Alt để tránh trùng column width
+  Mod+Alt+Minus { spawn-sh "~/.config/hypr/hyprland/scripts/zoom.sh decrease 0.1 2>/dev/null || true"; }
+  Mod+Alt+Equal { spawn-sh "~/.config/hypr/hyprland/scripts/zoom.sh increase 0.1 2>/dev/null || true"; }
+
+  // ─── Workspace: 1–10 ───
+  Mod+1 { focus-workspace 1; }
+  Mod+2 { focus-workspace 2; }
+  Mod+3 { focus-workspace 3; }
+  Mod+4 { focus-workspace 4; }
+  Mod+5 { focus-workspace 5; }
+  Mod+6 { focus-workspace 6; }
+  Mod+7 { focus-workspace 7; }
+  Mod+8 { focus-workspace 8; }
+  Mod+9 { focus-workspace 9; }
+  Mod+0 { focus-workspace 10; }
+  Mod+Ctrl+1 { move-column-to-workspace 1; }
+  Mod+Ctrl+2 { move-column-to-workspace 2; }
+  Mod+Ctrl+3 { move-column-to-workspace 3; }
+  Mod+Ctrl+4 { move-column-to-workspace 4; }
+  Mod+Ctrl+5 { move-column-to-workspace 5; }
+  Mod+Ctrl+6 { move-column-to-workspace 6; }
+  Mod+Ctrl+7 { move-column-to-workspace 7; }
+  Mod+Ctrl+8 { move-column-to-workspace 8; }
+  Mod+Ctrl+9 { move-column-to-workspace 9; }
+  Mod+Ctrl+0 { move-column-to-workspace 10; }
+
+  // ─── Workspace: 11–20 (secondary monitor) — dùng Mod+Shift+1..0 để tránh trùng Mod+Ctrl+1..0 ───
+  Mod+Shift+1 { focus-workspace 11; }
+  Mod+Shift+2 { focus-workspace 12; }
+  Mod+Shift+3 { focus-workspace 13; }
+  Mod+Shift+4 { focus-workspace 14; }
+  Mod+Shift+5 { focus-workspace 15; }
+  Mod+Shift+6 { focus-workspace 16; }
+  Mod+Shift+7 { focus-workspace 17; }
+  Mod+Shift+8 { focus-workspace 18; }
+  Mod+Shift+9 { focus-workspace 19; }
+  Mod+Shift+0 { focus-workspace 20; }
+  Mod+Shift+Ctrl+1 { move-column-to-workspace 11; }
+  Mod+Shift+Ctrl+2 { move-column-to-workspace 12; }
+  Mod+Shift+Ctrl+3 { move-column-to-workspace 13; }
+  Mod+Shift+Ctrl+4 { move-column-to-workspace 14; }
+  Mod+Shift+Ctrl+5 { move-column-to-workspace 15; }
+  Mod+Shift+Ctrl+6 { move-column-to-workspace 16; }
+  Mod+Shift+Ctrl+7 { move-column-to-workspace 17; }
+  Mod+Shift+Ctrl+8 { move-column-to-workspace 18; }
+  Mod+Shift+Ctrl+9 { move-column-to-workspace 19; }
+  Mod+Shift+Ctrl+0 { move-column-to-workspace 20; }
+
+  // ─── Workspace: scroll / paging ───
+  Mod+Page_Down { focus-workspace-down; }
+  Mod+Page_Up { focus-workspace-up; }
+  Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+  Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
+  Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+  Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+  Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+  Mod+Ctrl+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+  // focus-workspace down/up: dùng Mod+Page_Down/Up hoặc scroll
+
+  // ─── Special / Scratchpad ───
+  // Hyprland: Super+S togglespecialworkspace; Super+Alt+S movetoworkspacesilent special
+  // niri không có special workspace; có thể map Mod+S vào action khác hoặc bỏ
+  Mod+S repeat=false { toggle-overview; }
+
+  // ─── Monitor focus ───
+  Mod+Shift+Left { focus-monitor-left; }
+  Mod+Shift+Right { focus-monitor-right; }
+  Mod+Shift+Up { focus-monitor-up; }
+  Mod+Shift+Down { focus-monitor-down; }
+  Mod+Shift+Ctrl+Left { move-column-to-monitor-left; }
+  Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+  Mod+Shift+Ctrl+Up { move-column-to-monitor-up; }
+  Mod+Shift+Ctrl+Down { move-column-to-monitor-down; }
+
+  // ─── Session — sát Hyprland: Super+L lock, Super+Shift+L suspend, Ctrl+Alt+Del session (niri: quit) ───
+  Mod+Shift+L { spawn-sh "systemctl suspend || loginctl suspend"; }
+  Mod+Shift+E { quit; }
+  Ctrl+Alt+Delete { quit; }
+  Ctrl+Shift+Alt+Mod+Delete { spawn-sh "systemctl poweroff 2>/dev/null || loginctl poweroff 2>/dev/null || true"; }
+
+  // ─── Apps ───
+  Mod+Return hotkey-overlay-title="Terminal" { spawn-sh "ghostty 2>/dev/null || kitty -1 2>/dev/null || foot 2>/dev/null || alacritty"; }
+  Mod+T hotkey-overlay-title=null { spawn-sh "ghostty 2>/dev/null || kitty -1 2>/dev/null || foot"; }
+  Mod+E { spawn-sh "nautilus 2>/dev/null || dolphin 2>/dev/null || nemo 2>/dev/null || thunar"; }
+  Mod+W hotkey-overlay-title="Browser" { spawn-sh "floorp 2>/dev/null || firefox 2>/dev/null || chromium"; }
+  Mod+C { spawn-sh "code 2>/dev/null || codium 2>/dev/null || cursor 2>/dev/null || zed 2>/dev/null || kate"; }
+  Mod+X { spawn-sh "kate 2>/dev/null || gnome-text-editor 2>/dev/null"; }
+  Ctrl+Mod+V { spawn-sh "pavucontrol-qt 2>/dev/null || pavucontrol"; }
+  Mod+I { spawn-sh "systemsettings 2>/dev/null || gnome-control-center 2>/dev/null"; }
+  Ctrl+Shift+Escape { spawn-sh "gnome-system-monitor 2>/dev/null || btop"; }
+  Ctrl+Mod+Shift+Alt+W { spawn-sh "wps 2>/dev/null || onlyoffice-desktopeditors 2>/dev/null || libreoffice 2>/dev/null || true"; }
+  Ctrl+Mod+Backslash { set-column-width "640"; }
+
+  // ─── Custom: config / keybinds ───
+  Ctrl+Mod+Slash { spawn-sh "xdg-open ~/.config/illogical-impulse/config.json 2>/dev/null"; }
+  Ctrl+Mod+Alt+Slash { spawn-sh "xdg-open ~/.config/niri/binds.kdl 2>/dev/null"; }
+
+  // Escape hatch khi app giữ shortcut
+  Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+}

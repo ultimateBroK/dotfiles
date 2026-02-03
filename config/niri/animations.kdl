@@ -1,0 +1,45 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// ANIMATIONS — tương đương general.conf { animations {} }
+// ═══════════════════════════════════════════════════════════════════════════════
+// Hyprland: macOS-inspired bezier (macEaseOut, macWindowOpen, ...), animation
+// windowsIn/Out, workspaces, layers, fade. Niri dùng easing (duration-ms, curve)
+// hoặc spring (damping-ratio, stiffness, epsilon); không có bezier tùy chỉnh.
+//
+// ========== MACOS-INSPIRED (Hyprland, tham khảo) ==========
+// bezier = macEaseOut, 0.16, 1, 0.3, 1
+// bezier = macWindowOpen, 0.25, 0.1, 0.25, 1  // Window opening
+// bezier = macWindowClose, 0.3, 0, 0.8, 0.15
+// animation = windowsIn, 1, 4.5, macWindowOpen, popin 87%
+// animation = workspaces, 1, 4, macEaseInOut, slide
+// ========== Niri: ease-out-expo / spring ==========
+// ═══════════════════════════════════════════════════════════════════════════════
+
+animations {
+  // Window open/close — tương tự windowsIn, windowsOut (duration ~4–4.5)
+  window-open {
+    duration-ms 450
+    curve "ease-out-expo"
+  }
+  window-close {
+    duration-ms 400
+    curve "ease-out-quad"
+  }
+  // Workspace switch — tương tự workspaces animation (slide)
+  workspace-switch {
+    spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+  }
+  horizontal-view-movement {
+    spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+  }
+  window-movement {
+    spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+  }
+  window-resize {
+    spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+  }
+  // Tương đương Hyprland layersIn/Out, overview — smooth zoom overview
+  overview-open-close {
+    spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+  }
+  // config-notification, exit-confirmation, screenshot-ui, recent-windows: mặc định niri
+}

@@ -306,8 +306,8 @@
       "enable": false
     },
     "night": {
-      "automatic": true,
-      "colorTemperature": 3616,
+      "automatic": false,
+      "colorTemperature": 4274,
       "from": "19:00",
       "to": "06:30"
     }

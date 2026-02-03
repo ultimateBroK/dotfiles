@@ -284,7 +284,7 @@ linux-cachyos-headers
 linux-cachyos-lts
 linux-cachyos-lts-headers
 linux-firmware
-lmstudio
+lmstudio-bin
 logrotate
 logseq-desktop
 loupe
@@ -330,6 +330,7 @@ netctl
 networkmanager-openvpn
 nfs-utils
 nilfs-utils
+niri
 nmap
 nm-connection-editor
 nodejs-lts-jod
@@ -345,6 +346,7 @@ obsidian
 ocrmypdf
 octopi
 ollama-vulkan
+onlyoffice-bin
 openai-codex-bin
 opencl-mesa
 opencode-bin
