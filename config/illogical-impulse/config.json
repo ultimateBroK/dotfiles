@@ -50,8 +50,8 @@
     },
     "transparency": {
       "automatic": true,
-      "backgroundTransparency": 0.11,
-      "contentTransparency": 0.57,
+      "backgroundTransparency": null,
+      "contentTransparency": null,
       "enable": true
     },
     "wallpaperTheming": {
@@ -96,7 +96,7 @@
       "workspaceZoom": 1
     },
     "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/macos-tahoe-26-6016x6016-22673.jpg",
+    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/sea-men-ERd52c7VSrc-unsplash.jpg",
     "widgets": {
       "clock": {
         "cookie": {
@@ -188,7 +188,7 @@
       "showKeyboardToggle": false,
       "showMicToggle": true,
       "showPerformanceProfileToggle": false,
-      "showScreenRecord": false,
+      "showScreenRecord": true,
       "showScreenSnip": false
     },
     "verbose": true,
@@ -307,7 +307,7 @@
     },
     "night": {
       "automatic": false,
-      "colorTemperature": 4274,
+      "colorTemperature": 4950,
       "from": "19:00",
       "to": "06:30"
     }

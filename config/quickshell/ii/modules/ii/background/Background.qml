@@ -131,9 +131,10 @@ Variants {
                 id: wallpaper
                 visible: opacity > 0 && !blurLoader.active
                 opacity: (status === Image.Ready && !bgRoot.wallpaperIsVideo) ? 1 : 0
-                cache: false
-                smooth: false
-                asynchronous: false
+                cache: true
+                smooth: true
+                mipmap: true
+                asynchronous: true
                 // Range = groups that workspaces span on
                 property int chunkSize: Config?.options.bar.workspaces.shown ?? 10
                 property int lower: Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize
