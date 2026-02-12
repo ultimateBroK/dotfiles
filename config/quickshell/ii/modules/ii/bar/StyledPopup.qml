@@ -103,7 +103,7 @@ LazyLoader {
             target: popupBackground
         }
 
-        Rectangle {
+        LiquidGlassRect {
             id: popupBackground
             readonly property real margin: 10
             anchors {
@@ -115,6 +115,8 @@ LazyLoader {
             }
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
+            glassColor: Appearance.m3colors.m3surfaceContainer
+            glassTransparency: root.glassTransparency
             color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer, root.glassTransparency)
             radius: Appearance.rounding.small
             children: [root.contentItem]

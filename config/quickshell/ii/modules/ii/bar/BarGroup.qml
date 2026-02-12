@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.widgets
 import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
@@ -47,7 +48,7 @@ Item {
     implicitHeight: vertical ? (gridLayout.implicitHeight + padding * 2) : Appearance.sizes.baseBarHeight
     default property alias items: gridLayout.children
 
-    Rectangle {
+    LiquidGlassRect {
         id: background
         anchors {
             fill: parent
@@ -56,16 +57,16 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        color: Config.options?.bar.borderless
+        glassColor: root.adaptiveGroupColor
+        glassTransparency: root.glassTransparency
+        highlightEnabled: !(Config.options?.bar.borderless ?? false)
+        color: (Config.options?.bar.borderless ?? false)
             ? "transparent"
             : ColorUtils.transparentize(root.adaptiveGroupColor, root.glassTransparency)
         radius: Appearance.rounding.small
 
         border.width: Config.options?.bar.borderless ? 0 : 1
-        border.color: ColorUtils.applyAlpha(
-            Appearance.colors.colLayer0Border,
-            Appearance.isDarkMode ? 0.35 : 0.15
-        )
+        border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, Appearance.isDarkMode ? 0.35 : 0.15)
     }
 
     GridLayout {

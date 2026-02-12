@@ -219,7 +219,8 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
-                Quickshell.execDetached(["bash", "-c", `${Config.options.apps.volumeMixer}`]);
+                const cmd = root.isSink ? Config.options.apps.volumeMixer : (Config.options.apps.volumeMixerInput || Config.options.apps.volumeMixer);
+                Quickshell.execDetached(["bash", "-c", cmd]);
                 GlobalStates.sidebarRightOpen = false;
             }
         }

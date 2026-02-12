@@ -130,7 +130,7 @@ Scope { // Scope
                 target: sidebarLeftBackground
                 radius: sidebarLeftBackground.radius
             }
-            Rectangle {
+            LiquidGlassRect {
                 id: sidebarLeftBackground
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -138,7 +138,7 @@ Scope { // Scope
                 anchors.leftMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
                 width: sidebarRoot.sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
                 height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
-                color: Appearance.colors.colLayer0
+                glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
                 border.width: 1
                 border.color: Appearance.colors.colLayer0Border
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
@@ -180,10 +180,10 @@ Scope { // Scope
                 if (!visible) GlobalStates.sidebarLeftOpen = false;
             }
             
-            Rectangle {
+            LiquidGlassRect {
                 id: detachedSidebarBackground
                 anchors.fill: parent
-                color: Appearance.colors.colLayer0
+                glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
 
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {

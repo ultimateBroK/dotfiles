@@ -47,13 +47,13 @@ Item {
     StyledRectangularShadow {
         target: sidebarRightBackground
     }
-    Rectangle {
+    LiquidGlassRect {
         id: sidebarRightBackground
 
         anchors.fill: parent
         implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
         implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
-        color: Appearance.colors.colLayer0
+        glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
         border.width: 1
         border.color: Appearance.colors.colLayer0Border
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1

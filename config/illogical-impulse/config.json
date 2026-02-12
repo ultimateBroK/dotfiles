@@ -75,7 +75,8 @@
     "taskManager": "plasma-systemmonitor --page-name Processes",
     "terminal": "kitty -1",
     "update": "kitty -1 --hold=yes fish -i -c 'sudo pacman -Syu'",
-    "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
+    "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt -t 3\" \"pavucontrol -t 3\"",
+    "volumeMixerInput": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt -t 4\" \"pavucontrol -t 4\""
   },
   "audio": {
     "protection": {
@@ -96,7 +97,7 @@
       "workspaceZoom": 1
     },
     "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/sea-men-ERd52c7VSrc-unsplash.jpg",
+    "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-dark-mode-stock-official-black-background-3840x2401-5668.jpg",
     "widgets": {
       "clock": {
         "cookie": {

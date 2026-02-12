@@ -215,7 +215,12 @@ WindowDialog {
         DialogButton {
             buttonText: Translation.tr("Details")
             onClicked: {
-                Quickshell.execDetached(["bash", "-c", `${Network.ethernet ? Config.options.apps.networkEthernet : Config.options.apps.network}`]);
+                // User preference: Wi-Fi "Details" should open KDE Network settings.
+                // (Some users set Config.options.apps.network to a TUI like nmtui.)
+                const cmd = (Config.options.apps.networkEthernet && Config.options.apps.networkEthernet.length > 0)
+                    ? Config.options.apps.networkEthernet
+                    : Config.options.apps.network;
+                Quickshell.execDetached(["bash", "-c", cmd]);
                 GlobalStates.sidebarRightOpen = false;
             }
         }
