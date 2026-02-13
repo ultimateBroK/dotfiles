@@ -126,8 +126,8 @@
         "showOnlyWhenLocked": false,
         "style": "digital",
         "styleLocked": "cookie",
-        "x": 544,
-        "y": 271
+        "x": 705,
+        "y": 611
       },
       "weather": {
         "enable": false,
@@ -189,7 +189,7 @@
       "showKeyboardToggle": false,
       "showMicToggle": true,
       "showPerformanceProfileToggle": false,
-      "showScreenRecord": true,
+      "showScreenRecord": false,
       "showScreenSnip": false
     },
     "verbose": true,
@@ -256,7 +256,7 @@
       "floorp",
       "spotify"
     ],
-    "pinnedOnStartup": true
+    "pinnedOnStartup": false
   },
   "enabledPanels": [
     "iiBar",

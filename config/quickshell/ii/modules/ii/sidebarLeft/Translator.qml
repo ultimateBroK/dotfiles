@@ -88,7 +88,7 @@ Item {
         id: getLanguagesProc
         command: ["trans", "-list-languages", "-no-bidi"]
         property list<string> bufferList: ["auto"]
-        running: true
+        running: false
         stdout: SplitParser {
             onRead: data => {
                 getLanguagesProc.bufferList.push(data.trim());
@@ -102,6 +102,15 @@ Item {
             langs.unshift("auto");
             root.languages = langs;
             getLanguagesProc.bufferList = []; // Clear the buffer
+        }
+    }
+
+    // Lazy-load language list only when user opens the selector (avoids lag on Translator tab load)
+    onShowLanguageSelectorChanged: {
+        if (root.showLanguageSelector && root.languages.length <= 1 && !getLanguagesProc.running) {
+            root.languages = ["auto"]; // Show at least one option while loading
+            getLanguagesProc.bufferList = ["auto"];
+            getLanguagesProc.running = true;
         }
     }
 
@@ -231,6 +240,7 @@ Item {
         z: 9999
         sourceComponent: SelectionDialog {
             id: languageSelectorDialog
+            animateListAppearance: false
             titleText: Translation.tr("Select Language")
             items: root.languages
             defaultChoice: root.languageSelectorTarget ? root.targetLanguage : root.sourceLanguage

@@ -1,6 +1,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
@@ -49,13 +50,14 @@ Item {
     }
     LiquidGlassRect {
         id: sidebarRightBackground
+        liquidGlassVariant: true
 
         anchors.fill: parent
         implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
         implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
         glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
         border.width: 1
-        border.color: Appearance.colors.colLayer0Border
+        border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
         ColumnLayout {

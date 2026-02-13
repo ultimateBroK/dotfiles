@@ -1,6 +1,7 @@
 import qs
 import qs.services
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import QtQuick
 import Quickshell.Io
@@ -132,6 +133,7 @@ Scope { // Scope
             }
             LiquidGlassRect {
                 id: sidebarLeftBackground
+                liquidGlassVariant: true
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.topMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
@@ -140,7 +142,7 @@ Scope { // Scope
                 height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
                 glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
                 border.width: 1
-                border.color: Appearance.colors.colLayer0Border
+                border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                 Behavior on width {
@@ -182,8 +184,12 @@ Scope { // Scope
             
             LiquidGlassRect {
                 id: detachedSidebarBackground
+                liquidGlassVariant: true
                 anchors.fill: parent
                 glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
+                border.width: 1
+                border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
+                radius: Appearance.rounding.screenRounding
 
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {

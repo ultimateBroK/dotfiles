@@ -13,6 +13,8 @@ Item {
     property alias items: choiceModel.values
     property int selectedId: choiceListView.currentIndex
     property var defaultChoice
+    /** Set to false for long lists (e.g. language selector) to avoid lag when opening. */
+    property bool animateListAppearance: true
 
     signal canceled();
     signal selected(var result);
@@ -64,6 +66,7 @@ Item {
 
             StyledListView {
                 id: choiceListView
+                animateAppearance: root.animateListAppearance
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
