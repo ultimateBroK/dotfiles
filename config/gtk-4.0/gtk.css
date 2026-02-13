@@ -4,20 +4,20 @@
 */
 
 @media (prefers-color-scheme: light) {
-    @define-color accent_color #006a61;
+    @define-color accent_color #006687;
     @define-color accent_fg_color #ffffff;
-    @define-color accent_bg_color #006a61;
-    @define-color window_bg_color #fff7fb;
-    @define-color window_fg_color #201a21;
+    @define-color accent_bg_color #006687;
+    @define-color window_bg_color #fbf8ff;
+    @define-color window_fg_color #1a1b25;
     /* Use surface container ladder for clearer elevation steps */
-    @define-color headerbar_bg_color #f7eaf5;
-    @define-color headerbar_fg_color #201a21;
-    @define-color popover_bg_color #f1e5ef;
-    @define-color popover_fg_color #201a21;
-    @define-color view_bg_color #fdf0fa;
-    @define-color view_fg_color #201a21;
-    @define-color card_bg_color #fdf0fa;
-    @define-color card_fg_color #201a21;
+    @define-color headerbar_bg_color #eeecfb;
+    @define-color headerbar_fg_color #1a1b25;
+    @define-color popover_bg_color #e8e7f5;
+    @define-color popover_fg_color #1a1b25;
+    @define-color view_bg_color #f4f2ff;
+    @define-color view_fg_color #1a1b25;
+    @define-color card_bg_color #f4f2ff;
+    @define-color card_fg_color #1a1b25;
     @define-color sidebar_bg_color @window_bg_color;
     @define-color sidebar_fg_color @window_fg_color;
     @define-color sidebar_border_color @window_bg_color;
@@ -25,20 +25,20 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    @define-color accent_color #75d7ca;
-    @define-color accent_fg_color #003732;
-    @define-color accent_bg_color #75d7ca;
-    @define-color window_bg_color #171118;
-    @define-color window_fg_color #ebdfe9;
+    @define-color accent_color #71d2ff;
+    @define-color accent_fg_color #003547;
+    @define-color accent_bg_color #71d2ff;
+    @define-color window_bg_color #12131c;
+    @define-color window_fg_color #e3e1ef;
     /* Use surface container ladder for clearer elevation steps */
-    @define-color headerbar_bg_color #241e25;
-    @define-color headerbar_fg_color #ebdfe9;
-    @define-color popover_bg_color #2e282f;
-    @define-color popover_fg_color #ebdfe9;
-    @define-color view_bg_color #201a21;
-    @define-color view_fg_color #ebdfe9;
-    @define-color card_bg_color #201a21;
-    @define-color card_fg_color #ebdfe9;
+    @define-color headerbar_bg_color #1e1f29;
+    @define-color headerbar_fg_color #e3e1ef;
+    @define-color popover_bg_color #292934;
+    @define-color popover_fg_color #e3e1ef;
+    @define-color view_bg_color #1a1b25;
+    @define-color view_fg_color #e3e1ef;
+    @define-color card_bg_color #1a1b25;
+    @define-color card_fg_color #e3e1ef;
     @define-color sidebar_bg_color @window_bg_color;
     @define-color sidebar_fg_color @window_fg_color;
     @define-color sidebar_border_color @window_bg_color;
