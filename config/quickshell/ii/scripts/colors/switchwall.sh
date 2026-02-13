@@ -250,13 +250,13 @@ switch() {
         fi
     fi
 
-    # Determine mode if not set
+    # Determine mode if not set (default dark when gsettings unavailable, e.g. on Hyprland)
     if [[ -z "$mode_flag" ]]; then
         current_mode=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'")
-        if [[ "$current_mode" == "prefer-dark" ]]; then
-            mode_flag="dark"
-        else
+        if [[ "$current_mode" == "prefer-light" ]]; then
             mode_flag="light"
+        else
+            mode_flag="dark"
         fi
     fi
 
@@ -303,7 +303,11 @@ switch() {
         [[ "$term_fg_boost" != "null" && -n "$term_fg_boost" ]] && generate_colors_material_args+=(--term_fg_boost "$term_fg_boost")
     fi
 
-    matugen "${matugen_args[@]}"
+    # matugen v4.0.0: --source-color-index 0 = auto-select first color (no interactive prompt)
+    # Write mode for MaterialThemeLoader (new nested JSON format: colors.dark / colors.light)
+    mkdir -p "$STATE_DIR/user/generated"
+    echo "${mode_flag:-dark}" > "$STATE_DIR/user/generated/mode.txt"
+    matugen --source-color-index 0 "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss

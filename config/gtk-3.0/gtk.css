@@ -3,20 +3,20 @@
 * Generated with Matugen
 */
 
-@define-color accent_color #71d2ff;
-@define-color accent_fg_color #003547;
-@define-color accent_bg_color #71d2ff;
-@define-color window_bg_color #12131c;
-@define-color window_fg_color #e3e1ef;
+@define-color accent_color #00e0b2;
+@define-color accent_fg_color #00382a;
+@define-color accent_bg_color #00e0b2;
+@define-color window_bg_color #0a1611;
+@define-color window_fg_color #d8e6de;
 /* Use surface container ladder for clearer elevation steps */
-@define-color headerbar_bg_color #1e1f29;
-@define-color headerbar_fg_color #e3e1ef;
-@define-color popover_bg_color #292934;
-@define-color popover_fg_color #e3e1ef;
-@define-color view_bg_color #1a1b25;
-@define-color view_fg_color #e3e1ef;
-@define-color card_bg_color #1a1b25;
-@define-color card_fg_color #e3e1ef;
+@define-color headerbar_bg_color #16221d;
+@define-color headerbar_fg_color #d8e6de;
+@define-color popover_bg_color #202c28;
+@define-color popover_fg_color #d8e6de;
+@define-color view_bg_color #121e1a;
+@define-color view_fg_color #d8e6de;
+@define-color card_bg_color #121e1a;
+@define-color card_fg_color #d8e6de;
 @define-color sidebar_bg_color @window_bg_color;
 @define-color sidebar_fg_color @window_fg_color;
 @define-color sidebar_border_color @window_bg_color;

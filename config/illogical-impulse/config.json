@@ -50,8 +50,8 @@
     },
     "transparency": {
       "automatic": true,
-      "backgroundTransparency": null,
-      "contentTransparency": null,
+      "backgroundTransparency": 0.11,
+      "contentTransparency": 0.57,
       "enable": true
     },
     "wallpaperTheming": {
@@ -474,6 +474,10 @@
           {
             "size": 1,
             "type": "audio"
+          },
+          {
+            "size": 1,
+            "type": "darkMode"
           }
         ]
       },
