@@ -191,6 +191,7 @@ Item { // Notification item area
         radius: Appearance.rounding.small
         anchors.leftMargin: root.xOffset
         color: Qt.rgba(0, 0, 0, 0.35)
+        clip: true
 
         Behavior on anchors.leftMargin {
             enabled: !dragManager.dragging
@@ -223,7 +224,8 @@ Item { // Notification item area
                 implicitHeight: summaryText.implicitHeight
                 StyledText {
                     id: summaryText
-                    Layout.fillWidth: summaryTextMetrics.width >= summaryRow.implicitWidth * root.summaryElideRatio
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colOnLayer3
@@ -234,6 +236,7 @@ Item { // Notification item area
                     opacity: !root.expanded ? 1 : 0
                     visible: opacity > 0 && root.hasBody
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                     clip: true
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

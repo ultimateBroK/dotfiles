@@ -242,8 +242,8 @@ Item { // Bar content region
                 Layout.bottomMargin: Appearance.rounding.screenRounding
                 Layout.fillHeight: false
 
-                implicitHeight: indicatorsColumnLayout.implicitHeight + 4 * 2
-                implicitWidth: indicatorsColumnLayout.implicitWidth + 6 * 2
+                implicitHeight: indicatorsColumnLayout.implicitHeight + 3 * 2
+                implicitWidth: indicatorsColumnLayout.implicitWidth + 4 * 2
 
                 buttonRadius: Appearance.rounding.full
                 colBackground: barBottomSectionMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)

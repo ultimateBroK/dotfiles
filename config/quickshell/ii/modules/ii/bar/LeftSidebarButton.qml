@@ -9,7 +9,7 @@ RippleButton {
 
     property bool showPing: false
 
-    property real buttonPadding: 5
+    property real buttonPadding: 3
     implicitWidth: distroIcon.width + buttonPadding * 2
     implicitHeight: distroIcon.height + buttonPadding * 2
     buttonRadius: Appearance.rounding.full

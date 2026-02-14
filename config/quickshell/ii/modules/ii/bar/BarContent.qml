@@ -314,8 +314,8 @@ Item { // Bar content region
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     Layout.fillWidth: false
 
-                    implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
-                    implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+                    implicitWidth: indicatorsRowLayout.implicitWidth + 6 * 2
+                    implicitHeight: indicatorsRowLayout.implicitHeight + 3 * 2
 
                     buttonRadius: Appearance.rounding.full
                     // Let BarGroup provide the base surface; only show hover/toggled emphasis.
