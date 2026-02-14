@@ -6,7 +6,7 @@ Personal Linux desktop configuration for **CachyOS/Arch**: Hyprland, Quickshell 
 
 <div align="center">
 
-<video src="preview.mp4" controls width="720"></video>
+https://github.com/user-attachments/assets/f0c29c02-2b66-413c-b813-03fab4d6ad9f
 
 </div>
 
