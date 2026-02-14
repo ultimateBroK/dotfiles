@@ -50,7 +50,7 @@ dotfiles/
 
 1. Clone and enter the repo:
    ```bash
-   git clone https://github.com/ultimateBroK/dotfiles_1.git ~/Downloads/dotfiles
+   git clone https://github.com/ultimateBroK/dotfiles.git ~/Downloads/dotfiles
    cd ~/Downloads/dotfiles
    ```
 
