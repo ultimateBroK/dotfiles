@@ -1,282 +1,297 @@
 #!/bin/bash
 
 # Dotfiles symlink management script
-# This script creates symlinks from ~/.config to the dotfiles config directory
-# Works from any location - automatically detects the script's directory
+# Creates symlinks from ~/.config to dotfiles/config/
+# Dynamically discovers all top-level items in config/ (folders and files)
+# Works from any location — uses script directory to find dotfiles root
 
 set -euo pipefail
 
-# Get script directory and dotfiles root directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
-CONFIG_DIR="$HOME/.config"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
+EXCLUDE_FILE="$DOTFILES_DIR/.link-dotfiles-exclude"
 
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Function to show usage
+# Options (set by parse_args)
+OPT_DIRECTORIES_ONLY=false
+OPT_DRY_RUN=false
+OPT_EXCLUDE=()
+OPT_INCLUDE=()
+
 show_usage() {
-    echo "Usage: $0 [OPTION]"
+    echo "Usage: $0 [OPTION] [-- [EXTRA_OPTIONS]]"
+    echo ""
+    echo "Link mode (default): create one symlink per item in config/"
+    echo "  Source: $DOTFILES_CONFIG_DIR/*"
+    echo "  Target: $CONFIG_DIR/<name>"
     echo ""
     echo "Options:"
-    echo "  -l, --link-config    Symlink the entire config folder to ~/.config"
-    echo "  -u, --unlink-config  Remove the symlink from ~/.config"
-    echo "  -h, --help           Show this help message"
+    echo "  -l, --link-config     Symlink the whole config folder to ~/.config (single symlink)."
+    echo "  -u, --unlink-config   Remove ~/.config symlink and optionally restore backup."
+    echo "  -d, --directories-only  Only link directories; skip files in config/."
+    echo "  -i, --include LIST    Only link these names (space-separated). Default: link all."
+    echo "  -e, --exclude LIST    Skip these names (space-separated)."
+    echo "  --exclude-from FILE   Skip names listed in FILE (one per line). Default: $EXCLUDE_FILE if present."
+    echo "  -n, --dry-run        Print what would be linked; do not create symlinks."
+    echo "  -h, --help           Show this help."
     echo ""
-    echo "If no option is provided, the script will create individual symlinks"
-    echo "for each config item in the dotfiles/config directory."
+    echo "Examples:"
+    echo "  $0                    # Link every item in config/"
+    echo "  $0 -d                 # Link only directories"
+    echo "  $0 -e 'foo bar'       # Link all except foo and bar"
+    echo "  $0 -i 'hypr fish'     # Link only hypr and fish"
+    echo "  $0 -n                 # Show planned links only"
 }
 
-# Function to symlink entire config folder to .config
+# Parse arguments (first pass: -l/-u/-h take precedence; second pass: -d/-i/-e/-n for link mode)
+parse_args() {
+    local arg
+    while [ $# -gt 0 ]; do
+        arg="$1"
+        shift
+        case "$arg" in
+            -l|--link-config)
+                link_config_folder
+                exit 0
+                ;;
+            -u|--unlink-config)
+                unlink_config_folder
+                exit 0
+                ;;
+            -h|--help)
+                show_usage
+                exit 0
+                ;;
+            -d|--directories-only)
+                OPT_DIRECTORIES_ONLY=true
+                ;;
+            -n|--dry-run)
+                OPT_DRY_RUN=true
+                ;;
+            -i|--include)
+                [ $# -gt 0 ] && OPT_INCLUDE=($1) && shift
+                ;;
+            -e|--exclude)
+                [ $# -gt 0 ] && OPT_EXCLUDE=($1) && shift
+                ;;
+            --exclude-from)
+                if [ $# -gt 0 ] && [ -f "$1" ]; then
+                    while IFS= read -r line || [ -n "$line" ]; do
+                        line="${line%%#*}"
+                        line=$(echo "$line" | tr -d ' \t\r\n')
+                        [ -n "$line" ] && OPT_EXCLUDE+=("$line")
+                    done < "$1"
+                fi
+                shift
+                ;;
+            --)
+                break
+                ;;
+            *)
+                echo -e "${RED}Unknown option: $arg${NC}"
+                show_usage
+                exit 1
+                ;;
+        esac
+    done
+}
+
+# List top-level items in config/ (portable: no GNU find -printf)
+list_config_items() {
+    if [ ! -d "$DOTFILES_CONFIG_DIR" ]; then
+        echo -e "${RED}Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}" >&2
+        return 1
+    fi
+    for path in "$DOTFILES_CONFIG_DIR"/*; do
+        [ -e "$path" ] || continue
+        basename "$path"
+    done | sort
+}
+
+# Return 0 if $1 should be linked according to options
+should_link() {
+    local name="$1"
+    local path="$DOTFILES_CONFIG_DIR/$name"
+
+    if [ "$OPT_DIRECTORIES_ONLY" = true ] && [ ! -d "$path" ]; then
+        return 1
+    fi
+    if [ ${#OPT_INCLUDE[@]} -gt 0 ]; then
+        local i
+        for i in "${OPT_INCLUDE[@]}"; do
+            [ "$i" = "$name" ] && return 0
+        done
+        return 1
+    fi
+    local e
+    for e in "${OPT_EXCLUDE[@]}"; do
+        [ "$e" = "$name" ] && return 1
+    done
+    return 0
+}
+
 link_config_folder() {
-    echo -e "${BLUE}Symlinking config folder to ~/.config...${NC}"
+    echo -e "${BLUE}Symlinking config folder to $CONFIG_DIR...${NC}"
     echo "Source: $DOTFILES_CONFIG_DIR"
     echo "Target: $CONFIG_DIR"
     echo ""
-    
+
     if [ ! -d "$DOTFILES_CONFIG_DIR" ]; then
         echo -e "${RED}Error: Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}"
         return 1
     fi
-    
+
     if [ -L "$CONFIG_DIR" ]; then
-        echo -e "${YELLOW}~/.config is already a symlink${NC}"
+        echo -e "${YELLOW}$CONFIG_DIR is already a symlink${NC}"
         if [ "$(readlink -f "$CONFIG_DIR")" = "$(readlink -f "$DOTFILES_CONFIG_DIR")" ]; then
-            echo -e "${GREEN}It already points to the correct location: $DOTFILES_CONFIG_DIR${NC}"
+            echo -e "${GREEN}It already points to: $DOTFILES_CONFIG_DIR${NC}"
             return 0
-        else
-            echo -e "${YELLOW}Current symlink points to: $(readlink "$CONFIG_DIR")${NC}"
-            echo -e "${YELLOW}Removing existing symlink...${NC}"
-            rm "$CONFIG_DIR"
         fi
+        echo -e "${YELLOW}Removing existing symlink...${NC}"
+        rm "$CONFIG_DIR"
     fi
-    
+
     if [ -d "$CONFIG_DIR" ] && [ ! -L "$CONFIG_DIR" ]; then
-        echo -e "${YELLOW}Backing up existing ~/.config to ${CONFIG_DIR}.backup${NC}"
+        echo -e "${YELLOW}Backing up existing $CONFIG_DIR to ${CONFIG_DIR}.backup${NC}"
         mv "$CONFIG_DIR" "${CONFIG_DIR}.backup"
-        echo -e "${GREEN}Backup created at ${CONFIG_DIR}.backup${NC}"
+        echo -e "${GREEN}Backup created.${NC}"
     fi
-    
+
     ln -sf "$DOTFILES_CONFIG_DIR" "$CONFIG_DIR"
     echo -e "${GREEN}Created symlink: $CONFIG_DIR -> $DOTFILES_CONFIG_DIR${NC}"
     echo ""
-    echo -e "${GREEN}Done! ~/.config is now symlinked to your dotfiles config folder.${NC}"
+    echo -e "${GREEN}Done.${NC}"
 }
 
-# Function to unlink config folder
 unlink_config_folder() {
-    echo -e "${BLUE}Removing symlink from ~/.config...${NC}"
-    
+    echo -e "${BLUE}Removing symlink: $CONFIG_DIR${NC}"
+
     if [ ! -L "$CONFIG_DIR" ]; then
-        if [ -d "$CONFIG_DIR" ]; then
-            echo -e "${YELLOW}~/.config is not a symlink, it's a regular directory.${NC}"
-            echo -e "${YELLOW}Nothing to unlink.${NC}"
-        else
-            echo -e "${YELLOW}~/.config does not exist.${NC}"
-        fi
+        [ -d "$CONFIG_DIR" ] && echo -e "${YELLOW}$CONFIG_DIR is not a symlink. Nothing to unlink.${NC}"
+        [ ! -e "$CONFIG_DIR" ] && echo -e "${YELLOW}$CONFIG_DIR does not exist.${NC}"
         return 0
     fi
-    
-    echo -e "${YELLOW}Current symlink points to: $(readlink "$CONFIG_DIR")${NC}"
-    echo -e "${YELLOW}Removing symlink...${NC}"
+
     rm "$CONFIG_DIR"
-    
-    # Restore backup if it exists
     if [ -d "${CONFIG_DIR}.backup" ]; then
-        echo -e "${YELLOW}Restoring backup from ${CONFIG_DIR}.backup...${NC}"
+        echo -e "${YELLOW}Restoring backup...${NC}"
         mv "${CONFIG_DIR}.backup" "$CONFIG_DIR"
         echo -e "${GREEN}Backup restored.${NC}"
     else
-        echo -e "${YELLOW}No backup found. Creating empty ~/.config directory...${NC}"
         mkdir -p "$CONFIG_DIR"
+        echo -e "${YELLOW}No backup found; created empty $CONFIG_DIR${NC}"
     fi
-    
-    echo ""
-    echo -e "${GREEN}Done! ~/.config is no longer a symlink.${NC}"
+    echo -e "${GREEN}Done.${NC}"
 }
 
-# Function to create symlink
 create_symlink() {
     local source="$1"
     local target="$2"
-    local name=$(basename "$source")
-    
-    # Check if target is already a symlink
+
+    if [ "$OPT_DRY_RUN" = true ]; then
+        echo -e "${BLUE}[dry-run]${NC} $target -> $source"
+        return 0
+    fi
+
     if [ -L "$target" ]; then
         local current_link=$(readlink -f "$target")
         local expected_link=$(readlink -f "$source")
         if [ "$current_link" = "$expected_link" ]; then
-            echo -e "${GREEN}Symlink already exists and points to correct location: $target${NC}"
+            echo -e "${GREEN}Already linked: $target${NC}"
             return 0
-        else
-            echo -e "${YELLOW}Symlink exists but points to wrong location${NC}"
-            echo -e "${YELLOW}  Current: $current_link${NC}"
-            echo -e "${YELLOW}  Expected: $expected_link${NC}"
-            echo -e "${YELLOW}Removing old symlink...${NC}"
-            rm "$target"
         fi
+        echo -e "${YELLOW}Removing old symlink: $target${NC}"
+        rm "$target"
     fi
-    
-    # Handle existing target (directory or file) that is not a symlink
+
     if [ -e "$target" ] && [ ! -L "$target" ]; then
+        echo -e "${YELLOW}Backing up: $target -> ${target}.backup${NC}"
         if [ -d "$target" ]; then
-            echo -e "${YELLOW}Backing up existing directory $target to ${target}.backup${NC}"
-            # Use rsync or cp to backup, then remove
             if command -v rsync &> /dev/null; then
-                rsync -a "$target/" "${target}.backup/" || {
-                    echo -e "${RED}Failed to backup directory with rsync, trying cp...${NC}"
-                    cp -r "$target" "${target}.backup" || {
-                        echo -e "${RED}Failed to backup directory! Aborting.${NC}"
-                        return 1
-                    }
-                }
+                rsync -a "$target/" "${target}.backup/" || cp -r "$target" "${target}.backup"
             else
-                cp -r "$target" "${target}.backup" || {
-                    echo -e "${RED}Failed to backup directory! Aborting.${NC}"
-                    return 1
-                }
+                cp -r "$target" "${target}.backup"
             fi
-            # Verify backup exists before removing original
-            if [ -d "${target}.backup" ]; then
-                rm -rf "$target"
-            else
-                echo -e "${RED}Backup verification failed! Not removing original directory.${NC}"
-                return 1
-            fi
+            rm -rf "$target"
         else
-            echo -e "${YELLOW}Backing up existing file $target to ${target}.backup${NC}"
-            mv "$target" "${target}.backup" || {
-                echo -e "${RED}Failed to backup file! Aborting.${NC}"
-                return 1
-            }
+            mv "$target" "${target}.backup"
         fi
     fi
-    
-    # Ensure parent directory exists
-    local parent_dir=$(dirname "$target")
-    if [ ! -d "$parent_dir" ]; then
-        mkdir -p "$parent_dir"
-    fi
-    
-    # Verify source exists
+
+    mkdir -p "$(dirname "$target")"
     if [ ! -e "$source" ]; then
-        echo -e "${RED}Source does not exist: $source${NC}"
+        echo -e "${RED}Source missing: $source${NC}"
         return 1
     fi
-    
-    # Create the symlink
+
     ln -sf "$source" "$target"
-    
-    # Verify the symlink was created correctly
-    if [ -L "$target" ]; then
-        local actual_target=$(readlink -f "$target")
-        local expected_target=$(readlink -f "$source")
-        if [ "$actual_target" = "$expected_target" ]; then
-            if [ -d "$source" ]; then
-                echo -e "${GREEN}Created directory symlink: $target -> $source${NC}"
-            else
-                echo -e "${GREEN}Created file symlink: $target -> $source${NC}"
-            fi
-        else
-            echo -e "${RED}Error: Symlink verification failed!${NC}"
-            echo -e "${RED}  Expected: $expected_target${NC}"
-            echo -e "${RED}  Actual: $actual_target${NC}"
-            return 1
-        fi
+    if [ -d "$source" ]; then
+        echo -e "${GREEN}Linked directory: $target -> $source${NC}"
     else
-        echo -e "${RED}Error: Failed to create symlink: $target${NC}"
-        return 1
+        echo -e "${GREEN}Linked file: $target -> $source${NC}"
     fi
 }
 
-# Function to create directory structure in dotfiles
-ensure_dotfiles_structure() {
-    mkdir -p "$DOTFILES_CONFIG_DIR"
-}
-
-# Function to list items inside config directory dynamically
-list_config_items() {
-    if [ ! -d "$DOTFILES_CONFIG_DIR" ]; then
-        echo -e "${RED}Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}"
-        return 1
-    fi
-
-    find "$DOTFILES_CONFIG_DIR" -mindepth 1 -maxdepth 1 -printf '%f\n' | sort
-}
-
-# Function to create individual symlinks (original behavior)
 link_individual_items() {
-    echo "Setting up dotfiles symlinks..."
-    echo "Dotfiles directory: $DOTFILES_DIR"
-    echo "Config directory: $CONFIG_DIR"
+    echo -e "${BLUE}Setting up dotfiles symlinks (from config/ to $CONFIG_DIR)${NC}"
+    echo "Dotfiles root: $DOTFILES_DIR"
     echo ""
-    
-    ensure_dotfiles_structure
-    
-    # Build list of items directly from config directory
+
+    mkdir -p "$DOTFILES_CONFIG_DIR"
+
+    # Load exclude file if present
+    if [ -f "$EXCLUDE_FILE" ]; then
+        while IFS= read -r line || [ -n "$line" ]; do
+            line="${line%%#*}"
+            line=$(echo "$line" | tr -d ' \t\r\n')
+            [ -n "$line" ] && OPT_EXCLUDE+=("$line")
+        done < "$EXCLUDE_FILE"
+    fi
+
+    local items=()
     if ! mapfile -t items < <(list_config_items); then
-        echo -e "${RED}Failed to list config items. Aborting.${NC}"
+        echo -e "${RED}Failed to list config items.${NC}"
         return 1
     fi
 
     if [ ${#items[@]} -eq 0 ]; then
-        echo -e "${YELLOW}No items found in $DOTFILES_CONFIG_DIR${NC}"
+        echo -e "${YELLOW}No items in $DOTFILES_CONFIG_DIR${NC}"
         return 0
     fi
 
+    local linked=0
     for item in "${items[@]}"; do
+        should_link "$item" || continue
         source="$DOTFILES_CONFIG_DIR/$item"
         target="$CONFIG_DIR/$item"
-        
-        # Check if source exists in dotfiles
         if [ ! -e "$source" ]; then
-            echo -e "${YELLOW}Source not found in dotfiles: $source${NC}"
-            echo -e "${YELLOW}  Copy it first with: cp -r $target $source${NC}"
+            echo -e "${YELLOW}Skip (missing): $source${NC}"
             continue
         fi
-        
-        create_symlink "$source" "$target"
+        create_symlink "$source" "$target" && linked=$((linked + 1))
     done
-    
+
     echo ""
-    echo -e "${GREEN}Done!${NC}"
+    if [ "$OPT_DRY_RUN" = true ]; then
+        echo -e "${BLUE}Dry run finished. No symlinks created.${NC}"
+    else
+        echo -e "${GREEN}Done.${NC}"
+    fi
     echo ""
-    echo "To add new configs:"
-    echo "  1. Copy to dotfiles: cp -r ~/.config/<config> $DOTFILES_CONFIG_DIR/"
-    echo "  2. Run this script again: $DOTFILES_DIR/scripts/link-dotfiles.sh"
+    echo "To add more configs: put folders or files in $DOTFILES_CONFIG_DIR/ and run this script again."
+    echo "Optional: create $EXCLUDE_FILE with one config name per line to exclude from linking."
 }
 
-# Main function
 main() {
-    # Parse command-line arguments
-    case "${1:-}" in
-        -l|--link-config)
-            link_config_folder
-            ;;
-        -u|--unlink-config)
-            unlink_config_folder
-            ;;
-        -h|--help)
-            show_usage
-            ;;
-        "")
-            # No arguments, use default behavior
-            link_individual_items
-            ;;
-        *)
-            echo -e "${RED}Unknown option: $1${NC}"
-            echo ""
-            show_usage
-            exit 1
-            ;;
-    esac
+    parse_args "$@"
+    link_individual_items
 }
 
-# Run main function
 main "$@"
-

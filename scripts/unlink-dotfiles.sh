@@ -4,10 +4,10 @@
 
 set -euo pipefail
 
-# Paths
+# Paths (match link-dotfiles.sh)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
-CONFIG_DIR="$HOME/.config"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 
 # Colors
@@ -17,13 +17,16 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+# List top-level items in config/ (portable; no GNU find -printf)
 list_config_items() {
     if [ ! -d "$DOTFILES_CONFIG_DIR" ]; then
-        echo -e "${RED}Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}"
+        echo -e "${RED}Config directory does not exist: $DOTFILES_CONFIG_DIR${NC}" >&2
         return 1
     fi
-
-    find "$DOTFILES_CONFIG_DIR" -mindepth 1 -maxdepth 1 -printf '%f\n' | sort
+    for path in "$DOTFILES_CONFIG_DIR"/*; do
+        [ -e "$path" ] || continue
+        basename "$path"
+    done | sort
 }
 
 unlink_item() {
@@ -61,10 +64,16 @@ unlink_item() {
 }
 
 main() {
-    echo "Removing dotfile symlinks from ~/.config"
+    echo "Removing dotfile symlinks from $CONFIG_DIR"
     echo "Dotfiles directory: $DOTFILES_DIR"
     echo "Config directory: $CONFIG_DIR"
     echo ""
+
+    if [ -L "$CONFIG_DIR" ]; then
+        echo -e "${YELLOW}$CONFIG_DIR is a single symlink (whole-folder link). Use link-dotfiles.sh to unlink:${NC}"
+        echo "  $SCRIPT_DIR/link-dotfiles.sh --unlink-config"
+        exit 0
+    fi
 
     if ! mapfile -t items < <(list_config_items); then
         echo -e "${RED}Failed to list config items. Aborting.${NC}"

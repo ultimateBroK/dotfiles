@@ -8,7 +8,7 @@ set -euo pipefail
 # Resolve repo location relative to this script for portability
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 DOTFILES_DIR="$( cd "$SCRIPT_DIR/.." &> /dev/null && pwd )"
-CONFIG_DIR="$HOME/.config"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 
 # Colors
@@ -57,7 +57,6 @@ mkdir -p "$DOTFILES_CONFIG_DIR"
 cp -a "$SOURCE" "$TARGET"
 echo -e "${GREEN}Done! Copied to $TARGET${NC}"
 echo ""
-echo "Next steps:"
-echo "  1. Add '$CONFIG_NAME' to the items array in scripts/link-dotfiles.sh"
-echo "  2. Run: $DOTFILES_DIR/scripts/link-dotfiles.sh"
+echo "Next: link the new config (link-dotfiles.sh picks up config/ automatically):"
+echo "  $DOTFILES_DIR/scripts/link-dotfiles.sh"
 
