@@ -122,8 +122,8 @@ MouseArea {
         }
         focus: true
         border.width: 1
-        border.color: Appearance.colors.colLayer0Border
-        color: Appearance.colors.colLayer0
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+        color: Qt.rgba(0, 0, 0, 0.45)
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
         property int calculatedRows: Math.ceil(grid.count / grid.columns)
@@ -141,7 +141,7 @@ MouseArea {
                 Layout.margins: 4
                 implicitWidth: quickDirColumnLayout.implicitWidth
                 implicitHeight: quickDirColumnLayout.implicitHeight
-                color: Appearance.colors.colLayer1
+                color: Qt.rgba(1, 1, 1, 0.06)
                 radius: wallpaperGridBackground.radius - Layout.margins
 
                 ColumnLayout {

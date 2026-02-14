@@ -80,7 +80,7 @@ ApplicationWindow {
     minimumHeight: 500
     width: 1100
     height: 750
-    color: Appearance.m3colors.m3background
+    color: "#000000"
 
     ColumnLayout {
         anchors {
@@ -227,10 +227,12 @@ ApplicationWindow {
                     }
                 }
             }
-            Rectangle { // Content container
+            Rectangle { // Content container (AMOLED glass inner surface)
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: Appearance.m3colors.m3surfaceContainerLow
+                color: Qt.rgba(1, 1, 1, 0.05)
+                border.width: 1
+                border.color: CF.ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.windowRounding - root.contentPadding
 
                 Loader {
