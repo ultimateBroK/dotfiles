@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal Linux desktop configuration for **CachyOS/Arch**: Hyprland, Quickshell (ii shell), and a consistent AMOLED-style glassmorphism UI.
+Personal Linux desktop configuration for **CachyOS/Arch**: Hyprland, Quickshell (ii shell), and a consistent AMOLED-style glassmorphism UI. 
 
 ## Preview
 
@@ -157,3 +157,5 @@ Existing configs are backed up with a `.backup` suffix before linking.
 - **install-packages.sh** — Installs paru if needed, then installs from the lists above.
 
 ---
+
+## **Thanks to [illogical-impulse](https://github.com/end-4/dots-hyprland)**
