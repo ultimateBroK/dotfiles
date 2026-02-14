@@ -131,18 +131,19 @@ Scope { // Scope
                 target: sidebarLeftBackground
                 radius: sidebarLeftBackground.radius
             }
-            LiquidGlassRect {
+            AmoledGlassRect {
                 id: sidebarLeftBackground
-                liquidGlassVariant: true
+                amoledVariant: true
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.topMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
                 anchors.leftMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
                 width: sidebarRoot.sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
                 height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
-                glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
+                glassColor: "#000000"
+                glassTransparency: 0.55
                 border.width: 1
-                border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
+                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                 Behavior on width {
@@ -182,13 +183,14 @@ Scope { // Scope
                 if (!visible) GlobalStates.sidebarLeftOpen = false;
             }
             
-            LiquidGlassRect {
+            AmoledGlassRect {
                 id: detachedSidebarBackground
-                liquidGlassVariant: true
+                amoledVariant: true
                 anchors.fill: parent
-                glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
+                glassColor: "#000000"
+                glassTransparency: 0.55
                 border.width: 1
-                border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
+                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.screenRounding
 
                 Keys.onPressed: (event) => {

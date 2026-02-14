@@ -17,13 +17,8 @@ PopupWindow {
 
     color: "transparent"
     property real padding: Appearance.sizes.elevationMargin
-    // Keep alpha high because Hyprland often uses `ignorealpha 0.79` for quickshell layers.
-    // Clamp to keep it readable and still "glassy".
-    readonly property real glassTransparency: {
-        const base = Appearance?.contentTransparency ?? 0.18;
-        const t = base * 0.25 + 0.06;
-        return Math.max(0.08, Math.min(0.14, t));
-    }
+    // Glassmorphism AMOLED: same as sidebar.
+    readonly property real glassTransparency: 0.55
     // Track the maximum page size while the menu is open.
     // This avoids iterating `stackView.children` (which can include internal items),
     // and prevents old pages from artificially inflating the popup size if they linger.
@@ -97,7 +92,7 @@ PopupWindow {
             opacity: popupBackground.opacity
         }
 
-        LiquidGlassRect {
+        AmoledGlassRect {
             id: popupBackground
             readonly property real padding: 4
             anchors {
@@ -109,12 +104,12 @@ PopupWindow {
                 margins: root.padding
             }
 
-            glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
+            glassColor: "#000000"
             glassTransparency: root.glassTransparency
-            color: ColorUtils.transparentize(glassColor, glassTransparency)
+            color: ColorUtils.transparentize("#000000", 0.55)
             radius: Appearance.rounding.windowRounding
             border.width: 1
-            border.color: Appearance.colors.colLayer0Border
+            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
             clip: true
 
             opacity: 0

@@ -12,15 +12,8 @@ LazyLoader {
     property Item hoverTarget
     default property Item contentItem
     property real popupBackgroundMargin: 0
-    // Make popups "glassy" so compositor blur shows through (Hyprland blur rules).
-    // Higher value = more transparent.
-    // NOTE: Hyprland rules include `ignorealpha 0.79, quickshell:.*` so we must keep
-    // alpha reasonably high, otherwise the popup becomes *too* transparent.
-    // Clamp to <= 0.18 => alpha >= 0.82.
-    property real glassTransparency: {
-        const t = (Appearance?.contentTransparency ?? 0.18) * 0.25 + 0.06;
-        return Math.max(0.08, Math.min(0.12, t));
-    }
+    // Glassmorphism AMOLED: same as sidebar (blur shows through).
+    property real glassTransparency: 0.55
 
     active: hoverTarget && hoverTarget.containsMouse
 
@@ -103,7 +96,7 @@ LazyLoader {
             target: popupBackground
         }
 
-        LiquidGlassRect {
+        AmoledGlassRect {
             id: popupBackground
             readonly property real margin: 10
             anchors {
@@ -115,14 +108,14 @@ LazyLoader {
             }
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
-            glassColor: Appearance.m3colors.m3surfaceContainer
+            glassColor: "#000000"
             glassTransparency: root.glassTransparency
-            color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer, root.glassTransparency)
+            color: ColorUtils.transparentize("#000000", 0.55)
             radius: Appearance.rounding.small
             children: [root.contentItem]
 
             border.width: 1
-            border.color: ColorUtils.transparentize(Appearance.colors.colLayer0Border, 0.35)
+            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
         }
     }
 }

@@ -46,12 +46,13 @@ Rectangle {
         target: dialogBackground
         radius: dialogBackground.radius
     }
-    LiquidGlassRect {
+    AmoledGlassRect {
         id: dialogBackground
-        liquidGlassVariant: true
-        glassColor: Appearance?.m3colors?.m3surfaceContainerHigh ?? Appearance.colors.colLayer2
+        amoledVariant: true
+        glassColor: "#000000"
+        glassTransparency: 0.40
         border.width: 1
-        border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
         anchors.horizontalCenter: parent.horizontalCenter
         radius: Appearance.rounding.large
         

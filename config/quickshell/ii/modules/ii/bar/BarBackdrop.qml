@@ -34,7 +34,7 @@ Item {
             if (!root.hasBackground) return "transparent";
 
             // User request: keep the TOP bar background fully transparent.
-            // (Bar components themselves remain "liquid glass".)
+            // (Bar components themselves remain "AMOLED glass".)
             if (!root.vertical) return "transparent";
 
             // For vibrant-like palettes, keep the TOP bar fully transparent.

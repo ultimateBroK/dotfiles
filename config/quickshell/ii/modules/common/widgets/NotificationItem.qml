@@ -184,12 +184,13 @@ Item { // Notification item area
         anchors.rightMargin: 10
     }
 
-    Rectangle { // Background of notification item
+    Rectangle { // AMOLED glassmorphism background
         id: background
         width: parent.width
         anchors.left: parent.left
         radius: Appearance.rounding.small
         anchors.leftMargin: root.xOffset
+        color: Qt.rgba(0, 0, 0, 0.35)
 
         Behavior on anchors.leftMargin {
             enabled: !dragManager.dragging
@@ -199,12 +200,6 @@ Item { // Notification item area
                 easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
             }
         }
-
-        color: (expanded && !onlyNotification) ? 
-            (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                ColorUtils.mix(Appearance.colors.colSecondaryContainer, Appearance.colors.colLayer2, 0.35) :
-                (Appearance.colors.colLayer3) :
-            ColorUtils.transparentize(Appearance.colors.colLayer3)
 
         implicitHeight: expanded ? (contentColumn.implicitHeight + padding * 2) : summaryRow.implicitHeight
         Behavior on implicitHeight {

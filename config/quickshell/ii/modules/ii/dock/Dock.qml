@@ -110,67 +110,18 @@ Scope { // Scope
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
-                        Rectangle { // The real rectangle that is visible
+                        Rectangle { // AMOLED glassmorphism (same as topbar/sidebar)
                             id: dockVisualBackground
                             property real margin: dockRoot.dockShadowPad
                             anchors.fill: parent
                             anchors.topMargin: dockRoot.dockAtTop ? dockRoot.dockEdgeGap : dockRoot.dockShadowPad
                             anchors.bottomMargin: dockRoot.dockAtTop ? dockRoot.dockShadowPad : dockRoot.dockEdgeGap
                             implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
-                            // macOS-like "frosted" dock:
-                            // - compositor blur comes from Hyprland layerrules
-                            // - we keep the background semi-transparent + add a subtle highlight gradient
                             clip: true
-                            color: ColorUtils.applyAlpha(
-                                // "Smoky glass" tint (dark instead of milky/white)
-                                ColorUtils.mix(
-                                    Appearance.colors.colLayer0,
-                                    Appearance.m3colors.m3background,
-                                    Appearance.isDarkMode ? 0.22 : 0.30
-                                ),
-                                // Lower alpha = clearer glass
-                                Appearance.isDarkMode ? 0.34 : 0.26
-                            )
+                            color: Qt.rgba(0, 0, 0, 0.45)
                             border.width: 1
-                            border.color: ColorUtils.applyAlpha(
-                                Appearance.colors.colLayer0Border,
-                                Appearance.isDarkMode ? 0.32 : 0.24
-                            )
-
+                            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                             radius: 15
-
-                            // Subtle glass highlight (top) + shade (bottom)
-                            Rectangle {
-                                anchors.fill: parent
-                                radius: parent.radius
-                                color: "transparent"
-                                gradient: Gradient {
-                                    GradientStop {
-                                        position: 0.0
-                                        color: Appearance.isDarkMode
-                                            ? Qt.rgba(1, 1, 1, 0.08)
-                                            : Qt.rgba(1, 1, 1, 0.10)
-                                    }
-                                    GradientStop {
-                                        position: 1.0
-                                        color: Appearance.isDarkMode
-                                            ? Qt.rgba(0, 0, 0, 0.12)
-                                            : Qt.rgba(0, 0, 0, 0.08)
-                                    }
-                                }
-                            }
-
-                            // Inner highlight stroke for "glass" edge
-                            Rectangle {
-                                anchors.fill: parent
-                                anchors.margins: 1
-                                radius: Math.max(0, parent.radius - 1)
-                                color: "transparent"
-                                border.width: 1
-                                border.color: Appearance.isDarkMode
-                                    ? Qt.rgba(1, 1, 1, 0.07)
-                                    : Qt.rgba(1, 1, 1, 0.09)
-                            }
 
                                 RowLayout {
                                     id: dockRow

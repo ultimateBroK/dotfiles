@@ -48,16 +48,17 @@ Item {
     StyledRectangularShadow {
         target: sidebarRightBackground
     }
-    LiquidGlassRect {
+    AmoledGlassRect {
         id: sidebarRightBackground
-        liquidGlassVariant: true
+        amoledVariant: true
 
         anchors.fill: parent
         implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
         implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
-        glassColor: Appearance?.m3colors?.m3surfaceContainer ?? Appearance.colors.colLayer0
+        glassColor: "#000000"
+        glassTransparency: 0.55
         border.width: 1
-        border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, (Appearance?.isDarkMode ?? true) ? 0.32 : 0.18)
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
         ColumnLayout {

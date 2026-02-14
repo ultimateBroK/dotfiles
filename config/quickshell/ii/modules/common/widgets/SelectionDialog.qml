@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.services
 import QtQuick
@@ -32,9 +33,11 @@ Item {
         }
     }
 
-    Rectangle { // The dialog
+    Rectangle { // The dialog (Glassmorphism AMOLED)
         id: dialog
-        color: Appearance.colors.colSurfaceContainerHigh
+        color: Qt.rgba(0, 0, 0, 0.45)
+        border.width: 1
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
         radius: Appearance.rounding.normal
         anchors.fill: parent
         anchors.margins: dialogMargin

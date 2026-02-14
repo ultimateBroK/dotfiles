@@ -156,11 +156,11 @@ MouseArea { // Notification group area
         target: background
         visible: popup
     }
-    Rectangle { // Background of the notification
+    Rectangle { // AMOLED glassmorphism background
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: popup ? ColorUtils.applyAlpha(Appearance.colors.colLayer2, 1 - Appearance.backgroundTransparency) : Appearance.colors.colLayer2
+        color: Qt.rgba(0, 0, 0, 0.55)
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 

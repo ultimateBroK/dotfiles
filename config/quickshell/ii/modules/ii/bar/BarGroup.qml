@@ -8,47 +8,15 @@ Item {
     id: root
     property bool vertical: false
     property real padding: 5
-    // Keep alpha high because Hyprland has `ignorealpha 0.79, quickshell:.*`.
-    // Also adapt to bright wallpapers so text stays readable.
-    readonly property real glassTransparency: {
-        // Balance readability vs "not too dark".
-        // Bright wallpaper -> slightly more opaque, but never "heavy".
-        // Dark mode range: [0.10..0.16] (alpha [0.90..0.84])
-        // Light mode: slightly more transparent so the bar doesn't look "muddy".
-        const l = Math.max(0, Math.min(1, Appearance?.wallpaperLightness ?? 0.5));
-        const base = 0.16 - l * 0.06; // l=1 => 0.10, l=0 => 0.16
-        const isDark = Appearance?.isDarkMode ?? true;
-        const t = isDark ? base : (base + 0.02);
-        const lo = isDark ? 0.10 : 0.12;
-        const hi = isDark ? 0.16 : 0.18;
-        return Math.max(lo, Math.min(hi, t));
-    }
-    readonly property color adaptiveGroupColor: {
-        // Very gently darken the surface on *very bright* wallpapers for extra contrast.
-        // Keep this subtle so the bar doesn't look "too dark".
-        const l = Math.max(0, Math.min(1, Appearance?.wallpaperLightness ?? 0.5));
-        const isDark = Appearance?.isDarkMode ?? true;
-        // Avoid "double transparency" in light mode:
-        // Appearance.colors.colLayer1 is already transparentized by contentTransparency.
-        // BarGroup also transparentizes for the glass effect; doing both makes the group
-        // overly see-through, so dark wallpaper bleeds through and looks like a black overlay.
-        const baseSurface = isDark
-            ? Appearance.colors.colLayer1
-            : (Appearance?.m3colors?.m3surfaceContainerLow ?? Appearance.colors.colLayer1);
-        // Light mode should stay airy: start later and cap lower.
-        const start = isDark ? 0.70 : 0.82;
-        const cap = isDark ? 0.12 : 0.06;
-        const slope = isDark ? 0.60 : 0.45;
-        const darken = Math.max(0, Math.min(cap, (l - start) * slope));
-        // ColorUtils.mix( a, b, p ) => p=1 all a, p=0 all b.
-        // We want "slight darken" => mostly colLayer1 with a small amount of black.
-        return ColorUtils.mix(baseSurface, "#000000", 1 - darken);
-    }
+    // AMOLED glassmorphism (same as dock: flat black 0.45 + white border + rounded)
     implicitWidth: vertical ? Appearance.sizes.baseVerticalBarWidth : (gridLayout.implicitWidth + padding * 2)
     implicitHeight: vertical ? (gridLayout.implicitHeight + padding * 2) : Appearance.sizes.baseBarHeight
     default property alias items: gridLayout.children
 
-    LiquidGlassRect {
+    StyledRectangularShadow {
+        target: background
+    }
+    Rectangle {
         id: background
         anchors {
             fill: parent
@@ -57,16 +25,12 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        glassColor: root.adaptiveGroupColor
-        glassTransparency: root.glassTransparency
-        highlightEnabled: !(Config.options?.bar.borderless ?? false)
         color: (Config.options?.bar.borderless ?? false)
             ? "transparent"
-            : ColorUtils.transparentize(root.adaptiveGroupColor, root.glassTransparency)
-        radius: Appearance.rounding.small
-
+            : Qt.rgba(0, 0, 0, 0.45)
         border.width: Config.options?.bar.borderless ? 0 : 1
-        border.color: ColorUtils.applyAlpha(Appearance.colors.colLayer0Border, Appearance.isDarkMode ? 0.35 : 0.15)
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+        radius: 15
     }
 
     GridLayout {
