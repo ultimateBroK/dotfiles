@@ -48,7 +48,7 @@ Item {
             text: root.text
             font.pixelSize: Appearance?.font.pixelSize.smaller ?? 14
             font.hintingPreference: Font.PreferNoHinting // Prevent shaky text
-            color: Appearance?.colors.colOnTooltip ?? "#FFFFFF"
+            color: "#FFFFFF"
             wrapMode: Text.Wrap
         }
     }   
