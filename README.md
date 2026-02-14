@@ -2,8 +2,6 @@
 
 Personal Linux desktop configuration for **CachyOS/Arch**: Hyprland, Quickshell (ii shell), and a consistent AMOLED-style glassmorphism UI.
 
-**[@ultimateBroK](https://github.com/ultimateBroK)** · [Repository](https://github.com/ultimateBroK/dotfiles_1)
-
 ## Preview
 
 <div align="center">
