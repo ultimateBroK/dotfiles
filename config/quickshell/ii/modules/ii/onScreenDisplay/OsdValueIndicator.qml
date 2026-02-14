@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
@@ -29,7 +30,9 @@ Item {
             margins: Appearance.sizes.elevationMargin
         }
         radius: Appearance.rounding.full
-        color: Appearance.colors.colLayer0
+        color: Qt.rgba(0, 0, 0, 0.45)
+        border.width: 1
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
 
         implicitWidth: valueRow.implicitWidth
         implicitHeight: valueRow.implicitHeight

@@ -1,6 +1,7 @@
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -71,9 +72,9 @@ Scope { // Scope
             Rectangle {
                 id: cheatsheetBackground
                 anchors.centerIn: parent
-                color: Appearance.colors.colLayer0
+                color: Qt.rgba(0, 0, 0, 0.45)
                 border.width: 1
-                border.color: Appearance.colors.colLayer0Border
+                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.windowRounding
                 property real padding: 20
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2

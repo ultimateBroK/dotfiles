@@ -52,7 +52,7 @@ StyledPopup {
                 Layout.preferredWidth: root.popupWidth
                 Layout.preferredHeight: 80
                 radius: Appearance.rounding.large
-                color: Appearance.colors.colSurfaceContainer
+                color: Qt.rgba(1, 1, 1, 0.05)
                 
                 RowLayout {
                     anchors.centerIn: parent
@@ -120,7 +120,7 @@ StyledPopup {
             implicitHeight: warningContent.implicitHeight + 20
             Layout.preferredHeight: implicitHeight
             radius: Appearance.rounding.small
-            color: Appearance.colors.colSurfaceContainerHigh
+            color: Qt.rgba(1, 1, 1, 0.07)
             border.width: 1
             border.color: warningHeader.anyDanger ? Appearance.colors.colError : Appearance.colors.colSecondary
 
@@ -162,7 +162,7 @@ StyledPopup {
                     Rectangle {
                         Layout.fillWidth: true
                         radius: Appearance.rounding.small
-                        color: Appearance.colors.colSurfaceContainer
+                        color: Qt.rgba(1, 1, 1, 0.05)
                         border.width: 1
                         border.color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
                         implicitHeight: warningItemContent.implicitHeight + 14
@@ -284,7 +284,7 @@ StyledPopup {
                     Rectangle {
                         Layout.fillWidth: true
                         radius: Appearance.rounding.small
-                        color: Appearance.colors.colSurfaceContainerHigh
+                        color: Qt.rgba(1, 1, 1, 0.07)
                         Layout.preferredHeight: hourlyGrid.implicitHeight + 16
 
                         ColumnLayout {
@@ -304,7 +304,7 @@ StyledPopup {
                                     model: (Weather.hourly || []).slice(0, 10)
                                     Rectangle {
                                         radius: Appearance.rounding.normal
-                                        color: Appearance.colors.colSurfaceContainer
+                                        color: Qt.rgba(1, 1, 1, 0.05)
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 90
                                         Layout.minimumWidth: 60

@@ -204,7 +204,9 @@ Item { // Wrapper
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
         radius: searchBar.height / 2 + searchBar.verticalPadding
-        color: Appearance.colors.colBackgroundSurfaceContainer
+        color: Qt.rgba(0, 0, 0, 0.45)
+        border.width: 1
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
 
         Behavior on implicitHeight {
             id: searchHeightBehavior
@@ -248,7 +250,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 height: 1
-                color: Appearance.colors.colOutlineVariant
+                color: ColorUtils.applyAlpha("#ffffff", 0.08)
             }
 
             ListView { // App results

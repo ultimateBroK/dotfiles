@@ -10,7 +10,7 @@ import QtQuick.Layouts
 Rectangle {
     id: root
     radius: Appearance.rounding.normal
-    color: Appearance.colors.colLayer1
+    color: Qt.rgba(1, 1, 1, 0.06)
 
     ColumnLayout {
         anchors.fill: parent

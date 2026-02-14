@@ -50,7 +50,7 @@ WindowDialog {
         Layout.leftMargin: 0
         Layout.rightMargin: 0
         radius: Appearance.rounding.small
-        color: Appearance.colors.colSurfaceContainer
+        color: Qt.rgba(1, 1, 1, 0.05)
         
         ColumnLayout {
             id: volumeStatusLayout
@@ -121,7 +121,7 @@ WindowDialog {
                     Layout.preferredWidth: 40
                     Layout.preferredHeight: 40
                     radius: 20
-                    color: root.isMuted ? Appearance.colors.colErrorContainer : Appearance.colors.colSurfaceContainerHigh
+                    color: root.isMuted ? Appearance.colors.colErrorContainer : Qt.rgba(1, 1, 1, 0.07)
                     
                     MaterialSymbol {
                         anchors.centerIn: parent

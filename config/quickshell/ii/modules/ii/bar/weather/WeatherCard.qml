@@ -7,7 +7,7 @@ import qs.modules.common.widgets
 Rectangle {
     id: root
     radius: Appearance.rounding.normal
-    color: Appearance.colors.colSurfaceContainerHigh
+    color: Qt.rgba(1, 1, 1, 0.07)
     implicitWidth: columnLayout.implicitWidth + 10 * 2
     implicitHeight: columnLayout.implicitHeight + 10 * 2
     Layout.fillWidth: parent

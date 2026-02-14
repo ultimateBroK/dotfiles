@@ -54,7 +54,7 @@ StyledPopup {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 110
                 radius: Appearance.rounding.large
-                color: Appearance.colors.colSurfaceContainer
+                color: Qt.rgba(1, 1, 1, 0.05)
 
                 ColumnLayout {
                     anchors.centerIn: parent
@@ -101,7 +101,7 @@ StyledPopup {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 110
                 radius: Appearance.rounding.large
-                color: Appearance.colors.colSurfaceContainer
+                color: Qt.rgba(1, 1, 1, 0.05)
 
                 ColumnLayout {
                     anchors.centerIn: parent
@@ -147,7 +147,7 @@ StyledPopup {
                 Layout.preferredWidth: 120
                 Layout.preferredHeight: 110
                 radius: Appearance.rounding.large
-                color: Appearance.colors.colSurfaceContainer
+                color: Qt.rgba(1, 1, 1, 0.05)
 
                 ColumnLayout {
                     anchors.centerIn: parent

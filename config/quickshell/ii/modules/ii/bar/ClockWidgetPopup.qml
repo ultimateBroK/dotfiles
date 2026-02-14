@@ -49,7 +49,7 @@ StyledPopup {
             Layout.preferredWidth: 280
             Layout.preferredHeight: root.isSpecialDay ? 118 : 88
             radius: Appearance.rounding.large
-            color: Appearance.colors.colSurfaceContainer
+            color: Qt.rgba(1, 1, 1, 0.05)
             
             ColumnLayout {
                 anchors.fill: parent
@@ -190,7 +190,7 @@ StyledPopup {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Math.min(todoList.implicitHeight + 16, 200)
                 radius: Appearance.rounding.small
-                color: Appearance.colors.colSurfaceContainerHigh
+                color: Qt.rgba(1, 1, 1, 0.07)
                 
                 ColumnLayout {
                     id: todoList
@@ -245,7 +245,7 @@ StyledPopup {
             Layout.preferredWidth: 240
             Layout.preferredHeight: 60
             radius: Appearance.rounding.normal
-            color: Appearance.colors.colSurfaceContainerHigh
+            color: Qt.rgba(1, 1, 1, 0.07)
             
             RowLayout {
                 anchors.centerIn: parent

@@ -134,7 +134,9 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 clip: true
-                color: Appearance.colors.colSurfaceContainer
+                color: Qt.rgba(0, 0, 0, 0.45)
+                border.width: 1
+                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.normal
                 anchors.bottom: root.dockAtTop ? undefined : parent.bottom
                 anchors.top: root.dockAtTop ? parent.top : undefined

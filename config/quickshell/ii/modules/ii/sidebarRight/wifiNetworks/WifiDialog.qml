@@ -29,7 +29,7 @@ WindowDialog {
         Layout.leftMargin: 0
         Layout.rightMargin: 0
         radius: Appearance.rounding.small
-        color: Appearance.colors.colSurfaceContainer
+        color: Qt.rgba(1, 1, 1, 0.05)
         
         RowLayout {
             id: currentWifiLayout
@@ -108,7 +108,7 @@ WindowDialog {
         Layout.leftMargin: 0
         Layout.rightMargin: 0
         radius: Appearance.rounding.small
-        color: Appearance.colors.colSurfaceContainer
+        color: Qt.rgba(1, 1, 1, 0.05)
         
         RowLayout {
             id: connectingLayout

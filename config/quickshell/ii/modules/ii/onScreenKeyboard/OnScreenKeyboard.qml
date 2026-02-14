@@ -2,6 +2,7 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -65,7 +66,9 @@ Scope { // Scope
             Rectangle {
                 id: oskBackground
                 anchors.centerIn: parent
-                color: Appearance.colors.colLayer0
+                color: Qt.rgba(0, 0, 0, 0.45)
+                border.width: 1
+                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
                 radius: Appearance.rounding.windowRounding
                 property real padding: 10
                 implicitWidth: oskRowLayout.implicitWidth + padding * 2

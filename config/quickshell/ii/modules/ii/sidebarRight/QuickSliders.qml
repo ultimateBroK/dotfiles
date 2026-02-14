@@ -18,7 +18,7 @@ Rectangle {
     implicitWidth: contentItem.implicitWidth + root.horizontalPadding * 2
     implicitHeight: contentItem.implicitHeight + root.verticalPadding * 2
     radius: Appearance.rounding.normal
-    color: Appearance.colors.colLayer1
+    color: Qt.rgba(1, 1, 1, 0.06)
     property real verticalPadding: 6
     property real horizontalPadding: 10
 

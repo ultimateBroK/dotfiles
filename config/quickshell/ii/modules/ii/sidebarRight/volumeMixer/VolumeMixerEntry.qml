@@ -18,7 +18,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.small
-        color: Appearance.colors.colSurfaceContainerLow
+        color: Qt.rgba(1, 1, 1, 0.04)
         
         ColumnLayout {
             id: mainLayout
@@ -77,7 +77,7 @@ Item {
                     Layout.preferredWidth: 36
                     Layout.preferredHeight: 36
                     radius: 18
-                    color: (root.node?.audio.muted ?? false) ? Appearance.colors.colErrorContainer : Appearance.colors.colSurfaceContainerHigh
+                    color: (root.node?.audio.muted ?? false) ? Appearance.colors.colErrorContainer : Qt.rgba(1, 1, 1, 0.07)
                     
                     MaterialSymbol {
                         anchors.centerIn: parent

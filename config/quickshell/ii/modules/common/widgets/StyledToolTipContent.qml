@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -22,7 +23,9 @@ Item {
             bottom: root.bottom
             horizontalCenter: root.horizontalCenter
         }
-        color: Appearance?.colors.colTooltip ?? "#3C4043"
+        color: Qt.rgba(0, 0, 0, 0.65)
+        border.width: 1
+        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
         radius: Appearance?.rounding.verysmall ?? 7
         opacity: shown ? 1 : 0
         implicitWidth: shown ? (tooltipTextObject.implicitWidth + 2 * root.horizontalPadding) : 0

@@ -139,7 +139,7 @@ Item {
             anchors.margins: root.dialogMargins
             implicitHeight: dialogColumnLayout.implicitHeight
 
-            color: Appearance.colors.colSurfaceContainerHigh
+            color: Qt.rgba(1, 1, 1, 0.07)
             radius: Appearance.rounding.normal
 
             function addTask() {
