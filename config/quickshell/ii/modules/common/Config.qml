@@ -138,6 +138,10 @@ Singleton {
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot, scheme-vibrant
                 }
+                // Blur in bar, sidebars, popups (compositor blur). When false, surfaces use solid background to reduce GPU load.
+                property JsonObject blurInShell: JsonObject {
+                    property bool enable: true
+                }
             }
 
             property JsonObject audio: JsonObject {

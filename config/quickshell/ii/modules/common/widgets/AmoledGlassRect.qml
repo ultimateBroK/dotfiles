@@ -36,7 +36,10 @@ Rectangle {
         ? (root.amoledVariant ? 0.04 : 0.08)
         : (root.amoledVariant ? 0.06 : 0.04)
 
-    color: ColorUtils.transparentize(root.glassColor, root.glassTransparency)
+    // When blurInShell is off, use solid background (reduces compositor/GPU blur load).
+    color: (Config?.options?.appearance?.blurInShell?.enable !== false)
+        ? ColorUtils.transparentize(root.glassColor, root.glassTransparency)
+        : root.glassColor
 
     border.width: 1
     border.color: ColorUtils.applyAlpha("#ffffff", 0.08)

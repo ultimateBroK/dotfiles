@@ -34,6 +34,9 @@
         "tool": "search"
     },
     "appearance": {
+        "blurInShell": {
+            "enable": false
+        },
         "extraBackgroundTint": true,
         "fakeScreenRounding": 1,
         "fonts": {
@@ -50,8 +53,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
+            "backgroundTransparency": 0.08003741331116682,
+            "contentTransparency": 0.2784699690592676,
             "enable": true
         },
         "wallpaperTheming": {
@@ -126,7 +129,7 @@
                 "showOnlyWhenLocked": false,
                 "style": "digital",
                 "styleLocked": "cookie",
-                "x": 1462.5,
+                "x": 1463,
                 "y": 261
             },
             "weather": {

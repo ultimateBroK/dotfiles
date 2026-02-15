@@ -189,7 +189,9 @@ Scope {
 
                                 implicitSize: Appearance.rounding.screenRounding
                                 color: (showBarBackground && Config.options.bar.vertical)
-                                    ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
+                                    ? ((Config?.options?.appearance?.blurInShell?.enable !== false)
+                                        ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
+                                        : Appearance.colors.colLayer0)
                                     : "transparent"
 
                                 corner: RoundCorner.CornerEnum.TopLeft
@@ -210,7 +212,9 @@ Scope {
                                 }
                                 implicitSize: Appearance.rounding.screenRounding
                                 color: (showBarBackground && Config.options.bar.vertical)
-                                    ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
+                                    ? ((Config?.options?.appearance?.blurInShell?.enable !== false)
+                                        ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
+                                        : Appearance.colors.colLayer0)
                                     : "transparent"
 
                                 corner: RoundCorner.CornerEnum.TopRight

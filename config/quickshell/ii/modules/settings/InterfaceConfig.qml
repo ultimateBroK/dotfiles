@@ -278,6 +278,27 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "dashboard_customize"
+        title: Translation.tr("Bar & sidebars")
+
+        ContentSubsection {
+            title: Translation.tr("Blur effect")
+
+            ConfigSwitch {
+                buttonIcon: "blur_on"
+                text: Translation.tr("Enable blur in bar, sidebars and popups")
+                checked: Config.options.appearance.blurInShell.enable
+                onCheckedChanged: {
+                    Config.options.appearance.blurInShell.enable = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("When off, surfaces use solid background (reduces GPU load).")
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "notifications"
         title: Translation.tr("Notifications")
 
