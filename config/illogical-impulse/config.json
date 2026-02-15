@@ -53,8 +53,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.08003741331116682,
-            "contentTransparency": 0.2784699690592676,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -100,7 +100,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-stock-official-colorful-3840x2160-5658.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/windows-11-dark-mode-stock-official-black-background-3840x2401-5668.jpg",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -261,7 +261,10 @@
             "tradingview",
             "anytype",
             "floorp",
-            "spotify"
+            "spotify",
+            "antigravity",
+            "dev.zed.zed",
+            "dev.warp.warp"
         ],
         "pinnedOnStartup": false
     },
@@ -347,7 +350,7 @@
         "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     },
     "notifications": {
-        "position": "bottom-right",
+        "position": "top-right",
         "timeout": 10000
     },
     "osd": {
