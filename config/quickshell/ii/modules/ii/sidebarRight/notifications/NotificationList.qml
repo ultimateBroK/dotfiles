@@ -39,32 +39,39 @@ Item {
         descriptionHorizontalAlignment: Text.AlignHCenter
     }
 
-    ButtonGroup {
+    Item {
         id: statusRow
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
+        implicitHeight: statusRowLayout.implicitHeight
 
-        NotificationStatusButton {
-            Layout.fillWidth: false
-            buttonIcon: "notifications_paused"
-            toggled: Notifications.silent
-            onClicked: () => {
-                Notifications.silent = !Notifications.silent;
+        RowLayout {
+            id: statusRowLayout
+            anchors.fill: parent
+            spacing: 6
+
+            NotificationStatusButton {
+                Layout.fillWidth: false
+                buttonIcon: "notifications_paused"
+                toggled: Notifications.silent
+                onClicked: () => {
+                    Notifications.silent = !Notifications.silent;
+                }
             }
-        }
-        NotificationStatusButton {
-            enabled: false
-            Layout.fillWidth: true
-            buttonText: Translation.tr("%1 notifications").arg(Notifications.list.length)
-        }
-        NotificationStatusButton {
-            Layout.fillWidth: false
-            buttonIcon: "delete_sweep"
-            onClicked: () => {
-                Notifications.discardAllNotifications()
+            NotificationStatusButton {
+                enabled: false
+                Layout.fillWidth: true
+                buttonText: Translation.tr("%1 notifications").arg(Notifications.list.length)
+            }
+            NotificationStatusButton {
+                Layout.fillWidth: false
+                buttonIcon: "delete_sweep"
+                onClicked: () => {
+                    Notifications.discardAllNotifications()
+                }
             }
         }
     }
