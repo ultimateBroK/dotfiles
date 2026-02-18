@@ -10,7 +10,6 @@ com.github.unrud.VideoDownloader
 com.google.Chrome
 com.jeffser.Alpaca
 com.mattjakeman.ExtensionManager
-com.obsproject.Studio
 com.rafaelmardojai.Blanket
 com.system76.Popsicle
 com.vixalien.sticky
@@ -19,10 +18,8 @@ de.haeckerfelix.Shortwave
 dev.geopjr.Calligraphy
 dev.qwery.AddWater
 io.bassi.Amberol
-io.emeric.watchflower
 io.github.alainm23.planify
 io.github.amit9838.mousam
-io.github.diegoivanme.flowtime
 io.github.ecotubehq.player
 io.github.efogdev.mpris-timer
 io.github.josephmawa.Egghead
@@ -38,7 +35,6 @@ net.lutris.Lutris
 net.nokyan.Resources
 org.DolphinEmu.dolphin-emu
 org.gnome.Boxes
-org.gnome.Crosswords
 org.gnome.gitlab.somas.Apostrophe
 org.gnome.PowerStats
 org.gnome.seahorse.Application

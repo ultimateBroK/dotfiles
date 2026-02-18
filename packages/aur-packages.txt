@@ -10,6 +10,7 @@ bottles
 breeze-plus
 bridge-utils
 cloudflare-warp-nox-bin
+crosswords
 crush-bin
 cursor-bin
 darkly-bin
@@ -27,6 +28,7 @@ github-desktop-bin
 glew1.10
 gnome-bluetooth
 goofcord-bin
+gpu-screen-recorder-gtk
 gtk-sharp-2
 hoppscotch-bin
 httpie-desktop-bin
@@ -76,6 +78,7 @@ libgcrypt15
 libgnome-keyring
 libidn11
 libindicator-gtk2
+libipuz
 libjpeg6-turbo
 librtmp0
 libtiff4
@@ -111,6 +114,7 @@ proton-authenticator-bin
 python-cobble
 python-dacite
 python-duckduckgo-search
+python-fpdf2
 python-funk
 python-magika
 python-mammoth
@@ -119,20 +123,21 @@ python-pocketsphinx
 python-pptx
 python-precisely
 python-primp
+python-puzpy
 python-sounddevice
 python-speechrecognition
+python-uharfbuzz
 python-youtube-transcript-api
 qbittorrent-enhanced-git
 qt4
-quickshell-git
 qwen-code
 rocm-gfx1150-bin
 ryzenadj-git
-siyuan
 snapd
 sni-qt
 speedtest-cli-git
 speedtest-librespeed
+spicetify-cli
 spotify
 tenere-bin
 tradingview-bin-latest

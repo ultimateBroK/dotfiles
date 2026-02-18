@@ -63,6 +63,7 @@ clinfo
 cloudflare-warp-nox-bin
 composer
 cpupower
+crosswords
 crush-bin
 cryptsetup
 cups
@@ -178,7 +179,6 @@ gst-plugin-pipewire
 gst-plugins-bad
 gst-plugins-ugly
 gst-plugin-va
-gstreamer-vaapi
 gtk-sharp-2
 gum
 gutenprint
@@ -219,6 +219,7 @@ illogical-impulse-widgets
 imageviewer
 inetutils
 iptables-nft
+ipython
 irqbalance
 iwd
 jamesdsp
@@ -343,6 +344,7 @@ nss-mdns
 ntp
 nwg-displays
 obsidian
+obs-studio
 ocrmypdf
 octopi
 ollama-vulkan
@@ -386,6 +388,7 @@ pv
 pyright
 python
 python-cobble
+python-curl_cffi
 python-dacite
 python-defusedxml
 python-duckduckgo-search
@@ -424,6 +427,7 @@ python-whatthepatch
 qbittorrent-enhanced-git
 qemu-base
 qt6-3d
+qt6-base
 qt6-datavis3d
 qt6-doc
 qt6-examples
@@ -454,7 +458,6 @@ sddm
 sg3_utils
 showtime
 simple-scan
-siyuan
 smartmontools
 s-nail
 snapd
@@ -464,6 +467,7 @@ sni-qt
 sof-firmware
 speedtest-cli-git
 speedtest-librespeed
+spicetify-cli
 splix
 spotify
 stacer
@@ -520,6 +524,7 @@ upscayl-bin
 usb_modeswitch
 usbutils
 uwsm
+v4l2loopback-dkms
 vde2
 vesktop
 vim
