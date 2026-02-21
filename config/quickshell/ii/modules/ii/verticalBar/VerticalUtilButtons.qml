@@ -92,7 +92,9 @@ Item {
             visible: Config.options.bar.utilButtons.showMicToggle
             sourceComponent: Bar.CircleUtilButton {
                 Layout.alignment: Qt.AlignHCenter
-                onClicked: Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
+                onClicked: {
+                    if (Audio.source?.audio) Audio.source.audio.muted = !Audio.source.audio.muted
+                }
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 0

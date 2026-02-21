@@ -7,6 +7,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 import Quickshell.Services.UPower
+import qs.services
 
 Item {
     id: root
@@ -89,7 +90,9 @@ Item {
             visible: Config.options.bar.utilButtons.showMicToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
+                onClicked: {
+                    if (Audio.source?.audio) Audio.source.audio.muted = !Audio.source.audio.muted
+                }
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 0

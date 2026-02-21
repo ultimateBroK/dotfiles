@@ -150,6 +150,8 @@ Theme=kora
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+contrast=4
+frameContrast=0.2
 widgetStyle=Darkly
 
 [KFileDialog Settings]
