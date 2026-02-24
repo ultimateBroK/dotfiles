@@ -1,9 +1,8 @@
 adw-gtk-theme-git
 ampcode
 android-sdk-platform-tools
-antigravity
+antigravity-tools-bin
 anytype-bin
-appimagelauncher
 asus-vivobook-rgb-keyboard
 binance
 bottles
@@ -28,6 +27,7 @@ github-desktop-bin
 glew1.10
 gnome-bluetooth
 goofcord-bin
+google-antigravity-bin
 gpu-screen-recorder-gtk
 gtk-sharp-2
 hoppscotch-bin
@@ -129,8 +129,8 @@ python-speechrecognition
 python-uharfbuzz
 python-youtube-transcript-api
 qbittorrent-enhanced-git
+qoder-bin
 qt4
-qwen-code
 rocm-gfx1150-bin
 ryzenadj-git
 snapd

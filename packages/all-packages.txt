@@ -9,9 +9,8 @@ alsa-utils
 amd-ucode
 ampcode
 android-sdk-platform-tools
-antigravity
+antigravity-tools-bin
 anytype-bin
-appimagelauncher
 arch-wiki-docs
 aria2
 ast-grep
@@ -60,6 +59,7 @@ calf
 cantarell-fonts
 chwd
 clinfo
+cloc
 cloudflare-warp-nox-bin
 composer
 cpupower
@@ -170,6 +170,7 @@ gnome-user-share
 gnome-weather
 gnu-free-fonts
 goofcord-bin
+google-antigravity-bin
 gpsd
 gpu-screen-recorder-gtk
 grilo-plugins
@@ -426,6 +427,7 @@ python-wcwidth
 python-whatthepatch
 qbittorrent-enhanced-git
 qemu-base
+qoder-bin
 qt6-3d
 qt6-base
 qt6-datavis3d
