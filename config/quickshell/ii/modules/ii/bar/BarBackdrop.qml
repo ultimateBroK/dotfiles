@@ -43,7 +43,8 @@ Item {
             var isVibrantScheme = (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad");
             if (isVibrantScheme && !root.vertical) return "transparent";
 
-            const blurOn = Config?.options?.appearance?.blurInShell?.enable !== false;
+            const blurOn = (Config?.options?.blur?.globalEnable !== false) &&
+                (Config?.options?.appearance?.blurInShell?.enable !== false);
             return blurOn
                 ? ColorUtils.transparentize(Appearance.colors.colLayer0, Config.options.bar.autoHide.enable ? 0.2 : 1)
                 : Appearance.colors.colLayer0;

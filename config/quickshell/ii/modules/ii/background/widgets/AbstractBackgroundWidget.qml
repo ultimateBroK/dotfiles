@@ -44,7 +44,9 @@ AbstractWidget {
     property color dominantColor: Appearance.colors.colPrimary
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
     property color colText: {
-        const onNormalBackground = (GlobalStates.screenLocked && Config.options.lock.blur.enable)
+        const onNormalBackground = (GlobalStates.screenLocked
+            && Config.options.lock.blur.enable
+            && (Config?.options?.blur?.globalEnable !== false))
         const adaptiveColor = ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (dominantColorIsDark ? 0.8 : 0.12))
         return onNormalBackground ? Appearance.colors.colOnLayer0 : adaptiveColor;
     }

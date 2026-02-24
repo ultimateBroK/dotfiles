@@ -144,6 +144,12 @@ Singleton {
                 }
             }
 
+            // Global blur controls for Quickshell surfaces (lock screen, bar, sidebars, popups, etc.)
+            // Acts as a master switch on top of per-surface blur settings.
+            property JsonObject blur: JsonObject {
+                property bool globalEnable: true
+            }
+
             property JsonObject audio: JsonObject {
                 // Values in %
                 property JsonObject protection: JsonObject {

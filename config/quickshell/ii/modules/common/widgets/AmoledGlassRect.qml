@@ -36,8 +36,8 @@ Rectangle {
         ? (root.amoledVariant ? 0.04 : 0.08)
         : (root.amoledVariant ? 0.06 : 0.04)
 
-    // When blurInShell is off, use solid background (reduces compositor/GPU blur load).
-    color: (Config?.options?.appearance?.blurInShell?.enable !== false)
+    // When blur is disabled globally or for shell surfaces, use solid background (reduces compositor/GPU blur load).
+    color: ((Config?.options?.blur?.globalEnable !== false) && (Config?.options?.appearance?.blurInShell?.enable !== false))
         ? ColorUtils.transparentize(root.glassColor, root.glassTransparency)
         : root.glassColor
 

@@ -189,7 +189,8 @@ Scope {
 
                                 implicitSize: Appearance.rounding.screenRounding
                                 color: (showBarBackground && Config.options.bar.vertical)
-                                    ? ((Config?.options?.appearance?.blurInShell?.enable !== false)
+                                    ? (((Config?.options?.blur?.globalEnable !== false)
+                                            && (Config?.options?.appearance?.blurInShell?.enable !== false))
                                         ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
                                         : Appearance.colors.colLayer0)
                                     : "transparent"
@@ -212,7 +213,8 @@ Scope {
                                 }
                                 implicitSize: Appearance.rounding.screenRounding
                                 color: (showBarBackground && Config.options.bar.vertical)
-                                    ? ((Config?.options?.appearance?.blurInShell?.enable !== false)
+                                    ? (((Config?.options?.blur?.globalEnable !== false)
+                                            && (Config?.options?.appearance?.blurInShell?.enable !== false))
                                         ? ColorUtils.transparentize(Appearance.colors.colLayer0, 0.75)
                                         : Appearance.colors.colLayer0)
                                     : "transparent"

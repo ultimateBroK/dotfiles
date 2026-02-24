@@ -251,12 +251,34 @@ ContentPage {
             }
         }
         
+    }
+
+    ContentSection {
+        icon: "blur_on"
+        title: Translation.tr("Blur")
+
         ContentSubsection {
-            title: Translation.tr("Blur effect")
+            title: Translation.tr("Global")
 
             ConfigSwitch {
                 buttonIcon: "blur_on"
-                text: Translation.tr('Enable blur')
+                text: Translation.tr("Enable all blur effects")
+                checked: Config.options.blur.globalEnable
+                onCheckedChanged: {
+                    Config.options.blur.globalEnable = checked;
+                }
+                StyledToolTip {
+                    text: Translation.tr("Master switch for blur across lock screen, bar, sidebars and popups.")
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Lock screen")
+
+            ConfigSwitch {
+                buttonIcon: "blur_on"
+                text: Translation.tr("Enable lock screen blur")
                 checked: Config.options.lock.blur.enable
                 onCheckedChanged: {
                     Config.options.lock.blur.enable = checked;
@@ -275,14 +297,9 @@ ContentPage {
                 }
             }
         }
-    }
-
-    ContentSection {
-        icon: "dashboard_customize"
-        title: Translation.tr("Bar & sidebars")
 
         ContentSubsection {
-            title: Translation.tr("Blur effect")
+            title: Translation.tr("Bar & sidebars")
 
             ConfigSwitch {
                 buttonIcon: "blur_on"

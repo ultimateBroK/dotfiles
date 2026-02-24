@@ -184,13 +184,13 @@ Item { // Notification item area
         anchors.rightMargin: 10
     }
 
-    Rectangle { // AMOLED glassmorphism background
+    Rectangle { // Notification content background
         id: background
         width: parent.width
         anchors.left: parent.left
         radius: Appearance.rounding.small
         anchors.leftMargin: root.xOffset
-        color: Qt.rgba(0, 0, 0, 0.35)
+        color: "transparent"
         clip: true
 
         Behavior on anchors.leftMargin {
