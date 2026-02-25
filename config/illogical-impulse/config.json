@@ -100,7 +100,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.local/state/quickshell/user/generated/wallpaper/mpvpaper_thumbnails/mylivewallpapers-com-Hi-Tech-User-Interface-FHD.mp4.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/1305211.png",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/1249596.jpg",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -270,7 +270,7 @@
             "anytype",
             "lm studio"
         ],
-        "pinnedOnStartup": true
+        "pinnedOnStartup": false
     },
     "enabledPanels": [
         "iiBar",
@@ -321,7 +321,7 @@
             "enable": false
         },
         "night": {
-            "automatic": false,
+            "automatic": true,
             "colorTemperature": 5025,
             "from": "19:00",
             "to": "06:30"

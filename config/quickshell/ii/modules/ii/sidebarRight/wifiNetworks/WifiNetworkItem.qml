@@ -31,8 +31,9 @@ DialogListItem {
             spacing: 10
             MaterialSymbol {
                 iconSize: Appearance.font.pixelSize.larger
-                property int strength: root.wifiNetwork?.strength ?? 0
-                text: strength > 80 ? "signal_wifi_4_bar" : strength > 60 ? "network_wifi_3_bar" : strength > 40 ? "network_wifi_2_bar" : strength > 20 ? "network_wifi_1_bar" : "signal_wifi_0_bar"
+                property int strength: root.wifiNetwork && typeof root.wifiNetwork.strength === "number" && !isNaN(root.wifiNetwork.strength)
+                    ? root.wifiNetwork.strength : 0
+                text: strength > 80 ? "signal_wifi_4_bar" : strength > 60 ? "network_wifi_3_bar" : strength > 40 ? "network_wifi_2_bar" : strength > 20 ? "network_wifi_1_bar" : "wifi_find"
                 color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {

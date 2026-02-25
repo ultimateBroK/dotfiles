@@ -14,10 +14,22 @@ WindowDialog {
     // Logic: Check if there's an active wifi connection
     property bool hasActiveConnection: Network.active !== null && Network.wifiEnabled
     property string activeNetworkName: Network.active?.ssid ?? ""
-    property int activeNetworkStrength: Network.active?.strength ?? 0
+    property int activeNetworkStrength: root.hasActiveConnection && Network.active && typeof Network.active.strength === "number" && !isNaN(Network.active.strength)
+        ? Network.active.strength : 0
 
     WindowDialogTitle {
         text: Translation.tr("Wi-Fi")
+    }
+
+    // Disconnected status - show when WiFi enabled but not connected
+    StyledText {
+        visible: Network.wifiEnabled && !root.hasActiveConnection && !Network.wifiConnecting
+        text: Translation.tr("Not connected. Select a network below.")
+        font.pixelSize: Appearance.font.pixelSize.small
+        color: Appearance.colors.colOnSurfaceVariant
+        Layout.fillWidth: true
+        Layout.bottomMargin: 8
+        wrapMode: Text.WordWrap
     }
     
     // Current connection status - only show when actually connected
@@ -162,6 +174,18 @@ WindowDialog {
         Layout.leftMargin: -Appearance.rounding.large
         Layout.rightMargin: -Appearance.rounding.large
     }
+
+    // Section header for network list
+    StyledText {
+        visible: !Network.wifiScanning
+        text: Translation.tr("Available networks")
+        font.pixelSize: Appearance.font.pixelSize.smaller
+        font.weight: Font.Medium
+        color: Appearance.colors.colOnSurfaceVariant
+        Layout.topMargin: 4
+        Layout.bottomMargin: 4
+    }
+
     // Cache sorted networks to avoid sorting on every render
     property var sortedNetworks: {
         const networks = Network.wifiNetworks;

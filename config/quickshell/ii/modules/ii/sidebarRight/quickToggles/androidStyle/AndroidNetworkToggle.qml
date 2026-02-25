@@ -8,7 +8,7 @@ AndroidQuickToggleButton {
     id: root
     
     name: Translation.tr("Internet")
-    statusText: Network.networkName
+    statusText: Network.networkName || Translation.tr("Not connected")
 
     toggled: Network.wifiStatus !== "disabled"
     buttonIcon: Network.materialSymbol
@@ -17,7 +17,7 @@ AndroidQuickToggleButton {
         root.openMenu()
     }
     StyledToolTip {
-        text: Translation.tr("%1 | Right-click to configure").arg(Network.networkName)
+        text: (Network.networkName || Translation.tr("Not connected")) + " | " + Translation.tr("Right-click to configure")
     }
 }
 

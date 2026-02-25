@@ -27,16 +27,18 @@ Singleton {
 
     property string networkName: ""
     property int networkStrength
+    property int effectiveStrength: (typeof root.networkStrength === "number" && !isNaN(root.networkStrength))
+        ? root.networkStrength : 0
     property string materialSymbol: root.ethernet
         ? "lan"
         : root.wifiEnabled
             ? (
-                Network.networkStrength > 83 ? "signal_wifi_4_bar" :
-                Network.networkStrength > 67 ? "network_wifi" :
-                Network.networkStrength > 50 ? "network_wifi_3_bar" :
-                Network.networkStrength > 33 ? "network_wifi_2_bar" :
-                Network.networkStrength > 17 ? "network_wifi_1_bar" :
-                "signal_wifi_0_bar"
+                root.effectiveStrength > 83 ? "signal_wifi_4_bar" :
+                root.effectiveStrength > 67 ? "network_wifi" :
+                root.effectiveStrength > 50 ? "network_wifi_3_bar" :
+                root.effectiveStrength > 33 ? "network_wifi_2_bar" :
+                root.effectiveStrength > 17 ? "network_wifi_1_bar" :
+                "wifi_find"
             )
             : (root.wifiStatus === "connecting")
                 ? "signal_wifi_statusbar_not_connected"
@@ -77,14 +79,16 @@ Singleton {
         Quickshell.execDetached(["xdg-open", "https://nmcheck.gnome.org/"]) // From some StackExchange thread, seems to work
     }
 
+    property WifiAccessPoint pendingReconnectNetwork: null
     function changePassword(network: WifiAccessPoint, password: string, username = ""): void {
         // TODO: enterprise wifi with username
         network.askingPassword = false;
+        root.pendingReconnectNetwork = network;
         changePasswordProc.exec({
             "environment": {
                 "PASSWORD": password
             },
-            "command": ["bash", "-c", `nmcli connection modify ${network.ssid} wifi-sec.psk "$PASSWORD"`]
+            "command": ["bash", "-c", `nmcli connection modify "${network.ssid}" wifi-sec.psk "$PASSWORD"`]
         })
     }
 
@@ -115,6 +119,10 @@ Singleton {
         onExited: (exitCode, exitStatus) => {
             root.wifiConnectTarget.askingPassword = (exitCode !== 0)
             root.wifiConnectTarget = null
+            if (exitCode === 0) {
+                root.update()
+                if (!getNetworks.running) getNetworks.running = true
+            }
         }
     }
 
@@ -128,8 +136,11 @@ Singleton {
     Process {
         id: changePasswordProc
         onExited: { // Re-attempt connection after changing password
-            connectProc.running = false
-            connectProc.running = true
+            if (root.pendingReconnectNetwork) {
+                root.wifiConnectTarget = root.pendingReconnectNetwork
+                connectProc.exec(["nmcli", "dev", "wifi", "connect", root.pendingReconnectNetwork.ssid])
+                root.pendingReconnectNetwork = null
+            }
         }
     }
 
@@ -229,10 +240,12 @@ Singleton {
     Process {
         id: updateNetworkStrength
         running: true
-        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\*/{if (NR!=1) {print $2}}'"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.networkStrength = parseInt(data);
+        command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi 2>/dev/null | awk '$1==\"*\" {print $2; exit}'"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const match = text.trim().split("\n")[0];
+                const val = parseInt(match, 10);
+                root.networkStrength = (typeof val === "number" && !isNaN(val)) ? val : 0;
             }
         }
     }
