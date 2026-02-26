@@ -2,6 +2,7 @@ import qs
 import qs.modules.common
 import qs.services
 import qs.modules.common.functions
+import "notification_utils.js" as NotificationUtils
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
@@ -41,7 +42,9 @@ Item { // Notification item area
     // or when summary is derived from the first line of body.
     readonly property string dedupedBody: dedupeBody(root.safeSummary, normalizedBody)
     readonly property bool hasBody: dedupedBody.length > 0
-    readonly property string bodyRich: dedupedBody.replace(/\n/g, "<br/>")
+    readonly property string bodyRich: NotificationUtils.hasMarkdown(dedupedBody)
+        ? NotificationUtils.markdownToHtml(dedupedBody)
+        : dedupedBody.replace(/\n/g, "<br/>")
 
     implicitHeight: background.implicitHeight
 

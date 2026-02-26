@@ -50,33 +50,51 @@ ShellRoot {
         _startupLog("ShellRoot Component.onCompleted")
         MaterialThemeLoader.reapplyTheme()
         _startupLog("Theme applied; scheduling deferred startup")
-        // Defer expensive init work so the UI appears faster.
-        deferredStartup.start()
+        // Event-driven startup: Wait until Config is ready
+        if (Config.ready) {
+            Qt.callLater(root.runDeferredStartup)
+        }
     }
 
-    Timer {
-        id: deferredStartup
-        interval: 1500
-        repeat: false
-        running: false
-        onTriggered: {
-            root._startupLog("Deferred startup triggered")
-            Hyprsunset.load()
-            FirstRunExperience.load()
-            ConflictKiller.load()
-            Cliphist.refresh()
-            Wallpapers.load()
-            Updates.load()
-            // Ensure PowerProfileHyprlandSync is initialized
-            PowerProfileHyprlandSync
-            root._startupLog("Deferred startup finished scheduling loads")
+    QtObject {
+        id: startupState
+        property bool executed: false
+    }
+
+    function runDeferredStartup() {
+        if (startupState.executed) return;
+        startupState.executed = true;
+
+        root._startupLog("Event-driven deferred startup triggered")
+        
+        const services = [
+            { name: "Hyprsunset", action: () => Hyprsunset.load() },
+            { name: "FirstRunExperience", action: () => FirstRunExperience.load() },
+            { name: "ConflictKiller", action: () => ConflictKiller.load() },
+            { name: "Cliphist", action: () => Cliphist.refresh() },
+            { name: "Wallpapers", action: () => Wallpapers.load() },
+            { name: "Updates", action: () => Updates.load() },
+            { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } }
+        ]
+
+        for (const service of services) {
+            try {
+                service.action()
+            } catch(e) {
+                console.error(`${service.name} initialization failed:`, e)
+            }
         }
+        
+        root._startupLog("Deferred startup finished scheduling loads")
     }
 
     Connections {
         target: Config
         function onReadyChanged() {
             root._startupLog(`Config.ready=${Config.ready}`)
+            if (Config.ready) {
+                Qt.callLater(root.runDeferredStartup)
+            }
         }
     }
 
@@ -109,13 +127,41 @@ ShellRoot {
         required property string identifier
         property bool extraCondition: true
         active: Config.ready && Config.options.enabledPanels.includes(identifier) && extraCondition
+
+        onActiveChanged: {
+            if (!active) {
+                // Ensure unused components are freed from JS memory (Improvement D)
+                gc();
+            }
+        }
     }
 
     // Panel families
     property list<string> families: ["ii", "adhd"]
+    property list<string> basePanels: [
+        "iiBackground", 
+        "iiCheatsheet", 
+        "iiDock", 
+        "iiLock", 
+        "iiMediaControls", 
+        "iiNotificationPopup", 
+        "iiOnScreenDisplay", 
+        "iiOnScreenKeyboard", 
+        "iiOverlay", 
+        "iiOverview", 
+        "iiPolkit", 
+        "iiRegionSelector", 
+        "iiReloadPopup", 
+        "iiScreenCorners", 
+        "iiSessionScreen", 
+        "iiSidebarLeft", 
+        "iiSidebarRight",
+        "iiWallpaperSelector"
+    ]
+
     property var panelFamilies: ({
-        "ii": ["iiBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiVerticalBar", "iiWallpaperSelector"],
-        "adhd": ["adhdBar", "iiBackground", "iiCheatsheet", "iiDock", "iiLock", "iiMediaControls", "iiNotificationPopup", "iiOnScreenDisplay", "iiOnScreenKeyboard", "iiOverlay", "iiOverview", "iiPolkit", "iiRegionSelector", "iiReloadPopup", "iiScreenCorners", "iiSessionScreen", "iiSidebarLeft", "iiSidebarRight", "iiWallpaperSelector"],
+        "ii": ["iiBar", "iiVerticalBar"].concat(Array.from(basePanels)),
+        "adhd": ["adhdBar"].concat(Array.from(basePanels))
     })
     function cyclePanelFamily() {
         const currentIndex = families.indexOf(Config.options.panelFamily)
@@ -130,6 +176,9 @@ ShellRoot {
         } else if (nextFamily === "ii") {
             Config.options.adhd.enable = false
         }
+        
+        // Explicitly collect garbage after panel switching to free unused QML DOM
+        gc()
     }
 
     function cyclePowerProfile() {

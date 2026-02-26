@@ -82,3 +82,36 @@ const getFriendlyNotifTimeString = (timestamp) => {
     // Older dates
     return Qt.formatDateTime(messageTime, "MMMM dd");
 };
+
+/**
+ * Check if text contains markdown-style syntax (so we can render as rich text when needed).
+ * @param { string } text
+ * @returns { boolean }
+ */
+function hasMarkdown(text) {
+    if (!text || typeof text !== 'string') return false;
+    return /\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\[[^\]]+\]\([^)]+\)/.test(text);
+}
+
+/**
+ * Convert simple markdown to Qt StyledText/HTML for notification body.
+ * Handles: **bold**, *italic*, `code`, [label](url), newlines.
+ * Only converts when patterns are present; plain text is returned with just \n -> <br/>.
+ * @param { string } text
+ * @returns { string }
+ */
+function markdownToHtml(text) {
+    if (!text || typeof text !== 'string') return '';
+    let out = text;
+    // Links first (so brackets/parens aren't used by other patterns)
+    out = out.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    // Bold **...**
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    // Italic *...* (do after bold so ** is already replaced)
+    out = out.replace(/\*([^*]+)\*/g, '<i>$1</i>');
+    // Inline code `...`
+    out = out.replace(/`([^`]+)`/g, '<code style="background:rgba(128,128,128,0.2);padding:1px 4px;border-radius:3px;">$1</code>');
+    // Newlines
+    out = out.replace(/\n/g, '<br/>');
+    return out;
+}

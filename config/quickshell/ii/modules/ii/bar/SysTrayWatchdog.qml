@@ -24,16 +24,12 @@ Item {
         repeat: false
         onTriggered: {
             root._lastKnownCount = SystemTray.items.values.length
-            pollTimer.start()
         }
     }
     
-    Timer {
-        id: pollTimer
-        interval: 5000
-        repeat: true
-        running: false
-        onTriggered: {
+    Connections {
+        target: SystemTray.items
+        function onValuesChanged() {
             const current = SystemTray.items.values.length
             // If we previously had items and now have none, attempt recovery
             if (root._lastKnownCount > 0 && current === 0) {

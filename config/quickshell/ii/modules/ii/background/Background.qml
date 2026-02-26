@@ -185,14 +185,9 @@ Variants {
                     }
                 }
                 sourceSize {
-                    // Load at native wallpaper resolution to maintain original sharpness
-                    // Use wallpaper dimensions when available, otherwise use display size with scale
-                    width: bgRoot.wallpaperWidth > bgRoot.screen.width ? 
-                           bgRoot.wallpaperWidth : 
-                           bgRoot.screen.width * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
-                    height: bgRoot.wallpaperHeight > bgRoot.screen.height ? 
-                            bgRoot.wallpaperHeight : 
-                            bgRoot.screen.height * bgRoot.effectiveWallpaperScale * bgRoot.monitor.scale
+                    // Cap at screen size * effective scale to prevent huge VRAM usage for oversized images
+                    width: Math.min(bgRoot.wallpaperWidth, Math.round(bgRoot.screen.width * bgRoot.effectiveWallpaperScale * (bgRoot.monitor.scale || 1)))
+                    height: Math.min(bgRoot.wallpaperHeight, Math.round(bgRoot.screen.height * bgRoot.effectiveWallpaperScale * (bgRoot.monitor.scale || 1)))
                 }
                 width: bgRoot.wallpaperWidth / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
                 height: bgRoot.wallpaperHeight / bgRoot.wallpaperToScreenRatio * bgRoot.effectiveWallpaperScale
