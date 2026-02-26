@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
+import Quickshell.Io
 
 /**
  * Watchdog component to detect and recover missing tray items after sleep/resume or reload.
@@ -59,10 +60,21 @@ Item {
                 return
             }
             
-            // Final fallback: reload Quickshell to reinitialize the tray implementation
-            console.warn("[SysTrayWatchdog] Detected missing tray items after resume; reloading Quickshell to recover")
-            Quickshell.reload(true)
+            // Final fallback: completely restart the Quickshell daemon to prevent QML memory leak
+            console.warn("[SysTrayWatchdog] Detected missing tray items after resume; completely reloading Quickshell to recover")
+            
+            // Execute shell command to restart the OS process detached
+            // Using sleep to allow this function block to exit cleanly before sigterm
+            restartProcess.running = true
             attempts = 0
         }
+    }
+
+    Process {
+        id: restartProcess
+        // Quickshell does not have a --replace flag.
+        // We use pkill to kill the current process, wait 1 second, and start a new instance natively.
+        command: ["bash", "-c", "pkill quickshell; sleep 1; quickshell &"]
+        running: false
     }
 }
