@@ -153,6 +153,8 @@
     "borderless": false,
     "bottom": false,
     "cornerStyle": 2,
+    "customHeight": 40,
+    "customMargin": 5,
     "floatStyleShadow": true,
     "indicators": {
       "notifications": {
@@ -266,7 +268,7 @@
       "anytype",
       "lm studio"
     ],
-    "pinnedOnStartup": false
+    "pinnedOnStartup": true
   },
   "enabledPanels": [
     "iiBar",
@@ -318,7 +320,7 @@
     },
     "night": {
       "automatic": true,
-      "colorTemperature": 5025,
+      "colorTemperature": 4574,
       "from": "19:00",
       "to": "06:30"
     }

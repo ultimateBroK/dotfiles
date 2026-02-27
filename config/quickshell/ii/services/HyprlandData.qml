@@ -58,13 +58,23 @@ Singleton {
         updateAll();
     }
 
-    // Debounce updates to avoid excessive hyprctl calls
-    property Timer debounceTimer: Timer {
-        interval: 50
+    // Throttled timers for specific subsystems to avoid fork-bombing hyprctl on wake
+    property Timer debounceClientsTimer: Timer {
+        interval: 100
         repeat: false
-        onTriggered: {
-            updateAll()
-        }
+        onTriggered: updateWindowList()
+    }
+    
+    property Timer debounceWorkspacesTimer: Timer {
+        interval: 100
+        repeat: false
+        onTriggered: updateWorkspaces()
+    }
+    
+    property Timer debounceMonitorsTimer: Timer {
+        interval: 500
+        repeat: false
+        onTriggered: updateMonitors()
     }
     
     Connections {
@@ -72,8 +82,34 @@ Singleton {
 
         function onRawEvent(event) {
             // console.log("Hyprland raw event:", event.name);
-            // Debounce rapid events to improve performance
-            debounceTimer.restart()
+            // Intelligently route events to their specific update function
+            // instead of calling updateAll() on EVERY event
+            switch (event.name) {
+                case "workspace":
+                case "focusedmon":
+                case "activewindowv2":
+                    debounceWorkspacesTimer.restart()
+                    break
+                    
+                case "openwindow":
+                case "closewindow":
+                case "movewindow":
+                case "activewindow":
+                case "windowtitle":
+                case "windowtitlev2":
+                    debounceClientsTimer.restart()
+                    break
+                    
+                case "monitoradded":
+                case "monitorremoved":
+                    debounceMonitorsTimer.restart()
+                    break
+                    
+                case "layerSurface":
+                case "configreloaded":
+                    updateLayers()
+                    break
+            }
         }
     }
 
