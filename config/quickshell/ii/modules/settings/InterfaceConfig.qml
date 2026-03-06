@@ -251,34 +251,12 @@ ContentPage {
             }
         }
         
-    }
-
-    ContentSection {
-        icon: "blur_on"
-        title: Translation.tr("Blur")
-
         ContentSubsection {
-            title: Translation.tr("Global")
+            title: Translation.tr("Blur effect")
 
             ConfigSwitch {
                 buttonIcon: "blur_on"
-                text: Translation.tr("Enable all blur effects")
-                checked: Config.options.blur.globalEnable
-                onCheckedChanged: {
-                    Config.options.blur.globalEnable = checked;
-                }
-                StyledToolTip {
-                    text: Translation.tr("Master switch for blur across lock screen, bar, sidebars and popups.")
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Lock screen")
-
-            ConfigSwitch {
-                buttonIcon: "blur_on"
-                text: Translation.tr("Enable lock screen blur")
+                text: Translation.tr('Enable blur')
                 checked: Config.options.lock.blur.enable
                 onCheckedChanged: {
                     Config.options.lock.blur.enable = checked;
@@ -294,22 +272,6 @@ ContentPage {
                 stepSize: 2
                 onValueChanged: {
                     Config.options.lock.blur.extraZoom = value / 100;
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Bar & sidebars")
-
-            ConfigSwitch {
-                buttonIcon: "blur_on"
-                text: Translation.tr("Enable blur in bar, sidebars and popups")
-                checked: Config.options.appearance.blurInShell.enable
-                onCheckedChanged: {
-                    Config.options.appearance.blurInShell.enable = checked;
-                }
-                StyledToolTip {
-                    text: Translation.tr("When off, surfaces use solid background (reduces GPU load).")
                 }
             }
         }
@@ -329,45 +291,6 @@ ContentPage {
             onValueChanged: {
                 Config.options.notifications.timeout = value;
             }
-        }
-
-        ConfigSelectionArray {
-            Layout.fillWidth: false
-            currentValue: {
-                switch (Config.options.notifications.position) {
-                    case "top-right": return 0;
-                    case "top-left": return 1;
-                    case "bottom-right": return 2;
-                    case "bottom-left": return 3;
-                    default: return 0;
-                }
-            }
-            onSelected: newValue => {
-                const positions = ["top-right", "top-left", "bottom-right", "bottom-left"];
-                Config.options.notifications.position = positions[newValue];
-            }
-            options: [
-                {
-                    displayName: Translation.tr("Top Right"),
-                    icon: "north_east",
-                    value: 0
-                },
-                {
-                    displayName: Translation.tr("Top Left"),
-                    icon: "north_west",
-                    value: 1
-                },
-                {
-                    displayName: Translation.tr("Bottom Right"),
-                    icon: "south_east",
-                    value: 2
-                },
-                {
-                    displayName: Translation.tr("Bottom Left"),
-                    icon: "south_west",
-                    value: 3
-                }
-            ]
         }
     }
 
@@ -852,71 +775,6 @@ ContentPage {
                     onValueChanged: {
                         Config.options.overview.columns = value;
                     }
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Appearance")
-
-            ConfigSwitch {
-                buttonIcon: "label"
-                text: Translation.tr("Show workspace labels")
-                checked: Config.options.overview.showWorkspaceLabels
-                onCheckedChanged: {
-                    Config.options.overview.showWorkspaceLabels = checked;
-                }
-            }
-
-            ConfigSwitch {
-                buttonIcon: "title"
-                text: Translation.tr("Show window titles")
-                checked: Config.options.overview.showWindowTitles
-                onCheckedChanged: {
-                    Config.options.overview.showWindowTitles = checked;
-                }
-            }
-
-            ConfigSwitch {
-                buttonIcon: "highlight"
-                text: Translation.tr("Highlight active workspace")
-                checked: Config.options.overview.highlightActiveWorkspace
-                onCheckedChanged: {
-                    Config.options.overview.highlightActiveWorkspace = checked;
-                }
-            }
-
-            ConfigSpinBox {
-                icon: "opacity"
-                text: Translation.tr("Background opacity (%)")
-                value: Config.options.overview.backgroundOpacity * 100
-                from: 0
-                to: 100
-                stepSize: 5
-                onValueChanged: {
-                    Config.options.overview.backgroundOpacity = value / 100;
-                }
-            }
-        }
-
-        ContentSubsection {
-            title: Translation.tr("Behavior")
-
-            ConfigSwitch {
-                buttonIcon: "animation"
-                text: Translation.tr("Animate window transitions")
-                checked: Config.options.overview.animateWindowTransitions
-                onCheckedChanged: {
-                    Config.options.overview.animateWindowTransitions = checked;
-                }
-            }
-
-            ConfigSwitch {
-                buttonIcon: "close"
-                text: Translation.tr("Close window on middle click")
-                checked: Config.options.overview.closeWindowOnMiddleClick
-                onCheckedChanged: {
-                    Config.options.overview.closeWindowOnMiddleClick = checked;
                 }
             }
         }
