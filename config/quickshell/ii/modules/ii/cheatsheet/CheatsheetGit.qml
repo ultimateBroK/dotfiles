@@ -16,75 +16,50 @@ Item {
 
     property var commandGroups: [
         {
-            name: "System",
+            name: "Init & Config",
             commands: [
-                { cmd: "df -h", desc: "Disk usage" },
-                { cmd: "free -h", desc: "Memory usage" },
-                { cmd: "ps aux", desc: "List processes" },
-                { cmd: "top", desc: "Monitor processes" },
-                { cmd: "htop", desc: "Interactive process viewer" },
-                { cmd: "uptime", desc: "System uptime" },
-                { cmd: "uname -a", desc: "System info" },
-                { cmd: "whoami", desc: "Current user" },
-                { cmd: "pwd", desc: "Current directory" },
-                { cmd: "ls -lah", desc: "List files (detailed)" },
-                { cmd: "du -sh *", desc: "Directory sizes" },
-                { cmd: "journalctl -xe", desc: "System logs" }
+                { cmd: "git init", desc: "Initialize a new repository" },
+                { cmd: "git clone <url>", desc: "Clone a repository" },
+                { cmd: "git config --global user.name <name>", desc: "Set username" },
+                { cmd: "git config --global user.email <email>", desc: "Set email" }
             ]
         },
         {
-            name: "Package Management",
+            name: "Basic Snapshotting",
             commands: [
-                { cmd: "pacman -Syu", desc: "Update system (Arch)" },
-                { cmd: "pacman -S <pkg>", desc: "Install package (Arch)" },
-                { cmd: "pacman -R <pkg>", desc: "Remove package (Arch)" },
-                { cmd: "pacman -Ss <search>", desc: "Search packages (Arch)" },
-                { cmd: "yay -S <pkg>", desc: "Install AUR package" },
-                { cmd: "flatpak update", desc: "Update Flatpaks" },
-                { cmd: "flatpak install <app>", desc: "Install Flatpak" },
-                { cmd: "cargo install <pkg>", desc: "Install Rust crate" },
-                { cmd: "npm install -g <pkg>", desc: "Install npm package" },
-                { cmd: "pip install <pkg>", desc: "Install Python package" }
+                { cmd: "git status", desc: "Check repository status" },
+                { cmd: "git add .", desc: "Stage all changes" },
+                { cmd: "git add <file>", desc: "Stage specific file" },
+                { cmd: "git commit -m 'msg'", desc: "Commit changes" },
+                { cmd: "git diff", desc: "Show unstaged changes" },
+                { cmd: "git diff --staged", desc: "Show staged changes" }
             ]
         },
         {
-            name: "File Operations",
+            name: "Branching & Merging",
             commands: [
-                { cmd: "cp <src> <dest>", desc: "Copy file" },
-                { cmd: "mv <src> <dest>", desc: "Move/rename file" },
-                { cmd: "rm <file>", desc: "Remove file" },
-                { cmd: "rm -rf <dir>", desc: "Remove directory" },
-                { cmd: "mkdir <dir>", desc: "Create directory" },
-                { cmd: "touch <file>", desc: "Create empty file" },
-                { cmd: "cat <file>", desc: "View file content" },
-                { cmd: "less <file>", desc: "View file (scrollable)" },
-                { cmd: "head -n <file>", desc: "First N lines" },
-                { cmd: "tail -n <file>", desc: "Last N lines" },
-                { cmd: "grep <pattern> <file>", desc: "Search in file" },
-                { cmd: "find . -name '<pattern>'", desc: "Find files" }
+                { cmd: "git branch", desc: "List branches" },
+                { cmd: "git checkout -b <branch>", desc: "Create and switch branch" },
+                { cmd: "git checkout <branch>", desc: "Switch branch" },
+                { cmd: "git merge <branch>", desc: "Merge branch into current" },
+                { cmd: "git branch -d <branch>", desc: "Delete local branch" }
             ]
         },
         {
-            name: "Network",
+            name: "Sharing & Updating",
             commands: [
-                { cmd: "ping <host>", desc: "Test connectivity" },
-                { cmd: "curl <url>", desc: "Download/request URL" },
-                { cmd: "wget <url>", desc: "Download file" },
-                { cmd: "ip addr", desc: "Show IP addresses" },
-                { cmd: "ip route", desc: "Show routing table" },
-                { cmd: "ss -tulpn", desc: "Show listening ports" },
-                { cmd: "nmcli device status", desc: "Network status" },
-                { cmd: "nmap <target>", desc: "Network scan" }
+                { cmd: "git fetch", desc: "Download all history from remote" },
+                { cmd: "git pull", desc: "Fetch and merge from remote" },
+                { cmd: "git push", desc: "Push to remote" },
+                { cmd: "git remote -v", desc: "List remote connections" }
             ]
         },
         {
-            name: "Archives",
+            name: "Inspect & Compare",
             commands: [
-                { cmd: "tar -czf <archive.tar.gz> <dir>", desc: "Create tar.gz" },
-                { cmd: "tar -xzf <archive.tar.gz>", desc: "Extract tar.gz" },
-                { cmd: "zip -r <archive.zip> <dir>", desc: "Create zip" },
-                { cmd: "unzip <archive.zip>", desc: "Extract zip" },
-                { cmd: "7z x <archive.7z>", desc: "Extract 7z" }
+                { cmd: "git log", desc: "View commit history" },
+                { cmd: "git log --oneline", desc: "View compact commit history" },
+                { cmd: "git show <commit>", desc: "View changes of a commit" }
             ]
         }
     ]

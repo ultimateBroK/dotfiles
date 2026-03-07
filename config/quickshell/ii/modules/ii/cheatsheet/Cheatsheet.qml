@@ -23,6 +23,10 @@ Scope { // Scope
             "icon": "terminal",
             "name": Translation.tr("Commands")
         },
+        {
+            "icon": "account_tree",
+            "name": Translation.tr("Git")
+        },
     ]
 
     Loader {
@@ -164,6 +168,7 @@ Scope { // Scope
 
                         CheatsheetKeybinds {}
                         CheatsheetShellCommands {}
+                        CheatsheetGit {}
                     }
                 }
             }
