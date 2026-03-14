@@ -19,12 +19,11 @@ Scope {
         }
     }
     function unlockKeyring() {
-        unlockKeyringProc.exec({
-            environment: ({
-                "UNLOCK_PASSWORD": lockContext.currentText
-            }),
-            command: ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")]
-        })
+        // Run asynchronously so the main thread is never blocked (exec() would block
+        // until the script exits, preventing the lock screen from actually unlocking).
+        unlockKeyringProc.environment = ({ "UNLOCK_PASSWORD": lockContext.currentText });
+        unlockKeyringProc.command = ["bash", "-c", Quickshell.shellPath("scripts/keyring/unlock.sh")];
+        unlockKeyringProc.running = true;
     }
 
     property var windowData: []
@@ -71,15 +70,16 @@ Scope {
                 return;
             }
 
-            // Unlock the keyring if configured to do so
-            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
-
-            // Unlock the screen before exiting, or the compositor will display a
-            // fallback lock you can't interact with.
+            // Unlock the screen FIRST so the user can get back to the desktop immediately.
+            // (If we run unlockKeyring() with exec() first, it blocks the main thread until
+            // the script exits, so the screen never unlocks if the script hangs or is slow.)
             GlobalStates.screenLocked = false;
-            
+
             // Refocus last focused window on unlock (hack)
-            Quickshell.execDetached(["bash", "-c", `sleep 0.2; hyprctl --batch "dispatch togglespecialworkspace; dispatch togglespecialworkspace"`])
+            Quickshell.execDetached(["bash", "-c", `sleep 0.2; hyprctl --batch "dispatch togglespecialworkspace; dispatch togglespecialworkspace"`]);
+
+            // Unlock the keyring in the background (async) so it never blocks the UI
+            if (Config.options.lock.security.unlockKeyring) root.unlockKeyring();
 
             // Reset
             lockContext.reset();
