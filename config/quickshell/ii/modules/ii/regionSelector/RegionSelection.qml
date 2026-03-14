@@ -221,10 +221,14 @@ PanelWindow {
         stdout: StdioCollector {
             id: imageDimensionCollector
             onStreamFinished: {
-                imageRegions = RegionFunctions.filterImageRegions(
-                    JSON.parse(imageDimensionCollector.text),
-                    root.windowRegions
-                );
+                const text = imageDimensionCollector.text;
+                if (!text || text.trim().length === 0) return;
+                try {
+                    const parsed = JSON.parse(text);
+                    imageRegions = RegionFunctions.filterImageRegions(parsed, root.windowRegions);
+                } catch (e) {
+                    console.warn("[Region Selector] Image detection failed or returned invalid JSON:", e.message);
+                }
             }
         }
     }
