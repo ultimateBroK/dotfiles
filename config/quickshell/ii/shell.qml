@@ -78,15 +78,15 @@ ShellRoot {
         const criticalServices = [
             { name: "Hyprsunset", action: () => Hyprsunset.load() },
             { name: "ConflictKiller", action: () => ConflictKiller.load() },
-            { name: "Cliphist", action: () => Cliphist.refresh() }
+            { name: "Cliphist", action: () => Cliphist.refresh() },
+            { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } }
         ]
 
         // Non-critical services - load after delay
         const deferredServices = [
             { name: "FirstRunExperience", action: () => FirstRunExperience.load() },
             { name: "Wallpapers", action: () => Wallpapers.load() },
-            { name: "Updates", action: () => Updates.load() },
-            { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } }
+            { name: "Updates", action: () => Updates.load() }
         ]
 
         // Load critical services immediately
