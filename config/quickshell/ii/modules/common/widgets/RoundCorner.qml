@@ -34,15 +34,23 @@ Item {
             left: root.isLeft ? parent.left : undefined
             right: root.isRight ? parent.right : undefined
         }
+
+        // Anti-aliasing settings for smooth rounded corners
+        antialiasing: true
+        smooth: true
+
+        // Layer configuration for MSAA (Multisample Anti-Aliasing)
         layer.enabled: true
         layer.smooth: true
+        layer.samples: 4
+
         preferredRendererType: Shape.CurveRenderer
 
         ShapePath {
             id: shapePath
             strokeWidth: 0
             fillColor: root.color
-            pathHints: ShapePath.PathSolid & ShapePath.PathNonIntersecting
+            pathHints: ShapePath.PathSolid | ShapePath.PathNonIntersecting
 
             startX: switch (root.corner) {
                 case RoundCorner.CornerEnum.TopLeft:

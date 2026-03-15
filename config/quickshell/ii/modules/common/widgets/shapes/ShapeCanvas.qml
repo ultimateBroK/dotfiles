@@ -7,6 +7,11 @@ Canvas {
     property var roundedPolygon: null
     property bool polygonIsNormalized: true
 
+    // Anti-aliasing settings for smooth shape rendering
+    antialiasing: true
+    smooth: true
+    renderStrategy: Canvas.Cooperative  // Better rendering quality
+
     // Internals: size
     property var bounds: roundedPolygon.calculateBounds()
     implicitWidth: bounds[2] - bounds[0]

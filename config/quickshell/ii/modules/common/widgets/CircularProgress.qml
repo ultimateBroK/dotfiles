@@ -50,6 +50,11 @@ Item {
 
     Shape {
         anchors.fill: parent
+
+        // Anti-aliasing settings for smooth circular rendering
+        antialiasing: true
+        smooth: true
+
         layer.enabled: true
         layer.smooth: true
         preferredRendererType: Shape.CurveRenderer
