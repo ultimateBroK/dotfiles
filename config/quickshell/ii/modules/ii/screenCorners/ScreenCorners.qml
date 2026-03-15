@@ -56,12 +56,18 @@ Scope {
             rightVisualMargin: (Config.options.interactions.deadPixelWorkaround.enable && cornerPanelWindow.anchors.right) * 1
             bottomVisualMargin: (Config.options.interactions.deadPixelWorkaround.enable && cornerPanelWindow.anchors.bottom) * 1
 
+            // Layer caching for static corner rendering
+            layer.enabled: true
+            layer.smooth: true
+
             implicitSize: Appearance.rounding.screenRounding
             implicitHeight: Math.max(implicitSize, sidebarCornerOpenInteractionLoader.implicitHeight)
             implicitWidth: Math.max(implicitSize, sidebarCornerOpenInteractionLoader.implicitWidth)
 
             Loader {
                 id: sidebarCornerOpenInteractionLoader
+                asynchronous: true
+                visible: status == Loader.Ready
                 active: {
                     if (!Config.options.sidebar.cornerOpen.enable) return false;
                     if (cornerPanelWindow.fullscreen) return false;
@@ -78,8 +84,15 @@ Scope {
                     id: mouseArea
                     implicitWidth: Config.options.sidebar.cornerOpen.cornerRegionWidth
                     implicitHeight: Config.options.sidebar.cornerOpen.cornerRegionHeight
-                    hoverEnabled: true
+                    hoverEnabled: Config.options.sidebar.cornerOpen.enable
+                    
+                    // Throttle for position changes (~60fps)
+                    property int lastProcessTime: 0
                     onPositionChanged: {
+                        const now = Date.now()
+                        if (now - lastProcessTime < 16) return
+                        lastProcessTime = now
+                        
                         if (!Config.options.sidebar.cornerOpen.clicklessCornerEnd) return;
                         const verticalOffset = Config.options.sidebar.cornerOpen.clicklessCornerVerticalOffset;
                         const correctX = (cornerWidget.isRight && mouseArea.mouseX >= mouseArea.width - 2) || (cornerWidget.isLeft && mouseArea.mouseX <= 2);
@@ -126,6 +139,7 @@ Scope {
                     }
 
                     Loader {
+                        asynchronous: true
                         active: Config.options.sidebar.cornerOpen.visualize
                         anchors.fill: parent
                         sourceComponent: Rectangle {

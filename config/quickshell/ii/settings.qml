@@ -239,6 +239,8 @@ ApplicationWindow {
                     id: pageLoader
                     anchors.fill: parent
                     opacity: 1.0
+                    asynchronous: true
+                    visible: status == Loader.Ready || opacity > 0
 
                     active: Config.ready
                     Component.onCompleted: {

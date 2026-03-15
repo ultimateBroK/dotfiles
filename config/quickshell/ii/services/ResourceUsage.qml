@@ -70,35 +70,55 @@ Singleton {
     property list<real> swapUsageHistory: []
     property list<real> gpuUsageHistory: []
 
+    // Adaptive polling interval based on visibility
+    readonly property int adaptiveInterval: {
+        if (!root.active) return 10000  // 10s when not visible
+        if (overlayResourcesEnabled) return Config.options?.resources?.updateInterval ?? 1000
+        return Config.options?.resources?.updateInterval ?? 3000
+    }
+
     function kbToGbString(kb) {
         return (kb / (1024 * 1024)).toFixed(1) + " GB";
     }
 
     function updateMemoryUsageHistory() {
-        // Use slice instead of spread operator for better performance
-        memoryUsageHistory = memoryUsageHistory.slice().concat([memoryUsedPercentage])
-        if (memoryUsageHistory.length > historyLength) {
-            memoryUsageHistory = memoryUsageHistory.slice(-historyLength)
+        // Optimized: push and truncate instead of slice+concat
+        const newHistory = memoryUsageHistory
+        newHistory.push(memoryUsedPercentage)
+        if (newHistory.length > historyLength) {
+            memoryUsageHistory = newHistory.slice(-historyLength)
+        } else {
+            memoryUsageHistory = newHistory
         }
     }
     function updateSwapUsageHistory() {
-        // Use slice instead of spread operator for better performance
-        swapUsageHistory = swapUsageHistory.slice().concat([swapUsedPercentage])
-        if (swapUsageHistory.length > historyLength) {
-            swapUsageHistory = swapUsageHistory.slice(-historyLength)
+        // Optimized: push and truncate instead of slice+concat
+        const newHistory = swapUsageHistory
+        newHistory.push(swapUsedPercentage)
+        if (newHistory.length > historyLength) {
+            swapUsageHistory = newHistory.slice(-historyLength)
+        } else {
+            swapUsageHistory = newHistory
         }
     }
     function updateCpuUsageHistory() {
-        // Use slice instead of spread operator for better performance
-        cpuUsageHistory = cpuUsageHistory.slice().concat([cpuUsage])
-        if (cpuUsageHistory.length > historyLength) {
-            cpuUsageHistory = cpuUsageHistory.slice(-historyLength)
+        // Optimized: push and truncate instead of slice+concat
+        const newHistory = cpuUsageHistory
+        newHistory.push(cpuUsage)
+        if (newHistory.length > historyLength) {
+            cpuUsageHistory = newHistory.slice(-historyLength)
+        } else {
+            cpuUsageHistory = newHistory
         }
     }
     function updateGpuUsageHistory() {
-        gpuUsageHistory = gpuUsageHistory.slice().concat([gpuUsage])
-        if (gpuUsageHistory.length > historyLength) {
-            gpuUsageHistory = gpuUsageHistory.slice(-historyLength)
+        // Optimized: push and truncate instead of slice+concat
+        const newHistory = gpuUsageHistory
+        newHistory.push(gpuUsage)
+        if (newHistory.length > historyLength) {
+            gpuUsageHistory = newHistory.slice(-historyLength)
+        } else {
+            gpuUsageHistory = newHistory
         }
     }
     function updateHistories() {
@@ -229,7 +249,7 @@ Singleton {
     }
 
 	Timer {
-		interval: Config.options?.resources?.updateInterval ?? 3000
+		interval: root.adaptiveInterval
         running: root.active
         repeat: true
 		onTriggered: {

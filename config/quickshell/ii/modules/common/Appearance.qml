@@ -231,15 +231,18 @@ Singleton {
     }
 
     colors: QtObject {
-        property color colSubtext: m3colors.m3outline
+        property color colSubtext: m3colors.m3outline ?? "#948f94"
         
         // Base layer0 with scheme-aware primary mixing and mode-aware adjustments
+        // Added null checks and default values for binding safety
         property color colLayer0Base: {
-            var bg = ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency);
+            // Safe default if m3colors not ready
+            if (!m3colors.m3background) return "#141313"
+            var bg = ColorUtils.transparentize(m3colors.m3background, root.backgroundTransparency ?? 0);
             // Keep the base surface closer to pure background in light mode to avoid "tint wash".
-            var mixRatio = Config.options.appearance.extraBackgroundTint ? (0.99 - root.schemePrimaryMix) : (1.0 - root.schemePrimaryMix);
+            var mixRatio = Config?.options?.appearance?.extraBackgroundTint ? (0.99 - root.schemePrimaryMix) : (1.0 - root.schemePrimaryMix);
             if (!root.isDarkMode) mixRatio = Math.max(mixRatio, 0.94);
-            var mixed = ColorUtils.mix(bg, m3colors.m3primary, mixRatio);
+            var mixed = ColorUtils.mix(bg, m3colors.m3primary ?? "#cbc4cb", mixRatio);
             
             // Apply lightness adjustment for light mode
             if (root.schemeLightnessAdjust !== 1.0) {
@@ -250,6 +253,8 @@ Singleton {
             return mixed;
         }
         property color colLayer0: {
+            // Safe default
+            if (!colLayer0Base) return "#141313"
             if (root.schemeSaturationBoost === 0.0) {
                 // Monochrome: desaturate completely
                 var base = Qt.color(colLayer0Base);
@@ -264,6 +269,8 @@ Singleton {
             return colLayer0Base;
         }
         property color colOnLayer0: {
+            // Safe default
+            if (!m3colors.m3onBackground) return "#e6e1e1"
             if (root.schemeContrastBoost !== 1.0) {
                 var base = Qt.color(m3colors.m3onBackground);
                 var adjusted = Qt.hsla(base.hslHue, base.hslSaturation, Math.min(1.0, base.hslLightness * root.schemeContrastBoost), base.a);
@@ -274,8 +281,8 @@ Singleton {
         property color colLayer0Hover: {
             var mixRatio = 0.9 * root.schemeContrastBoost;
             return ColorUtils.transparentize(
-                ColorUtils.mix(colLayer0, colOnLayer0, Math.min(0.95, mixRatio)),
-                root.contentTransparency
+                ColorUtils.mix(colLayer0 ?? "#141313", colOnLayer0 ?? "#e6e1e1", Math.min(0.95, mixRatio)),
+                root.contentTransparency ?? 0
             );
         }
         property color colLayer0Active: {
@@ -581,6 +588,11 @@ Singleton {
                     easing.type: root.animation.elementMoveFast.type
                     easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
+            // Simplified animation for non-critical UI elements (better performance)
+            property Component numberAnimationSimple: Component { NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutQuad  // Simpler calculation than BezierSpline
+            }}
         }
 
         property QtObject elementResize: QtObject {
@@ -593,6 +605,13 @@ Singleton {
                     duration: root.animation.elementResize.duration
                     easing.type: root.animation.elementResize.type
                     easing.bezierCurve: root.animation.elementResize.bezierCurve
+                }
+            }
+            // Simplified animation for non-critical resize operations
+            property Component numberAnimationSimple: Component {
+                NumberAnimation {
+                    duration: 250
+                    easing.type: Easing.OutQuad
                 }
             }
         }

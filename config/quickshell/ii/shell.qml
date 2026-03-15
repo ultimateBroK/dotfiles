@@ -4,6 +4,15 @@
 //@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
 //@ pragma Env QT_QUICK_ANTIALIASING=1
 
+// Performance optimization environment variables
+//@ pragma Env QSG_RENDER_LOOP=threaded
+//@ pragma Env QSG_ATLAS_SIZE_LIMIT=256
+//@ pragma Env QT_ENABLE_GLYPH_CACHE_WORKAROUND=1
+
+// Debug environment variables (uncomment for profiling)
+//@ pragma Env QSG_RENDERER_DEBUG=render
+//@ pragma Env QSG_RENDER_TIMING=1
+
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 
@@ -68,17 +77,23 @@ ShellRoot {
 
         root._startupLog("Event-driven deferred startup triggered")
         
-        const services = [
+        // Critical services - load immediately
+        const criticalServices = [
             { name: "Hyprsunset", action: () => Hyprsunset.load() },
-            { name: "FirstRunExperience", action: () => FirstRunExperience.load() },
             { name: "ConflictKiller", action: () => ConflictKiller.load() },
-            { name: "Cliphist", action: () => Cliphist.refresh() },
+            { name: "Cliphist", action: () => Cliphist.refresh() }
+        ]
+
+        // Non-critical services - load after delay
+        const deferredServices = [
+            { name: "FirstRunExperience", action: () => FirstRunExperience.load() },
             { name: "Wallpapers", action: () => Wallpapers.load() },
             { name: "Updates", action: () => Updates.load() },
             { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } }
         ]
 
-        for (const service of services) {
+        // Load critical services immediately
+        for (const service of criticalServices) {
             try {
                 service.action()
             } catch(e) {
@@ -86,7 +101,36 @@ ShellRoot {
             }
         }
         
-        root._startupLog("Deferred startup finished scheduling loads")
+        // Load deferred services after 2 seconds
+        Qt.callLater(() => {
+            Qt.setTimeout(() => {
+                for (const service of deferredServices) {
+                    try {
+                        service.action()
+                    } catch(e) {
+                        console.error(`${service.name} initialization failed:`, e)
+                    }
+                }
+                root._startupLog("Deferred startup finished")
+            }, 2000)
+        })
+        
+        root._startupLog("Critical services loaded; deferred services scheduled")
+    }
+
+    // Periodic memory cleanup timer
+    Timer {
+        id: memoryCleanupTimer
+        interval: 60000  // 1 minute
+        running: true
+        repeat: true
+        onTriggered: {
+            // Only run GC if no user activity
+            if (!GlobalStates.sidebarLeftOpen && !GlobalStates.sidebarRightOpen 
+                && !GlobalStates.mediaControlsOpen && !GlobalStates.overlayOpen) {
+                gc()
+            }
+        }
     }
 
     Connections {

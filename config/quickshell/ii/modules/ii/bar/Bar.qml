@@ -115,6 +115,11 @@ Scope {
                         id: barContent
                         
                         implicitHeight: Appearance.sizes.barHeight
+                        
+                        // Layer caching for static bar content (only when not animating)
+                        layer.enabled: !Config?.options.bar.autoHide.enable
+                        layer.smooth: true
+                        
                         anchors {
                             right: parent.right
                             left: parent.left
