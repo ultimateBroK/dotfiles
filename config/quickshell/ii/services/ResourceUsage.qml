@@ -64,7 +64,7 @@ Singleton {
     property string maxAvailableCpuString: "--"
     property string maxAvailableGpuString: "--"
 
-    readonly property int historyLength: Config?.options.resources.historyLength ?? 60
+    readonly property int historyLength: Config?.options?.resources?.historyLength ?? 60
     property list<real> cpuUsageHistory: []
     property list<real> memoryUsageHistory: []
     property list<real> swapUsageHistory: []
@@ -73,8 +73,8 @@ Singleton {
     // Adaptive polling interval based on visibility
     readonly property int adaptiveInterval: {
         if (!root.active) return 10000  // 10s when not visible
-        if (overlayResourcesEnabled) return Config.options?.resources?.updateInterval ?? 1000
-        return Config.options?.resources?.updateInterval ?? 3000
+        if (overlayResourcesEnabled) return Config?.options?.resources?.updateInterval ?? 1000
+        return Config?.options?.resources?.updateInterval ?? 3000
     }
 
     function kbToGbString(kb) {
@@ -83,7 +83,7 @@ Singleton {
 
     function updateMemoryUsageHistory() {
         // Optimized: push and truncate instead of slice+concat
-        const newHistory = memoryUsageHistory
+        var newHistory = memoryUsageHistory.slice()
         newHistory.push(memoryUsedPercentage)
         if (newHistory.length > historyLength) {
             memoryUsageHistory = newHistory.slice(-historyLength)
@@ -93,7 +93,7 @@ Singleton {
     }
     function updateSwapUsageHistory() {
         // Optimized: push and truncate instead of slice+concat
-        const newHistory = swapUsageHistory
+        var newHistory = swapUsageHistory.slice()
         newHistory.push(swapUsedPercentage)
         if (newHistory.length > historyLength) {
             swapUsageHistory = newHistory.slice(-historyLength)
@@ -103,7 +103,7 @@ Singleton {
     }
     function updateCpuUsageHistory() {
         // Optimized: push and truncate instead of slice+concat
-        const newHistory = cpuUsageHistory
+        var newHistory = cpuUsageHistory.slice()
         newHistory.push(cpuUsage)
         if (newHistory.length > historyLength) {
             cpuUsageHistory = newHistory.slice(-historyLength)
@@ -113,7 +113,7 @@ Singleton {
     }
     function updateGpuUsageHistory() {
         // Optimized: push and truncate instead of slice+concat
-        const newHistory = gpuUsageHistory
+        var newHistory = gpuUsageHistory.slice()
         newHistory.push(gpuUsage)
         if (newHistory.length > historyLength) {
             gpuUsageHistory = newHistory.slice(-historyLength)
@@ -175,7 +175,7 @@ Singleton {
         if (!root.needCpu) return;
         if (cpuTempProc.running) return;
         const now = Date.now();
-        const minInterval = Math.max(root.cpuTempMinIntervalMs, Config.options?.resources?.updateInterval ?? 3000);
+        const minInterval = Math.max(root.cpuTempMinIntervalMs, Config?.options?.resources?.updateInterval ?? 3000);
         if (now - root._lastCpuTempPollMs < minInterval) return;
         root._lastCpuTempPollMs = now;
         cpuTempProc.running = true;
@@ -186,7 +186,7 @@ Singleton {
         if (!root.needGpu) return;
         if (gpuProc.running) return;
         const now = Date.now();
-        const minInterval = Math.max(root.gpuMinIntervalMs, Config.options?.resources?.updateInterval ?? 3000);
+        const minInterval = Math.max(root.gpuMinIntervalMs, Config?.options?.resources?.updateInterval ?? 3000);
         if (now - root._lastGpuPollMs < minInterval) return;
         root._lastGpuPollMs = now;
         gpuProc.running = true;

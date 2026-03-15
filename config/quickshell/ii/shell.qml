@@ -9,9 +9,6 @@
 //@ pragma Env QSG_ATLAS_SIZE_LIMIT=256
 //@ pragma Env QT_ENABLE_GLYPH_CACHE_WORKAROUND=1
 
-// Debug environment variables (uncomment for profiling)
-//@ pragma Env QSG_RENDERER_DEBUG=render
-//@ pragma Env QSG_RENDER_TIMING=1
 
 // Adjust this to make the shell smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
