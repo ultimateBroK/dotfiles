@@ -19,6 +19,7 @@ Scope {
     property string currentText: ""
     property bool unlockInProgress: false
     property bool showFailure: false
+    // No fingerprint reader: keep false; fingerprint block below is commented out
     property bool fingerprintsConfigured: false
     property var targetAction: LockContext.ActionEnum.Unlock
 
@@ -38,7 +39,7 @@ Scope {
         root.resetTargetAction();
         root.clearText();
         root.unlockInProgress = false;
-        stopFingerPam();
+        // stopFingerPam();
     }
 
     Timer {
@@ -63,36 +64,37 @@ Scope {
         pam.start();
     }
 
-    function tryFingerUnlock() {
-        if (root.fingerprintsConfigured) {
-            fingerPam.start();
-        }
-    }
+    // --- Fingerprint (disabled: no reader on this machine) ---
+    // function tryFingerUnlock() {
+    //     if (root.fingerprintsConfigured) {
+    //         fingerPam.start();
+    //     }
+    // }
+    function tryFingerUnlock() { }
 
-    function stopFingerPam() {
-        if (fingerPam.running) {
-            fingerPam.abort();
-        }
-    }
+    // function stopFingerPam() {
+    //     if (fingerPam.running) {
+    //         fingerPam.abort();
+    //     }
+    // }
 
-    Process {
-        id: fingerprintCheckProc
-        running: true
-        command: ["bash", "-c", "fprintd-list $(whoami)"]
-        stdout: StdioCollector {
-            id: fingerprintOutputCollector
-            onStreamFinished: {
-                root.fingerprintsConfigured = fingerprintOutputCollector.text.includes("Fingerprints for user");
-            }
-        }
-        onExited: (exitCode, exitStatus) => {
-            if (exitCode !== 0) {
-                // console.warn("[LockContext] fprintd-list command exited with error:", exitCode, exitStatus);
-                root.fingerprintsConfigured = false;
-            }
-        }
-    }
-    
+    // Process {
+    //     id: fingerprintCheckProc
+    //     running: true
+    //     command: ["bash", "-c", "fprintd-list $(whoami)"]
+    //     stdout: StdioCollector {
+    //         id: fingerprintOutputCollector
+    //         onStreamFinished: {
+    //             root.fingerprintsConfigured = fingerprintOutputCollector.text.includes("Fingerprints for user");
+    //         }
+    //     }
+    //     onExited: (exitCode, exitStatus) => {
+    //         if (exitCode !== 0) {
+    //             root.fingerprintsConfigured = false;
+    //         }
+    //     }
+    // }
+
     PamContext {
         id: pam
 
@@ -112,7 +114,7 @@ Scope {
         onCompleted: result => {
             if (result == PamResult.Success) {
                 root.unlocked(root.targetAction);
-                stopFingerPam();
+                // stopFingerPam();
             } else {
                 root.clearText();
                 root.unlockInProgress = false;
@@ -122,19 +124,17 @@ Scope {
         }
     }
 
-    PamContext {
-        id: fingerPam
-
-        configDirectory: "pam"
-        config: "fprintd.conf"
-
-        onCompleted: result => {
-            if (result == PamResult.Success) {
-                root.unlocked(root.targetAction);
-                stopFingerPam();
-            } else if (result == PamResult.Error) { // if timeout or etc..
-                tryFingerUnlock()
-            }
-        }
-    }
+    // PamContext {
+    //     id: fingerPam
+    //     configDirectory: "pam"
+    //     config: "fprintd.conf"
+    //     onCompleted: result => {
+    //         if (result == PamResult.Success) {
+    //             root.unlocked(root.targetAction);
+    //             stopFingerPam();
+    //         } else if (result == PamResult.Error) {
+    //             tryFingerUnlock()
+    //         }
+    //     }
+    // }
 }
