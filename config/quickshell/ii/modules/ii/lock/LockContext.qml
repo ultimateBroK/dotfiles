@@ -96,6 +96,11 @@ Scope {
     PamContext {
         id: pam
 
+        // Use a minimal pam_unix stack (see quickshell-examples/lockscreen). The system
+        // default (/etc/pam.d/login) can include modules that misbehave outside a real TTY.
+        configDirectory: "pam"
+        config: "password.conf"
+
         // pam_unix will ask for a response for the password prompt
         onPamMessage: {
             if (this.responseRequired) {
