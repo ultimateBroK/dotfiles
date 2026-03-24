@@ -53,8 +53,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": null,
+            "contentTransparency": null,
             "enable": true
         },
         "wallpaperTheming": {
@@ -265,7 +265,8 @@
             "code",
             "code-insiders",
             "cursor",
-            "qoder"
+            "qoder",
+            "trae"
         ],
         "pinnedOnStartup": false
     },
@@ -298,6 +299,9 @@
         "deadPixelWorkaround": {
             "enable": false
         },
+        "mouse": {
+            "sensitivity": 0
+        },
         "scrolling": {
             "fasterTouchpadScroll": false,
             "mouseScrollDeltaThreshold": 120,
@@ -318,7 +322,7 @@
             "enable": false
         },
         "night": {
-            "automatic": true,
+            "automatic": false,
             "colorTemperature": 4574,
             "from": "19:00",
             "to": "06:30"

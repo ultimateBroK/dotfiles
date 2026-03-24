@@ -358,6 +358,10 @@ Singleton {
                     property int mouseScrollFactor: 120
                     property int touchpadScrollFactor: 450
                 }
+                // Hyprland input:sensitivity; range -1.0..1.0, 0 = default
+                property JsonObject mouse: JsonObject {
+                    property real sensitivity: 0
+                }
                 property JsonObject deadPixelWorkaround: JsonObject { // Hyprland leaves out 1 pixel on the right for interactions
                     property bool enable: false
                 }

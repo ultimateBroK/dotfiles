@@ -534,6 +534,36 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "mouse"
+        title: Translation.tr("Mouse")
+
+        ConfigSpinBox {
+            icon: "adjust"
+            text: Translation.tr("Pointer sensitivity")
+            value: Math.round((Config.options.interactions.mouse.sensitivity ?? 0) * 100)
+            from: -100
+            to: 100
+            stepSize: 5
+            onValueChanged: {
+                const s = value / 100;
+                Config.options.interactions.mouse.sensitivity = s;
+                Quickshell.execDetached(["hyprctl", "keyword", "input:sensitivity", String(s)]);
+            }
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton
+                propagateComposedEvents: true
+                StyledToolTip {
+                    extraVisibleCondition: false
+                    alternativeVisibleCondition: parent.containsMouse
+                    text: Translation.tr("Hyprland input:sensitivity. 0 = default; negative = slower; positive = faster.")
+                }
+            }
+        }
+    }
+
+    ContentSection {
         icon: "screenshot_monitor"
         title: Translation.tr("Bar & screen")
 

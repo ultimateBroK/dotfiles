@@ -79,7 +79,8 @@ ShellRoot {
             { name: "Hyprsunset", action: () => Hyprsunset.load() },
             { name: "ConflictKiller", action: () => ConflictKiller.load() },
             { name: "Cliphist", action: () => Cliphist.refresh() },
-            { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } }
+            { name: "PowerProfileHyprlandSync", action: () => { PowerProfileHyprlandSync; } },
+            { name: "MouseSensitivityHyprlandSync", action: () => { MouseSensitivityHyprlandSync; } }
         ]
 
         // Non-critical services - load after delay
