@@ -7,7 +7,6 @@ com.github.neithern.g4music
 com.github.taiko2k.tauonmb
 com.github.tchx84.Flatseal
 com.github.unrud.VideoDownloader
-com.google.Chrome
 com.jeffser.Alpaca
 com.mattjakeman.ExtensionManager
 com.rafaelmardojai.Blanket

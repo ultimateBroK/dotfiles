@@ -53,8 +53,8 @@
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": null,
-            "contentTransparency": null,
+            "backgroundTransparency": 0.10052961742241386,
+            "contentTransparency": 0.3338548465733869,
             "enable": true
         },
         "wallpaperTheming": {
@@ -100,7 +100,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.config/hypr/custom/scripts/mpvpaper_thumbnails/The Matrix Raining Green Code Backdrop for OBS - Teams, Zoom calls in 4k - link to 45mins ver below.mkv.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/grid-green-6016x6016-10269.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/storm-clouds-blue-imac-pro-stock-5k-5120x2880-4025.jpg",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -266,7 +266,8 @@
             "code-insiders",
             "cursor",
             "qoder",
-            "trae"
+            "trae",
+            "windsurf"
         ],
         "pinnedOnStartup": false
     },
@@ -300,7 +301,7 @@
             "enable": false
         },
         "mouse": {
-            "sensitivity": 0
+            "sensitivity": 0.2
         },
         "scrolling": {
             "fasterTouchpadScroll": false,
@@ -322,7 +323,7 @@
             "enable": false
         },
         "night": {
-            "automatic": false,
+            "automatic": true,
             "colorTemperature": 4574,
             "from": "19:00",
             "to": "06:30"

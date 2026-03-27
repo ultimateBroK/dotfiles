@@ -9,6 +9,7 @@ alsa-utils
 amd-ucode
 ampcode
 android-sdk-platform-tools
+antigravity
 antigravity-tools-bin
 anytype-bin
 arch-wiki-docs
@@ -22,6 +23,7 @@ baobab
 base
 base-devel
 bash-completion
+beaver-notes-bin
 binance
 bind
 blanket
@@ -58,6 +60,7 @@ cachy-update
 calf
 cantarell-fonts
 chwd
+cline-cli
 clinfo
 cloc
 cloudflare-warp-nox-bin
@@ -130,6 +133,7 @@ ghostscript
 ghostty
 git
 github-cli
+github-copilot-cli
 github-desktop-bin
 glances
 glew1.10
@@ -170,7 +174,7 @@ gnome-user-share
 gnome-weather
 gnu-free-fonts
 goofcord-bin
-google-antigravity-bin
+google-chrome
 gpsd
 gpu-screen-recorder-gtk
 grilo-plugins
@@ -232,8 +236,7 @@ jre21-openjdk
 jre8-openjdk
 julia
 kdeconnect
-kiro-cli
-kiro-ide
+kilo-bin
 lazydocker
 lazygit
 less
@@ -286,6 +289,7 @@ linux-cachyos-headers
 linux-cachyos-lts
 linux-cachyos-lts-headers
 linux-firmware
+llmfit
 lmstudio-bin
 logrotate
 logseq-desktop
@@ -329,6 +333,7 @@ neofetch
 neovide
 neovim
 netctl
+network-manager-applet
 networkmanager-openvpn
 nfs-utils
 nilfs-utils
@@ -363,11 +368,13 @@ otf-monaspace-nerdfonts
 pacman-contrib
 pandoc-cli
 papers
+partitionmanager
 paru
 pear-desktop-bin
 perl
 perplexity
 php
+pi-coding-agent
 pipewire-alsa
 pixi
 pkgfile
@@ -444,7 +451,7 @@ qt6-scxml
 qt6-serialbus
 qt6-serialport
 quickshell-git
-qwen-code
+qwen-code-bin
 radeontop
 rebuild-detector
 reflector
@@ -473,13 +480,17 @@ spicetify-cli
 splix
 spotify
 stacer
+steam
 sudo
 supergfxctl
+surge
 sushi
 sysfsutils
 system-config-printer
+tabiew
 tecla
 tenere-bin
+testdisk
 texinfo
 texlive-basic
 texlive-bibtexextra
@@ -508,6 +519,7 @@ tgpt
 tigervnc
 totem
 tradingview-bin-latest
+trae-bin
 tree
 ttf-bitstream-vera
 ttf-dejavu
@@ -519,6 +531,7 @@ ttyper
 tui-journal
 typst
 ubuntu-wallpapers
+udiskie
 ufw
 unrar
 unzip
@@ -538,6 +551,7 @@ visualvm
 vkd3d
 vlc
 vlc-plugins-all
+vsce
 vulkan-radeon
 wakafetch-git
 warp-terminal
@@ -575,3 +589,4 @@ yt-dlp
 zam-plugins
 zed
 zen-browser-bin
+z-library-bin
