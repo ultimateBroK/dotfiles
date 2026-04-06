@@ -106,7 +106,7 @@ $character"""
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[   ](bold fg:blue)"
+success_symbol = "[   ](bold fg:#50C878)"
 error_symbol = "[   ](bold fg:red)"
 
 # Disable the package module, hiding it from the prompt completely
@@ -114,11 +114,11 @@ error_symbol = "[   ](bold fg:red)"
 disabled = true
 
 [git_branch]
-style = "bg: cyan"
+style = "bg:#50C878"
 symbol = "󰘬"
 truncation_length = 12
 truncation_symbol = ""
-format = "󰜥 [](bold fg:cyan)[$symbol $branch(:$remote_branch)](fg:black bg:cyan)[ ](bold fg:cyan)"
+format = "󰜥 [](bold fg:#50C878)[$symbol $branch(:$remote_branch)](fg:black bg:#50C878)[ ](bold fg:#50C878)"
 
 [git_commit]
 commit_hash_length = 4
@@ -142,7 +142,7 @@ deleted = " 🗑 "
 
 [hostname]
 ssh_only = false
-format =  "[•$hostname](bg:cyan bold fg:black)[](bold fg:cyan)"
+format =  "[•$hostname](bg:#50C878 bold fg:black)[](bold fg:#50C878)"
 trim_at = ".companyname.com"
 disabled = false
 
@@ -161,19 +161,19 @@ format = '🕙[\[ $time \]]($style) '
 time_format = "%T"
 
 [username]
-style_user = "bold bg:cyan fg:black"
+style_user = "bold bg:#50C878 fg:black"
 style_root = "red bold"
-format = "[ ](bold fg:cyan)[$user]($style)"
+format = "[ ](bold fg:#50C878)[$user]($style)"
 disabled = false
 show_always = true
 
 [directory]
 home_symbol = "  "
 read_only = "  "
-style = "bg:green fg:black"
+style = "bg:#50C878 fg:black"
 truncation_length = 6
 truncation_symbol = " ••/"
-format = '[ ](bold fg:green)[󰉋 $path]($style)[ ](bold fg:green)'
+format = '[ ](bold fg:#50C878)[󰉋 $path]($style)[ ](bold fg:#50C878)'
 
 [directory.substitutions]
 "Desktop" = "  "
@@ -193,100 +193,132 @@ disabled = false
 
 [aws]
 symbol = " "
+style = "bold yellow"
 
 [buf]
 symbol = " "
+style = "bold blue"
 
 [bun]
 symbol = " "
+style = "bold red"
 
 [c]
 symbol = " "
+style = "149 bold"
 
 [cpp]
 symbol = " "
+style = "149 bold"
 
 [cmake]
 symbol = " "
+style = "bold blue"
 
 [conda]
 symbol = " "
+style = "green bold"
 
 [crystal]
 symbol = " "
+style = "bold red"
 
 [dart]
 symbol = " "
+style = "bold blue"
 
 [deno]
 symbol = " "
+style = "green bold"
 
 [docker_context]
 symbol = " "
+style = "blue bold"
 
 [elixir]
 symbol = " "
+style = "bold purple"
 
 [elm]
 symbol = " "
+style = "cyan bold"
 
 [fennel]
 symbol = " "
+style = "bold green"
 
 [fortran]
 symbol = " "
+style = "bold purple"
 
 [fossil_branch]
 symbol = " "
+style = "bold purple"
 
 [gcloud]
 symbol = " "
+style = "bold blue"
 
 [golang]
 symbol = " "
+style = "bold cyan"
 
 [gradle]
 symbol = " "
+style = "bold bright-cyan"
 
 [guix_shell]
 symbol = " "
+style = "yellow bold"
 
 [haskell]
 symbol = " "
+style = "bold purple"
 
 [haxe]
 symbol = " "
+style = "bold fg:202"
 
 [hg_branch]
 symbol = " "
+style = "bold purple"
 
 
 [java]
 symbol = " "
+style = "red dimmed"
 
 [julia]
 symbol = " "
+style = "bold purple"
 
 [kotlin]
 symbol = " "
+style = "bold blue"
 
 [lua]
 symbol = " "
+style = "bold blue"
 
 [meson]
 symbol = "󰔷 "
+style = "blue bold"
 
 [nim]
 symbol = "󰆥 "
+style = "yellow bold"
 
 [nix_shell]
 symbol = " "
+style = "bold blue"
 
 [nodejs]
 symbol = " "
+style = "bold green"
 
 [ocaml]
 symbol = " "
+style = "bold yellow"
 
 [os.symbols]
 Alpaquita = " "
@@ -341,36 +373,48 @@ Zorin = " "
 
 [perl]
 symbol = " "
+style = "149 bold"
 
 [php]
 symbol = " "
+style = "147 bold"
 
 [pijul_channel]
 symbol = " "
+style = "bold purple"
 
 [python]
 symbol = " "
+style = "yellow bold"
 
 [rlang]
 symbol = "󰟔 "
+style = "blue bold"
 
 [ruby]
 symbol = " "
+style = "bold red"
 
 [rust]
 symbol = "󱘗 "
+style = "bold red"
 
 [scala]
 symbol = " "
+style = "red bold"
 
 [status]
 symbol = " "
+style = "bold red"
 
 [swift]
 symbol = " "
+style = "bold 202"
 
 [xmake]
 symbol = " "
+style = "bold green"
 
 [zig]
 symbol = " "
+style = "bold yellow"
