@@ -113,6 +113,11 @@ error_symbol = "[   ](bold fg:red)"
 [package]
 disabled = true
 
+[sudo]
+style = 'bold bright-green'
+symbol = '👩‍💻 '
+disabled = false
+
 [git_branch]
 style = "bg:#50C878"
 symbol = "󰘬"
@@ -158,6 +163,7 @@ style = "bold dimmed green"
 [time]
 disabled = true
 format = '🕙[\[ $time \]]($style) '
+style = 'bold bright-yellow'
 time_format = "%T"
 
 [username]
@@ -283,7 +289,6 @@ style = "bold fg:214"
 symbol = " "
 style = "bold bright-purple"
 
-
 [java]
 symbol = " "
 style = "bold bright-red"
@@ -383,6 +388,11 @@ style = "bold bright-purple"
 symbol = " "
 style = "bold bright-purple"
 
+[pixi]
+format = 'via [$symbol($version )(\($environment\) )]($style)'
+symbol = '🧚 '
+style = 'bold bright-yellow'
+
 [python]
 symbol = " "
 style = "bold bright-yellow"
@@ -402,6 +412,12 @@ style = "bold bright-red"
 [scala]
 symbol = " "
 style = "bold bright-red"
+
+[solidity]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${major}.${minor}.${patch}'
+symbol = ' '
+style = 'bold bright-blue'
 
 [status]
 symbol = " "
