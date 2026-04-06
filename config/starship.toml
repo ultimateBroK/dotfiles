@@ -192,7 +192,7 @@ format = '[ ](bold fg:#50C878)[󰉋 $path]($style)[ ](bold fg:#50C878)'
 
 [cmd_duration]
 min_time = 0
-format = '[](bold fg:yellow)[󰪢 $duration](bold bg:yellow fg:black)[](bold fg:yellow)'
+format = '[](bold fg:bright-yellow)[󰪢 $duration](bold bg:bright-yellow fg:black)[](bold fg:bright-yellow)'
 
 [os]
 disabled = false
