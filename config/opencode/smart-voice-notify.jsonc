@@ -1,0 +1,551 @@
+{
+    // ============================================================
+    // OpenCode Smart Voice Notify - Configuration
+    // ============================================================
+    // 
+    // This file was auto-generated with all available options.
+    // Customize the settings below to your preference.
+    // 
+    // Sound files have been automatically copied to:
+    //   ~/.config/opencode/assets/
+    //
+    // Documentation: https://github.com/MasuRii/opencode-smart-voice-notify
+    //
+    // ============================================================
+
+    // Internal version tracking - DO NOT REMOVE
+    "_configVersion": "1.3.3",
+
+    // ============================================================
+    // PLUGIN ENABLE/DISABLE
+    // ============================================================
+    // Master switch to enable or disable the entire plugin.
+    // Set to false to disable all notifications without uninstalling.
+    "enabled": true,
+
+    // ============================================================
+    // GRANULAR NOTIFICATION CONTROL
+    // ============================================================
+    // Enable or disable notifications for specific event types.
+    // If disabled, no sound, TTS, desktop, or webhook notifications
+    // will be sent for that specific category.
+    "enableIdleNotification": true,       // Agent finished work
+    "enablePermissionNotification": true, // Agent needs permission
+    "enableQuestionNotification": true,     // Agent asks a question
+    "enableErrorNotification": true,       // Agent encountered an error
+
+    // Enable or disable reminders for specific event types.
+    // If disabled, the initial notification will still fire, but no
+    // follow-up TTS reminders will be scheduled.
+    "enableIdleReminder": true,
+    "enablePermissionReminder": true,
+    "enableQuestionReminder": true,
+    "enableErrorReminder": true,
+
+    // ============================================================
+    // NOTIFICATION MODE SETTINGS (Smart Notification System)
+    // ============================================================
+    // Controls how notifications are delivered:
+    //   'sound-first' - Play sound immediately, TTS reminder after delay (RECOMMENDED)
+    //   'tts-first'   - Speak TTS immediately, no sound
+    //   'both'        - Play sound AND speak TTS immediately
+    //   'sound-only'  - Only play sound, no TTS at all
+    "notificationMode": "both",
+    
+    // ============================================================
+    // TTS REMINDER SETTINGS (When user doesn't respond to sound)
+    // ============================================================
+    
+    // Enable TTS reminder if user doesn't respond after sound notification
+    "enableTTSReminder": true,
+    
+    // Delay (in seconds) before TTS reminder fires
+    // Set globally or per-notification type
+    "ttsReminderDelaySeconds": 30,         // Global default
+    "idleReminderDelaySeconds": 30,        // For task completion notifications
+    "permissionReminderDelaySeconds": 20,  // For permission requests (more urgent)
+    
+    // Follow-up reminders if user STILL doesn't respond after first TTS
+    "enableFollowUpReminders": true,
+    "maxFollowUpReminders": 3,              // Max number of follow-up TTS reminders
+    "reminderBackoffMultiplier": 1.5,       // Each follow-up waits longer (30s, 45s, 67s...)
+
+    // ============================================================
+    // TTS ENGINE SELECTION
+    // ============================================================
+    // 'openai'     - OpenAI-compatible TTS (Self-hosted/Cloud, e.g. Kokoro, LocalAI)
+    // 'elevenlabs' - Best quality, anime-like voices (requires API key, free tier: 10k chars/month)
+    // 'edge'       - Good quality neural voices (Python edge-tts CLI RECOMMENDED, with msedge-tts npm fallback)
+    // 'sapi'       - Windows built-in voices (free, offline, robotic)
+    "ttsEngine": "openai",
+    
+    // Enable TTS for notifications (falls back to sound files if TTS fails)
+    "enableTTS": true,
+    
+    // ============================================================
+    // ELEVENLABS SETTINGS (Best Quality - Anime-like Voices)
+    // ============================================================
+    // Get your API key from: https://elevenlabs.io/app/settings/api-keys
+    // Free tier: 10,000 characters/month
+    // 
+    // To use ElevenLabs:
+    // 1. Uncomment elevenLabsApiKey and add your key
+    // 2. Change ttsEngine above to "elevenlabs"
+    //
+    // "elevenLabsApiKey": "YOUR_API_KEY_HERE",
+    
+    // Voice ID - Recommended cute/anime-like voices:
+    //   'cgSgspJ2msm6clMCkdW9' - Jessica (Playful, Bright, Warm) - RECOMMENDED
+    //   'FGY2WhTYpPnrIDTdsKH5' - Laura (Enthusiast, Quirky)
+    //   'jsCqWAovK2LkecY7zXl4' - Freya (Expressive, Confident)
+    //   'EXAVITQu4vr4xnSDxMaL' - Sarah (Soft, Warm)
+    // Browse more at: https://elevenlabs.io/voice-library
+    "elevenLabsVoiceId": "cgSgspJ2msm6clMCkdW9",
+    
+    // Model: 'eleven_turbo_v2_5' (fast, good), 'eleven_multilingual_v2' (highest quality)
+    "elevenLabsModel": "eleven_turbo_v2_5",
+    
+    // Voice tuning (0.0 to 1.0)
+    "elevenLabsStability": 0.5,       // Lower = more expressive, Higher = more consistent
+    "elevenLabsSimilarity": 0.75,     // How closely to match the original voice
+    "elevenLabsStyle": 0.5,           // Style exaggeration (higher = more expressive)
+    
+    // ============================================================
+    // EDGE TTS SETTINGS (Free Neural Voices)
+    // ============================================================
+    // Uses Python edge-tts CLI (RECOMMENDED, pip install edge-tts) with automatic
+    // fallback to msedge-tts npm package if Python is not available.
+    
+    // Voice options (run 'edge-tts --list-voices' to see all):
+    //   'en-US-AnaNeural'   - Young, cute, cartoon-like (RECOMMENDED)
+    //   'en-US-JennyNeural' - Friendly, warm
+    //   'en-US-AriaNeural'  - Confident, clear
+    //   'en-GB-SoniaNeural' - British, friendly
+    //   'en-AU-NatashaNeural' - Australian, warm
+    "edgeVoice": "en-US-JennyNeural",
+    
+    // Pitch adjustment: +0Hz to +100Hz (higher = more anime-like)
+    "edgePitch": "+0Hz",
+    
+    // Speech rate: -50% to +100%
+    "edgeRate": "+10%",
+    
+    // ============================================================
+    // SAPI SETTINGS (Windows Built-in - Last Resort Fallback)
+    // ============================================================
+    
+    // Voice (run PowerShell to list all installed voices):
+    //   Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).GetInstalledVoices() | % { $_.VoiceInfo.Name }
+    //
+    // Common Windows voices:
+    //   'Microsoft Zira Desktop' - Female, US English
+    //   'Microsoft David Desktop' - Male, US English
+    //   'Microsoft Hazel Desktop' - Female, UK English
+    "sapiVoice": "Microsoft Zira Desktop",
+    
+    // Speech rate: -10 (slowest) to +10 (fastest), 0 is normal
+    "sapiRate": -1,
+    
+    // Pitch: 'x-low', 'low', 'medium', 'high', 'x-high'
+    "sapiPitch": "medium",
+    
+    // Volume: 'silent', 'x-soft', 'soft', 'medium', 'loud', 'x-loud'
+    "sapiVolume": "loud",
+    
+    // ============================================================
+    // OPENAI-COMPATIBLE TTS SETTINGS (Kokoro, LocalAI, OpenAI, etc.)
+    // ============================================================
+    // Any OpenAI-compatible /v1/audio/speech endpoint.
+    // Examples: Kokoro, OpenAI, LocalAI, Coqui, AllTalk, etc.
+    //
+    // To use OpenAI-compatible TTS:
+    // 1. Set ttsEngine above to "openai"
+    // 2. Set openaiTtsEndpoint to your server URL (without /v1/audio/speech)
+    // 3. Configure voice and model for your server
+    
+    // Base URL for your TTS server (e.g., "http://192.168.86.43:8880")
+    "openaiTtsEndpoint": "http://localhost:8880",
+    
+    // API key (leave empty if your server doesn't require auth)
+    "openaiTtsApiKey": "",
+    
+    // Model name (server-dependent, e.g., "tts-1", "kokoro", "xtts")
+    "openaiTtsModel": "kokoro",
+    
+    // Voice name (server-dependent)
+    // Kokoro voices: "af_heart", "af_bella", "am_adam", etc.
+    // OpenAI voices: "alloy", "echo", "fable", "onyx", "nova", "shimmer"
+    "openaiTtsVoice": "af_heart",
+    
+    // Audio format: "mp3", "opus", "aac", "flac", "wav", "pcm"
+    "openaiTtsFormat": "mp3",
+    
+    // Speech speed: 0.25 to 4.0 (1.0 = normal)
+    "openaiTtsSpeed": 1,
+    
+    // ============================================================
+    // INITIAL TTS MESSAGES (Used immediately or after sound)
+    // These are randomly selected each time for variety
+    // ============================================================
+    
+    // Messages when agent finishes work (task completion)
+    "idleTTSMessages": [
+        "All done! Your task has been completed successfully.",
+        "Hey there! I finished working on your request.",
+        "Task complete! Ready for your review whenever you are.",
+        "Good news! Everything is done and ready for you.",
+        "Finished! Let me know if you need anything else."
+    ],
+    
+    // Messages for permission requests
+    "permissionTTSMessages": [
+        "Attention please! I need your permission to continue.",
+        "Hey! Quick approval needed to proceed with the task.",
+        "Heads up! There is a permission request waiting for you.",
+        "Excuse me! I need your authorization before I can continue.",
+        "Permission required! Please review and approve when ready."
+    ],
+    
+    // Messages for MULTIPLE permission requests (use {count} placeholder)
+    // Used when several permissions arrive simultaneously
+    "permissionTTSMessagesMultiple": [
+        "Attention please! There are {count} permission requests waiting for your approval.",
+        "Hey! {count} permissions need your approval to continue.",
+        "Heads up! You have {count} pending permission requests.",
+        "Excuse me! I need your authorization for {count} different actions.",
+        "{count} permissions required! Please review and approve when ready."
+    ],
+
+    // ============================================================
+    // TTS REMINDER MESSAGES (More urgent - used after delay if no response)
+    // These are more personalized and urgent to get user attention
+    // ============================================================
+    
+    // Reminder messages when agent finished but user hasn't responded
+    "idleReminderTTSMessages": [
+        "Hey, are you still there? Your task has been waiting for review.",
+        "Just a gentle reminder - I finished your request a while ago!",
+        "Hello? I completed your task. Please take a look when you can.",
+        "Still waiting for you! The work is done and ready for review.",
+        "Knock knock! Your completed task is patiently waiting for you."
+    ],
+    
+    // Reminder messages when permission still needed
+    "permissionReminderTTSMessages": [
+        "Hey! I still need your permission to continue. Please respond!",
+        "Reminder: There is a pending permission request. I cannot proceed without you.",
+        "Hello? I am waiting for your approval. This is getting urgent!",
+        "Please check your screen! I really need your permission to move forward.",
+        "Still waiting for authorization! The task is on hold until you respond."
+    ],
+    
+    // Reminder messages for MULTIPLE permissions (use {count} placeholder)
+    "permissionReminderTTSMessagesMultiple": [
+        "Hey! I still need your approval for {count} permissions. Please respond!",
+        "Reminder: There are {count} pending permission requests. I cannot proceed without you.",
+        "Hello? I am waiting for your approval on {count} items. This is getting urgent!",
+        "Please check your screen! {count} permissions are waiting for your response.",
+        "Still waiting for authorization on {count} requests! The task is on hold."
+    ],
+    
+    // ============================================================
+    // PERMISSION BATCHING (Multiple permissions at once)
+    // ============================================================
+    // When multiple permissions arrive simultaneously, batch them into one notification
+    // This prevents overlapping sounds when 5+ permissions come at once
+    
+    // Batch window (ms) - how long to wait for more permissions before notifying
+    "permissionBatchWindowMs": 800,
+    
+    // ============================================================
+    // QUESTION TOOL SETTINGS (SDK v1.1.7+ - Agent asking user questions)
+    // ============================================================
+    // The "question" tool allows the LLM to ask users questions during execution.
+    // This is useful for gathering preferences, clarifying instructions, or getting
+    // decisions on implementation choices.
+    
+    // Messages when agent asks user a question
+    "questionTTSMessages": [
+        "Hey! I have a question for you. Please check your screen.",
+        "Attention! I need your input to continue.",
+        "Quick question! Please take a look when you have a moment.",
+        "I need some clarification. Could you please respond?",
+        "Question time! Your input is needed to proceed."
+    ],
+    
+    // Messages for MULTIPLE questions (use {count} placeholder)
+    "questionTTSMessagesMultiple": [
+        "Hey! I have {count} questions for you. Please check your screen.",
+        "Attention! I need your input on {count} items to continue.",
+        "{count} questions need your attention. Please take a look!",
+        "I need some clarifications. There are {count} questions waiting for you.",
+        "Question time! {count} questions need your response to proceed."
+    ],
+    
+    // Reminder messages for questions (more urgent - used after delay)
+    "questionReminderTTSMessages": [
+        "Hey! I am still waiting for your answer. Please check the questions!",
+        "Reminder: There is a question waiting for your response.",
+        "Hello? I need your input to continue. Please respond when you can.",
+        "Still waiting for your answer! The task is on hold.",
+        "Your input is needed! Please check the pending question."
+    ],
+    
+    // Reminder messages for MULTIPLE questions (use {count} placeholder)
+    "questionReminderTTSMessagesMultiple": [
+        "Hey! I am still waiting for answers to {count} questions. Please respond!",
+        "Reminder: There are {count} questions waiting for your response.",
+        "Hello? I need your input on {count} items. Please respond when you can.",
+        "Still waiting for your answers on {count} questions! The task is on hold.",
+        "Your input is needed! {count} questions are pending your response."
+    ],
+    
+    // Delay (in seconds) before question reminder fires
+    "questionReminderDelaySeconds": 25,
+    
+    // Question batch window (ms) - how long to wait for more questions before notifying
+    "questionBatchWindowMs": 800,
+    
+    // ============================================================
+    // ERROR NOTIFICATION SETTINGS (Session Errors)
+    // ============================================================
+    // Notify users when the agent encounters an error during execution.
+    // Error notifications use more urgent messaging to get user attention.
+    
+    // Messages when agent encounters an error
+    "errorTTSMessages": [
+        "Oops! Something went wrong. Please check for errors.",
+        "Alert! The agent encountered an error and needs your attention.",
+        "Error detected! Please review the issue when you can.",
+        "Houston, we have a problem! An error occurred during the task.",
+        "Heads up! There was an error that requires your attention."
+    ],
+    
+    // Messages for MULTIPLE errors (use {count} placeholder)
+    "errorTTSMessagesMultiple": [
+        "Oops! There are {count} errors that need your attention.",
+        "Alert! The agent encountered {count} errors. Please review.",
+        "{count} errors detected! Please check when you can.",
+        "Houston, we have {count} problems! Multiple errors occurred.",
+        "Heads up! {count} errors require your attention."
+    ],
+    
+    // Reminder messages for errors (more urgent - used after delay)
+    "errorReminderTTSMessages": [
+        "Hey! There's still an error waiting for your attention.",
+        "Reminder: An error occurred and hasn't been addressed yet.",
+        "The agent is stuck! Please check the error when you can.",
+        "Still waiting! That error needs your attention.",
+        "Don't forget! There's an unresolved error in your session."
+    ],
+    
+    // Reminder messages for MULTIPLE errors (use {count} placeholder)
+    "errorReminderTTSMessagesMultiple": [
+        "Hey! There are still {count} errors waiting for your attention.",
+        "Reminder: {count} errors occurred and haven't been addressed yet.",
+        "The agent is stuck! Please check the {count} errors when you can.",
+        "Still waiting! {count} errors need your attention.",
+        "Don't forget! There are {count} unresolved errors in your session."
+    ],
+    
+    // Delay (in seconds) before error reminder fires (shorter than idle for urgency)
+    "errorReminderDelaySeconds": 20,
+    
+    // ============================================================
+    // AI MESSAGE GENERATION (OpenAI-Compatible Endpoints)
+    // ============================================================
+    // Use a local/self-hosted AI to generate dynamic notification messages
+    // instead of using preset static messages. The AI generates the text,
+    // which is then spoken by your configured TTS engine (ElevenLabs, Edge, etc.)
+    //
+    // Supports: Ollama, LM Studio, LocalAI, vLLM, llama.cpp, Jan.ai, and any
+    // OpenAI-compatible endpoint. You provide your own endpoint URL and API key.
+    
+    // Enable AI-generated messages (experimental feature)
+    "enableAIMessages": true,
+    
+    // Your AI server endpoint URL (e.g., Ollama: http://localhost:11434/v1)
+    // Common endpoints:
+    //   Ollama:    http://localhost:11434/v1
+    //   LM Studio: http://localhost:1234/v1
+    //   LocalAI:   http://localhost:8080/v1
+    //   vLLM:      http://localhost:8000/v1
+    //   Jan.ai:    http://localhost:1337/v1
+    "aiEndpoint": "http://localhost:1234/v1",
+    
+    // Model name to use (depends on what's loaded in your AI server)
+    // Examples: "llama3", "mistral", "phi3", "gemma2", "qwen2"
+    // "aiModel": "lfm2.5-1.2b-instruct",
+    // "aiModel": "qwen3.5-0.8b",
+    "aiModel": "qwen3.5-2b-claude-4.6-opus-reasoning-distilled",
+    
+    // API key for your AI server (leave empty for Ollama/LM Studio/LocalAI)
+    // Only needed if your server requires authentication
+    "aiApiKey": "",
+    
+    // Request timeout in milliseconds (local AI can be slow on first request)
+    "aiTimeout": 15000,
+    
+    // Fallback to static preset messages if AI generation fails
+    "aiFallbackToStatic": true,
+    
+    // Enable context-aware AI messages (includes project name, task title, and change summary)
+    // When enabled, AI-generated notifications will include relevant context like:
+    // - Project name (e.g., "Your work on MyProject is complete!")
+    // - Task/session title if available
+    // - Change summary (files modified, lines added/deleted)
+    // Disabled by default - enable this for more personalized notifications
+    "enableContextAwareAI": false,
+    
+    // Custom prompts for each notification type
+    // The AI will generate a short message based on these prompts
+    // Keep prompts concise - they're sent with each notification
+    "aiPrompts": {
+        "idle": "Generate a single brief, friendly notification sentence (max 15 words) saying a coding task is complete. Be encouraging and warm. Output only the message, no quotes.",
+        "permission": "Generate a single brief, urgent but friendly notification sentence (max 15 words) asking the user to approve a permission request. Output only the message, no quotes.",
+        "question": "Generate a single brief, polite notification sentence (max 15 words) saying the assistant has a question and needs user input. Output only the message, no quotes.",
+        "error": "Generate a single brief, concerned but calm notification sentence (max 15 words) saying an error occurred and needs attention. Output only the message, no quotes.",
+        "idleReminder": "Generate a single brief, gentle reminder sentence (max 15 words) that a completed task is waiting for review. Be slightly more insistent. Output only the message, no quotes.",
+        "permissionReminder": "Generate a single brief, urgent reminder sentence (max 15 words) that permission approval is still needed. Convey importance. Output only the message, no quotes.",
+        "questionReminder": "Generate a single brief, polite but persistent reminder sentence (max 15 words) that a question is still waiting for an answer. Output only the message, no quotes.",
+        "errorReminder": "Generate a single brief, urgent reminder sentence (max 15 words) that an error still needs attention. Convey urgency. Output only the message, no quotes."
+    },
+    
+    // ============================================================
+    // SOUND FILES (For immediate notifications)
+    // These are played first before TTS reminder kicks in
+    // ============================================================
+    // Paths are relative to ~/.config/opencode/ directory
+    // Sound files are automatically copied here on first run
+    // You can replace with your own custom MP3/WAV files
+    
+    "idleSound": "assets/Soft-high-tech-notification-sound-effect.mp3",
+    "permissionSound": "assets/Machine-alert-beep-sound-effect.mp3",
+    "questionSound": "assets/Machine-alert-beep-sound-effect.mp3",
+    "errorSound": "assets/Machine-alert-beep-sound-effect.mp3",
+    
+    // ============================================================
+    // GENERAL SETTINGS
+    // ============================================================
+    
+    // Wake monitor from sleep when notifying (Windows/macOS)
+    "wakeMonitor": true,
+    
+    // Force system volume up if below threshold
+    "forceVolume": false,
+    
+    // Volume threshold (0-100): force volume if current level is below this
+    "volumeThreshold": "50",
+    
+    // Show TUI toast notifications in OpenCode terminal
+    "enableToast": true,
+    
+    // Enable audio notifications (sound files and TTS)
+    "enableSound": true,
+    
+    // ============================================================
+    // DESKTOP NOTIFICATION SETTINGS
+    // ============================================================
+    // Native desktop notifications (Windows Toast, macOS Notification Center, Linux notify-send)
+    // These appear as system notifications alongside sound and TTS.
+    //
+    // Note: On Linux, you may need to install libnotify-bin:
+    //   Ubuntu/Debian: sudo apt install libnotify-bin
+    //   Fedora: sudo dnf install libnotify
+    //   Arch: sudo pacman -S libnotify
+    
+    // Enable native desktop notifications
+    "enableDesktopNotification": true,
+    
+    // How long the notification stays on screen (in seconds)
+    // Note: Some platforms may ignore this (especially Windows 10+)
+    "desktopNotificationTimeout": 5,
+    
+    // Include the project name in notification titles for easier identification
+    // Example: "OpenCode - MyProject" instead of just "OpenCode"
+    "showProjectInNotification": true,
+    
+    // ============================================================
+    // FOCUS DETECTION SETTINGS
+    // ============================================================
+    // Suppress sound/desktop notifications when terminal window is focused.
+    // Cross-platform: Windows, macOS, and Linux (X11 via xdotool/xprop, Wayland via gdbus).
+    // Default: false (notifications always play regardless of focus)
+    // Set to true to avoid notification spam when actively working in terminal
+    "suppressWhenFocused": false,
+    
+    // Override focus detection: always send notifications even when terminal is focused
+    // Set to true to disable focus-based suppression entirely
+    "alwaysNotify": false,
+    
+    // ============================================================
+    // WEBHOOK NOTIFICATION SETTINGS (Discord/Generic)
+    // ============================================================
+    // Send notifications to a Discord webhook or any compatible endpoint.
+    // This allows you to receive notifications on your phone or other devices.
+    
+    // Enable webhook notifications
+    "enableWebhook": false,
+    
+    // Webhook URL (e.g., https://discord.com/api/webhooks/...)
+    "webhookUrl": "",
+    
+    // Username to show in the webhook message
+    "webhookUsername": "OpenCode Notify",
+    
+    // Events that should trigger a webhook notification
+    // Options: "idle", "permission", "error", "question"
+    "webhookEvents": [
+        "idle",
+        "permission",
+        "error",
+        "question"
+    ],
+    
+    // Mention @everyone on permission requests (Discord only)
+    "webhookMentionOnPermission": false,
+    
+    // ============================================================
+    // SOUND THEME SETTINGS (Themed Sound Packs)
+    // ============================================================
+    // Configure a directory containing custom sound files for notifications.
+    // This allows you to use themed sound packs (e.g., Warcraft, StarCraft, etc.)
+    //
+    // Directory structure should contain:
+    //   /path/to/theme/idle/       - Sounds for task completion
+    //   /path/to/theme/permission/ - Sounds for permission requests
+    //   /path/to/theme/error/      - Sounds for agent errors
+    //   /path/to/theme/question/   - Sounds for agent questions
+    //
+    // If a specific event folder is missing, it falls back to default sounds.
+    
+    // Path to your custom sound theme directory (absolute path recommended)
+    "soundThemeDir": "",
+    
+    // Pick a random sound from the appropriate theme folder for each notification
+    "randomizeSoundFromTheme": true,
+    
+    // ============================================================
+    // PER-PROJECT SOUND SETTINGS
+    // ============================================================
+    // Assign a unique notification sound to each project based on its path.
+    // This helps you distinguish which project is notifying you when working
+    // on multiple tasks simultaneously.
+    //
+    // Note: Requires sounds named 'ding1.mp3' through 'ding6.mp3' in your 
+    // assets/ folder. If disabled, default sound files are used.
+    
+    // Enable unique sounds per project
+    "perProjectSounds": false,
+    
+    // Seed value to change sound assignments (0-999)
+    "projectSoundSeed": 0,
+    
+    // Consider monitor asleep after this many seconds of inactivity (Windows only)
+    "idleThresholdSeconds": 60,
+    
+    // Enable debug logging to ~/.config/opencode/logs/smart-voice-notify-debug.log
+    // The logs folder is created automatically when debug logging is enabled
+    // Useful for troubleshooting notification issues
+    "debugLog": false
+}

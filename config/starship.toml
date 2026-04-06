@@ -193,75 +193,75 @@ disabled = false
 
 [aws]
 symbol = " "
-style = "bold yellow"
+style = "bold bright-yellow"
 
 [buf]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [bun]
 symbol = " "
-style = "bold red"
+style = "bold bright-red"
 
 [c]
 symbol = " "
-style = "149 bold"
+style = "bold bright-green"
 
 [cpp]
 symbol = " "
-style = "149 bold"
+style = "bold bright-green"
 
 [cmake]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [conda]
 symbol = " "
-style = "green bold"
+style = "bold bright-green"
 
 [crystal]
 symbol = " "
-style = "bold red"
+style = "bold bright-red"
 
 [dart]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [deno]
 symbol = " "
-style = "green bold"
+style = "bold bright-green"
 
 [docker_context]
 symbol = " "
-style = "blue bold"
+style = "bold bright-blue"
 
 [elixir]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [elm]
 symbol = " "
-style = "cyan bold"
+style = "bold bright-cyan"
 
 [fennel]
 symbol = " "
-style = "bold green"
+style = "bold bright-green"
 
 [fortran]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [fossil_branch]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [gcloud]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [golang]
 symbol = " "
-style = "bold cyan"
+style = "bold bright-cyan"
 
 [gradle]
 symbol = " "
@@ -269,56 +269,56 @@ style = "bold bright-cyan"
 
 [guix_shell]
 symbol = " "
-style = "yellow bold"
+style = "bold bright-yellow"
 
 [haskell]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [haxe]
 symbol = " "
-style = "bold fg:202"
+style = "bold fg:214"
 
 [hg_branch]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 
 [java]
 symbol = " "
-style = "red dimmed"
+style = "bold bright-red"
 
 [julia]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [kotlin]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [lua]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [meson]
 symbol = "󰔷 "
-style = "blue bold"
+style = "bold bright-blue"
 
 [nim]
 symbol = "󰆥 "
-style = "yellow bold"
+style = "bold bright-yellow"
 
 [nix_shell]
 symbol = " "
-style = "bold blue"
+style = "bold bright-blue"
 
 [nodejs]
 symbol = " "
-style = "bold green"
+style = "bold bright-green"
 
 [ocaml]
 symbol = " "
-style = "bold yellow"
+style = "bold bright-yellow"
 
 [os.symbols]
 Alpaquita = " "
@@ -373,48 +373,48 @@ Zorin = " "
 
 [perl]
 symbol = " "
-style = "149 bold"
+style = "bold bright-green"
 
 [php]
 symbol = " "
-style = "147 bold"
+style = "bold bright-purple"
 
 [pijul_channel]
 symbol = " "
-style = "bold purple"
+style = "bold bright-purple"
 
 [python]
 symbol = " "
-style = "yellow bold"
+style = "bold bright-yellow"
 
 [rlang]
 symbol = "󰟔 "
-style = "blue bold"
+style = "bold bright-blue"
 
 [ruby]
 symbol = " "
-style = "bold red"
+style = "bold bright-red"
 
 [rust]
 symbol = "󱘗 "
-style = "bold red"
+style = "bold bright-red"
 
 [scala]
 symbol = " "
-style = "red bold"
+style = "bold bright-red"
 
 [status]
 symbol = " "
-style = "bold red"
+style = "bold bright-red"
 
 [swift]
 symbol = " "
-style = "bold 202"
+style = "bold 214"
 
 [xmake]
 symbol = " "
-style = "bold green"
+style = "bold bright-green"
 
 [zig]
 symbol = " "
-style = "bold yellow"
+style = "bold bright-yellow"

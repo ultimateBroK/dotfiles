@@ -1,0 +1,112 @@
+{
+    // =============================================
+    // Agent configuration
+    // =============================================
+    "agents": {
+        "loom": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.4,
+            "display_name": "Loom"
+        },
+
+        "tapestry": {
+            "model": "github-copilot/gpt-5.3-codex",
+            "variants": "high",
+            "temperature": 0.3,
+            "display_name": "Tapestry"
+        },
+
+        "shuttle": {
+            "model": "github-copilot/gpt-5.3-codex",
+            "variants": "high",
+            "temperature": 0.3,
+            "display_name": "Shuttle"
+        },
+
+        "thread": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.5,
+            "display_name": "Thread"
+        },
+
+        "pattern": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.7,
+            "display_name": "Pattern"
+        },
+
+        "weft": {
+            "model": "github-copilot/gemini-3.1-pro-preview",
+            "temperature": 0.3,
+            "display_name": "Weft"
+        },
+
+        "warp": {
+            "model": "github-copilot/gpt-5.3-codex",
+            "variants": "high",
+            "temperature": 0.3,
+            "display_name": "Warp"
+        },
+
+        "spindle": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.5,
+            "display_name": "Spindle"
+        }
+    },
+    "custom_agents": {
+        "ml-engineer": {
+            "description": "Machine Learning expert: model design, training, evaluation, optimization, PyTorch/TensorFlow, data pipeline",
+            "model": "github-copilot/gemini-3.1-pro-preview",
+            "temperature": 0.3,
+            "display_name": "ML Engineer",
+            "mode": "subagent",
+            "tools": {
+                "write": true,
+                "edit": true,
+                "bash": true
+            }
+        }
+    },
+
+    // =============================================
+    // Category-based routing
+    // =============================================
+    "categories": {
+        "frontend": {
+            "model": "github-copilot/gemini-3.1-pro-preview",
+            "temperature": 0.7
+        },
+        "backend": {
+            "model": "github-copilot/gpt-5.3-codex",
+            "temperature": 0.3
+        },
+        "agentic": {
+            "model": "zai-coding-plan/glm-5.1",
+            "temperature": 0.5
+        },
+        "research": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.5
+        },
+        "security": {
+            "model": "github-copilot/gpt-5.3-codex",
+            "temperature": 0.3
+        },
+        "quick-fix": {
+            "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+            "temperature": 0.3
+        }
+    },
+
+    // =============================================
+    // Background / sub-agents
+    // =============================================
+    "background": {
+        "defaultConcurrency": 4,
+        "staleTimeoutMs": 60000
+    },
+    "analytics": {
+        "enabled": true
+    }
+}

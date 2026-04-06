@@ -1,0 +1,134 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "~/.config/opencode/instructions/morph-tools.md",
+    "https://gist.githubusercontent.com/ultimateBroK/3b7d0d4309d05d2b0aff28e5f6991c86/raw/d0e995c6c22e9f35c188586ee3c139a8cb9772a7/rules.md"
+  ],
+  "plugin": [
+    "github:JRedeker/opencode-morph-fast-apply@latest",
+    "opencode-wakatime@latest",
+    "true-mem",
+    "opencode-handoff@latest",
+    "opencode-smart-voice-notify@latest",
+    "opentmux",
+    "@opencode_weave/weave@latest",
+    "@tarquinen/opencode-dcp@latest",
+    "opencode-agent-tmux"
+  ],
+  "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+  "agent": {
+    "explore": {
+      "disable": true
+    },
+    "general": {
+      "disable": true
+    }
+  },
+  "mcp": {
+    "zai-mcp-server": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@z_ai/mcp-server"
+      ],
+      "environment": {
+        "Z_AI_MODE": "ZAI",
+        "Z_AI_API_KEY": "'API'"
+      }
+    },
+    "web-search-prime": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
+      "headers": {
+        "Authorization": "Bearer 'API'"
+      }
+    },
+    "web-reader": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/web_reader/mcp",
+      "headers": {
+        "Authorization": "Bearer 'API'"
+      }
+    },
+    "zread": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/zread/mcp",
+      "headers": {
+        "Authorization": "Bearer 'API'"
+      }
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "brave-search": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "environment": {
+        "BRAVE_API_KEY": ""
+      }
+    },
+    "fast-filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "fast-filesystem-mcp"
+      ]
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "analyzer": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-server-analyzer"
+      ]
+    },
+    "fetch": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-server-fetch"
+      ]
+    },
+    "pare-git": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@paretools/git"
+      ]
+    },
+    "pare-test": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@paretools/test"
+      ]
+    },
+    "codedb": {
+      "type": "local",
+      "command": [
+        "/home/ultimatebrok/bin/codedb",
+        "mcp"
+      ]
+    }
+  }
+}
