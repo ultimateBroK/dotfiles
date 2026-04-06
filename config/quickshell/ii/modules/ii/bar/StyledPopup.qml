@@ -89,7 +89,11 @@ LazyLoader {
             right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
         }
-        WlrLayershell.namespace: "quickshell:popup"
+        // Hyprland uses this for layerrule animation direction. Horizontal top bar → slide top
+        // (top-down); bottom bar → slide bottom; vertical bar keeps generic namespace.
+        WlrLayershell.namespace: Config.options.bar.vertical
+            ? "quickshell:popup"
+            : (Config.options.bar.bottom ? "quickshell:popupBottom" : "quickshell:popupTop")
         WlrLayershell.layer: WlrLayer.Overlay
 
         StyledRectangularShadow {
