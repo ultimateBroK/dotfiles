@@ -28,8 +28,8 @@
 # font-family = Iosevka
 # window-padding-x = 2
 #
-theme = Darkermatrix
-# theme = Darkmatrix
+# theme = Darkermatrix
+theme = Darkmatrix
 # theme = Matrix
 # config-file = colors
 # custom-shader = shaders/cursor_tail.glsl

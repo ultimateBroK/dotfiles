@@ -362,7 +362,7 @@
     // OpenAI-compatible endpoint. You provide your own endpoint URL and API key.
     
     // Enable AI-generated messages (experimental feature)
-    "enableAIMessages": true,
+    "enableAIMessages": false,
     
     // Your AI server endpoint URL (e.g., Ollama: http://localhost:11434/v1)
     // Common endpoints:
@@ -376,8 +376,8 @@
     // Model name to use (depends on what's loaded in your AI server)
     // Examples: "llama3", "mistral", "phi3", "gemma2", "qwen2"
     // "aiModel": "lfm2.5-1.2b-instruct",
-    // "aiModel": "qwen3.5-0.8b",
-    "aiModel": "qwen3.5-2b-claude-4.6-opus-reasoning-distilled",
+    "aiModel": "qwen3.5-0.8b",
+    //"aiModel": "qwen3.5-2b-claude-4.6-opus-reasoning-distilled",
     
     // API key for your AI server (leave empty for Ollama/LM Studio/LocalAI)
     // Only needed if your server requires authentication

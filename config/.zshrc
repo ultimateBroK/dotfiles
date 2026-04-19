@@ -103,7 +103,7 @@ shutdown() {
 }
 
 fucklife() {
-  wine /home/ultimatebrok/.wine/drive_c/Program\ Files/MetaTrader\ 5\ EXNESS/terminal64.exe
+  wine /home/ultimatebrok/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe
 }
 
 # --- CONDA ---
@@ -138,3 +138,6 @@ unsetopt correct_all
 
 GITSTATUS_LOG_LEVEL=DEBUG
 
+
+# Weave Agent Fleet
+export PATH="$HOME/.weave/fleet/bin:$PATH"
