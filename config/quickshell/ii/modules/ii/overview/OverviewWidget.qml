@@ -130,7 +130,7 @@ Item {
         implicitWidth: workspaceColumnLayout.implicitWidth + padding * 2
         implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
         radius: root.largeWorkspaceRadius + padding
-        color: Qt.rgba(0, 0, 0, 0.45)
+        color: Appearance.isDarkMode ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.91, 0.89, 0.89, 0.60)
 
         Column { // Workspaces
             id: workspaceColumnLayout
@@ -153,10 +153,10 @@ Item {
                     required property int index
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * root.workspacesShown + row.index * Config.options.overview.columns + colIndex + 1
-                    property color defaultWorkspaceColor: Qt.rgba(1, 1, 1, 0.05)
-                    property color hoveredWorkspaceColor: Qt.rgba(1, 1, 1, 0.08)
-                    property color hoveredBorderColor: ColorUtils.applyAlpha("#ffffff", 0.12)
-                            property color defaultBorderColor: ColorUtils.applyAlpha("#ffffff", 0.06)
+                    property color defaultWorkspaceColor: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.05) : Qt.rgba(0, 0, 0, 0.04)
+                    property color hoveredWorkspaceColor: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.08) : Qt.rgba(0, 0, 0, 0.06)
+                    property color hoveredBorderColor: Appearance.isDarkMode ? ColorUtils.applyAlpha("#ffffff", 0.12) : ColorUtils.applyAlpha("#000000", 0.12)
+                            property color defaultBorderColor: Appearance.isDarkMode ? ColorUtils.applyAlpha("#ffffff", 0.06) : ColorUtils.applyAlpha("#000000", 0.06)
                     property bool hoveredWhileDragging: false
 
                     implicitWidth: root.workspaceImplicitWidth

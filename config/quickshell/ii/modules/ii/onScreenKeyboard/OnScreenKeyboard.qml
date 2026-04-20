@@ -66,9 +66,11 @@ Scope { // Scope
             Rectangle {
                 id: oskBackground
                 anchors.centerIn: parent
-                color: Qt.rgba(0, 0, 0, 0.45)
+                color: Appearance.isDarkMode ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.91, 0.89, 0.89, 0.60)
                 border.width: 1
-                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+                border.color: Appearance.isDarkMode
+                    ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                    : ColorUtils.applyAlpha("#ffffff", 0.35)
                 radius: Appearance.rounding.windowRounding
                 property real padding: 10
                 implicitWidth: oskRowLayout.implicitWidth + padding * 2

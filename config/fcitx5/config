@@ -53,15 +53,15 @@ resetStateWhenFocusIn=No
 # Share Input State
 ShareInputState=No
 # Show preedit in application
-PreeditEnabledByDefault=False
+PreeditEnabledByDefault=True
 # Show Input Method Information when switch input method
-ShowInputMethodInformation=True
+ShowInputMethodInformation=False
 # Show Input Method Information when changing focus
 showInputMethodInformationWhenFocusIn=False
 # Show compact input method information
-CompactInputMethodInformation=True
+CompactInputMethodInformation=False
 # Show first input method information
-ShowFirstInputMethodInformation=True
+ShowFirstInputMethodInformation=False
 # Default page size
 DefaultPageSize=5
 # Override XKB Option

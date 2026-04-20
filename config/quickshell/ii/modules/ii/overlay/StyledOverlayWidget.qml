@@ -190,9 +190,11 @@ AbstractOverlayWidget {
             fill: parent
             margins: root.resizeMargin
         }
-        color: ColorUtils.transparentize(Qt.rgba(0, 0, 0, 0.45), (root.fancyBorders && GlobalStates.overlayOpen) ? 0 : 1)
+        color: ColorUtils.transparentize(Appearance.isDarkMode ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.91, 0.89, 0.89, 0.60), (root.fancyBorders && GlobalStates.overlayOpen) ? 0 : 1)
         radius: root.radius
-        border.color: ColorUtils.transparentize(ColorUtils.applyAlpha("#ffffff", 0.08), GlobalStates.overlayOpen ? 0 : 1)
+        border.color: ColorUtils.transparentize(Appearance.isDarkMode
+            ? ColorUtils.applyAlpha("#ffffff", 0.08)
+            : ColorUtils.applyAlpha("#ffffff", 0.35), GlobalStates.overlayOpen ? 0 : 1)
         border.width: 1
 
         layer.enabled: GlobalStates.overlayOpen

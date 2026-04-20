@@ -30,9 +30,11 @@ Item {
             margins: Appearance.sizes.elevationMargin
         }
         radius: Appearance.rounding.full
-        color: Qt.rgba(0, 0, 0, 0.45)
+        color: Appearance.isDarkMode ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.91, 0.89, 0.89, 0.60)
         border.width: 1
-        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+        border.color: Appearance.isDarkMode
+            ? ColorUtils.applyAlpha("#ffffff", 0.08)
+            : ColorUtils.applyAlpha("#ffffff", 0.35)
 
         implicitWidth: valueRow.implicitWidth
         implicitHeight: valueRow.implicitHeight

@@ -55,11 +55,23 @@ Item {
         anchors.fill: parent
         implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
         implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
-        glassColor: "#000000"
-        glassTransparency: 0.55
+        glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
+        glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
         border.width: 1
-        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+        border.color: Appearance.isDarkMode
+            ? ColorUtils.applyAlpha("#ffffff", 0.08)
+            : ColorUtils.applyAlpha("#ffffff", 0.35)
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+
+        Behavior on glassColor {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on glassTransparency {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on border.color {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
 
         ColumnLayout {
             anchors.fill: parent

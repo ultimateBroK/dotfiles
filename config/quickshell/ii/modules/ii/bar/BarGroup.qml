@@ -8,7 +8,7 @@ Item {
     id: root
     property bool vertical: false
     property real padding: 5
-    // AMOLED glassmorphism (same as dock: flat black 0.45 + white border + rounded)
+    // Tahoe Liquid Glass (dark/light mode aware)
     implicitWidth: vertical ? Appearance.sizes.baseVerticalBarWidth : (gridLayout.implicitWidth + padding * 2)
     implicitHeight: vertical ? (gridLayout.implicitHeight + padding * 2) : Appearance.sizes.baseBarHeight
     default property alias items: gridLayout.children
@@ -16,8 +16,9 @@ Item {
     StyledRectangularShadow {
         target: background
     }
-    Rectangle {
+    AmoledGlassRect {
         id: background
+        amoledVariant: true
         anchors {
             fill: parent
             topMargin: root.vertical ? 0 : 4
@@ -25,12 +26,25 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        color: (Config.options?.bar.borderless ?? false)
+        glassColor: (Config.options?.bar.borderless ?? false)
             ? "transparent"
-            : Qt.rgba(0, 0, 0, 0.45)
+            : (Appearance.isDarkMode ? "#000000" : "#e8e4e4")
+        glassTransparency: Appearance.isDarkMode ? 0.50 : 0.40
         border.width: Config.options?.bar.borderless ? 0 : 1
-        border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+        border.color: Appearance.isDarkMode
+            ? ColorUtils.applyAlpha("#ffffff", 0.08)
+            : ColorUtils.applyAlpha("#ffffff", 0.35)
         radius: 15
+
+        Behavior on glassColor {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on glassTransparency {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on border.color {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
     }
 
     GridLayout {

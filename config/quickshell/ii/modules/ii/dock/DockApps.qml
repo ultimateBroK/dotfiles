@@ -125,8 +125,9 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
             }
-            Rectangle {
+            AmoledGlassRect {
                 id: popupBackground
+                amoledVariant: true
                 property real padding: 5
                 opacity: previewPopup.show ? 1 : 0
                 visible: opacity > 0
@@ -134,10 +135,23 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 clip: true
-                color: Qt.rgba(0, 0, 0, 0.45)
+                glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
+                glassTransparency: Appearance.isDarkMode ? 0.50 : 0.40
                 border.width: 1
-                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+                border.color: Appearance.isDarkMode
+                    ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                    : ColorUtils.applyAlpha("#ffffff", 0.35)
                 radius: Appearance.rounding.normal
+
+                Behavior on glassColor {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on glassTransparency {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on border.color {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
                 anchors.bottom: root.dockAtTop ? undefined : parent.bottom
                 anchors.top: root.dockAtTop ? parent.top : undefined
                 anchors.bottomMargin: root.dockAtTop ? 0 : Appearance.sizes.elevationMargin

@@ -12,8 +12,8 @@ LazyLoader {
     property Item hoverTarget
     default property Item contentItem
     property real popupBackgroundMargin: 0
-    // Glassmorphism AMOLED: same as sidebar (blur shows through).
-    property real glassTransparency: 0.55
+    // Tahoe Liquid Glass (dark/light mode aware)
+    property real glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
 
     active: hoverTarget && hoverTarget.containsMouse
 
@@ -112,14 +112,15 @@ LazyLoader {
             }
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
-            glassColor: "#000000"
+            glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
             glassTransparency: root.glassTransparency
-            color: ColorUtils.transparentize("#000000", 0.55)
             radius: Appearance.rounding.small
             children: [root.contentItem]
 
             border.width: 1
-            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+            border.color: Appearance.isDarkMode
+                ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                : ColorUtils.applyAlpha("#ffffff", 0.35)
         }
     }
 }

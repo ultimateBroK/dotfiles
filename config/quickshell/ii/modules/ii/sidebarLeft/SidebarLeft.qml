@@ -140,11 +140,23 @@ Scope { // Scope
                 anchors.leftMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
                 width: sidebarRoot.sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
                 height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
-                glassColor: "#000000"
-                glassTransparency: 0.55
+                glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
+                glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
                 border.width: 1
-                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+                border.color: Appearance.isDarkMode
+                    ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                    : ColorUtils.applyAlpha("#ffffff", 0.35)
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+
+                Behavior on glassColor {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on glassTransparency {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on border.color {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
 
                 Behavior on width {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -187,11 +199,23 @@ Scope { // Scope
                 id: detachedSidebarBackground
                 amoledVariant: true
                 anchors.fill: parent
-                glassColor: "#000000"
-                glassTransparency: 0.55
+                glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
+                glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
                 border.width: 1
-                border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+                border.color: Appearance.isDarkMode
+                    ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                    : ColorUtils.applyAlpha("#ffffff", 0.35)
                 radius: Appearance.rounding.screenRounding
+
+                Behavior on glassColor {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on glassTransparency {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on border.color {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
 
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {

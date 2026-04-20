@@ -17,8 +17,8 @@ PopupWindow {
 
     color: "transparent"
     property real padding: Appearance.sizes.elevationMargin
-    // Glassmorphism AMOLED: same as sidebar.
-    readonly property real glassTransparency: 0.55
+    // Tahoe Liquid Glass (dark/light mode aware)
+    readonly property real glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
     // Track the maximum page size while the menu is open.
     // This avoids iterating `stackView.children` (which can include internal items),
     // and prevents old pages from artificially inflating the popup size if they linger.
@@ -104,12 +104,13 @@ PopupWindow {
                 margins: root.padding
             }
 
-            glassColor: "#000000"
+            glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
             glassTransparency: root.glassTransparency
-            color: ColorUtils.transparentize("#000000", 0.55)
             radius: Appearance.rounding.windowRounding
             border.width: 1
-            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+            border.color: Appearance.isDarkMode
+                ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                : ColorUtils.applyAlpha("#ffffff", 0.35)
             clip: true
 
             opacity: 0

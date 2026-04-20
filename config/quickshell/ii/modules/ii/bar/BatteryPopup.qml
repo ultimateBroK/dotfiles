@@ -22,7 +22,7 @@ StyledPopup {
                 Layout.preferredWidth: 200
                 Layout.preferredHeight: 80
                 radius: Appearance.rounding.large
-                color: Qt.rgba(1, 1, 1, 0.05)
+                color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.05) : Qt.rgba(0, 0, 0, 0.04)
                 
                 RowLayout {
                     anchors.centerIn: parent
@@ -56,7 +56,7 @@ StyledPopup {
                             height: 32
                             radius: 6
                             // Keep a solid background so the fill is always visible
-                            color: Qt.rgba(1, 1, 1, 0.08)
+                            color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.08) : Qt.rgba(0, 0, 0, 0.06)
                             border.color: Appearance.colors.colOnSurfaceVariant
                             border.width: 1
 
@@ -177,7 +177,7 @@ StyledPopup {
                             Layout.preferredHeight: 4
                             Layout.alignment: Qt.AlignHCenter
                             radius: 999
-                            color: Qt.rgba(1, 1, 1, 0.04)
+                            color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.04) : Qt.rgba(0, 0, 0, 0.03)
                             opacity: 0.9
 
                             Rectangle {

@@ -110,18 +110,32 @@ Scope { // Scope
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
-                        Rectangle { // AMOLED glassmorphism (same as topbar/sidebar)
+                        AmoledGlassRect { // Tahoe Liquid Glass (dark/light mode aware)
                             id: dockVisualBackground
+                            amoledVariant: true
                             property real margin: dockRoot.dockShadowPad
                             anchors.fill: parent
                             anchors.topMargin: dockRoot.dockAtTop ? dockRoot.dockEdgeGap : dockRoot.dockShadowPad
                             anchors.bottomMargin: dockRoot.dockAtTop ? dockRoot.dockShadowPad : dockRoot.dockEdgeGap
                             implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
                             clip: true
-                            color: Qt.rgba(0, 0, 0, 0.45)
+                            glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
+                            glassTransparency: Appearance.isDarkMode ? 0.50 : 0.40
                             border.width: 1
-                            border.color: ColorUtils.applyAlpha("#ffffff", 0.08)
+                            border.color: Appearance.isDarkMode
+                                ? ColorUtils.applyAlpha("#ffffff", 0.08)
+                                : ColorUtils.applyAlpha("#ffffff", 0.35)
                             radius: 15
+
+                            Behavior on glassColor {
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
+                            Behavior on glassTransparency {
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
+                            Behavior on border.color {
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
 
                                 RowLayout {
                                     id: dockRow

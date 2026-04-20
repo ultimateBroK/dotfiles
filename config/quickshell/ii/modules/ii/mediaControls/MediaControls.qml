@@ -254,7 +254,7 @@ Scope {
                     Rectangle { 
                         id: placeholderBackground
                         anchors.centerIn: parent
-                        color: Qt.rgba(0, 0, 0, 0.45)
+                        color: Appearance.isDarkMode ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.91, 0.89, 0.89, 0.60)
                         radius: root.popupRounding
                         property real padding: 20
                         implicitWidth: placeholderLayout.implicitWidth + padding * 2
