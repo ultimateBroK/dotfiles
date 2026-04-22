@@ -135,6 +135,78 @@ Singleton {
                 {
                     "type": "function",
                     "function": {
+                        "name": "web_search",
+                        "description": "Search the web using DuckDuckGo. Use this when you need up-to-date information or facts not in your training data.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "query": {
+                                    "type": "string",
+                                    "description": "The search query",
+                                },
+                            },
+                            "required": ["query"]
+                        }
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "search_files",
+                        "description": "Search for text in files using grep. Use this to find specific content in code, config files, or documents.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "pattern": {
+                                    "type": "string",
+                                    "description": "The text pattern to search for (supports regex)",
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "description": "The directory path to search in (default: current directory)",
+                                },
+                            },
+                            "required": ["pattern"]
+                        }
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "read_file",
+                        "description": "Read the contents of a file. Use this to examine code, configuration files, logs, or any text files.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string",
+                                    "description": "The absolute path to the file to read",
+                                },
+                            },
+                            "required": ["path"]
+                        }
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "list_directory",
+                        "description": "List files and directories in a given path. Use this to explore the file system structure.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string",
+                                    "description": "The absolute path to the directory to list",
+                                },
+                            },
+                            "required": ["path"]
+                        }
+                    },
+                },
+                {
+                    "type": "function",
+                    "function": {
                         "name": "get_shell_config",
                         "description": "Get the desktop shell config file contents",
                         "parameters": {}
@@ -165,7 +237,7 @@ Singleton {
                     "type": "function",
                     "function": {
                         "name": "run_shell_command",
-                        "description": "Run a shell command in bash and get its output. Use this only for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
+                        "description": "Run a shell command in bash and get its output. Use this for quick commands that don't require user interaction. For commands that require interaction, ask the user to run manually instead.",
                         "parameters": {
                             "type": "object",
                             "properties": {
@@ -237,7 +309,7 @@ Singleton {
     }
     property list<var> availableTools: Object.keys(root.tools[models[currentModelId]?.api_format])
     property var toolDescriptions: {
-        "functions": Translation.tr("Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed"),
+        "functions": Translation.tr("Web search, file search, file system access, edit configs, run commands.\nCan search web (DuckDuckGo), search files (grep), read files, list directories, and execute shell commands"),
         "search": Translation.tr("Gives the model search capabilities (immediately)"),
         "none": Translation.tr("Disable tools")
     }
@@ -254,163 +326,7 @@ Singleton {
     // - key_get_description: Description of pricing and how to get an API key
     // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
     // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
-    property var models: Config.options.policies.ai === 2 ? {} : {
-        "gemini-2.0-flash": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.0 Flash",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nFast, can perform searches for up-to-date information"),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
-            "model": "gemini-2.0-flash",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-2.5-flash": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers"),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent",
-            "model": "gemini-2.5-flash",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-2.5-flash-pro": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Pro",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nGoogle's state-of-the-art multipurpose model that excels at coding and complex reasoning tasks."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent",
-            "model": "gemini-2.5-pro",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-2.5-flash-lite": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash-Lite",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nA Gemini 2.5 Flash model optimized for cost-efficiency and high throughput."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent",
-            "model": "gemini-2.5-flash-lite",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-3-pro-preview": aiModelComponent.createObject(this, {
-            "name": "Gemini 3 Pro Preview",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nPreview of Gemini 3 Pro with enhanced reasoning and multimodal capabilities."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:streamGenerateContent",
-            "model": "gemini-3-pro-preview",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-flash-latest": aiModelComponent.createObject(this, {
-            "name": "Gemini Flash (Latest)",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nLatest version of Gemini Flash with automatic updates to the newest available model."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent",
-            "model": "gemini-flash-latest",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-flash-lite-latest": aiModelComponent.createObject(this, {
-            "name": "Gemini Flash-Lite (Latest)",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nLatest lightweight Flash model optimized for speed and efficiency."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:streamGenerateContent",
-            "model": "gemini-flash-lite-latest",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini",
-        }),
-        "gemini-3-pro-image-preview": aiModelComponent.createObject(this, {
-            "name": "Gemini 3 Pro Image Preview",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nGenerate images with Gemini experimental capabilities."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateImage",
-            "model": "gemini-3-pro-image-preview",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini-image",
-        }),
-        "gemini-2.5-flash-image": aiModelComponent.createObject(this, {
-            "name": "Gemini 2.5 Flash Image",
-            "icon": "google-gemini-symbolic",
-            "description": Translation.tr("Online | Google's model\nFast image generation with latest model."),
-            "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateImage",
-            "model": "gemini-2.5-flash-image",
-            "requires_key": true,
-            "key_id": "gemini",
-            "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": Translation.tr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
-            "api_format": "gemini-image",
-        }),
-        "mistral-medium-3": aiModelComponent.createObject(this, {
-            "name": "Mistral Medium 3",
-            "icon": "mistral-symbolic",
-            "description": Translation.tr("Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls").arg("Mistral"),
-            "homepage": "https://mistral.ai/news/mistral-medium-3",
-            "endpoint": "https://api.mistral.ai/v1/chat/completions",
-            "model": "mistral-medium-2505",
-            "requires_key": true,
-            "key_id": "mistral",
-            "key_get_link": "https://console.mistral.ai/api-keys",
-            "key_get_description": Translation.tr("**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key"),
-            "api_format": "mistral",
-        }),
-        "github-gpt-5-nano": aiModelComponent.createObject(this, {
-            "name": "GPT-5 Nano (GH Models)",
-            "icon": "github-symbolic",
-            "api_format": "openai",
-            "description": Translation.tr("Online via %1 | %2's model").arg("GitHub Models").arg("OpenAI"),
-            "homepage": "https://github.com/marketplace/models",
-            "endpoint": "https://models.inference.ai.azure.com/chat/completions",
-            "model": "gpt-5-nano",
-            "requires_key": true,
-            "key_id": "github",
-            "key_get_link": "https://github.com/settings/tokens",
-            "key_get_description": Translation.tr("**Pricing**: Free tier available with limited rates. See https://docs.github.com/en/billing/concepts/product-billing/github-models\n\n**Instructions**: Generate a GitHub personal access token with Models permission, then set as API key here\n\n**Note**: To use this you will have to set the temperature parameter to 1"),
-        }),
-        "openrouter-deepseek-r1": aiModelComponent.createObject(this, {
-            "name": "DeepSeek R1",
-            "icon": "deepseek-symbolic",
-            "description": Translation.tr("Online via %1 | %2's model").arg("OpenRouter").arg("DeepSeek"),
-            "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
-            "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-            "model": "deepseek/deepseek-r1:free",
-            "requires_key": true,
-            "key_id": "openrouter",
-            "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": Translation.tr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
-        }),
-    }
+    property var models: Config.options.policies.ai === 2 ? {} : {}
     property var modelList: Object.keys(root.models)
     property var currentModelId: Persistent.states?.ai?.model || modelList[0]
 
@@ -445,6 +361,9 @@ Singleton {
         if (model.includes("gemma")) return "google-gemini-symbolic";
         if (model.includes("deepseek")) return "deepseek-symbolic";
         if (/^phi\d*:/i.test(model)) return "microsoft-symbolic";
+        if (model.includes("qwen")) return "ollama-symbolic";
+        if (model.includes("granite")) return "ollama-symbolic";
+        if (model.includes("lfm")) return "ollama-symbolic";
         return "ollama-symbolic";
     }
 
@@ -492,6 +411,40 @@ Singleton {
 
                 } catch (e) {
                     console.log("Could not fetch Ollama models:", e);
+                }
+            }
+        }
+    }
+
+    Process {
+        id: getLMStudioModels
+        running: true
+        command: ["bash", "-c", `${Directories.scriptPath}/ai/show-installed-lmstudio-models.sh`.replace(/file:\/\//, "")]
+        stdout: SplitParser {
+            onRead: data => {
+                try {
+                    if (data.length === 0) return;
+                    const dataJson = JSON.parse(data);
+                    if (dataJson.length === 0) return;
+                    root.modelList = [...root.modelList, ...dataJson];
+                    dataJson.forEach(model => {
+                        const safeModelName = root.safeModelName(model);
+                        root.addModel(safeModelName, {
+                            "name": guessModelName(model),
+                            "icon": guessModelLogo(model),
+                            "description": Translation.tr("Local LMStudio model | %1").arg(model),
+                            "homepage": "https://lmstudio.ai",
+                            "endpoint": "http://localhost:1234/v1/chat/completions",
+                            "model": model,
+                            "requires_key": false,
+                            "api_format": "openai",
+                        })
+                    });
+
+                    root.modelList = Object.keys(root.models);
+
+                } catch (e) {
+                    console.log("Could not fetch LMStudio models:", e);
                 }
             }
         }
@@ -884,10 +837,34 @@ Singleton {
         root.messageIDs = [...root.messageIDs, id];
         root.messageByID[id] = responseMessage;
 
-        commandExecutionProc.message = responseMessage;
-        commandExecutionProc.baseMessageContent = responseMessage.content;
-        commandExecutionProc.shellCommand = message.functionCall.args.command;
-        commandExecutionProc.running = true; // Start the command execution
+        if (message.functionName === "web_search") {
+            const query = message.functionCall.args.query;
+            webSearchProc.query = query;
+            webSearchProc.message = responseMessage;
+            webSearchProc.running = true;
+        } else if (message.functionName === "search_files") {
+            const pattern = message.functionCall.args.pattern;
+            const path = message.functionCall.args.path ?? ".";
+            fileSearchProc.pattern = pattern;
+            fileSearchProc.searchPath = path;
+            fileSearchProc.message = responseMessage;
+            fileSearchProc.running = true;
+        } else if (message.functionName === "read_file") {
+            const filePath = message.functionCall.args.path;
+            fileReadProc.filePath = filePath;
+            fileReadProc.message = responseMessage;
+            fileReadProc.running = true;
+        } else if (message.functionName === "list_directory") {
+            const dirPath = message.functionCall.args.path;
+            dirListProc.dirPath = dirPath;
+            dirListProc.message = responseMessage;
+            dirListProc.running = true;
+        } else {
+            commandExecutionProc.message = responseMessage;
+            commandExecutionProc.baseMessageContent = responseMessage.content;
+            commandExecutionProc.shellCommand = message.functionCall.args.command;
+            commandExecutionProc.running = true; // Start the command execution
+        }
     }
 
     Process {
@@ -899,7 +876,7 @@ Singleton {
         stdout: SplitParser {
             onRead: (output) => {
                 commandExecutionProc.message.functionResponse += output + "\n\n";
-                const updatedContent = commandExecutionProc.baseMessageContent + `\n\n<think>\n<tt>${commandExecutionProc.message.functionResponse}</tt>\n</think>`;
+                const updatedContent = commandExecutionProc.baseMessageContent + `\n\n\`\`\`\n${commandExecutionProc.message.functionResponse}\n\`\`\``;
                 commandExecutionProc.message.rawContent = updatedContent;
                 commandExecutionProc.message.content = updatedContent;
             }
@@ -910,6 +887,123 @@ Singleton {
         }
     }
 
+    Process {
+        id: fileReadProc
+        property string filePath: ""
+        property AiMessageData message
+        command: ["cat", filePath]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length > 0) {
+                    fileReadProc.message.functionResponse = text;
+                } else {
+                    fileReadProc.message.functionResponse = Translation.tr("Could not read file: %1").arg(fileReadProc.filePath);
+                }
+                const updatedContent = fileReadProc.message.content + `\n\n\`\`\`\n${fileReadProc.message.functionResponse}\n\`\`\``;
+                fileReadProc.message.rawContent = updatedContent;
+                fileReadProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                fileReadProc.message.functionResponse = Translation.tr("Could not read file: %1 (exit code: %2)").arg(fileReadProc.filePath).arg(exitCode);
+                const updatedContent = fileReadProc.message.content + `\n\n\`\`\`\n${fileReadProc.message.functionResponse}\n\`\`\``;
+                fileReadProc.message.rawContent = updatedContent;
+                fileReadProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+    }
+
+    Process {
+        id: dirListProc
+        property string dirPath: ""
+        property AiMessageData message
+        command: ["ls", "-la", dirPath]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length > 0) {
+                    dirListProc.message.functionResponse = text;
+                } else {
+                    dirListProc.message.functionResponse = Translation.tr("Could not list directory: %1").arg(dirListProc.dirPath);
+                }
+                const updatedContent = dirListProc.message.content + `\n\n\`\`\`\n${dirListProc.message.functionResponse}\n\`\`\``;
+                dirListProc.message.rawContent = updatedContent;
+                dirListProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                dirListProc.message.functionResponse = Translation.tr("Could not list directory: %1 (exit code: %2)").arg(dirListProc.dirPath).arg(exitCode);
+                const updatedContent = dirListProc.message.content + `\n\n\`\`\`\n${dirListProc.message.functionResponse}\n\`\`\``;
+                dirListProc.message.rawContent = updatedContent;
+                dirListProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+    }
+
+    Process {
+        id: webSearchProc
+        property string query: ""
+        property AiMessageData message
+        command: ["bash", "-c", `curl -s "https://duckduckgo.com/html/?q=${query}" | grep -oP '(?<=<a rel="nofollow" class="result__a" href=")[^"]*' | head -5`]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length > 0) {
+                    webSearchProc.message.functionResponse = text;
+                } else {
+                    webSearchProc.message.functionResponse = Translation.tr("No search results found for: %1").arg(webSearchProc.query);
+                }
+                const updatedContent = webSearchProc.message.content + `\n\n\`\`\`\n${webSearchProc.message.functionResponse}\n\`\`\``;
+                webSearchProc.message.rawContent = updatedContent;
+                webSearchProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                webSearchProc.message.functionResponse = Translation.tr("Web search failed for: %1").arg(webSearchProc.query);
+                const updatedContent = webSearchProc.message.content + `\n\n\`\`\`\n${webSearchProc.message.functionResponse}\n\`\`\``;
+                webSearchProc.message.rawContent = updatedContent;
+                webSearchProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+    }
+
+    Process {
+        id: fileSearchProc
+        property string pattern: ""
+        property string searchPath: "."
+        property AiMessageData message
+        command: ["bash", "-c", `grep -r "${pattern}" ${searchPath} 2>/dev/null | head -20`]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length > 0) {
+                    fileSearchProc.message.functionResponse = text;
+                } else {
+                    fileSearchProc.message.functionResponse = Translation.tr("No matches found for pattern: %1").arg(fileSearchProc.pattern);
+                }
+                const updatedContent = fileSearchProc.message.content + `\n\n\`\`\`\n${fileSearchProc.message.functionResponse}\n\`\`\``;
+                fileSearchProc.message.rawContent = updatedContent;
+                fileSearchProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0 && exitCode !== 1) {
+                fileSearchProc.message.functionResponse = Translation.tr("File search failed for pattern: %1").arg(fileSearchProc.pattern);
+                const updatedContent = fileSearchProc.message.content + `\n\n\`\`\`\n${fileSearchProc.message.functionResponse}\n\`\`\``;
+                fileSearchProc.message.rawContent = updatedContent;
+                fileSearchProc.message.content = updatedContent;
+                requester.makeRequest();
+            }
+        }
+    }
+
     function handleFunctionCall(name, args: var, message: AiMessageData) {
         if (name === "switch_to_search_mode") {
             const modelId = root.currentModelId;
@@ -917,6 +1011,46 @@ Singleton {
             root.postResponseHook = () => { root.currentTool = "functions" }
             addFunctionOutputMessage(name, Translation.tr("Switched to search mode. Continue with the user's request."))
             requester.makeRequest();
+        } else if (name === "web_search") {
+            if (!args.query || args.query.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `query`."));
+                return;
+            }
+            const contentToAppend = `\n\n**Web search request**\n\n\`\`\`search\n${args.query}\n\`\`\``;
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.functionPending = true;
+        } else if (name === "search_files") {
+            if (!args.pattern || args.pattern.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `pattern`."));
+                return;
+            }
+            const contentToAppend = `\n\n**File search request**\n\n\`\`\`grep\n${args.pattern}\n\`\`\``;
+            if (args.path) {
+                message.rawContent += `\n\nPath: ${args.path}`;
+                message.content += `\n\nPath: ${args.path}`;
+            }
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.functionPending = true;
+        } else if (name === "read_file") {
+            if (!args.path || args.path.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `path`."));
+                return;
+            }
+            const contentToAppend = `\n\n**File read request**\n\n\`\`\`file\n${args.path}\n\`\`\``;
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.functionPending = true;
+        } else if (name === "list_directory") {
+            if (!args.path || args.path.length === 0) {
+                addFunctionOutputMessage(name, Translation.tr("Invalid arguments. Must provide `path`."));
+                return;
+            }
+            const contentToAppend = `\n\n**Directory list request**\n\n\`\`\`directory\n${args.path}\n\`\`\``;
+            message.rawContent += contentToAppend;
+            message.content += contentToAppend;
+            message.functionPending = true;
         } else if (name === "get_shell_config") {
             const configJson = CF.ObjectUtils.toPlainObject(Config.options)
             addFunctionOutputMessage(name, JSON.stringify(configJson));

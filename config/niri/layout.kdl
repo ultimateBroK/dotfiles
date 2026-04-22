@@ -21,20 +21,20 @@ layout {
   }
   focus-ring {
     width 2
-    active-color "#ffb0cb"
-    inactive-color "#58404888"
+    active-color "#4cd9e2"
+    inactive-color "#3b485888"
     urgent-color "#ffb4ab"
   }
   border {
     on
     width 2
-    active-color "#ffb0cb"
-    inactive-color "#58404888"
+    active-color "#4cd9e2"
+    inactive-color "#3b485888"
     urgent-color "#ffb4ab"
   }
   shadow {
     off
   }
   struts {}
-  background-color "#1c1014"
+  background-color "#0d141c"
 }
