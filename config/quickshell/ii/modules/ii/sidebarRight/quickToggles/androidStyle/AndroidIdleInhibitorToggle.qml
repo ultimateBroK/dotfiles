@@ -10,12 +10,16 @@ AndroidQuickToggleButton {
     name: Translation.tr("Keep awake")
 
     toggled: Idle.inhibit
+    statusText: Idle.statusText
     buttonIcon: "coffee"
     mainAction: () => {
         Idle.toggleInhibit()
     }
+    altAction: () => {
+        Idle.cyclePreset()
+    }
     StyledToolTip {
-        text: Translation.tr("Keep system awake")
+        text: Translation.tr("Keep system awake (%1)").arg(Idle.selectedPresetLabel)
     }
 }
 

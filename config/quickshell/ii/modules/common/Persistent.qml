@@ -72,6 +72,7 @@ Singleton {
 
             property JsonObject idle: JsonObject {
                 property bool inhibit: false
+                property int presetIndex: 0
             }
 
             property JsonObject overlay: JsonObject {

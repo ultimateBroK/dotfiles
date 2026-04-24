@@ -49,12 +49,12 @@
             "title": "Google Sans Flex"
         },
         "palette": {
-            "type": "scheme-fruit-salad"
+            "type": "auto"
         },
         "transparency": {
             "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "backgroundTransparency": 0.07142874215738959,
+            "contentTransparency": 0.2669916666781672,
             "enable": true
         },
         "wallpaperTheming": {
@@ -100,7 +100,7 @@
             "workspaceZoom": 1
         },
         "thumbnailPath": "/home/ultimatebrok/.config/hypr/custom/scripts/mpvpaper_thumbnails/The Matrix Raining Green Code Backdrop for OBS - Teams, Zoom calls in 4k - link to 45mins ver below.mkv.jpg",
-        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/11-0-night.jpg",
+        "wallpaperPath": "/home/ultimatebrok/Pictures/Wallpapers/color-burst-splash-blue-black-background-macos-sierra-stock-5120x2880-1328.jpg",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -269,7 +269,7 @@
             "trae",
             "windsurf"
         ],
-        "pinnedOnStartup": false
+        "pinnedOnStartup": true
     },
     "enabledPanels": [
         "iiBar",
