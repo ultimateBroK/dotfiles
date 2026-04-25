@@ -12,7 +12,9 @@ Singleton {
 
     property alias inhibit: idleInhibitor.enabled
     property int selectedPresetIndex: 0
-    property int inhibitUntilEpochMs: 0
+    // Use real (double) to safely store epoch milliseconds.
+    property real inhibitUntilEpochMs: 0
+    property int countdownRemainingMs: 0
     readonly property var inhibitPresets: [
         { "label": Translation.tr("Current"), "durationMs": 0 },
         { "label": Translation.tr("15 minutes"), "durationMs": 15 * 60 * 1000 },
@@ -23,10 +25,12 @@ Singleton {
     ]
     readonly property string selectedPresetLabel: inhibitPresets[selectedPresetIndex].label
     readonly property int selectedDurationMs: inhibitPresets[selectedPresetIndex].durationMs
+    readonly property string countdownText: formatDuration(countdownRemainingMs)
+    readonly property string activeLabel: selectedDurationMs <= 0 ? selectedPresetLabel : Translation.tr("%1 left").arg(countdownText)
     readonly property string statusText: {
         if (!inhibit) return Translation.tr("Inactive")
         if (selectedDurationMs <= 0) return Translation.tr("Active")
-        return Translation.tr("Active (%1)").arg(selectedPresetLabel)
+        return Translation.tr("Active (%1)").arg(countdownText)
     }
     inhibit: false
 
@@ -49,9 +53,16 @@ Singleton {
 
     function setInhibit(enabled) {
         root.inhibit = enabled
-        if (!enabled) inhibitUntilEpochMs = 0
-        else if (selectedDurationMs > 0) inhibitUntilEpochMs = Date.now() + selectedDurationMs
-        else inhibitUntilEpochMs = 0
+        if (!enabled) {
+            inhibitUntilEpochMs = 0
+            countdownRemainingMs = 0
+        } else if (selectedDurationMs > 0) {
+            inhibitUntilEpochMs = Date.now() + selectedDurationMs
+            countdownRemainingMs = selectedDurationMs
+        } else {
+            inhibitUntilEpochMs = 0
+            countdownRemainingMs = 0
+        }
         Persistent.states.idle.inhibit = root.inhibit
     }
 
@@ -59,13 +70,29 @@ Singleton {
         root.selectedPresetIndex = (root.selectedPresetIndex + 1) % root.inhibitPresets.length
         Persistent.states.idle.presetIndex = root.selectedPresetIndex
         if (root.inhibit) {
-            if (root.selectedDurationMs > 0) inhibitUntilEpochMs = Date.now() + root.selectedDurationMs
-            else inhibitUntilEpochMs = 0
+            if (root.selectedDurationMs > 0) {
+                inhibitUntilEpochMs = Date.now() + root.selectedDurationMs
+                countdownRemainingMs = root.selectedDurationMs
+            } else {
+                inhibitUntilEpochMs = 0
+                countdownRemainingMs = 0
+            }
         }
     }
 
     function toggleInhibit() {
         setInhibit(!root.inhibit)
+    }
+
+    function formatDuration(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000))
+        const hours = Math.floor(totalSeconds / 3600)
+        const minutes = Math.floor((totalSeconds % 3600) / 60)
+        const seconds = totalSeconds % 60
+
+        if (hours > 0)
+            return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+        return `${minutes}:${String(seconds).padStart(2, "0")}`
     }
 
     Timer {
@@ -74,7 +101,11 @@ Singleton {
         running: root.inhibit
         onTriggered: {
             if (!root.inhibit) return
-            if (root.inhibitUntilEpochMs > 0 && Date.now() >= root.inhibitUntilEpochMs) {
+            if (root.inhibitUntilEpochMs > 0) {
+                const remainingMs = Math.max(0, Math.floor(root.inhibitUntilEpochMs - Date.now()))
+                root.countdownRemainingMs = remainingMs
+            }
+            if (root.inhibitUntilEpochMs > 0 && root.countdownRemainingMs <= 0) {
                 root.setInhibit(false)
             }
         }

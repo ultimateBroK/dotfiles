@@ -12,7 +12,7 @@ QuickToggleButton {
         Idle.toggleInhibit()
     }
     StyledToolTip {
-        text: Translation.tr("Keep system awake (%1)").arg(Idle.selectedPresetLabel)
+        text: Translation.tr("Keep system awake (%1)").arg(Idle.activeLabel)
     }
 
 }
