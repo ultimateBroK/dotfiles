@@ -33,15 +33,8 @@ Item {
         color: {
             if (!root.hasBackground) return "transparent";
 
-            // User request: keep the TOP bar background fully transparent.
-            // (Bar components themselves remain "AMOLED glass".)
+            // Top bar: keep background fully transparent (bar groups provide their own glass surfaces).
             if (!root.vertical) return "transparent";
-
-            // For vibrant-like palettes, keep the TOP bar fully transparent.
-            // (Avoid tinting the entire topbar background with the primary/accent color.)
-            var schemeType = Config?.options?.appearance?.palette?.type ?? "auto";
-            var isVibrantScheme = (schemeType === "scheme-vibrant" || schemeType === "scheme-rainbow" || schemeType === "scheme-fruit-salad");
-            if (isVibrantScheme && !root.vertical) return "transparent";
 
             const blurOn = (Config?.options?.blur?.globalEnable !== false) &&
                 (Config?.options?.appearance?.blurInShell?.enable !== false);

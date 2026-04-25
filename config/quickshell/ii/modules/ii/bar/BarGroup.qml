@@ -21,20 +21,20 @@ Item {
         amoledVariant: true
         anchors {
             fill: parent
-            topMargin: root.vertical ? 0 : 4
-            bottomMargin: root.vertical ? 0 : 4
-            leftMargin: root.vertical ? 4 : 0
-            rightMargin: root.vertical ? 4 : 0
+            topMargin: root.vertical ? 0 : 3
+            bottomMargin: root.vertical ? 0 : 3
+            leftMargin: root.vertical ? 3 : 0
+            rightMargin: root.vertical ? 3 : 0
         }
         glassColor: (Config.options?.bar.borderless ?? false)
             ? "transparent"
             : (Appearance.isDarkMode ? "#000000" : "#e8e4e4")
-        glassTransparency: Appearance.isDarkMode ? 0.50 : 0.40
+        glassTransparency: Appearance.isDarkMode ? 0.45 : 0.35
         border.width: Config.options?.bar.borderless ? 0 : 1
         border.color: Appearance.isDarkMode
-            ? ColorUtils.applyAlpha("#ffffff", 0.08)
-            : ColorUtils.applyAlpha("#ffffff", 0.35)
-        radius: 15
+            ? ColorUtils.applyAlpha("#ffffff", 0.12)
+            : ColorUtils.applyAlpha("#ffffff", 0.45)
+        radius: Appearance.rounding.large
 
         Behavior on glassColor {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

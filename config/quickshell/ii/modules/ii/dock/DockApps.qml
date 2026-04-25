@@ -136,12 +136,12 @@ Item {
                 }
                 clip: true
                 glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
-                glassTransparency: Appearance.isDarkMode ? 0.50 : 0.40
+                glassTransparency: Appearance.isDarkMode ? 0.45 : 0.35
                 border.width: 1
                 border.color: Appearance.isDarkMode
-                    ? ColorUtils.applyAlpha("#ffffff", 0.08)
-                    : ColorUtils.applyAlpha("#ffffff", 0.35)
-                radius: Appearance.rounding.normal
+                    ? ColorUtils.applyAlpha("#ffffff", 0.12)
+                    : ColorUtils.applyAlpha("#ffffff", 0.45)
+                radius: Appearance.rounding.large
 
                 Behavior on glassColor {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

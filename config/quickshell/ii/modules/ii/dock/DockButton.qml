@@ -6,7 +6,7 @@ import QtQuick.Layouts
 RippleButton {
     Layout.fillHeight: true
     implicitWidth: implicitHeight - topInset - bottomInset
-    buttonRadius: Appearance.rounding.normal
+    buttonRadius: Appearance.rounding.large
 
     background.implicitHeight: 50
 }
