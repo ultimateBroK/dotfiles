@@ -112,7 +112,9 @@ Scope { // Scope
                         }
                         AmoledGlassRect { // Tahoe Liquid Glass (dark/light mode aware)
                             id: dockVisualBackground
-                            amoledVariant: true
+                            // Match topbar (horizontal BarGroup) surface configuration.
+                            amoledVariant: false
+                            highlightEnabled: true
                             property real margin: dockRoot.dockShadowPad
                             anchors.fill: parent
                             anchors.topMargin: dockRoot.dockAtTop ? dockRoot.dockEdgeGap : dockRoot.dockShadowPad
@@ -120,11 +122,13 @@ Scope { // Scope
                             implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
                             clip: true
                             glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
-                            glassTransparency: Appearance.isDarkMode ? 0.45 : 0.35
+                            glassTransparency: Appearance.isDarkMode ? 0.06 : 0.03
+                            highlightOpacity: (Appearance?.isDarkMode ?? true) ? 0.035 : 0.03
+                            shadeOpacity: (Appearance?.isDarkMode ?? true) ? 0.03 : 0.02
                             border.width: 1
                             border.color: Appearance.isDarkMode
-                                ? ColorUtils.applyAlpha("#ffffff", 0.12)
-                                : ColorUtils.applyAlpha("#ffffff", 0.45)
+                                ? ColorUtils.applyAlpha("#ffffff", 0.10)
+                                : ColorUtils.applyAlpha("#ffffff", 0.32)
                             radius: Appearance.rounding.large
 
                             Behavior on glassColor {
@@ -139,8 +143,7 @@ Scope { // Scope
 
                                 RowLayout {
                                     id: dockRow
-                                    anchors.fill: parent
-                                    anchors.margins: padding
+                                    anchors.centerIn: parent
                                     spacing: 4
                                     property real padding: 7
 

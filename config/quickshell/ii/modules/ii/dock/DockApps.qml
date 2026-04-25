@@ -57,13 +57,19 @@ Item {
         id: previewPopup
         property var appTopLevel: root.lastHoveredButton?.appToplevel
         property bool allPreviewsReady: false
+        property bool hasPreviewItems: (previewRowLayout.children.length > 0)
         Connections {
             target: root
             function onLastHoveredButtonChanged() {
                 previewPopup.allPreviewsReady = false; // Reset readiness when the hovered button changes
+                previewPopup.updatePreviewReadiness();
             } 
         }
         function updatePreviewReadiness() {
+            if (previewRowLayout.children.length === 0) {
+                allPreviewsReady = false;
+                return;
+            }
             for(var i = 0; i < previewRowLayout.children.length; i++) {
                 const view = previewRowLayout.children[i];
                 if (view.hasContent === false) {
@@ -75,24 +81,12 @@ Item {
         }
         property bool shouldShow: {
             const hoverConditions = (popupMouseArea.containsMouse || root.buttonHovered)
-            return hoverConditions && allPreviewsReady;
+            return hoverConditions && hasPreviewItems;
         }
         property bool show: false
 
         onShouldShowChanged: {
-            if (shouldShow) {
-                // show = true;
-                updateTimer.restart();
-            } else {
-                updateTimer.restart();
-            }
-        }
-        Timer {
-            id: updateTimer
-            interval: 100
-            onTriggered: {
-                previewPopup.show = previewPopup.shouldShow
-            }
+            previewPopup.show = previewPopup.shouldShow
         }
         anchor {
             window: root.QsWindow.window
@@ -127,7 +121,9 @@ Item {
             }
             AmoledGlassRect {
                 id: popupBackground
-                amoledVariant: true
+                // Match topbar (horizontal BarGroup) surface configuration.
+                amoledVariant: false
+                highlightEnabled: true
                 property real padding: 5
                 opacity: previewPopup.show ? 1 : 0
                 visible: opacity > 0
@@ -136,11 +132,13 @@ Item {
                 }
                 clip: true
                 glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
-                glassTransparency: Appearance.isDarkMode ? 0.45 : 0.35
+                glassTransparency: Appearance.isDarkMode ? 0.06 : 0.03
+                highlightOpacity: (Appearance?.isDarkMode ?? true) ? 0.035 : 0.03
+                shadeOpacity: (Appearance?.isDarkMode ?? true) ? 0.03 : 0.02
                 border.width: 1
                 border.color: Appearance.isDarkMode
-                    ? ColorUtils.applyAlpha("#ffffff", 0.12)
-                    : ColorUtils.applyAlpha("#ffffff", 0.45)
+                    ? ColorUtils.applyAlpha("#ffffff", 0.10)
+                    : ColorUtils.applyAlpha("#ffffff", 0.32)
                 radius: Appearance.rounding.large
 
                 Behavior on glassColor {

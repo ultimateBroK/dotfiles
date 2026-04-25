@@ -14,27 +14,39 @@ Item {
     default property alias items: gridLayout.children
 
     StyledRectangularShadow {
+        // Keep depth on vertical bar, but flatten topbar look.
+        visible: root.vertical
         target: background
     }
     AmoledGlassRect {
         id: background
-        amoledVariant: true
+        // Keep vertical bar richer; keep topbar flatter but still subtly highlighted.
+        amoledVariant: root.vertical
+        highlightEnabled: true
         anchors {
             fill: parent
-            topMargin: root.vertical ? 0 : 3
-            bottomMargin: root.vertical ? 0 : 3
+            topMargin: root.vertical ? 0 : 1
+            bottomMargin: root.vertical ? 0 : 1
             leftMargin: root.vertical ? 3 : 0
             rightMargin: root.vertical ? 3 : 0
         }
         glassColor: (Config.options?.bar.borderless ?? false)
             ? "transparent"
             : (Appearance.isDarkMode ? "#000000" : "#e8e4e4")
-        glassTransparency: Appearance.isDarkMode ? 0.45 : 0.35
+        glassTransparency: root.vertical
+            ? (Appearance.isDarkMode ? 0.45 : 0.35)
+            : (Appearance.isDarkMode ? 0.06 : 0.03)
+        highlightOpacity: root.vertical
+            ? ((Appearance?.isDarkMode ?? true) ? 0.10 : 0.12)
+            : ((Appearance?.isDarkMode ?? true) ? 0.035 : 0.03)
+        shadeOpacity: root.vertical
+            ? ((Appearance?.isDarkMode ?? true) ? 0.06 : 0.05)
+            : ((Appearance?.isDarkMode ?? true) ? 0.03 : 0.02)
         border.width: Config.options?.bar.borderless ? 0 : 1
         border.color: Appearance.isDarkMode
-            ? ColorUtils.applyAlpha("#ffffff", 0.12)
-            : ColorUtils.applyAlpha("#ffffff", 0.45)
-        radius: Appearance.rounding.large
+            ? ColorUtils.applyAlpha("#ffffff", 0.10)
+            : ColorUtils.applyAlpha("#ffffff", 0.32)
+        radius: root.vertical ? Appearance.rounding.large : Appearance.rounding.large
 
         Behavior on glassColor {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

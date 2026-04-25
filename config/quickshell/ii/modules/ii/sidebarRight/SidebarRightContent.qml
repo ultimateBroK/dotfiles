@@ -47,20 +47,27 @@ Item {
 
     StyledRectangularShadow {
         target: sidebarRightBackground
+        radius: sidebarRightBackground.radius
     }
     AmoledGlassRect {
         id: sidebarRightBackground
         amoledVariant: true
+        // Remove residual silver sheen on the right sidebar surface.
+        highlightEnabled: false
 
-        anchors.fill: parent
-        implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
-        implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+        // Match left sidebar framing exactly.
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
+        anchors.rightMargin: Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2)
+        width: sidebarWidth - Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) - Math.max(Appearance.sizes.elevationMargin - 2, 2)
+        height: parent.height - (Math.max(Appearance.sizes.hyprlandGapsOut - 2, 2) * 2)
         glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
         glassTransparency: Appearance.isDarkMode ? 0.55 : 0.45
         border.width: 1
         border.color: Appearance.isDarkMode
-            ? ColorUtils.applyAlpha("#ffffff", 0.08)
-            : ColorUtils.applyAlpha("#ffffff", 0.35)
+            ? ColorUtils.applyAlpha("#ffffff", 0.04)
+            : ColorUtils.applyAlpha("#ffffff", 0.22)
         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
         Behavior on glassColor {
