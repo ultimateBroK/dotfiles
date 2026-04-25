@@ -111,6 +111,7 @@ Singleton {
             const index = root.list.findIndex((notif) => notif.notificationId === notificationId);
             const notifObject = root.list[index];
             print("[Notifications] Notification timer triggered for ID: " + notificationId + ", transient: " + notifObject?.isTransient);
+            if (!notifObject) { destroy(); return; }
             if (notifObject.isTransient) root.discardNotification(notificationId);
             else root.timeoutNotification(notificationId);
             destroy()
@@ -141,7 +142,7 @@ Singleton {
         // Update latest time for each app
         root.list.forEach((notif) => {
             if (!root.latestTimeForApp[notif.appName] || notif.time > root.latestTimeForApp[notif.appName]) {
-                root.latestTimeForApp[notif.appName] = Math.max(root.latestTimeForApp[notif.appName] || 0, notif.time);
+                root.latestTimeForApp[notif.appName] = notif.time;
             }
         });
         // Remove apps that no longer have notifications
@@ -294,7 +295,7 @@ Singleton {
 
     function cancelTimeout(id) {
         const index = root.list.findIndex((notif) => notif.notificationId === id);
-        if (root.list[index] != null)
+        if (root.list[index] != null && root.list[index].timer != null)
             root.list[index].timer.stop();
     }
 
@@ -303,6 +304,22 @@ Singleton {
         if (root.list[index] != null)
             root.list[index].popup = false;
         root.timeout(id);
+    }
+
+    function restartTimeout(id) {
+        const index = root.list.findIndex((notif) => notif.notificationId === id);
+        if (index === -1) return;
+        const notif = root.list[index];
+        if (notif == null) return;
+        if (notif.timer != null) {
+            notif.timer.stop();
+            notif.timer.destroy();
+            notif.timer = null;
+        }
+        notif.timer = notifTimerComponent.createObject(root, {
+            "notificationId": id,
+            "interval": Config?.options.notifications.timeout ?? 7000,
+        });
     }
 
     function timeoutAll() {

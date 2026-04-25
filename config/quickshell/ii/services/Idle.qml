@@ -34,12 +34,12 @@ Singleton {
         target: Persistent
         function onReadyChanged() {
             if (!Persistent.isNewHyprlandInstance) {
-                root.inhibit = Persistent.states.idle.inhibit
                 const persistedPresetIndex = Persistent.states.idle.presetIndex
                 root.selectedPresetIndex = Math.min(
                     Math.max(persistedPresetIndex !== undefined ? persistedPresetIndex : 0, 0),
                     root.inhibitPresets.length - 1
                 )
+                root.setInhibit(Persistent.states.idle.inhibit)
             } else {
                 Persistent.states.idle.inhibit = root.inhibit
                 Persistent.states.idle.presetIndex = root.selectedPresetIndex
@@ -51,6 +51,7 @@ Singleton {
         root.inhibit = enabled
         if (!enabled) inhibitUntilEpochMs = 0
         else if (selectedDurationMs > 0) inhibitUntilEpochMs = Date.now() + selectedDurationMs
+        else inhibitUntilEpochMs = 0
         Persistent.states.idle.inhibit = root.inhibit
     }
 
