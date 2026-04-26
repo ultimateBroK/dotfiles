@@ -78,6 +78,9 @@ Singleton {
         property double time
         property string urgency: notification?.urgency?.toString?.() ?? "normal"
         property Timer timer
+        property int timeoutDurationMs: 0
+        property double timeoutDeadlineMs: 0
+        property int timeoutRemainingMs: 0
 
         onNotificationChanged: {
             if (notification === null) {
@@ -112,6 +115,9 @@ Singleton {
             const notifObject = root.list[index];
             print("[Notifications] Notification timer triggered for ID: " + notificationId + ", transient: " + notifObject?.isTransient);
             if (!notifObject) { destroy(); return; }
+            notifObject.timeoutDeadlineMs = 0;
+            notifObject.timeoutRemainingMs = 0;
+            notifObject.timer = null;
             if (notifObject.isTransient) root.discardNotification(notificationId);
             else root.timeoutNotification(notificationId);
             destroy()
@@ -136,6 +142,14 @@ Singleton {
 
     function stringifyList(list) {
         return JSON.stringify(list.map((notif) => notifToJSON(notif)), null, 2);
+    }
+
+    function resolveTimeoutInterval(expireTimeout) {
+        if (expireTimeout === 0)
+            return 0;
+        if (expireTimeout === null || expireTimeout === undefined || expireTimeout < 0)
+            return Config?.options.notifications.timeout ?? 7000;
+        return Math.max(1, expireTimeout);
     }
     
     onListChanged: {
@@ -238,12 +252,17 @@ Singleton {
                 // Popup
                 if (!root.popupInhibited) {
                     newNotifObject.popup = true;
-                    if (notification.expireTimeout != 0) {
+                    const timeoutInterval = root.resolveTimeoutInterval(notification.expireTimeout);
+                    newNotifObject.timeoutDurationMs = timeoutInterval;
+                    newNotifObject.timeoutRemainingMs = timeoutInterval;
+                    if (timeoutInterval > 0) {
                         try {
                             newNotifObject.timer = notifTimerComponent.createObject(root, {
                                 "notificationId": newNotifObject.notificationId,
-                                "interval": notification.expireTimeout < 0 ? (Config?.options.notifications.timeout ?? 7000) : notification.expireTimeout,
+                                "interval": timeoutInterval,
                             });
+                            if (newNotifObject.timer != null)
+                                newNotifObject.timeoutDeadlineMs = Date.now() + timeoutInterval;
                         } catch (error) {
                             console.warn("[Notifications] Failed to create notification timer:", error);
                         }
@@ -295,8 +314,17 @@ Singleton {
 
     function cancelTimeout(id) {
         const index = root.list.findIndex((notif) => notif.notificationId === id);
-        if (root.list[index] != null && root.list[index].timer != null)
-            root.list[index].timer.stop();
+        const notif = root.list[index];
+        if (notif == null || notif.timer == null)
+            return;
+        if (notif.timeoutDeadlineMs > 0) {
+            const remaining = Math.ceil(notif.timeoutDeadlineMs - Date.now());
+            notif.timeoutRemainingMs = Math.max(0, remaining);
+        } else if (notif.timeoutRemainingMs <= 0) {
+            notif.timeoutRemainingMs = notif.timeoutDurationMs;
+        }
+        notif.timer.stop();
+        notif.timeoutDeadlineMs = 0;
     }
 
     function timeoutNotification(id) {
@@ -316,15 +344,24 @@ Singleton {
             notif.timer.destroy();
             notif.timer = null;
         }
+        const timeoutInterval = notif.timeoutRemainingMs > 0
+            ? notif.timeoutRemainingMs
+            : notif.timeoutDurationMs;
+        if (timeoutInterval <= 0)
+            return;
         notif.timer = notifTimerComponent.createObject(root, {
             "notificationId": id,
-            "interval": Config?.options.notifications.timeout ?? 7000,
+            "interval": timeoutInterval,
         });
+        if (notif.timer != null) {
+            notif.timeoutDeadlineMs = Date.now() + timeoutInterval;
+            notif.timeoutRemainingMs = timeoutInterval;
+        }
     }
 
     function timeoutAll() {
         root.popupList.forEach((notif) => {
-            root.timeout(notif.notificationId);
+            root.timeoutNotification(notif.notificationId);
         })
         root.popupList.forEach((notif) => {
             notif.popup = false;
