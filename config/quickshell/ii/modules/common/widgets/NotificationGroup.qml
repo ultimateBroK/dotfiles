@@ -78,15 +78,38 @@ MouseArea { // Notification group area
         destroyAnimation.running = true;
     }
 
-    hoverEnabled: true
-    onContainsMouseChanged: {
-        if (!root.popup) return;
-        if (root.containsMouse) root.notifications.forEach(notif => {
+    function pausePopupTimeouts() {
+        if (!root.popup)
+            return;
+        root.notifications.forEach(notif => {
             Notifications.cancelTimeout(notif.notificationId);
         });
-        else root.notifications.forEach(notif => {
-            Notifications.restartTimeout(notif.notificationId);
+    }
+
+    function dismissPopupNotifications() {
+        if (!root.popup)
+            return;
+        root.notifications.forEach(notif => {
+            Notifications.timeoutNotification(notif.notificationId);
         });
+    }
+
+    hoverEnabled: true
+    onContainsMouseChanged: {
+        if (root.containsMouse)
+            pausePopupTimeouts();
+        else
+            dismissPopupNotifications();
+    }
+
+    HoverHandler {
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onHoveredChanged: {
+            if (hovered)
+                root.pausePopupTimeouts();
+            else
+                root.dismissPopupNotifications();
+        }
     }
 
     SequentialAnimation { // Drag finish animation
