@@ -5,7 +5,10 @@
 //@ pragma Env QT_QUICK_ANTIALIASING=1
 
 // Performance optimization environment variables
-//@ pragma Env QSG_RENDER_LOOP=threaded
+// NOTE: "threaded" can crash on some Wayland/Qt6/Mesa stacks
+// with libffi/libwayland null-pointer callbacks. Keep render loop
+// on a safer mode for stability.
+//@ pragma Env QSG_RENDER_LOOP=basic
 //@ pragma Env QSG_ATLAS_SIZE_LIMIT=256
 //@ pragma Env QT_ENABLE_GLYPH_CACHE_WORKAROUND=1
 
