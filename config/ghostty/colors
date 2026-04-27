@@ -1,37 +1,37 @@
-background = #0d141c
-foreground = #dde3ee
-cursor-color = #4cd9e2
-selection-background = #3b4858
-selection-foreground = #bac8db
+background = #091517
+foreground = #d7e5e7
+cursor-color = #7dda9b
+selection-background = #324b4e
+selection-foreground = #b1cbcf
 
 # Black
-palette = 0=#0d141c
-palette = 8=#3b4858
+palette = 0=#091517
+palette = 8=#324b4e
 
 # Red
 palette = 1=#ffb4ab
 palette = 9=#ffb4ab
 
 # Green
-palette = 2=#4cd9e2
-palette = 10=#00696f
+palette = 2=#7dda9b
+palette = 10=#006d3b
 
 # Yellow
-palette = 3=#9fcafd
-palette = 11=#184974
+palette = 3=#81d3dd
+palette = 11=#004f56
 
 # Blue
-palette = 4=#004f53
-palette = 12=#80d4da
+palette = 4=#12512e
+palette = 12=#96d5a6
 
 # Magenta
-palette = 5=#004f53
-palette = 13=#70f6ff
+palette = 5=#00522b
+palette = 13=#99f7b5
 
 # Cyan
-palette = 6=#004f53
-palette = 14=#9cf0f7
+palette = 6=#12512e
+palette = 14=#b1f1c1
 
 # White
-palette = 7=#bac8db
-palette = 15=#dde3ee
+palette = 7=#b1cbcf
+palette = 15=#d7e5e7
