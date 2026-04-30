@@ -317,7 +317,7 @@ Item { // Bar content region
                     implicitWidth: indicatorsRowLayout.implicitWidth + 6 * 2
                     implicitHeight: indicatorsRowLayout.implicitHeight + 3 * 2
 
-                    buttonRadius: Appearance.rounding.full
+                    buttonRadius: Appearance.rounding.large
                     // Let BarGroup provide the base surface; only show hover/toggled emphasis.
                     colBackground: "transparent"
                     colBackgroundHover: "transparent"

@@ -114,7 +114,7 @@ LazyLoader {
             implicitHeight: root.contentItem.implicitHeight + margin * 2
             glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
             glassTransparency: root.glassTransparency
-            radius: Appearance.rounding.small
+            radius: Appearance.rounding.large
             children: [root.contentItem]
 
             border.width: 1

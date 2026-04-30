@@ -112,8 +112,8 @@ Scope { // Scope
                         }
                         AmoledGlassRect { // Tahoe Liquid Glass (dark/light mode aware)
                             id: dockVisualBackground
-                            // Match topbar (horizontal BarGroup) surface configuration.
-                            amoledVariant: false
+                            // Keep dock in glass mode so compositor blur remains pronounced.
+                            amoledVariant: true
                             highlightEnabled: true
                             property real margin: dockRoot.dockShadowPad
                             anchors.fill: parent
@@ -122,7 +122,7 @@ Scope { // Scope
                             implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
                             clip: true
                             glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
-                            glassTransparency: Appearance.isDarkMode ? 0.06 : 0.03
+                            glassTransparency: Appearance.isDarkMode ? 0.38 : 0.32
                             highlightOpacity: (Appearance?.isDarkMode ?? true) ? 0.035 : 0.03
                             shadeOpacity: (Appearance?.isDarkMode ?? true) ? 0.03 : 0.02
                             border.width: 1

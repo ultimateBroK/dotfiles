@@ -26,7 +26,7 @@ RippleButton {
     hoverEnabled: true
 
     toggled: (isToday == 1)
-    buttonRadius: Appearance.rounding.small
+    buttonRadius: Appearance.rounding.large
     
     contentItem: Item {
         anchors.fill: parent

@@ -37,7 +37,7 @@ WindowDialog {
         Layout.topMargin: -10
         Layout.leftMargin: 0
         Layout.rightMargin: 0
-        radius: Appearance.rounding.small
+        radius: Appearance.rounding.large
         color: Appearance.colors.colErrorContainer
         
         RowLayout {
@@ -90,7 +90,7 @@ WindowDialog {
         Layout.topMargin: -10
         Layout.leftMargin: 0
         Layout.rightMargin: 0
-        radius: Appearance.rounding.small
+        radius: Appearance.rounding.large
         color: Qt.rgba(1, 1, 1, 0.05)
         
         RowLayout {

@@ -33,9 +33,10 @@ Item {
         glassColor: (Config.options?.bar.borderless ?? false)
             ? "transparent"
             : (Appearance.isDarkMode ? "#000000" : "#e8e4e4")
+        // Increase transparency on horizontal topbar groups so compositor blur is visible.
         glassTransparency: root.vertical
             ? (Appearance.isDarkMode ? 0.45 : 0.35)
-            : (Appearance.isDarkMode ? 0.06 : 0.03)
+            : (Appearance.isDarkMode ? 0.38 : 0.32)
         highlightOpacity: root.vertical
             ? ((Appearance?.isDarkMode ?? true) ? 0.10 : 0.12)
             : ((Appearance?.isDarkMode ?? true) ? 0.035 : 0.03)
@@ -46,7 +47,8 @@ Item {
         border.color: Appearance.isDarkMode
             ? ColorUtils.applyAlpha("#ffffff", 0.10)
             : ColorUtils.applyAlpha("#ffffff", 0.32)
-        radius: root.vertical ? Appearance.rounding.large : Appearance.rounding.large
+        // Match dock corner curvature.
+        radius: Appearance.rounding.large
 
         Behavior on glassColor {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

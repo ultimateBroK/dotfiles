@@ -17,7 +17,7 @@ Item {
     
     Rectangle {
         anchors.fill: parent
-        radius: Appearance.rounding.small
+        radius: Appearance.rounding.large
         color: Qt.rgba(1, 1, 1, 0.04)
         
         ColumnLayout {

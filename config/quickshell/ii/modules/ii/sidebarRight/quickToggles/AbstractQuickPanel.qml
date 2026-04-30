@@ -5,7 +5,7 @@ import qs.modules.common.functions
 Rectangle {
     id: root
 
-    radius: Appearance.rounding.normal
+    radius: Appearance.rounding.large
     color: Appearance.isDarkMode
         ? Qt.rgba(1, 1, 1, 0.06)
         : Qt.rgba(0, 0, 0, 0.04)

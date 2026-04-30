@@ -121,8 +121,8 @@ Item {
             }
             AmoledGlassRect {
                 id: popupBackground
-                // Match topbar (horizontal BarGroup) surface configuration.
-                amoledVariant: false
+                // Keep preview popup in glass mode for consistent frosted look with dock.
+                amoledVariant: true
                 highlightEnabled: true
                 property real padding: 5
                 opacity: previewPopup.show ? 1 : 0
@@ -132,7 +132,7 @@ Item {
                 }
                 clip: true
                 glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
-                glassTransparency: Appearance.isDarkMode ? 0.06 : 0.03
+                glassTransparency: Appearance.isDarkMode ? 0.38 : 0.32
                 highlightOpacity: (Appearance?.isDarkMode ?? true) ? 0.035 : 0.03
                 shadeOpacity: (Appearance?.isDarkMode ?? true) ? 0.03 : 0.02
                 border.width: 1
@@ -190,7 +190,7 @@ Item {
                                     WrapperRectangle {
                                         Layout.fillWidth: true
                                         color: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
-                                        radius: Appearance.rounding.small
+                                        radius: Appearance.rounding.large
                                         margin: 5
                                         StyledText {
                                             Layout.fillWidth: true
@@ -205,7 +205,7 @@ Item {
                                         colBackground: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
                                         baseWidth: windowControlsHeight
                                         baseHeight: windowControlsHeight
-                                        buttonRadius: Appearance.rounding.full
+                                        buttonRadius: Appearance.rounding.large
                                         contentItem: MaterialSymbol {
                                             anchors.centerIn: parent
                                             horizontalAlignment: Text.AlignHCenter
@@ -232,7 +232,7 @@ Item {
                                         maskSource: Rectangle {
                                             width: screencopyView.width
                                             height: screencopyView.height
-                                            radius: Appearance.rounding.small
+                                            radius: Appearance.rounding.large
                                         }
                                     }
                                 }

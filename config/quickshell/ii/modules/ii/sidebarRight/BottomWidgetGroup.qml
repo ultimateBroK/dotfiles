@@ -8,7 +8,7 @@ import QtQuick.Layouts
 
 Rectangle {
     id: root
-    radius: Appearance.rounding.normal
+    radius: Appearance.rounding.large
     color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(0, 0, 0, 0.04)
     clip: false
     implicitHeight: collapsed ? (collapsedBottomWidgetGroupRow.implicitHeight + 16) : bottomWidgetGroupRow.implicitHeight

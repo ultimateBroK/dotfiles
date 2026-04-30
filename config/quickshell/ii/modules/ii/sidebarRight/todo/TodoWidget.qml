@@ -121,7 +121,7 @@ Item {
 
         Rectangle { // Scrim
             anchors.fill: parent
-            radius: Appearance.rounding.small
+            radius: Appearance.rounding.large
             color: Appearance.colors.colScrim
             MouseArea {
                 hoverEnabled: true
@@ -140,7 +140,7 @@ Item {
             implicitHeight: dialogColumnLayout.implicitHeight
 
             color: Qt.rgba(1, 1, 1, 0.07)
-            radius: Appearance.rounding.normal
+            radius: Appearance.rounding.large
 
             function addTask() {
                 if (todoInput.text.length > 0) {
@@ -183,7 +183,7 @@ Item {
 
                     background: Rectangle {
                         anchors.fill: parent
-                        radius: Appearance.rounding.verysmall
+                        radius: Appearance.rounding.large
                         border.width: 2
                         border.color: todoInput.activeFocus ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
                         color: "transparent"

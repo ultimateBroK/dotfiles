@@ -9,7 +9,7 @@ RippleButton {
     id: button
     required property bool input
 
-    buttonRadius: Appearance.rounding.small
+    buttonRadius: Appearance.rounding.large
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
     colRipple: Appearance.colors.colLayer2Active

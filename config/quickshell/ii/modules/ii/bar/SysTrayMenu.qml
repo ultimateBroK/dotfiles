@@ -106,7 +106,7 @@ PopupWindow {
 
             glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
             glassTransparency: root.glassTransparency
-            radius: Appearance.rounding.windowRounding
+            radius: Appearance.rounding.large
             border.width: 1
             border.color: Appearance.isDarkMode
                 ? ColorUtils.applyAlpha("#ffffff", 0.08)

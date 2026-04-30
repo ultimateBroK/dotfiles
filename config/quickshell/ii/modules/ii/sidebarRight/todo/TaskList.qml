@@ -27,7 +27,7 @@ Item {
             maskSource: Rectangle {
                 width: flickable.width
                 height: flickable.height
-                radius: Appearance.rounding.small
+                radius: Appearance.rounding.large
             }
         }
 
@@ -86,7 +86,7 @@ Item {
                         anchors.bottom: parent.bottom
                         implicitHeight: todoContentRowLayout.implicitHeight
                         color: Appearance.colors.colLayer2
-                        radius: Appearance.rounding.small
+                        radius: Appearance.rounding.large
                         ColumnLayout {
                             id: todoContentRowLayout
                             anchors.left: parent.left

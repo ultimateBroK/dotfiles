@@ -189,7 +189,7 @@ StyledPopup {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Math.min(todoList.implicitHeight + 16, 200)
-                radius: Appearance.rounding.small
+                radius: Appearance.rounding.large
                 color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0, 0, 0, 0.05)
                 
                 ColumnLayout {
@@ -244,7 +244,7 @@ StyledPopup {
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 240
             Layout.preferredHeight: 60
-            radius: Appearance.rounding.normal
+            radius: Appearance.rounding.large
             color: Appearance.isDarkMode ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0, 0, 0, 0.05)
             
             RowLayout {

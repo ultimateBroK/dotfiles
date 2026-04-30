@@ -119,7 +119,7 @@ StyledPopup {
             Layout.preferredWidth: root.popupWidth
             implicitHeight: warningContent.implicitHeight + 20
             Layout.preferredHeight: implicitHeight
-            radius: Appearance.rounding.small
+            radius: Appearance.rounding.large
             color: Qt.rgba(1, 1, 1, 0.07)
             border.width: 1
             border.color: warningHeader.anyDanger ? Appearance.colors.colError : Appearance.colors.colSecondary
@@ -161,7 +161,7 @@ StyledPopup {
                     model: (Weather.warnings || []).slice(0, root.maxWarningsToShow)
                     Rectangle {
                         Layout.fillWidth: true
-                        radius: Appearance.rounding.small
+                        radius: Appearance.rounding.large
                         color: Qt.rgba(1, 1, 1, 0.05)
                         border.width: 1
                         border.color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
@@ -176,7 +176,7 @@ StyledPopup {
                             Rectangle {
                                 Layout.preferredWidth: 4
                                 Layout.fillHeight: true
-                                radius: 2
+                                radius: Appearance.rounding.large
                                 color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
                             }
 
@@ -205,7 +205,7 @@ StyledPopup {
                                     }
 
                                     Rectangle {
-                                        radius: 999
+                                        radius: Appearance.rounding.large
                                         color: (modelData.severityLevel ?? 0) >= 2 ? Appearance.colors.colError : Appearance.colors.colSecondary
                                         Layout.preferredHeight: 18
                                         Layout.preferredWidth: severityLabel.implicitWidth + 10
@@ -283,7 +283,7 @@ StyledPopup {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        radius: Appearance.rounding.small
+                        radius: Appearance.rounding.large
                         color: Qt.rgba(1, 1, 1, 0.07)
                         Layout.preferredHeight: hourlyGrid.implicitHeight + 16
 
@@ -303,7 +303,7 @@ StyledPopup {
                                     // Show 10 hours total => 2 rows, 5 items each row
                                     model: (Weather.hourly || []).slice(0, 10)
                                     Rectangle {
-                                        radius: Appearance.rounding.normal
+                                        radius: Appearance.rounding.large
                                         color: Qt.rgba(1, 1, 1, 0.05)
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 90
