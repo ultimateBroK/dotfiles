@@ -4,9 +4,9 @@
 */
 
 @media (prefers-color-scheme: light) {
-    @define-color accent_color #006d3b;
+    @define-color accent_color #006971;
     @define-color accent_fg_color #ffffff;
-    @define-color accent_bg_color #006d3b;
+    @define-color accent_bg_color #006971;
     @define-color window_bg_color #eefcfe;
     @define-color window_fg_color #111e1f;
     /* Use surface container ladder for clearer elevation steps */
@@ -25,9 +25,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    @define-color accent_color #7dda9b;
-    @define-color accent_fg_color #00391c;
-    @define-color accent_bg_color #7dda9b;
+    @define-color accent_color #00dbec;
+    @define-color accent_fg_color #00363b;
+    @define-color accent_bg_color #00dbec;
     @define-color window_bg_color #091517;
     @define-color window_fg_color #d7e5e7;
     /* Use surface container ladder for clearer elevation steps */

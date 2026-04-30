@@ -5,6 +5,7 @@
     "agents": {
         "loom": {
             "model": "zai-coding-plan/glm-5.1",
+            "variants": "high",
             "temperature": 0.4,
             "display_name": "Loom"
         },
@@ -17,7 +18,7 @@
         },
 
         "shuttle": {
-            "model": "github-copilot/gpt-5.3-codex",
+            "model": "zai-coding-plan/glm-5.1",
             "variants": "high",
             "temperature": 0.3,
             "display_name": "Shuttle"
@@ -42,7 +43,7 @@
         },
 
         "warp": {
-            "model": "github-copilot/gpt-5.3-codex",
+            "model": "github-copilot/gpt-5.4-mini",
             "variants": "high",
             "temperature": 0.3,
             "display_name": "Warp"
@@ -78,7 +79,7 @@
             "temperature": 0.7
         },
         "backend": {
-            "model": "github-copilot/gpt-5.3-codex",
+            "model": "zai-coding-plan/glm-5.1",
             "temperature": 0.3
         },
         "agentic": {
@@ -90,7 +91,7 @@
             "temperature": 0.5
         },
         "security": {
-            "model": "github-copilot/gpt-5.3-codex",
+            "model": "zai-coding-plan/glm-5.1",
             "temperature": 0.3
         },
         "quick-fix": {
