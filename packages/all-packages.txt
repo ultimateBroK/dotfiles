@@ -7,6 +7,7 @@ alsa-firmware
 alsa-plugins
 alsa-utils
 amd-ucode
+amdxdna-dkms
 ampcode
 android-sdk-platform-tools
 antigravity
@@ -17,6 +18,7 @@ aria2
 ast-grep
 asusctl
 asus-vivobook-rgb-keyboard
+athas-bin
 autopep8
 awesome-terminal-fonts
 baobab
@@ -24,7 +26,7 @@ base
 base-devel
 bash-completion
 beaver-notes-bin
-binance
+binance-app
 bind
 blanket
 bluez
@@ -60,10 +62,12 @@ cachy-update
 calf
 cantarell-fonts
 chwd
+cine
 cline-cli
 clinfo
 cloc
 cloudflare-warp-nox-bin
+codemux-bin
 composer
 cpupower
 crosswords
@@ -106,6 +110,7 @@ exfatprogs
 ex-vi-compat
 f2fs-tools
 fastfetch
+fastflowlm
 faustus-dkms-git
 fcitx5-bamboo
 fcitx5-configtool
@@ -116,6 +121,7 @@ firefox
 firejail
 flatpak
 floorp-bin
+flowsurface-bin
 fluent-icon-theme-git
 foomatic-db
 foomatic-db-engine
@@ -131,6 +137,7 @@ gdm
 gedit
 ghostscript
 ghostty
+ghostty-nautilus
 git
 github-cli
 github-copilot-cli
@@ -189,7 +196,6 @@ gum
 gutenprint
 gvfs-afc
 gvfs-dnssd
-gvfs-google
 gvfs-gphoto2
 gvfs-mtp
 gvfs-nfs
@@ -223,7 +229,7 @@ illogical-impulse-toolkit
 illogical-impulse-widgets
 imageviewer
 inetutils
-iptables-nft
+iptables
 ipython
 irqbalance
 iwd
@@ -236,9 +242,11 @@ jre21-openjdk
 jre8-openjdk
 julia
 kdeconnect
+kdenlive
 kilo-bin
 lazydocker
 lazygit
+legcord-bin
 less
 letta-code
 lib32-gamemode
@@ -289,6 +297,7 @@ linux-cachyos-headers
 linux-cachyos-lts
 linux-cachyos-lts-headers
 linux-firmware
+livekit-cli
 llmfit
 lmstudio-bin
 logrotate
@@ -360,7 +369,9 @@ opencl-mesa
 opencode-bin
 opendesktop-fonts
 openrgb
+openscreen-bin
 openssh
+openwork
 opera
 orca
 os-prober
@@ -372,7 +383,6 @@ partitionmanager
 paru
 pear-desktop-bin
 perl
-perplexity
 php
 pi-coding-agent
 pipewire-alsa
@@ -400,8 +410,10 @@ python-curl_cffi
 python-dacite
 python-defusedxml
 python-duckduckgo-search
+python-edge-tts
 python-flake8
 python-funk
+python-linkify-it-py
 python-lsp-server
 python-magika
 python-mammoth
@@ -419,6 +431,7 @@ python-pyflakes
 python-pygraphviz
 python-pylint
 python-pynvim
+python-pyperclip
 python-pyqt5
 python-pysdl3
 python-pystemmer
@@ -429,7 +442,9 @@ python-safetensors
 python-sentencepiece
 python-sphinx
 python-tabulate
+python-textual
 python-transformers
+python-uc-micro-py
 python-wcwidth
 python-whatthepatch
 qbittorrent-enhanced-git
@@ -456,6 +471,7 @@ radeontop
 rebuild-detector
 reflector
 rocm-gfx1150-bin
+rtk-bin
 rtkit
 ruby
 rust-analyzer
@@ -517,6 +533,8 @@ texlive-publishers
 texlive-xetex
 tgpt
 tigervnc
+tmux
+tolaria-bin
 totem
 tradingview-bin-latest
 trae-bin
@@ -558,11 +576,15 @@ warp-terminal
 waterfox-bin
 waypipe
 wayvibes-git
+webapp-manager
 which
 wikiman
 wiki-tui
-windsurf
+windsurf-electron-latest
 windsurf-next
+wine
+wine-gecko
+wine-mono
 wireless-regdb
 wlr-randr
 wofi
@@ -581,6 +603,7 @@ xorg-xinput
 xorg-xkill
 xorg-xrandr
 xorg-xwayland
+xrt-plugin-amdxdna
 yapf
 yarn
 yay-bin
@@ -588,5 +611,6 @@ yelp
 yt-dlp
 zam-plugins
 zed
+zellij
 zen-browser-bin
 z-library-bin

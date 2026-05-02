@@ -7,7 +7,6 @@ com.github.neithern.g4music
 com.github.taiko2k.tauonmb
 com.github.tchx84.Flatseal
 com.github.unrud.VideoDownloader
-com.jeffser.Alpaca
 com.mattjakeman.ExtensionManager
 com.rafaelmardojai.Blanket
 com.system76.Popsicle
@@ -30,11 +29,9 @@ io.github.shonebinu.Brief
 io.github.thetumultuousunicornofdarkness.cpu-x
 io.missioncenter.MissionCenter
 me.iepure.devtoolbox
-net.lutris.Lutris
 net.nokyan.Resources
 org.DolphinEmu.dolphin-emu
 org.gnome.Boxes
-org.gnome.gitlab.somas.Apostrophe
 org.gnome.PowerStats
 org.gnome.seahorse.Application
 org.gnome.Solanum

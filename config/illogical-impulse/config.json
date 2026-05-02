@@ -265,7 +265,7 @@
       "trae",
       "windsurf"
     ],
-    "pinnedOnStartup": true
+    "pinnedOnStartup": false
   },
   "enabledPanels": [
     "iiBar",
