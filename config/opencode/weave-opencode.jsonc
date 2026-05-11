@@ -5,52 +5,54 @@
     "agents": {
         "loom": {
             "model": "zai-coding-plan/glm-5.1",
-            "variants": "high",
+            "variants": "medium",
             "temperature": 0.4,
             "display_name": "Loom"
         },
 
         "tapestry": {
             "model": "zai-coding-plan/glm-5.1",
-            "variants": "high",
-            "temperature": 0.3,
+            "temperature": 0.4,
             "display_name": "Tapestry"
         },
 
         "shuttle": {
             "model": "zai-coding-plan/glm-5.1",
-            "variants": "high",
-            "temperature": 0.3,
+            "temperature": 0.4,
             "display_name": "Shuttle"
         },
 
         "thread": {
-            "model": "zai-coding-plan/glm-5-turbo",
+            "model": "github-copilot/gpt-5.4-mini",
+            "variants": "xhigh",
             "temperature": 0.5,
             "display_name": "Thread"
         },
 
         "pattern": {
             "model": "zai-coding-plan/glm-5.1",
+            "variants": "medium",
             "temperature": 0.7,
             "display_name": "Pattern"
         },
 
         "weft": {
-            "model": "github-copilot/gemini-3.1-pro-preview",
-            "temperature": 0.3,
+            "model": "github-copilot/gpt-5.4-mini",
+            "variants": "xhigh",
+            "temperature": 0.4,
             "display_name": "Weft"
         },
 
         "warp": {
             "model": "github-copilot/gpt-5.4-mini",
-            "variants": "high",
-            "temperature": 0.3,
+            "variants": "xhigh",
+            "temperature": 0.4,
             "display_name": "Warp"
         },
 
         "spindle": {
-            "model": "zai-coding-plan/glm-5-turbo",
+            "model": "github-copilot/gpt-5.4-mini",
+            "variants": "xhigh",
             "temperature": 0.5,
             "display_name": "Spindle"
         }
@@ -58,8 +60,9 @@
     "custom_agents": {
         "ml-engineer": {
             "description": "Machine Learning expert: model design, training, evaluation, optimization, PyTorch/TensorFlow, data pipeline",
-            "model": "zai-coding-plan/glm-5.1",
-            "temperature": 0.3,
+            "model": "openai/gpt-5.5",
+            "variants": "medium",
+            "temperature": 0.4,
             "display_name": "ML Engineer",
             "mode": "subagent",
             "tools": {
@@ -80,7 +83,7 @@
         },
         "backend": {
             "model": "zai-coding-plan/glm-5.1",
-            "temperature": 0.3
+            "temperature": 0.4
         },
         "agentic": {
             "model": "zai-coding-plan/glm-5.1",
@@ -92,11 +95,11 @@
         },
         "security": {
             "model": "zai-coding-plan/glm-5.1",
-            "temperature": 0.3
+            "temperature": 0.4
         },
         "quick-fix": {
             "model": "zai-coding-plan/glm-5-turbo",
-            "temperature": 0.3
+            "temperature": 0.4
         }
     },
 

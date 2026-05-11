@@ -8,21 +8,6 @@ hl.config({
         -- Dark background for OLED displays
         background_color = 0x{{colors.surface.dark.hex_stripped}}FF,
     },
-    plugin = {
-        hyprbars = {
-            -- Font stack for title bars
-            bar_text_font    = "Rubik, Geist, AR One Sans, Reddit Sans, Inter, Roboto, Ubuntu, Noto Sans, sans-serif",
-            bar_height       = 30,
-            bar_padding      = 10,
-            bar_button_padding = 5,
-            bar_precedence_over_border = true,
-            bar_part_of_window = true,
-
-            -- Use a slightly elevated surface for better separation from the wallpaper/background
-            bar_color        = 0x{{colors.surface_container_low.dark.hex_stripped}}FF,
-            col              = { text = 0x{{colors.on_surface.dark.hex_stripped}}FF },
-        },
-    },
 })
 
 -- Pinned window border glow (primary accent color)
