@@ -2,6 +2,7 @@ pragma Singleton
 
 import qs.modules.common
 import qs.modules.common.functions
+import QtCore
 import QtQuick
 import Quickshell
 
@@ -11,6 +12,15 @@ import Quickshell
  */
 Singleton {
     id: root
+    /** XDG data dir (usually ~/.local/share); Chrome/Brave/Edge PWAs install hicolor PNGs here */
+    readonly property string genericDataHome: {
+        const locs = StandardPaths.standardLocations(StandardPaths.GenericDataLocation)
+        if (locs.length > 0)
+            return FileUtils.trimFileProtocol(locs[0].toString())
+        return FileUtils.trimFileProtocol(Directories.home) + "/.local/share"
+    }
+    readonly property var _chromiumPwaIconPrefixes: ["chrome-", "brave-", "msedge-", "microsoft-edge-"]
+
     property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
@@ -118,10 +128,77 @@ Singleton {
         });
     }
 
+    function isChromiumStylePwaIconName(iconName) {
+        if (!iconName || typeof iconName !== "string")
+            return false;
+        const n = iconName.trim();
+        if (n.length === 0 || n.includes("/") || n.startsWith("file:"))
+            return false;
+        const lower = n.toLowerCase();
+        for (let i = 0; i < root._chromiumPwaIconPrefixes.length; i++) {
+            if (lower.startsWith(root._chromiumPwaIconPrefixes[i]))
+                return true;
+        }
+        return false;
+    }
+
+    /** Freedesktop hicolor path for PWA icons (Threads, X, etc.): Icon=chrome-…-Default in .desktop */
+    function chromiumPwaHicolorFileUrl(iconName) {
+        if (!root.isChromiumStylePwaIconName(iconName))
+            return "";
+        const n = String(iconName).trim();
+        const base = root.genericDataHome;
+        if (!base)
+            return "";
+        // Chrome writes PNGs under hicolor/<size>/apps/; Quickshell.iconPath often misses ~/.local icons.
+        const path = `${base}/icons/hicolor/48x48/apps/${n}.png`;
+        return "file://" + path;
+    }
+
     function iconExists(iconName) {
         if (!iconName || iconName.length == 0) return false;
-        return (Quickshell.iconPath(iconName, true).length > 0) 
+        const s = String(iconName).trim();
+        // .desktop Icon= may be an absolute path (common for Chrome/Chromium PWAs)
+        if (s.startsWith("file://") || s.startsWith("/") || s.startsWith("~/"))
+            return true;
+        if (root.isChromiumStylePwaIconName(s))
+            return true;
+        return (Quickshell.iconPath(iconName, true).length > 0)
             && !iconName.includes("image-missing");
+    }
+
+    /**
+     * IconImage.source for theme icon names, file:// URLs, or absolute paths.
+     * Chromium web apps often ship Icon=/home/.../.local/share/icons/.../chrome-....png in .desktop.
+     */
+    function resolvedIconSource(icon, fallback) {
+        const fb = fallback ?? "image-missing";
+        if (!icon || String(icon).length == 0)
+            return Quickshell.iconPath(fb, "image-missing");
+        const s = String(icon).trim();
+        if (s.startsWith("file://"))
+            return s;
+        if (s.startsWith("/"))
+            return "file://" + s;
+        if (s.startsWith("~/")) {
+            const home = FileUtils.trimFileProtocol(Directories.home);
+            return "file://" + home + s.slice(1);
+        }
+        if (root.isChromiumStylePwaIconName(s)) {
+            const themed = Quickshell.iconPath(s, true);
+            if (themed && themed.length > 0)
+                return Quickshell.iconPath(s, fb);
+            const pwaUrl = root.chromiumPwaHicolorFileUrl(s);
+            if (pwaUrl)
+                return pwaUrl;
+        }
+        return Quickshell.iconPath(s, fb);
+    }
+
+    function _isPathIcon(s) {
+        if (!s || typeof s !== "string") return false;
+        const t = s.trim();
+        return t.startsWith("file://") || t.startsWith("/") || t.startsWith("~/");
     }
 
     function getReverseDomainNameAppName(str) {
@@ -138,6 +215,13 @@ Singleton {
 
     function guessIcon(str) {
         if (!str || str.length == 0) return "image-missing";
+
+        // Chromium PWA windows: StartupWMClass / Hyprland class is often crx_<id>
+        if (typeof str === "string" && str.startsWith("crx_")) {
+            const pwa = DesktopEntries.heuristicLookup(str);
+            if (pwa && pwa.icon)
+                return pwa.icon;
+        }
 
         // Quickshell's desktop entry lookup
         const entry = DesktopEntries.byId(str);
@@ -186,18 +270,19 @@ Singleton {
         });
         if (iconSearchResults.length > 0) {
             const guess = iconSearchResults[0].icon
-            if (iconExists(guess)) return guess;
+            if (_isPathIcon(guess) || iconExists(guess)) return guess;
         }
 
         const nameSearchResults = root.fuzzyQuery(str);
         if (nameSearchResults.length > 0) {
             const guess = nameSearchResults[0].icon
-            if (iconExists(guess)) return guess;
+            if (_isPathIcon(guess) || iconExists(guess)) return guess;
         }
 
         // Quickshell's desktop entry lookup
         const heuristicEntry = DesktopEntries.heuristicLookup(str);
-        if (heuristicEntry) return heuristicEntry.icon;
+        if (heuristicEntry && heuristicEntry.icon)
+            return heuristicEntry.icon;
 
         // Give up
         return "application-x-executable";

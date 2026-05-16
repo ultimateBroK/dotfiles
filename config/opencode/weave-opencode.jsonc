@@ -5,55 +5,52 @@
     "agents": {
         "loom": {
             "model": "zai-coding-plan/glm-5.1",
-            "variants": "medium",
-            "temperature": 0.4,
+            // "temperature": 0.4,
             "display_name": "Loom"
         },
 
         "tapestry": {
             "model": "zai-coding-plan/glm-5.1",
-            "temperature": 0.4,
+            // "temperature": 0.4,
             "display_name": "Tapestry"
         },
 
         "shuttle": {
             "model": "zai-coding-plan/glm-5.1",
-            "temperature": 0.4,
+            // "temperature": 0.4,
             "display_name": "Shuttle"
         },
 
         "thread": {
-            "model": "github-copilot/gpt-5.4-mini",
-            "variants": "xhigh",
-            "temperature": 0.5,
+            "model": "minimax-coding-plan/MiniMax-M2.7",
+            // "variants": "xhigh",
+            // "temperature": 0.5,
             "display_name": "Thread"
         },
 
         "pattern": {
             "model": "zai-coding-plan/glm-5.1",
-            "variants": "medium",
-            "temperature": 0.7,
+            // "temperature": 0.7,
             "display_name": "Pattern"
         },
 
         "weft": {
-            "model": "github-copilot/gpt-5.4-mini",
+            "model": "minimax-coding-plan/MiniMax-M2.7",
             "variants": "xhigh",
-            "temperature": 0.4,
+            // "temperature": 0.4,
             "display_name": "Weft"
         },
 
         "warp": {
-            "model": "github-copilot/gpt-5.4-mini",
-            "variants": "xhigh",
-            "temperature": 0.4,
+            "model": "minimax-coding-plan/MiniMax-M2.7",
+            // "temperature": 0.4,
             "display_name": "Warp"
         },
 
         "spindle": {
-            "model": "github-copilot/gpt-5.4-mini",
-            "variants": "xhigh",
-            "temperature": 0.5,
+            "model": "minimax-coding-plan/MiniMax-M2.7",
+            // "variants": "xhigh",
+            // "temperature": 0.5,
             "display_name": "Spindle"
         }
     },
@@ -62,7 +59,7 @@
             "description": "Machine Learning expert: model design, training, evaluation, optimization, PyTorch/TensorFlow, data pipeline",
             "model": "openai/gpt-5.5",
             "variants": "medium",
-            "temperature": 0.4,
+            // "temperature": 0.4,
             "display_name": "ML Engineer",
             "mode": "subagent",
             "tools": {
