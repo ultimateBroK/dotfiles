@@ -22,7 +22,7 @@ Item {
         id: background
         // Keep vertical bar richer; keep topbar flatter but still subtly highlighted.
         amoledVariant: root.vertical
-        highlightEnabled: true
+        highlightEnabled: root.vertical
         anchors {
             fill: parent
             topMargin: root.vertical ? 0 : 1
@@ -51,13 +51,22 @@ Item {
         radius: Appearance.rounding.large
 
         Behavior on glassColor {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            ColorAnimation {
+                duration: Appearance.animation.barMoveFast.duration
+                easing.type: Appearance.animation.barMoveFast.easingType
+            }
         }
         Behavior on glassTransparency {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            NumberAnimation {
+                duration: Appearance.animation.barMoveFast.duration
+                easing.type: Appearance.animation.barMoveFast.easingType
+            }
         }
         Behavior on border.color {
-            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+            ColorAnimation {
+                duration: Appearance.animation.barMoveFast.duration
+                easing.type: Appearance.animation.barMoveFast.easingType
+            }
         }
     }
 

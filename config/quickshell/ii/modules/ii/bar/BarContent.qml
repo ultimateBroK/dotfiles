@@ -329,7 +329,10 @@ Item { // Bar content region
                     property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colPrimary
 
                 Behavior on colText {
-                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                    ColorAnimation {
+                        duration: Appearance.animation.barMoveFast.duration
+                        easing.type: Appearance.animation.barMoveFast.easingType
+                    }
                 }
 
                 onPressed: {
@@ -347,7 +350,10 @@ Item { // Bar content region
                         Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            NumberAnimation {
+                                duration: Appearance.animation.barMoveFast.duration
+                                easing.type: Appearance.animation.barMoveFast.easingType
+                            }
                         }
                         MaterialSymbol {
                             text: "mic_off"
@@ -367,7 +373,10 @@ Item { // Bar content region
                         implicitHeight: reveal ? notificationUnreadCount.implicitHeight : 0
                         implicitWidth: reveal ? notificationUnreadCount.implicitWidth : 0
                         Behavior on Layout.rightMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            NumberAnimation {
+                                duration: Appearance.animation.barMoveFast.duration
+                                easing.type: Appearance.animation.barMoveFast.easingType
+                            }
                         }
                         NotificationUnreadCount {
                             id: notificationUnreadCount

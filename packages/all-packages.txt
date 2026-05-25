@@ -10,7 +10,8 @@ amd-ucode
 amdxdna-dkms
 ampcode
 android-sdk-platform-tools
-antigravity
+antigravity-cli-bin
+antigravity-ide-bin
 antigravity-tools-bin
 anytype-bin
 arch-wiki-docs
@@ -36,6 +37,7 @@ bluez-utils
 bottles
 bpftune-git
 brave-bin
+brave-origin-nightly-bin
 bridge-utils
 btop
 btrfs-assistant
@@ -77,6 +79,7 @@ cups
 cups-filters
 cups-pdf
 cursor-bin
+cursor-cli
 decibels
 deno
 device-mapper
@@ -93,12 +96,14 @@ docker
 docker-compose
 dosfstools
 downgrade
+dpcode-bin
 ducker
 duf
 e2fsprogs
 easyeffects
 efibootmgr
 efitools
+emdash-app
 eog
 epiphany
 equibop-bin
@@ -244,6 +249,7 @@ julia
 kdeconnect
 kdenlive
 kilo-bin
+konsole
 lazydocker
 lazygit
 legcord-bin
@@ -318,7 +324,6 @@ man-pages
 materialgram-bin
 mdadm
 mda.lv2
-mechvibes
 megasync
 meld
 mesa-utils
@@ -350,6 +355,7 @@ niri
 nmap
 nm-connection-editor
 nodejs-lts-jod
+notepad++
 noto-color-emoji-fontconfig
 noto-fonts
 noto-fonts-cjk
@@ -425,6 +431,7 @@ python-onnxruntime-opt-rocm
 python-onnxscript
 python-packaging
 python-pip
+python-pipx
 python-pycodestyle
 python-pydocstyle
 python-pyflakes
@@ -506,6 +513,7 @@ system-config-printer
 tabiew
 tecla
 tenere-bin
+terax-bin
 testdisk
 texinfo
 texlive-basic
@@ -576,11 +584,10 @@ warp-terminal
 waterfox-bin
 waypipe
 wayvibes-git
-webapp-manager
 which
 wikiman
 wiki-tui
-windsurf-electron-latest
+windsurf-bin
 windsurf-next
 wine
 wine-gecko
@@ -595,7 +602,6 @@ xf86-input-synaptics
 xf86-video-amdgpu
 xfsprogs
 xl2tpd
-xmcl-launcher
 xorg-server
 xorg-xdpyinfo
 xorg-xinit

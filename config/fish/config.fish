@@ -29,3 +29,7 @@ end
 
 # Added by LM Studio CLI tool (lms)
 set -gx PATH $PATH /home/ultimatebrok/.lmstudio/bin
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/home/ultimatebrok/.local/bin" $PATH

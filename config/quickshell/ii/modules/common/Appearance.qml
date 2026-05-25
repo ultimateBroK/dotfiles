@@ -595,6 +595,16 @@ Singleton {
             }}
         }
 
+        property QtObject barMove: QtObject {
+            property int duration: 200
+            property int easingType: Easing.OutQuad
+        }
+
+        property QtObject barMoveFast: QtObject {
+            property int duration: 150
+            property int easingType: Easing.OutQuad
+        }
+
         property QtObject elementResize: QtObject {
             property int duration: 300
             property int type: Easing.BezierSpline

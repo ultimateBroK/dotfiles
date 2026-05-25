@@ -1,8 +1,10 @@
+accounts-qml-module
 adw-gtk-theme-git
 amdxdna-dkms
 ampcode
 android-sdk-platform-tools
-antigravity
+antigravity-cli-bin
+antigravity-ide-bin
 antigravity-tools-bin
 anytype-bin
 asus-vivobook-rgb-keyboard
@@ -10,6 +12,7 @@ athas-bin
 beaver-notes-bin
 binance-app
 bottles
+brave-origin-nightly-bin
 breeze-plus
 bridge-utils
 cine
@@ -19,12 +22,15 @@ codemux-bin
 crosswords
 crush-bin
 cursor-bin
+cursor-cli
 darkly-bin
 dee
 dijo-1995parham
+dpcode-bin
 electron39-bin
 electron40-bin
 electron41-bin
+emdash-app
 equibop-bin
 execstack
 faustus-dkms-git
@@ -104,7 +110,6 @@ lmstudio-bin
 logseq-desktop
 lyrebird
 matugen-bin
-mechvibes
 megasync
 microsoft-edge-stable-bin
 miniaudio-git
@@ -114,6 +119,7 @@ music-presence-bin
 nautilus-admin-gtk4
 nautilus-bluetooth
 nautilus-launch
+notepad++
 ocrmypdf
 openai-codex-bin
 opencode-bin
@@ -166,6 +172,7 @@ splix
 spotify
 surge
 tenere-bin
+terax-bin
 tolaria-bin
 tradingview-bin-latest
 trae-bin
@@ -182,7 +189,6 @@ visual-studio-code-insiders-bin
 vsce
 wakafetch-git
 wayvibes-git
-windsurf-electron-latest
+windsurf-bin
 windsurf-next
-xmcl-launcher
 z-library-bin

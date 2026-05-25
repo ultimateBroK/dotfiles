@@ -116,8 +116,8 @@ Scope {
                         
                         implicitHeight: Appearance.sizes.barHeight
                         
-                        layer.enabled: !Config?.options.bar.autoHide.enable
-                        layer.smooth: true
+                        layer.enabled: Config?.options.bar.autoHide.enable
+                        layer.smooth: Config?.options.bar.autoHide.enable
                         
                         anchors {
                             right: parent.right
@@ -129,10 +129,16 @@ Scope {
                             rightMargin: (Config.options.interactions.deadPixelWorkaround.enable && barRoot.anchors.right) * -1
                         }
                         Behavior on anchors.topMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            NumberAnimation {
+                                duration: Appearance.animation.barMoveFast.duration
+                                easing.type: Appearance.animation.barMoveFast.easingType
+                            }
                         }
                         Behavior on anchors.bottomMargin {
-                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            NumberAnimation {
+                                duration: Appearance.animation.barMoveFast.duration
+                                easing.type: Appearance.animation.barMoveFast.easingType
+                            }
                         }
 
                         states: State {

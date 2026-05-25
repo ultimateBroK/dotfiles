@@ -36,7 +36,7 @@
 
         "weft": {
             "model": "minimax-coding-plan/MiniMax-M2.7",
-            "variants": "xhigh",
+            // "variants": "xhigh",
             // "temperature": 0.4,
             "display_name": "Weft"
         },
