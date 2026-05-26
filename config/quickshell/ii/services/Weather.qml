@@ -116,7 +116,8 @@ Singleton {
             return;
         }
         const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=en&format=json`;
-        geocodeFetcher.command[2] = `curl -sL --max-time 10 '${url}'`;
+        const escapedUrl = url.replace(/'/g, "'\\''");
+        geocodeFetcher.command[2] = `curl -sL --max-time 10 '${escapedUrl}'`;
         geocodeFetcher.running = true;
     }
 
@@ -145,7 +146,8 @@ Singleton {
         ].join("&");
 
         const url = `${base}?${query}`;
-        weatherFetcher.command[2] = `curl -sL --max-time 10 '${url}'`;
+        const escapedUrl = url.replace(/'/g, "'\\''");
+        weatherFetcher.command[2] = `curl -sL --max-time 10 '${escapedUrl}'`;
         weatherFetcherCityName = displayCityName || "";
         weatherFetcher.running = true;
     }
