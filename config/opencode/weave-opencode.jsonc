@@ -22,7 +22,7 @@
         },
 
         "thread": {
-            "model": "minimax-coding-plan/MiniMax-M2.7",
+            "model": "zai-coding-plan/glm-5.1",
             // "variants": "xhigh",
             // "temperature": 0.5,
             "display_name": "Thread"
@@ -35,20 +35,20 @@
         },
 
         "weft": {
-            "model": "minimax-coding-plan/MiniMax-M2.7",
+            "model": "zai-coding-plan/glm-5.1",
             // "variants": "xhigh",
             // "temperature": 0.4,
             "display_name": "Weft"
         },
 
         "warp": {
-            "model": "minimax-coding-plan/MiniMax-M2.7",
+            "model": "zai-coding-plan/glm-5.1",
             // "temperature": 0.4,
             "display_name": "Warp"
         },
 
         "spindle": {
-            "model": "minimax-coding-plan/MiniMax-M2.7",
+            "model": "zai-coding-plan/glm-5.1",
             // "variants": "xhigh",
             // "temperature": 0.5,
             "display_name": "Spindle"

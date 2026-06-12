@@ -79,13 +79,17 @@ function refine(payload, opts) {
     const hourlyOut = [];
     const now = new Date();
     const horizonMs = 24 * 3600 * 1000;
+    const includePastMs = 55 * 60 * 1000;
     for (let i = 0; i < hTimes.length; i++) {
         const d = new Date(hTimes[i]);
         const dt = d - now;
-        if (!Number.isFinite(dt) || dt < 0 || dt > horizonMs) continue;
+        if (!Number.isFinite(dt) || dt < -includePastMs || dt > horizonMs) continue;
+        const labelDtMins = Math.round(dt / 60000);
+        const isNowHour = (labelDtMins >= -10 && labelDtMins <= 10);
 
         hourlyOut.push({
-            timeLabel: Qt.formatTime(d, "hh:mm"),
+            timeLabel: isNowHour ? tr("Now") : Qt.formatTime(d, "hh:mm"),
+            isNowHour: isNowHour,
             timeIso: hTimes[i],
             temp: Format.formatTemp(Number(hTemp[i]), useUSCS),
             code: Number(hCode[i] ?? 0),
@@ -138,7 +142,7 @@ function refine(payload, opts) {
         });
     }
 
-    const warnings = Warnings.compute(hourlyOut, dailyOut, current, useUSCS);
+    const warnings = Warnings.compute(hourlyOut, dailyOut, current, useUSCS, tr);
 
     return {
         data: out,

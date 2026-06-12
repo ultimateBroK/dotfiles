@@ -2,9 +2,10 @@
 
 .import "Format.js" as Format
 
-function compute(hourlyArr, dailyArr, current, useUSCS) {
+function compute(hourlyArr, dailyArr, current, useUSCS, tr) {
     // Global hazard heuristics based on Open-Meteo variables (no official CAP alerts in Open-Meteo).
     // Designed to be useful when traveling to other countries/climates.
+    const t = (typeof tr === "function") ? tr : (s) => s;
     const warnings = [];
     const seen = {};
     const now = new Date();
@@ -23,7 +24,9 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
         const newActive = !!obj.isActive;
         const oldSev = Number(old.severityLevel ?? 0);
         const newSev = Number(obj.severityLevel ?? 0);
-        if ((newActive && !oldActive) || (newSev > oldSev)) {
+        if (newActive && !oldActive) {
+            warnings[idx] = obj;
+        } else if (newActive === oldActive && newSev > oldSev) {
             warnings[idx] = obj;
         }
     }
@@ -37,44 +40,44 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
         const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const startOfThat = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         const diffDays = Math.round((startOfThat - startOfToday) / (24 * 3600 * 1000));
-        if (diffDays === 0) return "Today";
-        if (diffDays === 1) return "Tomorrow";
+        if (diffDays === 0) return t("Today");
+        if (diffDays === 1) return t("Tomorrow");
         return Qt.formatDate(d, "ddd dd/MM");
     }
 
     function relativeFromNow(d) {
         const diffMs = d - now;
         const absMin = Math.round(Math.abs(diffMs) / 60000);
-        if (absMin <= 10) return "Now";
+        if (absMin <= 10) return t("Now");
         if (diffMs > 0) {
             const h = Math.floor(absMin / 60);
             const m = absMin % 60;
-            if (h > 0 && m > 0) return `In ${h}h ${m}m`;
-            if (h > 0) return `In ${h}h`;
-            return `In ${m}m`;
+            if (h > 0 && m > 0) return `${t("In")} ${h}h ${m}m`;
+            if (h > 0) return `${t("In")} ${h}h`;
+            return `${t("In")} ${m}m`;
         } else {
             const h = Math.floor(absMin / 60);
             const m = absMin % 60;
-            if (h > 0 && m > 0) return `Started ${h}h ${m}m ago`;
-            if (h > 0) return `Started ${h}h ago`;
-            return `Started ${m}m ago`;
+            if (h > 0 && m > 0) return `${t("Started")} ${h}h ${m}m ${t("ago")}`;
+            if (h > 0) return `${t("Started")} ${h}h ${t("ago")}`;
+            return `${t("Started")} ${m}m ${t("ago")}`;
         }
     }
 
     function describeWhen(first, last, isActive) {
-        if (!first) return "Next 24h";
+        if (!first) return t("Next 24h");
         const end = last ? last : first;
         const sameHour = Math.abs(end - first) < 45 * 60000;
         const startTxt = `${dayLabel(first)} ${fmtTime(first)}`;
         const endTxt = `${fmtTime(end)}`;
         if (isActive) {
             // show end time if we have it
-            return sameHour ? `Now • ${startTxt}` : `Now • until ${dayLabel(end)} ${endTxt}`;
+            return sameHour ? t("Now") : `${t("Now")} • ${t("until")} ${dayLabel(end)} ${endTxt}`;
         }
         if (sameHour) {
             return `${relativeFromNow(first)} • ${startTxt}`;
         }
-        return `${relativeFromNow(first)} • ${startTxt}–${endTxt}`;
+        return `${relativeFromNow(first)} • ${startTxt}–${dayLabel(end)} ${endTxt}`;
     }
 
     // Thresholds (units follow API settings)
@@ -317,10 +320,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             icon: "thunderstorm",
             severityLevel: 2,
             isActive: true,
-            title: currentHail ? "Thunderstorm now (hail possible)" : "Thunderstorm now",
-            severity: "Danger",
-            timeRange: "Now",
-            details: "Storm conditions detected right now."
+            title: currentHail ? t("Thunderstorm now (hail possible)") : t("Thunderstorm now"),
+            severity: t("Danger"),
+            timeRange: t("Now"),
+            details: t("Storm conditions detected right now.")
         });
     }
     if (currentFreezing) {
@@ -329,10 +332,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             icon: "severe_cold",
             severityLevel: 2,
             isActive: true,
-            title: "Freezing rain / ice now",
-            severity: "Danger",
-            timeRange: "Now",
-            details: "Icy conditions detected right now."
+            title: t("Freezing rain / ice now"),
+            severity: t("Danger"),
+            timeRange: t("Now"),
+            details: t("Icy conditions detected right now.")
         });
     }
     if (currentSnow) {
@@ -341,23 +344,23 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             icon: "ac_unit",
             severityLevel: 1,
             isActive: true,
-            title: "Snow / icy conditions now",
-            severity: "Warning",
-            timeRange: "Now",
-            details: "Snow/ice conditions detected right now."
+            title: t("Snow / icy conditions now"),
+            severity: t("Warning"),
+            timeRange: t("Now"),
+            details: t("Snow/ice conditions detected right now.")
         });
     }
     if (currentFog) {
         const sev = (Number.isFinite(curVis) && curVis <= visDanger) ? 2 : 1;
-        const detail = Number.isFinite(curVis) ? `Visibility: ${Format.formatVisibilityMeters(curVis, useUSCS)}` : "Low visibility possible.";
+        const detail = Number.isFinite(curVis) ? `${t("Visibility")}: ${Format.formatVisibilityMeters(curVis, useUSCS)}` : t("Low visibility possible.");
         addOrUpgradeWarning("fog", {
             kind: "fog",
             icon: "foggy",
             severityLevel: sev,
             isActive: true,
-            title: "Fog / low visibility now",
-            severity: sev >= 2 ? "Danger" : "Warning",
-            timeRange: "Now",
+            title: t("Fog / low visibility now"),
+            severity: sev >= 2 ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
             details: detail
         });
     }
@@ -367,10 +370,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             icon: "air",
             severityLevel: (curGust >= gustDanger) ? 2 : 1,
             isActive: true,
-            title: "Strong wind gusts now",
-            severity: (curGust >= gustDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Gust: ${Format.formatWind(curGust, useUSCS)}`
+            title: t("Strong wind gusts now"),
+            severity: (curGust >= gustDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Gust")}: ${Format.formatWind(curGust, useUSCS)}`
         });
     }
     if (Number.isFinite(curPrecip) && curPrecip >= precipWarn) {
@@ -379,10 +382,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             icon: "rainy",
             severityLevel: (curPrecip >= precipDanger) ? 2 : 1,
             isActive: true,
-            title: "Heavy rain now",
-            severity: (curPrecip >= precipDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Precipitation: ${Format.formatPrecip(curPrecip, useUSCS)}`
+            title: t("Heavy rain now"),
+            severity: (curPrecip >= precipDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Precipitation")}: ${Format.formatPrecip(curPrecip, useUSCS)}`
         });
     }
 
@@ -394,10 +397,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curHi >= heatIndexDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Heat stress now",
-            severity: (curHi >= heatIndexDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Heat index: ${Format.formatTemp(curHi, useUSCS)} (Temp: ${Format.formatTemp(curTemp, useUSCS)} • Humidity: ${Math.round(curRh)}%)`
+            title: t("Heat stress now"),
+            severity: (curHi >= heatIndexDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Heat index")}: ${Format.formatTemp(curHi, useUSCS)} (${t("Temp")}: ${Format.formatTemp(curTemp, useUSCS)} • ${t("Humidity")}: ${Math.round(curRh)}%)`
         });
     } else if (Number.isFinite(curApp) && curApp >= heatWarn) {
         addOrUpgradeWarning("heat", {
@@ -406,10 +409,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curApp >= heatDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Heat risk now",
-            severity: (curApp >= heatDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Apparent temperature: ${Format.formatTemp(curApp, useUSCS)}`
+            title: t("Heat risk now"),
+            severity: (curApp >= heatDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Apparent temperature")}: ${Format.formatTemp(curApp, useUSCS)}`
         });
     }
 
@@ -421,10 +424,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curWc <= windChillDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Wind chill now",
-            severity: (curWc <= windChillDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Wind chill: ${Format.formatTemp(curWc, useUSCS)} (Temp: ${Format.formatTemp(curTemp, useUSCS)} • Wind: ${Format.formatWind(curWind, useUSCS)})`
+            title: t("Wind chill now"),
+            severity: (curWc <= windChillDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Wind chill")}: ${Format.formatTemp(curWc, useUSCS)} (${t("Temp")}: ${Format.formatTemp(curTemp, useUSCS)} • ${t("Wind")}: ${Format.formatWind(curWind, useUSCS)})`
         });
     } else if (Number.isFinite(curApp) && curApp <= coldWarn) {
         addOrUpgradeWarning("cold", {
@@ -433,10 +436,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curApp <= coldDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Cold / frost risk now",
-            severity: (curApp <= coldDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Apparent temperature: ${Format.formatTemp(curApp, useUSCS)}`
+            title: t("Cold / frost risk now"),
+            severity: (curApp <= coldDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Apparent temperature")}: ${Format.formatTemp(curApp, useUSCS)}`
         });
     }
 
@@ -447,10 +450,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curUv >= uvDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "High UV exposure now",
-            severity: (curUv >= uvDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `UV index: ${curUv.toFixed(1)}`
+            title: t("High UV exposure now"),
+            severity: (curUv >= uvDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("UV index")}: ${curUv.toFixed(1)}`
         });
     }
 
@@ -461,10 +464,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curDew >= dewDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Oppressive humidity now",
-            severity: (curDew >= dewDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Dew point: ${Format.formatTemp(curDew, useUSCS)}`
+            title: t("Oppressive humidity now"),
+            severity: (curDew >= dewDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Dew point")}: ${Format.formatTemp(curDew, useUSCS)}`
         });
     }
 
@@ -475,10 +478,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: (curRh <= dryDanger) ? 2 : 1,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Very dry air now",
-            severity: (curRh <= dryDanger) ? "Danger" : "Warning",
-            timeRange: "Now",
-            details: `Humidity: ${Math.round(curRh)}%`
+            title: t("Very dry air now"),
+            severity: (curRh <= dryDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Now"),
+            details: `${t("Humidity")}: ${Math.round(curRh)}%`
         });
     }
 
@@ -489,10 +492,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: 2,
             isActive: true,
             startTimeMs: now.getTime(),
-            title: "Black ice / slippery risk now",
-            severity: "Danger",
-            timeRange: "Now",
-            details: `Near-freezing with precipitation (${Format.formatTemp(curApp, useUSCS)} • ${Format.formatPrecip(curPrecip, useUSCS)})`
+            title: t("Black ice / slippery risk now"),
+            severity: t("Danger"),
+            timeRange: t("Now"),
+            details: `${t("Near-freezing with precipitation")} (${Format.formatTemp(curApp, useUSCS)} • ${Format.formatPrecip(curPrecip, useUSCS)})`
         });
     }
 
@@ -504,10 +507,10 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: 2,
             isActive: false,
             startTimeMs: thunderFirst.getTime(),
-            title: hasHail ? "Thunderstorm risk (hail possible)" : "Nearby thunderstorm risk",
-            severity: "Danger",
+            title: hasHail ? t("Thunderstorm risk (hail possible)") : t("Nearby thunderstorm risk"),
+            severity: t("Danger"),
             timeRange: describeWhen(thunderFirst, thunderLast, false),
-            details: "Thunderstorm signals detected within the next 24 hours."
+            details: t("Thunderstorm signals detected within the next 24 hours.")
         });
     }
 
@@ -518,8 +521,232 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             severityLevel: 2,
             isActive: false,
             startTimeMs: freezingFirst.getTime(),
+            title: t("Freezing rain / ice risk"),
+            severity: t("Danger"),
+            timeRange: describeWhen(freezingFirst, freezingLast, false),
+            details: t("Icy conditions possible (slippery roads/sidewalks).")
+        });
+    }
+
+    if (snowFirst) {
+        addOrUpgradeWarning("snow", {
+            kind: "snow",
+            icon: "ac_unit",
+            severityLevel: hasHeavySnow ? 2 : 1,
+            isActive: false,
+            startTimeMs: snowFirst.getTime(),
+            title: hasHeavySnow ? t("Heavy snow risk") : t("Snow / icy conditions possible"),
+            severity: hasHeavySnow ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(snowFirst, snowLast, false),
+            details: t("Reduced visibility and slippery surfaces may occur.")
+        });
+    }
+
+    if (fogFirst) {
+        const fogSevLevel = (Number.isFinite(minFogVis) && minFogVis <= visDanger) ? 2 : 1;
+        const detail = Number.isFinite(minFogVis) && minFogVis !== Number.POSITIVE_INFINITY && minFogVis <= 5000
+            ? `${t("Lowest visibility")}: ${Format.formatVisibilityMeters(minFogVis, useUSCS)}`
+            : t("Forecast indicates fog / reduced visibility.");
+        addOrUpgradeWarning("fog", {
+            kind: "fog",
+            icon: "foggy",
+            severityLevel: fogSevLevel,
+            isActive: false,
+            startTimeMs: fogFirst.getTime(),
+            title: t("Fog / low visibility"),
+            severity: fogSevLevel >= 2 ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(fogFirst, fogLast, false),
+            details: detail
+        });
+    }
+
+    if (Number.isFinite(maxGust) && maxGust >= gustWarn) {
+        addOrUpgradeWarning("wind", {
+            kind: "wind",
+            icon: "air",
+            severityLevel: (maxGust >= gustDanger) ? 2 : 1,
+            isActive: false,
+            startTimeMs: now.getTime(),
+            title: t("Strong wind gusts nearby"),
+            severity: (maxGust >= gustDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Next 24h"),
+            details: `${t("Peak gust")}: ${Format.formatWind(maxGust, useUSCS)}`
+        });
+    }
+
+    if (Number.isFinite(maxPrecip) && maxPrecip >= precipWarn) {
+        addOrUpgradeWarning("rain", {
+            kind: "rain",
+            icon: "rainy",
+            severityLevel: (maxPrecip >= precipDanger) ? 2 : 1,
+            isActive: false,
+            startTimeMs: now.getTime(),
+            title: t("Heavy rain possible"),
+            severity: (maxPrecip >= precipDanger) ? t("Danger") : t("Warning"),
+            timeRange: t("Next 24h"),
+            details: `${t("Max hourly precipitation")}: ${Format.formatPrecip(maxPrecip, useUSCS)}`
+        });
+    }
+
+    if (heatStressFirst) {
+        const sevLevel = Number.isFinite(maxHeatIndex) && maxHeatIndex >= heatIndexDanger ? 2 : 1;
+        addOrUpgradeWarning("heat", {
+            kind: "heat_stress",
+            icon: "whatshot",
+            severityLevel: sevLevel,
+            isActive: false,
+            startTimeMs: heatStressFirst.getTime(),
+            title: t("Heat stress risk"),
+            severity: sevLevel >= 2 ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(heatStressFirst, heatStressLast, false),
+            details: Number.isFinite(maxHeatIndex) ? `${t("Peak heat index")}: ${Format.formatTemp(maxHeatIndex, useUSCS)}` : t("Heat stress possible.")
+        });
+    } else if (heatFirst) {
+        const detail = Number.isFinite(maxAppTemp) ? `${t("Peak apparent temperature")}: ${Format.formatTemp(maxAppTemp, useUSCS)}` : "";
+        addOrUpgradeWarning("heat", {
+            kind: "heat",
+            icon: "device_thermostat",
+            severityLevel: Number.isFinite(maxAppTemp) && maxAppTemp >= heatDanger ? 2 : 1,
+            isActive: false,
+            startTimeMs: heatFirst.getTime(),
+            title: t("Heat risk"),
+            severity: Number.isFinite(maxAppTemp) && maxAppTemp >= heatDanger ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(heatFirst, heatLast, false),
+            details: detail
+        });
+    }
+
+    if (windChillFirst) {
+        const sevLevel = Number.isFinite(minWindChill) && minWindChill <= windChillDanger ? 2 : 1;
+        addOrUpgradeWarning("cold", {
+            kind: "wind_chill",
+            icon: "air",
+            severityLevel: sevLevel,
+            isActive: false,
+            startTimeMs: windChillFirst.getTime(),
+            title: t("Wind chill risk"),
+            severity: sevLevel >= 2 ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(windChillFirst, windChillLast, false),
+            details: Number.isFinite(minWindChill) ? `${t("Lowest wind chill")}: ${Format.formatTemp(minWindChill, useUSCS)}` : t("Wind chill possible.")
+        });
+    } else if (coldFirst) {
+        const detail = Number.isFinite(minAppTemp) ? `${t("Lowest apparent temperature")}: ${Format.formatTemp(minAppTemp, useUSCS)}` : "";
+        addOrUpgradeWarning("cold", {
+            kind: "cold",
+            icon: "ac_unit",
+            severityLevel: Number.isFinite(minAppTemp) && minAppTemp <= coldDanger ? 2 : 1,
+            isActive: false,
+            startTimeMs: coldFirst.getTime(),
+            title: t("Cold / frost risk"),
+            severity: Number.isFinite(minAppTemp) && minAppTemp <= coldDanger ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(coldFirst, coldLast, false),
+            details: detail
+        });
+    }
+
+    if (uvFirst) {
+        addOrUpgradeWarning("uv", {
+            kind: "uv",
+            icon: "wb_sunny",
+            severityLevel: Number.isFinite(maxUv) && maxUv >= uvDanger ? 2 : 1,
+            isActive: false,
+            startTimeMs: uvFirst.getTime(),
+            title: t("High UV exposure"),
+            severity: Number.isFinite(maxUv) && maxUv >= uvDanger ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(uvFirst, uvLast, false),
+            details: Number.isFinite(maxUv) ? `${t("Peak UV index")}: ${maxUv.toFixed(1)}` : ""
+        });
+    }
+
+    if (humidFirst) {
+        let peakDew = Number.NEGATIVE_INFINITY;
+        for (let i = 0; i < hourlyArr.length; i++) {
+            const d = Number(hourlyArr[i].dewPointValue);
+            const timeVal = new Date(hourlyArr[i].timeIso);
+            const dt = timeVal - now;
+            if (!Number.isFinite(dt) || dt < -includePastMs || dt > horizonMs) continue;
+            if (Number.isFinite(d)) peakDew = Math.max(peakDew, d);
+        }
+        const sevLevel = (Number.isFinite(peakDew) && peakDew >= dewDanger) ? 2 : 1;
+        addOrUpgradeWarning("humidity", {
+            kind: "humidity",
+            icon: "humidity_high",
+            severityLevel: sevLevel,
+            isActive: false,
+            startTimeMs: humidFirst.getTime(),
+            title: t("Oppressive humidity"),
+            severity: sevLevel >= 2 ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(humidFirst, humidLast, false),
+            details: Number.isFinite(peakDew) ? `${t("Peak dew point")}: ${Format.formatTemp(peakDew, useUSCS)}` : t("High humidity expected.")
+        });
+    }
+
+    if (dryFirst) {
+        let minRh = Number.POSITIVE_INFINITY;
+        for (let i = 0; i < hourlyArr.length; i++) {
+            const h = Number(hourlyArr[i].humidityValue);
+            const timeVal = new Date(hourlyArr[i].timeIso);
+            const dt = timeVal - now;
+            if (!Number.isFinite(dt) || dt < -includePastMs || dt > horizonMs) continue;
+            if (Number.isFinite(h)) minRh = Math.min(minRh, h);
+        }
+        const sevLevel = (Number.isFinite(minRh) && minRh <= dryDanger) ? 2 : 1;
+        addOrUpgradeWarning("dry", {
+            kind: "dry",
+            icon: "airwave",
+            severityLevel: sevLevel,
+            isActive: false,
+            startTimeMs: dryFirst.getTime(),
+            title: t("Very dry air"),
+            severity: sevLevel >= 2 ? t("Danger") : t("Warning"),
+            timeRange: describeWhen(dryFirst, dryLast, false),
+            details: Number.isFinite(minRh) ? `${t("Lowest humidity")}: ${Math.round(minRh)}%` : t("Very dry air expected.")
+        });
+    }
+
+    if (iceFirst) {
+        addOrUpgradeWarning("ice", {
+            kind: "ice",
+            icon: "sledding",
+            severityLevel: 2,
+            isActive: false,
+            startTimeMs: iceFirst.getTime(),
+            title: t("Black ice / slippery risk"),
+            severity: t("Danger"),
+            timeRange: describeWhen(iceFirst, iceLast, false),
+            details: t("Near-freezing temperatures with precipitation may create slippery surfaces.")
+        });
+    }
+
+    // Escalate using today's daily thunderstorm code if available (helps when hourly is sparse)
+    if (dailyArr.length > 0) {
+        const today = dailyArr[0];
+        const todayCode = Number(today.code);
+        const todayProb = Number(today.precipProbMaxValue);
+        if ((todayCode === 95 || todayCode === 96 || todayCode === 99) && Number.isFinite(todayProb) && todayProb >= 60) {
+            addOrUpgradeWarning("thunder", {
+                kind: "thunder",
+                icon: "thunderstorm",
+                severityLevel: 1,
+                isActive: false,
+                startTimeMs: now.getTime(),
+                title: t("Storm risk today"),
+                severity: t("Warning"),
+                timeRange: t("Today"),
+                details: `${t("Rain chance")}: ${Format.formatPercent(todayProb)}`
+            });
+        }
+    }
+
+    if (freezingFirst) {
+        addOrUpgradeWarning("freezing", {
+            kind: "freezing",
+            icon: "severe_cold",
+            severityLevel: 2,
+            isActive: false,
+            startTimeMs: freezingFirst.getTime(),
             title: "Freezing rain / ice risk",
-            severity: "Danger",
+            severity: t("Danger"),
             timeRange: describeWhen(freezingFirst, freezingLast, false),
             details: "Icy conditions possible (slippery roads/sidewalks)."
         });
@@ -566,7 +793,7 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             startTimeMs: now.getTime(),
             title: "Strong wind gusts nearby",
             severity: (maxGust >= gustDanger) ? "Danger" : "Warning",
-            timeRange: "Next 24h",
+            timeRange: t("Next 24h"),
             details: `Peak gust: ${Format.formatWind(maxGust, useUSCS)}`
         });
     }
@@ -580,7 +807,7 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             startTimeMs: now.getTime(),
             title: "Heavy rain possible",
             severity: (maxPrecip >= precipDanger) ? "Danger" : "Warning",
-            timeRange: "Next 24h",
+            timeRange: t("Next 24h"),
             details: `Max hourly precipitation: ${Format.formatPrecip(maxPrecip, useUSCS)}`
         });
     }
@@ -710,7 +937,7 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
             isActive: false,
             startTimeMs: iceFirst.getTime(),
             title: "Black ice / slippery risk",
-            severity: "Danger",
+            severity: t("Danger"),
             timeRange: describeWhen(iceFirst, iceLast, false),
             details: "Near-freezing temperatures with precipitation may create slippery surfaces."
         });
@@ -722,15 +949,15 @@ function compute(hourlyArr, dailyArr, current, useUSCS) {
         const todayCode = Number(today.code);
         const todayProb = Number(today.precipProbMaxValue);
         if ((todayCode === 95 || todayCode === 96 || todayCode === 99) && Number.isFinite(todayProb) && todayProb >= 60) {
-            addOrUpgradeWarning("storm_today", {
-                kind: "storm_today",
+            addOrUpgradeWarning("thunder", {
+                kind: "thunder",
                 icon: "thunderstorm",
                 severityLevel: 1,
                 isActive: false,
                 startTimeMs: now.getTime(),
                 title: "Storm risk today",
-                severity: "Warning",
-                timeRange: "Today",
+                severity: t("Warning"),
+                timeRange: t("Today"),
                 details: `Rain chance: ${Format.formatPercent(todayProb)}`
             });
         }

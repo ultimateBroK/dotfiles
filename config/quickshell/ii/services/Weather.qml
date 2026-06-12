@@ -182,8 +182,11 @@ Singleton {
         command: ["bash", "-c", ""]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (text.length === 0)
+                if (text.length === 0) {
+                    root.loading = false;
+                    root.lastError = Translation.tr("No geocoding data received");
                     return;
+                }
                 try {
                     const parsedData = JSON.parse(text);
                     const r = parsedData?.results?.[0];
@@ -216,8 +219,11 @@ Singleton {
         command: ["bash", "-c", ""]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (text.length === 0)
+                if (text.length === 0) {
+                    root.loading = false;
+                    root.lastError = Translation.tr("No weather data received");
                     return;
+                }
                 try {
                     const parsedData = JSON.parse(text);
                     root.refineOpenMeteo(parsedData, root.weatherFetcherCityName);

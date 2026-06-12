@@ -266,12 +266,19 @@ Scope {
         }
     }
     GlobalShortcut {
+        id: overviewToggleReleaseShortcut
         name: "overviewToggleRelease"
         description: "Toggles overview on release"
+
+        property bool superJustPressed: false
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = true;
             GlobalStates.superPressedAtMs = Date.now();
+            superJustPressed = true;
+            Qt.callLater(() => {
+                overviewToggleReleaseShortcut.superJustPressed = false;
+            });
         }
 
         onReleased: {
@@ -297,6 +304,7 @@ Scope {
         description: "Interrupts possibility of overview being toggled on release. " + "This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. " + "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
 
         onPressed: {
+            if (overviewToggleReleaseShortcut.superJustPressed) return;
             GlobalStates.superReleaseMightTrigger = false;
         }
     }
