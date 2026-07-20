@@ -63,11 +63,11 @@ ForegroundPositive=#00e479
 ForegroundVisited=#ebb2ff
 
 [Colors:Header][Inactive]
-BackgroundAlternate=#1a1d27
+BackgroundAlternate=#404452
 BackgroundNormal=#1a1d27
 DecorationFocus=#b0c6ff
 DecorationHover=#b0c6ff
-ForegroundActive=#e0e2ef
+ForegroundActive=#8fc9fc
 ForegroundInactive=#8c909f
 ForegroundLink=#8fc9fc
 ForegroundNegative=#ffb3b4
@@ -169,7 +169,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=188
-View Style=Simple
+View Style=DetailTree
 
 [Sounds]
 Theme=modern-minimal-ui-sounds
