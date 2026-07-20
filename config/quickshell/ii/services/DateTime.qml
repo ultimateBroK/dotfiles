@@ -28,10 +28,11 @@ Singleton {
     property string uptime: "0h, 0m"
 
     Timer {
-        // Use configured interval instead of 10ms to reduce file I/O
-        interval: Config.options?.resources?.updateInterval ?? 3000
+        // Uptime only displays minutes, so no need to follow resource refresh cadence.
+        interval: 60000
         running: true
         repeat: true
+        triggeredOnStart: true
         onTriggered: {
             fileUptime.reload();
             const textUptime = fileUptime.text();

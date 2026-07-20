@@ -262,6 +262,7 @@ Item {
                         }
                     }
                     Item { // Main app icon
+                        id: mainAppIconContainer
                         anchors.centerIn: parent
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
@@ -296,7 +297,7 @@ Item {
                         }
 
                         Loader {
-                            active: Config.options.bar.workspaces.monochromeIcons
+                            active: Config.options.bar.workspaces.monochromeIcons && mainAppIconContainer.visible
                             anchors.fill: mainAppIcon
                             sourceComponent: Item {
                                 Desaturate {

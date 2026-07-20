@@ -34,6 +34,8 @@ Singleton {
 
     // Whether any on-screen consumer currently needs these metrics.
     readonly property bool active: needMemory || needSwap || needCpu || needGpu
+    property bool resourcesPopupOpen: false
+    readonly property bool detailsActive: overlayResourcesEnabled || resourcesPopupOpen
 
 	property real memoryTotal: 0
 	property real memoryFree: 0
@@ -55,6 +57,7 @@ Singleton {
     property bool gpuAvailable: false
     // Throttle GPU polling to avoid expensive tools (e.g. nvidia-smi) every tick.
     property int gpuMinIntervalMs: 5000
+    property int gpuBarMinIntervalMs: 15000
     property double _lastGpuPollMs: 0
     property int cpuTempMinIntervalMs: 2500
     property double _lastCpuTempPollMs: 0
@@ -173,6 +176,7 @@ Singleton {
     function _maybePollCpuTemp() {
         if (!root.active) return;
         if (!root.needCpu) return;
+        if (!root.detailsActive) return;
         if (cpuTempProc.running) return;
         const now = Date.now();
         const minInterval = Math.max(root.cpuTempMinIntervalMs, Config?.options?.resources?.updateInterval ?? 3000);
@@ -186,7 +190,8 @@ Singleton {
         if (!root.needGpu) return;
         if (gpuProc.running) return;
         const now = Date.now();
-        const minInterval = Math.max(root.gpuMinIntervalMs, Config?.options?.resources?.updateInterval ?? 3000);
+        const baseInterval = root.detailsActive ? root.gpuMinIntervalMs : root.gpuBarMinIntervalMs;
+        const minInterval = Math.max(baseInterval, Config?.options?.resources?.updateInterval ?? 3000);
         if (now - root._lastGpuPollMs < minInterval) return;
         root._lastGpuPollMs = now;
         gpuProc.running = true;
@@ -197,6 +202,7 @@ Singleton {
     function _maybePollCpuMaxFreq() {
         if (!root.active) return;
         if (!root.needCpu) return;
+        if (!root.detailsActive) return;
         if (findCpuMaxFreqProc.running) return;
         const now = Date.now();
         if (root.maxAvailableCpuString !== "--" && (now - root._lastCpuMaxFreqPollMs) < root.cpuMaxFreqMinIntervalMs) return;

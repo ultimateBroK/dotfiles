@@ -45,26 +45,40 @@ Singleton {
     property list<var> pinnedItems: []
     property list<var> unpinnedItems: []
     
+    function refreshFromTray() {
+        const currentCount = SystemTray.items.values?.length || 0
+        root.updateItems()
+
+        // If items disappeared after theme change, schedule recovery
+        if (root._lastItemCount > 0 && currentCount === 0) {
+            themeChangeRecovery.start()
+        }
+        root._lastItemCount = currentCount
+    }
+
     // Track last known item count to detect when items disappear
     property int _lastItemCount: 0
-    
-    // Timer to periodically check for SystemTray.items changes
-    // This ensures items appear even if SystemTray service initializes after component creation
+
+    Connections {
+        target: SystemTray.items
+        function onValuesChanged() {
+            root.refreshFromTray()
+        }
+    }
+
+    Connections {
+        target: Config.options.bar.tray
+        function onFilterPassiveChanged() { root.updateItems() }
+        function onInvertPinnedItemsChanged() { root.updateItems() }
+        function onPinnedItemsChanged() { root.updateItems() }
+    }
+
     Timer {
-        id: updateTimer
-        interval: 500
+        // Catch status-only changes that may not emit valuesChanged, but avoid 500ms idle polling.
+        interval: 5000
         repeat: true
         running: true
-        onTriggered: {
-            const currentCount = SystemTray.items.values?.length || 0
-            root.updateItems()
-            
-            // If items disappeared after theme change, schedule recovery
-            if (root._lastItemCount > 0 && currentCount === 0) {
-                themeChangeRecovery.start()
-            }
-            root._lastItemCount = currentCount
-        }
+        onTriggered: root.refreshFromTray()
     }
     
     // Recovery timer for theme changes - gives SystemTray time to reconnect
@@ -105,8 +119,7 @@ Singleton {
         interval: 1000
         repeat: false
         onTriggered: {
-            root.updateItems()
-            root._lastItemCount = SystemTray.items.values?.length || 0
+            root.refreshFromTray()
         }
     }
     
