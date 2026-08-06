@@ -200,7 +200,7 @@
         "verbose": true,
         "vertical": false,
         "weather": {
-            "city": "Hanoi",
+            "city": "Thanh Xuan ",
             "enable": true,
             "enableGPS": false,
             "fetchInterval": 10,

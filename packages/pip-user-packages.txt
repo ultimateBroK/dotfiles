@@ -1,5 +1,8 @@
 aiofiles==25.1.0
+apify_fingerprint_datapoints==0.13.0
 av==17.0.1
+browserforge==1.2.4
+cssselect==1.4.0
 docstring_parser==0.18.0
 eval_type_backport==0.3.1
 # Format: pip freeze (name==version)
@@ -16,6 +19,7 @@ livekit-blingfire==1.1.0
 livekit-plugins-google==1.5.6
 livekit-protocol==1.1.6
 mcp==1.27.0
+msgspec==0.21.1
 nest-asyncio==1.6.0
 opentelemetry-api==1.39.1
 opentelemetry-exporter-otlp==1.39.1
@@ -25,18 +29,23 @@ opentelemetry-exporter-otlp-proto-http==1.39.1
 opentelemetry-proto==1.39.1
 opentelemetry-sdk==1.39.1
 opentelemetry-semantic-conventions==0.60b1
-playwright==1.58.0
+patchright==1.61.2
+playwright==1.61.0
 prometheus_client==0.25.0
+Protego==0.6.2
 protobuf==5.29.6
 pydantic-settings==2.13.1
 pyee==13.0.1
 PyJWT==2.12.1
 python-multipart==0.0.24
+scrapling==0.4.11
 # Source: python user-site
 sse-starlette==3.3.4
 starlette==1.0.0
 tenacity==9.1.4
 thesis==0.1.0
+tld==0.13.2
 types-protobuf==7.34.1.20260408
 uvicorn==0.44.0
+w3lib==2.4.1
 watchfiles==1.1.1

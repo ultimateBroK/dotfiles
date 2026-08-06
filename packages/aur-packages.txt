@@ -3,8 +3,9 @@ adw-gtk-theme-git
 amdxdna-dkms
 ampcode
 android-sdk-platform-tools
-antigravity-cli-bin
-antigravity-ide-bin
+antigravity
+antigravity-cli
+antigravity-ide
 antigravity-tools-bin
 anytype-bin
 asus-vivobook-rgb-keyboard
@@ -15,18 +16,22 @@ bottles
 brave-origin-nightly-bin
 breeze-plus
 bridge-utils
+chrome-remote-desktop
 cine
 cline-cli
 cloudflare-warp-nox-bin
 codemux-bin
 crosswords
 crush-bin
-cursor-bin
 cursor-cli
 darkly-bin
 dee
+devin-desktop
+devin-desktop-next
 dijo-1995parham
 dpcode-bin
+electron37
+electron38
 electron39-bin
 electron40-bin
 electron41-bin
@@ -48,6 +53,7 @@ goofcord-bin
 google-chrome
 gpu-screen-recorder-gtk
 gtk-sharp-2
+heroic-games-launcher
 hoppscotch-bin
 httpie-desktop-bin
 ibus-lotus-bin
@@ -104,8 +110,8 @@ libtiff4
 libudev0-shim
 libunity
 libvpx1.3
+litehtml0.9
 livekit-cli
-llmfit
 lmstudio-bin
 logseq-desktop
 lyrebird
@@ -114,7 +120,6 @@ megasync
 microsoft-edge-stable-bin
 miniaudio-git
 morgen-bin
-mpvpaper
 music-presence-bin
 nautilus-admin-gtk4
 nautilus-bluetooth
@@ -126,9 +131,9 @@ opencode-bin
 openscreen-bin
 openssl-1.0
 openssl-1.1
-openwork
 opera
 otf-space-grotesk
+parabolic
 pear-desktop-bin
 pi-coding-agent
 playwright
@@ -146,6 +151,7 @@ python-grpcio-status
 python-magika
 python-mammoth
 python-markitdown
+python-pkg_resources
 python-pocketsphinx
 python-pptx
 python-precisely
@@ -158,8 +164,8 @@ python-youtube-transcript-api
 qbittorrent-enhanced-git
 qoder-bin
 qt4
+quickshell-git
 qwen-code-bin
-rocm-gfx1150-bin
 rtk-bin
 rustdesk-bin
 ryzenadj-git
@@ -169,6 +175,7 @@ speedtest-cli-git
 speedtest-librespeed
 spicetify-cli
 splix
+spoofdpi-bin
 spotify
 surge
 tenere-bin
@@ -181,6 +188,7 @@ ttf-material-symbols-variable-git
 ttf-readex-pro
 ttf-roboto-flex
 ttf-rubik-vf
+ttf-times-new-roman
 ttf-twemoji
 ubuntu-wallpapers
 upscayl-bin
@@ -189,6 +197,5 @@ visual-studio-code-insiders-bin
 vsce
 wakafetch-git
 wayvibes-git
-windsurf-bin
-windsurf-next
+wiki-tui
 z-library-bin

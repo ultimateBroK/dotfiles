@@ -10,8 +10,9 @@ amd-ucode
 amdxdna-dkms
 ampcode
 android-sdk-platform-tools
-antigravity-cli-bin
-antigravity-ide-bin
+antigravity
+antigravity-cli
+antigravity-ide
 antigravity-tools-bin
 anytype-bin
 arch-wiki-docs
@@ -63,6 +64,7 @@ cachyos-zsh-config
 cachy-update
 calf
 cantarell-fonts
+chrome-remote-desktop
 chwd
 cine
 cline-cli
@@ -83,6 +85,8 @@ cursor-cli
 decibels
 deno
 device-mapper
+devin-desktop
+devin-desktop-next
 dhclient
 diffutils
 dijo-1995parham
@@ -354,7 +358,7 @@ nilfs-utils
 niri
 nmap
 nm-connection-editor
-nodejs-lts-jod
+nodejs-lts-krypton
 notepad++
 noto-color-emoji-fontconfig
 noto-fonts
@@ -377,7 +381,6 @@ opendesktop-fonts
 openrgb
 openscreen-bin
 openssh
-openwork
 opera
 orca
 os-prober
@@ -385,6 +388,7 @@ otf-monaspace-nerdfonts
 pacman-contrib
 pandoc-cli
 papers
+parabolic
 partitionmanager
 paru
 pear-desktop-bin
@@ -477,7 +481,7 @@ qwen-code-bin
 radeontop
 rebuild-detector
 reflector
-rocm-gfx1150-bin
+rocm-core
 rtk-bin
 rtkit
 ruby
@@ -501,6 +505,7 @@ speedtest-cli-git
 speedtest-librespeed
 spicetify-cli
 splix
+spoofdpi-bin
 spotify
 stacer
 steam
@@ -553,6 +558,7 @@ ttf-liberation
 ttf-meslo-nerd
 ttf-noto-nerd
 ttf-opensans
+ttf-times-new-roman
 ttyper
 tui-journal
 typst
@@ -568,6 +574,7 @@ uwsm
 v4l2loopback-dkms
 vde2
 vesktop
+video-downloader
 vim
 virt-manager
 virt-viewer
@@ -587,8 +594,6 @@ wayvibes-git
 which
 wikiman
 wiki-tui
-windsurf-bin
-windsurf-next
 wine
 wine-gecko
 wine-mono

@@ -6,7 +6,6 @@ com.github.marhkb.Pods
 com.github.neithern.g4music
 com.github.taiko2k.tauonmb
 com.github.tchx84.Flatseal
-com.github.unrud.VideoDownloader
 com.mattjakeman.ExtensionManager
 com.rafaelmardojai.Blanket
 com.system76.Popsicle
@@ -18,9 +17,9 @@ dev.qwery.AddWater
 io.bassi.Amberol
 io.github.alainm23.planify
 io.github.amit9838.mousam
-io.github.ecotubehq.player
 io.github.efogdev.mpris-timer
 io.github.josephmawa.Egghead
+io.github.ladaapp.lada
 io.github.mmarco94.tambourine
 io.github.redddfoxxyy.samaya
 io.github.revisto.drum-machine
@@ -40,6 +39,7 @@ org.kde.filelight
 org.localsend.localsend_app
 org.standardnotes.standardnotes
 org.strawberrymusicplayer.strawberry
+org.vinegarhq.Sober
 rocks.shy.VacuumTube
 space.rirusha.Cassette
 xyz.safeworlds.hiit
