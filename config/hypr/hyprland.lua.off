@@ -8,7 +8,8 @@
 -- Muốn chỉ hyprlang: đổi tên hoặc xóa file này.
 --
 --   • helpers.quickshell_profile = "ii" (tương đương $qsConfig trong conf cũ)
---   • monitors.lua + workspaces.lua đọc monitors.conf & workspaces.conf
+--   • monitors.lua / workspaces.lua (cạnh hyprland.lua) do nwg-displays SINH RA —
+--     require thẳng, không parse conf nữa. Apply trong nwg-displays tự chạy hyprctl reload.
 --   • Submap bootstrap trong keybinds.lua
 --
 -- Thứ tự require khớp hyprland.conf source=…:
@@ -28,6 +29,6 @@ require("hyprland.keybinds")
 -- Layouts
 require("hyprland.layouts")
 
--- nwg-displays support (reads workspaces.conf + monitors.conf)
-require("hyprland.workspaces")
-require("hyprland.monitors")
+-- nwg-displays support (generated .lua files next to hyprland.lua)
+require("workspaces")
+require("monitors")

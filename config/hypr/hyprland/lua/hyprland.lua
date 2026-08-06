@@ -8,7 +8,8 @@
 -- rollback. Muốn chỉ hyprlang: đổi tên/xóa `hyprland.lua`.
 --
 --   • helpers.quickshell_profile = "ii" (tương đương $qsConfig trong conf cũ)
---   • monitors.lua + workspaces.lua đọc monitors.conf & workspaces.conf cạnh thư mục hyprland/
+--   • monitors.lua / workspaces.lua (cạnh hyprland.lua) do nwg-displays SINH RA —
+--     require thẳng, không parse conf nữa. Apply trong nwg-displays tự chạy hyprctl reload.
 --   • Submap bootstrap trong keybinds.lua (exec submap global)
 --
 -- Thứ tự require khớp hyprland.conf source=…:
@@ -18,8 +19,8 @@ require("hyprland.env")          -- environment variables
 require("hyprland.execs")        -- autostart (exec-once parity)
 require("hyprland.general")      -- general, decoration, animations, gestures, plugins
 require("hyprland.rules")        -- window / layer / workspace rules
-require("hyprland.colors")       -- misc background, hyprbars, pin bordercolor
+require("hyprland.colors")       -- misc background, pin bordercolor
 require("hyprland.keybinds")     -- binds + initial submap
 require("hyprland.layouts")      -- dwindle, master, scrolling
-require("hyprland.workspaces")   -- workspace → monitor (workspaces.conf)
-require("hyprland.monitors")     -- monitor= lines (monitors.conf)
+require("workspaces")            -- workspace → monitor (nwg-displays generates)
+require("monitors")              -- hl.monitor entries (nwg-displays generates)
