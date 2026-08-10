@@ -55,7 +55,7 @@ hl.env("QT_QPA_PLATFORM", "wayland")
 hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("XDG_MENU_PREFIX", "plasma-")
 -- Icon & sound themes (merged from custom/env.conf)
-hl.env("GTK_ICON_THEME", "kora")
+hl.env("GTK_ICON_THEME", "breeze")
 hl.env("XDG_SOUND_THEME_PATH", "/home/ultimatebrok/.local/share/sounds")
 
 -- ######## Wayland #########
