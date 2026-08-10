@@ -1,2 +1,3 @@
 config/hypr/hyprland/.current_profile
 __pycache__/
+.dirac-cache/
