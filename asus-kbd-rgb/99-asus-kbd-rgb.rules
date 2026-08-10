@@ -1,0 +1,4 @@
+# ASUS Vivobook S14 (M5406WA) RGB keyboard - ITE5570 LampArray controller (HID over I2C)
+# The HID device has no idVendor/idProduct attributes, so match on modalias
+# (hid:b0018g0001v00000B05p00005570). Grants read/write on its hidraw node.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{modalias}=="hid:*v00000B05p00005570", MODE="0660", GROUP="input"
