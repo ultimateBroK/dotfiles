@@ -81,8 +81,9 @@ Item {
     property int draggingFromWorkspace: -1
     property int draggingTargetWorkspace: -1
 
-    implicitWidth: overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
-    implicitHeight: overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
+    readonly property bool isPortrait: panelWindow?.screen ? (panelWindow.screen.height > panelWindow.screen.width) : false
+    implicitWidth: isPortrait ? Math.min(overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2, (panelWindow?.screen?.width ?? 1080) - 20) : (overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2)
+    implicitHeight: isPortrait ? Math.min(overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2, (panelWindow?.screen?.height ?? 800) - 20) : (overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2)
 
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []

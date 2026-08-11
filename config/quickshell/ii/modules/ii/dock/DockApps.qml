@@ -22,18 +22,20 @@ Item {
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
 
+    readonly property bool isPortrait: root.QsWindow.window?.screen ? (root.QsWindow.window.screen.height > root.QsWindow.window.screen.width) : false
     Layout.fillHeight: true
-    implicitWidth: listView.implicitWidth
+    implicitWidth: isPortrait ? Math.min(listView.implicitWidth, (root.QsWindow.window?.width ?? 1080) - 60) : listView.implicitWidth
     
     StyledListView {
         id: listView
         spacing: 2
+        clip: true
         orientation: ListView.Horizontal
         anchors {
             top: parent.top
             bottom: parent.bottom
         }
-        implicitWidth: contentWidth
+        implicitWidth: isPortrait ? Math.min(contentWidth, (root.QsWindow.window?.width ?? 1080) - 60) : contentWidth
 
         Behavior on implicitWidth {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

@@ -9,7 +9,8 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
-    property int sidebarWidth: Appearance.sizes.sidebarWidth
+    readonly property bool isPortrait: sidebarRoot.screen ? (sidebarRoot.screen.height > sidebarRoot.screen.width) : false
+    property int sidebarWidth: isPortrait ? Math.min(Appearance.sizes.sidebarWidth, (sidebarRoot.screen?.width ?? 1080) - 20) : Appearance.sizes.sidebarWidth
     property bool pin: false
 
     Process { // Dodge cursor away, pin, move cursor back

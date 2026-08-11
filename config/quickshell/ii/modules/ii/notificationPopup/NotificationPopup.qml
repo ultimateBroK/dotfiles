@@ -31,8 +31,9 @@ Scope {
             item: listview
         }
 
+        readonly property bool isPortrait: root.screen ? (root.screen.height > root.screen.width) : false
         color: "transparent"
-        implicitWidth: Appearance.sizes.notificationPopupWidth
+        implicitWidth: isPortrait ? Math.min(Appearance.sizes.notificationPopupWidth, (root.screen?.width ?? 1080) - 20) : Appearance.sizes.notificationPopupWidth
 
         NotificationListView {
             id: listview

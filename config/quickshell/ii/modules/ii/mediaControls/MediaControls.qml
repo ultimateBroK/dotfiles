@@ -178,8 +178,9 @@ Scope {
             visible: true
 
             exclusionMode: ExclusionMode.Ignore
+            readonly property bool isPortrait: mediaControlsRoot.screen ? (mediaControlsRoot.screen.height > mediaControlsRoot.screen.width) : false
             exclusiveZone: 0
-            implicitWidth: root.widgetWidth
+            implicitWidth: isPortrait ? Math.min(root.widgetWidth, (mediaControlsRoot.screen?.width ?? 1080) - 20) : root.widgetWidth
             implicitHeight: playerColumnLayout.implicitHeight
             color: "transparent"
             WlrLayershell.namespace: "quickshell:mediaControls"

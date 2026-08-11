@@ -89,7 +89,8 @@ Scope { // Scope
             visible: GlobalStates.sidebarLeftOpen
             
             property bool extend: false
-            property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
+            readonly property bool isPortrait: sidebarRoot.screen ? (sidebarRoot.screen.height > sidebarRoot.screen.width) : false
+            property real sidebarWidth: isPortrait ? Math.min(sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth, (sidebarRoot.screen?.width ?? 1080) - 20) : (sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth)
             property var contentParent: sidebarLeftBackground
 
             function hide() {

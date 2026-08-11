@@ -12,7 +12,10 @@ DockButton {
     property var appToplevel
     property var appListRoot
     property int lastFocused: -1
-    property real iconSize: 35
+    readonly property bool isPortrait: root.QsWindow.window?.screen ? (root.QsWindow.window.screen.height > root.QsWindow.window.screen.width) : false
+    readonly property real availableDockWidth: (root.QsWindow.window?.width ?? 1080) - 100
+    readonly property real autoIconSize: isPortrait ? Math.min(35, Math.max(18, (availableDockWidth / Math.max(1, TaskbarApps.apps.length)) - 10)) : 35
+    property real iconSize: autoIconSize
     property real countDotWidth: 10
     property real countDotHeight: 4
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
@@ -20,7 +23,8 @@ DockButton {
     readonly property bool isSeparator: appToplevel.appId === "SEPARATOR"
     readonly property var desktopEntry: DesktopEntries.heuristicLookup(appToplevel.appId)
     enabled: !isSeparator
-    implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
+    readonly property real calculatedButtonWidth: Math.max(20, iconSize + 8)
+    implicitWidth: isSeparator ? 1 : (isPortrait ? Math.min(implicitHeight - topInset - bottomInset, calculatedButtonWidth) : (implicitHeight - topInset - bottomInset))
 
     Loader {
         active: isSeparator

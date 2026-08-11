@@ -36,8 +36,9 @@ Scope {
                 item: content
             }
 
-            implicitHeight: Appearance.sizes.wallpaperSelectorHeight
-            implicitWidth: Appearance.sizes.wallpaperSelectorWidth
+            readonly property bool isPortrait: panelWindow.screen ? (panelWindow.screen.height > panelWindow.screen.width) : false
+            implicitHeight: isPortrait ? Math.min(Appearance.sizes.wallpaperSelectorHeight, (panelWindow.screen?.height ?? 800) - 80) : Appearance.sizes.wallpaperSelectorHeight
+            implicitWidth: isPortrait ? Math.min(Appearance.sizes.wallpaperSelectorWidth, (panelWindow.screen?.width ?? 1200) - 40) : Appearance.sizes.wallpaperSelectorWidth
 
             HyprlandFocusGrab { // Click outside to close
                 id: grab

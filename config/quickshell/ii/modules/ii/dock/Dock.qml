@@ -119,7 +119,8 @@ Scope { // Scope
                             anchors.fill: parent
                             anchors.topMargin: dockRoot.dockAtTop ? dockRoot.dockEdgeGap : dockRoot.dockShadowPad
                             anchors.bottomMargin: dockRoot.dockAtTop ? dockRoot.dockShadowPad : dockRoot.dockEdgeGap
-                            implicitWidth: dockRow.implicitWidth + dockRow.padding * 2
+                            readonly property bool isPortrait: dockRoot.screen ? (dockRoot.screen.height > dockRoot.screen.width) : false
+                            implicitWidth: isPortrait ? Math.min(dockRow.implicitWidth + dockRow.padding * 2, (dockRoot.screen?.width ?? 1080) - 16) : (dockRow.implicitWidth + dockRow.padding * 2)
                             clip: true
                             glassColor: Appearance.isDarkMode ? "#000000" : "#e8e4e4"
                             glassTransparency: Appearance.isDarkMode ? 0.38 : 0.32
