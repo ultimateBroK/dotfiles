@@ -8,11 +8,18 @@ import Quickshell
 
 Item {
     id: root
-    property real spacing: 20
+    property real spacing: 16
     property real titleSpacing: 7
     property real padding: 4
-    implicitWidth: row.implicitWidth + padding * 2
-    implicitHeight: row.implicitHeight + padding * 2
+
+    readonly property bool isPortrait: Screen.height > Screen.width
+
+    implicitWidth: isPortrait
+        ? portraitContainer.implicitWidth + padding * 2
+        : row.implicitWidth + padding * 2
+    implicitHeight: isPortrait
+        ? portraitContainer.implicitHeight + padding * 2
+        : row.implicitHeight + padding * 2
 
     property var commandGroups: [
         {
@@ -89,14 +96,16 @@ Item {
         }
     ]
 
-    Row { // Command columns
+    // ─── LANDSCAPE: horizontal Row (unchanged) ────────────────────────────────
+    Row {
         id: row
+        visible: !root.isPortrait
         spacing: root.spacing
-        
+
         Repeater {
             model: root.commandGroups
-            
-            delegate: Column { // Command sections
+
+            delegate: Column {
                 spacing: root.spacing
                 required property var modelData
                 anchors.top: row.top
@@ -104,9 +113,8 @@ Item {
                 Column {
                     id: sectionColumn
                     spacing: root.titleSpacing
-                    
+
                     StyledText {
-                        id: sectionTitle
                         font {
                             family: Appearance.font.family.title
                             pixelSize: Appearance.font.pixelSize.title
@@ -117,51 +125,113 @@ Item {
                     }
 
                     Column {
-                        id: commandColumn
                         spacing: 4
-
                         Repeater {
                             model: sectionColumn.parent.modelData.commands
-                            
-                            delegate: RippleButton {
-                                required property var modelData
-                                implicitWidth: commandRow.implicitWidth + 8 * 2
-                                implicitHeight: commandRow.implicitHeight + 4 * 2
-                                buttonRadius: Appearance.rounding.small
-                                colBackground: Appearance.colors.colLayer1
+                            delegate: commandItemDelegate
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-                                onClicked: {
-                                    Quickshell.clipboardText = modelData.cmd;
-                                }
+    // ─── PORTRAIT: 2-column grid inside Flickable ─────────────────────────────
+    Item {
+        id: portraitContainer
+        visible: root.isPortrait
+        width: root.isPortrait ? parent.width : 0
+        implicitWidth: portraitFlickable.width
+        implicitHeight: portraitFlickable.implicitHeight
 
-                                contentItem: Row {
-                                    id: commandRow
-                                    anchors.centerIn: parent
-                                    spacing: 8
-                                    StyledText {
-                                        id: commandText
-                                        font {
-                                            family: Appearance.font.family.monospace
-                                            pixelSize: Config.options.cheatsheet.fontSize.key || Appearance.font.pixelSize.smaller
-                                        }
-                                        color: Appearance.colors.colPrimary
-                                        text: modelData.cmd
-                                    }
-                                    StyledText {
-                                        text: "→"
-                                        color: Appearance.colors.colSubtext
-                                        font.pixelSize: Config.options.cheatsheet.fontSize.key || Appearance.font.pixelSize.smaller
-                                    }
-                                    StyledText {
-                                        id: descText
-                                        font.pixelSize: Config.options.cheatsheet.fontSize.comment || Appearance.font.pixelSize.smaller
-                                        color: Appearance.colors.colOnLayer0
-                                        text: modelData.desc
-                                    }
-                                }
+        Flickable {
+            id: portraitFlickable
+            width: parent.width
+            implicitHeight: Math.min(portraitGrid.implicitHeight, Screen.height - 120)
+            height: implicitHeight
+            contentWidth: width
+            contentHeight: portraitGrid.implicitHeight
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            GridLayout {
+                id: portraitGrid
+                width: parent.width
+                columns: 2
+                columnSpacing: root.spacing
+                rowSpacing: root.spacing
+
+                Repeater {
+                    model: root.commandGroups
+
+                    delegate: Column {
+                        id: cmdGroup
+                        required property var modelData
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignTop
+                        spacing: root.titleSpacing
+
+                        StyledText {
+                            font {
+                                family: Appearance.font.family.title
+                                pixelSize: Appearance.font.pixelSize.title
+                                variableAxes: Appearance.font.variableAxes.title
+                            }
+                            color: Appearance.colors.colOnLayer0
+                            text: cmdGroup.modelData.name
+                        }
+
+                        Column {
+                            spacing: 4
+                            Repeater {
+                                model: cmdGroup.modelData.commands
+                                delegate: commandItemDelegate
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    // ─── Shared command item delegate ─────────────────────────────────────────
+    Component {
+        id: commandItemDelegate
+        RippleButton {
+            required property var modelData
+            implicitWidth: commandRow.implicitWidth + 8 * 2
+            implicitHeight: commandRow.implicitHeight + 4 * 2
+            buttonRadius: Appearance.rounding.small
+            colBackground: Appearance.colors.colLayer1
+
+            onClicked: {
+                Quickshell.clipboardText = modelData.cmd;
+            }
+
+            contentItem: Row {
+                id: commandRow
+                anchors.centerIn: parent
+                spacing: 8
+                StyledText {
+                    font {
+                        family: Appearance.font.family.monospace
+                        pixelSize: Config.options.cheatsheet.fontSize.key
+                            || Appearance.font.pixelSize.smaller
+                    }
+                    color: Appearance.colors.colPrimary
+                    text: modelData.cmd
+                }
+                StyledText {
+                    text: "→"
+                    color: Appearance.colors.colSubtext
+                    font.pixelSize: Config.options.cheatsheet.fontSize.key
+                        || Appearance.font.pixelSize.smaller
+                }
+                StyledText {
+                    font.pixelSize: Config.options.cheatsheet.fontSize.comment
+                        || Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnLayer0
+                    text: modelData.desc
                 }
             }
         }

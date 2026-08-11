@@ -83,8 +83,16 @@ Scope { // Scope
                     : ColorUtils.applyAlpha("#ffffff", 0.35)
                 radius: Appearance.rounding.windowRounding
                 property real padding: 20
-                implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
-                implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
+                readonly property bool isPortrait: cheatsheetRoot.screen ? (cheatsheetRoot.screen.height > cheatsheetRoot.screen.width) : false
+                // Portrait: cap to screen bounds; Landscape: natural size
+                readonly property real maxPortraitWidth: (cheatsheetRoot.screen?.width ?? 1080) - 40
+                readonly property real maxPortraitHeight: (cheatsheetRoot.screen?.height ?? 800) - 40
+                implicitWidth: isPortrait
+                    ? Math.min(cheatsheetColumnLayout.implicitWidth + padding * 2, maxPortraitWidth)
+                    : (cheatsheetColumnLayout.implicitWidth + padding * 2)
+                implicitHeight: isPortrait
+                    ? Math.min(cheatsheetColumnLayout.implicitHeight + padding * 2, maxPortraitHeight)
+                    : (cheatsheetColumnLayout.implicitHeight + padding * 2)
 
                 Keys.onPressed: event => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
@@ -155,8 +163,17 @@ Scope { // Scope
                         currentIndex: tabBar.currentIndex
                         spacing: 10
 
-                        implicitWidth: Math.max.apply(null, contentChildren.map(child => child.implicitWidth || 0))
-                        implicitHeight: Math.max.apply(null, contentChildren.map(child => child.implicitHeight || 0))
+                        // Portrait: clamp width so children receive bounded size for Flow wrapping
+                        // Landscape: take the natural maximum of all pages
+                        implicitWidth: cheatsheetBackground.isPortrait
+                            ? (cheatsheetBackground.maxPortraitWidth - cheatsheetBackground.padding * 2)
+                            : Math.max.apply(null, contentChildren.map(child => child.implicitWidth || 0))
+                        implicitHeight: cheatsheetBackground.isPortrait
+                            ? Math.min(
+                                Math.max.apply(null, contentChildren.map(child => child.implicitHeight || 0)),
+                                cheatsheetBackground.maxPortraitHeight - cheatsheetBackground.padding * 2 - 60
+                              )
+                            : Math.max.apply(null, contentChildren.map(child => child.implicitHeight || 0))
 
                         clip: true
                         layer.enabled: true
