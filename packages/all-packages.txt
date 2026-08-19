@@ -310,6 +310,7 @@ linux-firmware
 livekit-cli
 llmfit
 lmstudio-bin
+localsend
 logrotate
 logseq-desktop
 loupe
@@ -337,6 +338,7 @@ miniaudio-git
 mkinitcpio
 modemmanager
 mokutil
+monique
 morgen-bin
 mpvpaper
 mtools
@@ -546,10 +548,11 @@ texlive-publishers
 texlive-xetex
 tgpt
 tigervnc
+tk
 tmux
 tolaria-bin
 totem
-tradingview-bin-latest
+tradingview
 trae-bin
 tree
 ttf-bitstream-vera

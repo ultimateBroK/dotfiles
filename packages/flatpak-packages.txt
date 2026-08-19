@@ -36,7 +36,6 @@ org.gnome.seahorse.Application
 org.gnome.Solanum
 org.gnome.World.PikaBackup
 org.kde.filelight
-org.localsend.localsend_app
 org.standardnotes.standardnotes
 org.strawberrymusicplayer.strawberry
 org.vinegarhq.Sober
