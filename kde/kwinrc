@@ -21,9 +21,9 @@ NightTemperature=5000
 
 [Plugins]
 blurEnabled=true
-kinetic_maximizeEnabled=false
-kinetic_scaleEnabled=true
-kinetic_squashEnabled=true
+bouncingPopupsEnabled=true
+bouncingWindowsEnabled=true
+kwin4_effect_squashplusEnabled=true
 mouseclickEnabled=true
 scaleEnabled=false
 slidebackEnabled=true
