@@ -12,6 +12,9 @@ Id_9=9c5d2c1b-ccaf-43f0-9bc5-3fecacb9077a
 Number=10
 Rows=1
 
+[Effect-slide]
+SlideBackground=false
+
 [NightColor]
 Active=true
 NightTemperature=5000
@@ -20,7 +23,7 @@ NightTemperature=5000
 blurEnabled=true
 kinetic_maximizeEnabled=false
 kinetic_scaleEnabled=true
-kwin4_effect_squashplusEnabled=true
+kinetic_squashEnabled=true
 mouseclickEnabled=true
 scaleEnabled=false
 slidebackEnabled=true
