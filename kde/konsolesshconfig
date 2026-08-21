@@ -1,0 +1,12 @@
+[Global plugin config]
+manageProfile=false
+
+[SSH Config][192.168.1.16]
+hostname=192.168.1.16
+identifier=192.168.1.16
+importedFromSshConfig=true
+port=
+profileName=
+sshkey=
+useSshConfig=true
+username=ultimatebrok

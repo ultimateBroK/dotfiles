@@ -1,0 +1,8 @@
+[Greeter][LnF][General]
+hideClockWhenIdle=true
+
+[Greeter][Wallpaper][org.kde.image][General]
+DynamicMode=3
+Image=file:///home/ultimatebrok/Pictures/Wallpapers/641951fbb2fb43167f84f24a2ca4462308f7d3df.png
+PreviewImage=file:///home/ultimatebrok/Pictures/Wallpapers/641951fbb2fb43167f84f24a2ca4462308f7d3df.png
+SlidePaths=/home/ultimatebrok/.local/share/wallpapers/,/usr/share/wallpapers/

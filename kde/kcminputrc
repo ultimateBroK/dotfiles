@@ -1,0 +1,8 @@
+[Libinput][2362][12310][ASCP1200:00 093A:3016 Mouse]
+ScrollFactor=2
+
+[Libinput][2362][12310][ASCP1200:00 093A:3016 Touchpad]
+NaturalScroll=true
+
+[Mouse]
+cursorTheme=Bibata-Modern-Ice
