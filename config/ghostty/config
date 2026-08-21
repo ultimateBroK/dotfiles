@@ -46,7 +46,7 @@ custom-shader = shaders/sonic_boom_cursor.glsl
 # # part of the value. For example, this will have a value of "#123abc":
 # background = #123abc
 #
-background-opacity = 0.85
+background-opacity = 0.9
 
 # # Empty values are used to reset config keys to default.
 # key =
@@ -56,3 +56,7 @@ background-opacity = 0.85
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 custom-shader-animation = always
+
+# Kích thước cửa sổ chuẩn (cột × dòng)
+window-width = 132
+window-height = 45
