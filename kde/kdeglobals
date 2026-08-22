@@ -139,13 +139,13 @@ ColorSchemeHash=f6df0e9f12a4783afd65d81532865d4d86848c5e
 TerminalApplication=/usr/bin/ghostty --gtk-single-instance=true
 TerminalService=com.mitchellh.ghostty.desktop
 XftAntialias=true
-XftHintStyle=hintmedium
+XftHintStyle=hintslight
 XftSubPixel=rgb
-fixed=JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-font=Noto Sans,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-menuFont=Noto Sans,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-smallestReadableFont=Noto Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-toolBarFont=Noto Sans,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+fixed=JetBrainsMono Nerd Font,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium,0,0
+font=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+menuFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+smallestReadableFont=Geist,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+toolBarFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [Icons]
 Theme=breeze-dark
@@ -183,7 +183,7 @@ Theme=modern-minimal-ui-sounds
 [WM]
 activeBackground=47,52,63
 activeBlend=47,52,63
-activeFont=Noto Sans,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+activeFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 activeForeground=211,218,227
 inactiveBackground=47,52,63
 inactiveBlend=47,52,63
