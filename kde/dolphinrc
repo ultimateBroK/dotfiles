@@ -1,12 +1,15 @@
+[CompactMode]
+PreviewSize=112
+
 [DetailsMode]
-PreviewSize=64
+PreviewSize=80
 
 [General]
 Version=202
 ViewPropsTimestamp=2026,8,19,21,36,57.373
 
 [IconsMode]
-PreviewSize=128
+PreviewSize=160
 
 [KFileDialog Settings]
 Places Icons Auto-resize=false
@@ -20,3 +23,4 @@ Plugins=ffmpegthumbnailer,appimagethumbnail,audiothumbnail,glycin-heif,blenderth
 
 [Search]
 Location=Everywhere
+SearchTool=Baloo

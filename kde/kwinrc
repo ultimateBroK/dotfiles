@@ -12,6 +12,10 @@ Id_9=9c5d2c1b-ccaf-43f0-9bc5-3fecacb9077a
 Number=10
 Rows=1
 
+[Effect-blur]
+BlurStrength=6
+Saturation=246
+
 [Effect-slide]
 SlideBackground=false
 
@@ -30,7 +34,7 @@ slidebackEnabled=true
 squashEnabled=false
 
 [TabBox]
-LayoutName=coverswitch
+LayoutName=AquaMediumIcons
 
 [Tiling][2bc718ce-7bea-40bb-804b-aa5b250a0e49][05b93efd-1f88-4759-a7ef-2b4fbe7b523b]
 padding=4
@@ -265,4 +269,4 @@ Scale=1
 BorderSize=Tiny
 BorderSizeAuto=false
 library=org.kde.kwin.aurorae.v2
-theme=__aurorae__svg__Nothing
+theme=__aurorae__svg__Carl
