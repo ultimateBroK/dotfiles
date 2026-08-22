@@ -142,10 +142,10 @@ XftAntialias=true
 XftHintStyle=hintslight
 XftSubPixel=rgb
 fixed=JetBrainsMono Nerd Font,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium,0,0
-font=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-menuFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-smallestReadableFont=Geist,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
-toolBarFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+font=SF Pro Rounded,11,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Medium,0,0
+menuFont=SF Pro Rounded,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+smallestReadableFont=SF Pro Rounded,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+toolBarFont=SF Pro Rounded,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [Icons]
 Theme=breeze-dark
@@ -183,7 +183,7 @@ Theme=modern-minimal-ui-sounds
 [WM]
 activeBackground=47,52,63
 activeBlend=47,52,63
-activeFont=Geist,11.5,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
+activeFont=SF Pro Rounded,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 activeForeground=211,218,227
 inactiveBackground=47,52,63
 inactiveBlend=47,52,63
