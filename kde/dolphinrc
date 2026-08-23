@@ -8,9 +8,6 @@ PreviewSize=80
 Version=202
 ViewPropsTimestamp=2026,8,19,21,36,57.373
 
-[IconsMode]
-PreviewSize=160
-
 [KFileDialog Settings]
 Places Icons Auto-resize=false
 Places Icons Static Size=22
