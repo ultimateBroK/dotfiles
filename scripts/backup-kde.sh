@@ -67,7 +67,7 @@ done
 # effects, plasma desktopthemes/plasmoids/look-and-feel) are third-party assets
 # reinstallable from the KDE Store, not per-user settings — excluded here to keep
 # the dotfiles repo small. Large asset caches (icons dep, fonts) are also skipped.
-KDE_SHARE_DIRS=( color-schemes konsole )
+KDE_SHARE_DIRS=( color-schemes konsole color/icc )
 echo "[.local/share dirs]"
 for d in "${KDE_SHARE_DIRS[@]}"; do
   [ -d "$SHARE_SRC/$d" ] || continue
