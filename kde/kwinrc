@@ -12,6 +12,10 @@ Id_9=9c5d2c1b-ccaf-43f0-9bc5-3fecacb9077a
 Number=10
 Rows=1
 
+[EdgeBarrier]
+CornerBarrier=false
+EdgeBarrier=0
+
 [Effect-blur]
 BlurStrength=6
 Saturation=246
@@ -254,7 +258,6 @@ VirtualKeyboardMode=1
 
 [Windows]
 FocusPolicy=FocusFollowsMouse
-FocusStealingPreventionLevel=0
 PerOutputVirtualDesktops=true
 RollOverDesktops=true
 
@@ -264,9 +267,10 @@ Reference=450
 
 [Xwayland]
 Scale=1
+XwaylandEisNoPromptApps=xdotool
 
 [org.kde.kdecoration2]
 BorderSize=Tiny
 BorderSizeAuto=false
 library=org.kde.kwin.aurorae.v2
-theme=__aurorae__svg__Carl
+theme=__aurorae__svg__Utterly-Round-Dark

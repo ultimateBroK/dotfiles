@@ -8,6 +8,13 @@ Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,Switch to Last-Used Ke
 Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,Switch to Next Keyboard Layout
 _k_friendly_name=Keyboard Layout Switcher
 
+[Strawberry]
+_k_friendly_name=Strawberry
+next_track=Media Next,none,Next track
+play_pause=Media Play,none,Play/Pause
+prev_track=Media Previous,none,Previous track
+stop=Media Stop,none,Stop
+
 [dolphin]
 _k_friendly_name=dolphin
 _launch=Ctrl+Alt+I,none,Launch Dolphin
@@ -128,7 +135,7 @@ Walk Through Windows of Current Application=Alt+`\tMeta+`,Alt+`\tMeta+`,Walk Thr
 Walk Through Windows of Current Application (Reverse)=Alt+~\tMeta+~,Alt+~\tMeta+~,Walk Through Windows of Current Application (Reverse)
 Walk Through Windows of Current Application Alternative=none,none,Walk Through Windows of Current Application Alternative
 Walk Through Windows of Current Application Alternative (Reverse)=none,none,Walk Through Windows of Current Application Alternative (Reverse)
-Window Above Other Windows=none,none,Keep Window Above Others
+Window Above Other Windows=Alt+P,none,Keep Window Above Others
 Window Below Other Windows=none,none,Keep Window Below Others
 Window Close=Meta+Q,Alt+F4,Close Window
 Window Custom Quick Tile Bottom=none,none,Custom Quick Tile Window to the Bottom
@@ -144,9 +151,9 @@ Window Maximize Horizontal=none,none,Maximize Window Horizontally
 Window Maximize Vertical=none,none,Maximize Window Vertically
 Window Minimize=Meta+PgDown,Meta+PgDown,Minimize Window
 Window Move=none,none,Move Window
-Window Move Center=none,none,Move Window to the Center
+Window Move Center=Meta+Alt+C,none,Move Window to the Center
 Window No Border=none,none,Toggle Window Titlebar and Frame
-Window On All Desktops=none,none,Keep Window on All Desktops
+Window On All Desktops=Alt+L,none,Keep Window on All Desktops
 Window One Desktop Down=Meta+Ctrl+Shift+Down,Meta+Ctrl+Shift+Down,Window One Desktop Down
 Window One Desktop Up=Meta+Ctrl+Shift+Up,Meta+Ctrl+Shift+Up,Window One Desktop Up
 Window One Desktop to the Left=Meta+Ctrl+Shift+Left,Meta+Ctrl+Shift+Left,Window One Desktop to the Left
@@ -220,11 +227,11 @@ view_zoom_out=Meta+-,Meta+-,Zoom Out
 _k_friendly_name=Media Controller
 mediavolumedown=none,none,Media volume down
 mediavolumeup=none,none,Media volume up
-nextmedia=Media Next,Media Next,Media playback next
+nextmedia=Media Next\tMeta+Shift+N,Media Next,Media playback next
 pausemedia=Media Pause,Media Pause,Pause media playback
 playmedia=none,none,Play media playback
-playpausemedia=Media Play,Media Play,Play/Pause media playback
-previousmedia=Media Previous,Media Previous,Media playback previous
+playpausemedia=Media Play\tMeta+Shift+P,Media Play,Play/Pause media playback
+previousmedia=Media Previous\tMeta+Shift+B,Media Previous,Media playback previous
 seekbackwardmedia=Media Rewind,Media Rewind,Media playback seek backward 5s
 seekbackwardmedialong=none,none,Media playback seek backward 30s
 seekforwardmedia=Media Fast Forward,Media Fast Forward,Media playback seek forward 5s
@@ -262,6 +269,7 @@ activate task manager entry 7=none,Meta+7,Activate Task Manager Entry 7
 activate task manager entry 8=none,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=none,Meta+9,Activate Task Manager Entry 9
 activate widget 153=none,none,Activate Weather (Quickshell) Widget
+activate widget 156=none,none,Activate Digital Clock Widget
 activate widget 24=none,none,Activate Application Launcher Widget
 activate widget 98=none,none,Activate Icons-Only Task Manager Widget
 clear history=none,none,Clear Notification History
@@ -289,7 +297,6 @@ new-window=Meta+Return
 [services][org.kde.spectacle.desktop]
 CurrentMonitorScreenShot=Shift+Print
 FullScreenScreenShot=Print
-OpenWithoutScreenshot=none
 _launch=Meta+Shift+S
 
 [services][systemsettings.desktop]
