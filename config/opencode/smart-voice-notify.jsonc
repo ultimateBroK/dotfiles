@@ -14,7 +14,7 @@
     // ============================================================
 
     // Internal version tracking - DO NOT REMOVE
-    "_configVersion": "1.3.3",
+    "_configVersion": "1.4.0",
 
     // ============================================================
     // PLUGIN ENABLE/DISABLE
@@ -182,6 +182,21 @@
     
     // Speech speed: 0.25 to 4.0 (1.0 = normal)
     "openaiTtsSpeed": 1,
+    
+    // ============================================================
+    // VOICE CACHE SETTINGS (Optional local TTS audio cache)
+    // ============================================================
+    // Cache generated TTS audio locally so repeated messages can replay
+    // without calling cloud/self-hosted TTS services again.
+    // Disabled by default to preserve existing behavior and disk usage.
+    "enableVoiceCache": false,
+    
+    // Directory for cached voice audio. Relative paths are resolved from
+    // ~/.config/opencode/; absolute paths are used as-is.
+    "voiceCacheDir": "voice-cache",
+    
+    // Maximum cache size in megabytes. Oldest cached audio is removed first.
+    "voiceCacheMaxSizeMB": 100,
     
     // ============================================================
     // INITIAL TTS MESSAGES (Used immediately or after sound)
@@ -375,9 +390,7 @@
     
     // Model name to use (depends on what's loaded in your AI server)
     // Examples: "llama3", "mistral", "phi3", "gemma2", "qwen2"
-    // "aiModel": "lfm2.5-1.2b-instruct",
     "aiModel": "qwen3.5-0.8b",
-    //"aiModel": "qwen3.5-2b-claude-4.6-opus-reasoning-distilled",
     
     // API key for your AI server (leave empty for Ollama/LM Studio/LocalAI)
     // Only needed if your server requires authentication
@@ -435,7 +448,7 @@
     "forceVolume": false,
     
     // Volume threshold (0-100): force volume if current level is below this
-    "volumeThreshold": "50",
+    "volumeThreshold": 50,
     
     // Show TUI toast notifications in OpenCode terminal
     "enableToast": true,
