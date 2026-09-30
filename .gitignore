@@ -3,3 +3,4 @@ __pycache__/
 .dirac-cache/
 *.bak
 *.pem
+config/mcp/mcp-servers.json

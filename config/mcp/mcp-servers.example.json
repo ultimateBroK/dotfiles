@@ -1,0 +1,42 @@
+{
+  "$schema": "mcp-servers.schema.json",
+  "version": 2,
+  "$comment": "MẪU tham chiếu (không secret). Copy thành mcp-servers.json (đã gitignore) rồi điền giá trị. Client áp dụng gom theo NHÓM ở client_sets — mỗi server chỉ khai 'set' (mặc định 'main'). Server: command+args+env (stdio) HOẶC type:http + url + headers; client override = key hermes/codex/claude/opencode.",
+  "client_sets": {
+    "main":           ["hermes", "codex", "opencode"],
+    "all":            ["hermes", "codex", "claude", "opencode"],
+    "claude-only":    ["claude"],
+    "codex":          ["codex"],
+    "opencode":       ["opencode"],
+    "codex-claude":   ["codex", "claude"],
+    "codex-opencode": ["codex", "opencode"],
+    "hermes-opencode":["hermes", "opencode"]
+  },
+  "default_set": "main",
+  "servers": {
+    "analyzer": {
+      "command": "uvx",
+      "args": ["mcp-server-analyzer"],
+      "set": "main"
+    },
+    "fetch": {
+      "command": "/home/ultimatebrok/.local/bin/mcp-server-fetch",
+      "args": [],
+      "set": "main",
+      "codex": { "tool_approvals": { "fetch": "approve" } },
+      "opencode": { "command": ["uvx", "--with", "mcp<2", "mcp-server-fetch"] }
+    },
+    "example-http": {
+      "type": "http",
+      "url": "https://mcp.example.com/mcp",
+      "headers": { "Authorization": "Bearer <CHANGE_ME>" },
+      "set": "codex-claude"
+    },
+    "example-secret": {
+      "command": "/path/to/server",
+      "args": [],
+      "env": { "SOME_API_KEY": "<CHANGE_ME>" },
+      "set": "main"
+    }
+  }
+}
