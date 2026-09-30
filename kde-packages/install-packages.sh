@@ -17,6 +17,7 @@ PIP_USER_PACKAGES="$SCRIPT_DIR/pip-user-packages.txt"
 PIPX_PACKAGES="$SCRIPT_DIR/pipx-packages.txt"
 CARGO_PACKAGES="$SCRIPT_DIR/cargo-packages.txt"
 GEM_PACKAGES="$SCRIPT_DIR/gem-packages.txt"
+CHROME_APPS="$SCRIPT_DIR/chrome-apps.txt"
 
 echo "========================================="
 echo "Package Installation Script"
@@ -304,6 +305,23 @@ fi
 
 echo ""
 echo "Step 9 complete!"
+echo ""
+
+# Step 10: Chrome Web Apps (informational)
+echo "========================================="
+echo "Step 10: Chrome Web Apps (informational)..."
+if [ -f "$CHROME_APPS" ]; then
+    echo "Found $(grep -c -v -E '^[[:space:]]*(#|$)' "$CHROME_APPS") Chrome web app(s) listed in $CHROME_APPS:"
+    filter_pkg_list "$CHROME_APPS" | while IFS= read -r line; do
+        echo "  • $line"
+    done
+    echo "Note: Chrome web apps are managed within Chrome browser."
+else
+    echo "No $CHROME_APPS found; skipping Chrome apps"
+fi
+
+echo ""
+echo "Step 10 complete!"
 echo ""
 
 echo "========================================="
